@@ -5,6 +5,8 @@ import {
   updatePeriod,
   updateNextEpochPoint,
   updateStabilityFees,
+  updateCashPriceInLastTWAP,
+  updateBondOraclePriceInLastTWAP,
 } from './actions';
 
 export interface TreasuryState {
@@ -12,6 +14,8 @@ export interface TreasuryState {
   period: number;
   currentEpoch: number;
   stabilityFees: string;
+  cashPriceInLastTWAP: string;
+  bondOraclePriceInLastTWAP: string;
 }
 
 export const initialState: TreasuryState = {
@@ -19,6 +23,8 @@ export const initialState: TreasuryState = {
   currentEpoch: 0,
   period: 0,
   stabilityFees: '0',
+  cashPriceInLastTWAP: '0',
+  bondOraclePriceInLastTWAP: '0',
 };
 
 export default createReducer(initialState, (builder) =>
@@ -34,5 +40,11 @@ export default createReducer(initialState, (builder) =>
     })
     .addCase(updateStabilityFees, (t, { payload }) => {
       t.stabilityFees = payload;
+    })
+    .addCase(updateCashPriceInLastTWAP, (t, { payload }) => {
+      t.cashPriceInLastTWAP = payload;
+    })
+    .addCase(updateBondOraclePriceInLastTWAP, (t, { payload }) => {
+      t.bondOraclePriceInLastTWAP = payload;
     }),
 );

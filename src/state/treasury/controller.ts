@@ -5,6 +5,8 @@ import {
   updateCurrentEpoch,
   updatePeriod,
   updateStabilityFees,
+  updateCashPriceInLastTWAP,
+  updateBondOraclePriceInLastTWAP,
 } from './actions';
 
 export const init = (basisCash: BasisCash, dispatch: Dispatch) => {
@@ -15,6 +17,12 @@ export const init = (basisCash: BasisCash, dispatch: Dispatch) => {
   basisCash.multicall.on('TREASURY_CURRENT_EPOCH', (val) => dispatch(updateCurrentEpoch(val)));
   basisCash.multicall.on('TREASURY_STABILITY_FEES', (val) =>
     dispatch(updateStabilityFees(val)),
+  );
+  basisCash.multicall.on('TREASURY_CASH_PRICE', (val) =>
+    dispatch(updateCashPriceInLastTWAP(val)),
+  );
+  basisCash.multicall.on('TREASURY_BOND_ORACLE_PRICE', (val) =>
+    dispatch(updateBondOraclePriceInLastTWAP(val)),
   );
 
   basisCash.multicall.addCalls([
@@ -40,6 +48,18 @@ export const init = (basisCash: BasisCash, dispatch: Dispatch) => {
       key: 'TREASURY_STABILITY_FEES',
       target: basisCash.contracts.Treasury.address,
       call: ['stabilityFee()(uint256)'],
+      convertResult: (val) => val.toString(),
+    },
+    {
+      key: 'TREASURY_CASH_PRICE',
+      target: basisCash.contracts.Treasury.address,
+      call: ['getSeigniorageOraclePrice()(uint256)'],
+      convertResult: (val) => val.toString(),
+    },
+    {
+      key: 'TREASURY_BOND_ORACLE_PRICE',
+      target: basisCash.contracts.Treasury.address,
+      call: ['getBondOraclePrice()(uint256)'],
       convertResult: (val) => val.toString(),
     },
   ]);

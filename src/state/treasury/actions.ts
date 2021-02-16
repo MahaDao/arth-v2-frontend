@@ -5,3 +5,9 @@ export const updateNextEpochPoint = createAction<number>('transactions/updateNex
 export const updatePeriod = createAction<number>('transactions/updatePeriod');
 export const updateCurrentEpoch = createAction<number>('transactions/updateCurrentEpoch');
 export const updateStabilityFees = createAction<string>('treasury/updateStabilityFees');
+export const updateCashPriceInLastTWAP = createAction<string>(
+  'transactions/updateCashPriceInLastTWAP',
+);
+export const updateBondOraclePriceInLastTWAP = createAction<string>(
+  'transactions/updateBondOraclePriceInLastTWAP',
+);

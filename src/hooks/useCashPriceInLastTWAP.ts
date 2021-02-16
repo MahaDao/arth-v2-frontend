@@ -2,13 +2,19 @@ import { useCallback, useEffect, useState } from 'react';
 import useBasisCash from './useBasisCash';
 import config from '../config';
 import { BigNumber } from 'ethers';
+import { useSelector } from 'react-redux';
+import { AppState } from '../state';
 
 const useCashPriceInLastTWAP = () => {
   const [price, setPrice] = useState<BigNumber>(BigNumber.from(0));
   const basisCash = useBasisCash();
 
+  const cashPriceInLastTWAP = useSelector<AppState, string>(
+    (state) => state.treasury.cashPriceInLastTWAP,
+  );
+
   const fetchCashPrice = useCallback(async () => {
-    setPrice(await basisCash.getCashPriceInLastTWAP());
+    setPrice(BigNumber.from(cashPriceInLastTWAP));
   }, [basisCash]);
 
   useEffect(() => {
