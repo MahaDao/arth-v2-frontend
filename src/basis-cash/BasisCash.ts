@@ -245,12 +245,6 @@ export class BasisCash {
     return GMUOracle.getPrice();
   }
 
-  async getStabilityFees(): Promise<BigNumber> {
-    const { Treasury } = this.contracts;
-    return Treasury.stabilityFee()
-  }
-
-
   async getCashPriceInLastTWAP(): Promise<BigNumber> {
     const { Treasury } = this.contracts;
     return Treasury.getSeigniorageOraclePrice();

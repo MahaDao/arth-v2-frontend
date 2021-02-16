@@ -1,17 +1,24 @@
 import { useCallback, useEffect, useState } from 'react';
-import useBasisCash from './useBasisCash';
-import { BigNumber } from 'ethers';
+import { useSelector } from 'react-redux';
+import basisCash from '../basis-cash';
+import { AppState } from '../state';
 
 const useStabilityFee = () => {
-  const [price, setPrice] = useState<BigNumber>(BigNumber.from(1));
-  const basisCash = useBasisCash();
+  const [price, setPrice] = useState<string>('1');
+
+
+  const stabilityFees = useSelector<AppState, string>(
+    (state) => state.treasury.stabilityFees,
+  );
 
   const fetchCashPrice = useCallback(async () => {
-    setPrice(await basisCash.getStabilityFees());
+    setPrice(stabilityFees);
   }, [basisCash]);
 
   useEffect(() => {
-    fetchCashPrice().catch((err) => console.error(`Failed to fetch stability fees: ${err.stack}`));
+    fetchCashPrice().catch((err) =>
+      console.error(`Failed to fetch stability fees: ${err.stack}`),
+    );
   }, [fetchCashPrice]);
 
   return price;
