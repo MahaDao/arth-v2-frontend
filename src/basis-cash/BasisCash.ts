@@ -237,6 +237,16 @@ export class BasisCash {
     };
   }
 
+  async getTargetPrice(): Promise<BigNumber> {
+    const { GMUOracle } = this.contracts;
+    return GMUOracle.getPrice();
+  }
+
+  async getBondOraclePriceInLastTWAP(): Promise<BigNumber> {
+    const { Treasury } = this.contracts;
+    return Treasury.getBondOraclePrice();
+  }
+
   async getBondStat(): Promise<TokenStat> {
     return {
       priceInDAI: await this.getTokenPriceFromUniswap(this.ARTHB),
@@ -519,19 +529,5 @@ export class BasisCash {
     const { Treasury } = this.contracts;
     const est = await Treasury.estimateSeignorageToMint(price);
     return est;
-  }
-
-  async getTreasuryNextAllocationTime(): Promise<TreasuryAllocationTime> {
-    const { Treasury } = this.contracts;
-    const nextEpochTimestamp: BigNumber = await Treasury.nextEpochPoint();
-    const period: BigNumber = await Treasury.getPeriod();
-    const currentEpoch: BigNumber = await Treasury.getCurrentEpoch();
-
-    const nextAllocation = new Date(nextEpochTimestamp.mul(1000).toNumber());
-    const prevAllocation = new Date(nextAllocation.getTime() - period.toNumber() * 1000);
-
-    console.log('nextAllocation', nextAllocation, nextEpochTimestamp);
-
-    return { prevAllocation, nextAllocation, currentEpoch: 1 + currentEpoch.toNumber() };
   }
 }
