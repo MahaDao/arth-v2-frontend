@@ -12,16 +12,13 @@ import Banks from './views/Banks';
 import Home from './views/Home';
 import Bond from './views/Bond';
 import Stats from './views/Stats';
-
-import store from './state';
+import { initMulticallListners, default as store } from './state';
 import theme from './theme';
 import Updaters from './state/Updaters';
 import Distributions from './views/Distributions';
 import Popups from './components/Popups';
 import config from './config';
 import useBasisCash from './hooks/useBasisCash';
-import * as Treasury from './state/treasury/controller';
-
 import './index.css';
 import './App.css';
 
@@ -79,7 +76,7 @@ const AppContent: React.FC = ({ children }) => {
 
   useEffect(() => {
     if (basisCash) {
-      Treasury.init(basisCash, dispatch);
+      initMulticallListners(basisCash, dispatch);
     }
   }, [basisCash, dispatch]);
 

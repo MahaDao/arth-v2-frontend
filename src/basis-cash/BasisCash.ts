@@ -35,7 +35,7 @@ export class BasisCash {
   ARTHB: ERC20;
   ARTHDAI_UNIV2: ERC20;
 
-  multicall: Multicall
+  multicall: Multicall;
 
   constructor(cfg: Configuration) {
     const { deployments, externalTokens } = cfg;
@@ -44,7 +44,7 @@ export class BasisCash {
     // loads contracts from deployments
     this.contracts = {};
     for (const [name, deployment] of Object.entries(deployments)) {
-      if (!deployment.abi) continue
+      if (!deployment.abi) continue;
       this.contracts[name] = new Contract(deployment.address, deployment.abi, provider);
     }
     this.externalTokens = {};
@@ -57,21 +57,13 @@ export class BasisCash {
     this.ARTHB = new ERC20(deployments.ARTHB.address, provider, 'ARTHB');
     this.DAI = new ERC20(deployments.DAI.address, provider, 'ARTHB');
 
-    this.multicall = new Multicall(cfg.defaultProvider, deployments.Multicall.address)
+    this.multicall = new Multicall(cfg.defaultProvider, deployments.Multicall.address);
 
     // Uniswap V2 Pair
 
-    this.arthDai = new Contract(
-      deployments.ArthDaiLP.address,
-      IUniswapV2PairABI,
-      provider,
-    );
+    this.arthDai = new Contract(deployments.ArthDaiLP.address, IUniswapV2PairABI, provider);
 
-    this.mahaEth = new Contract(
-      deployments.MahaEthLP.address,
-      IUniswapV2PairABI,
-      provider,
-    );
+    this.mahaEth = new Contract(deployments.MahaEthLP.address, IUniswapV2PairABI, provider);
 
     this.config = cfg;
     this.provider = provider;
@@ -107,46 +99,49 @@ export class BasisCash {
         key: 'BALANCE_OF_ARTH',
         target: this.ARTH.address,
         call: ['balanceOf(address)(uint256)', this.myAccount],
-        convertResult: val => val / 10 ** 18
-      }, {
+        convertResult: (val) => val / 10 ** 18,
+      },
+      {
         key: 'BALANCE_OF_ARTHB',
         target: this.ARTHB.address,
         call: ['balanceOf(address)(uint256)', this.myAccount],
-        convertResult: val => val / 10 ** 18
-      }, {
+        convertResult: (val) => val / 10 ** 18,
+      },
+      {
         key: 'BALANCE_OF_MAHA',
         target: this.MAHA.address,
         call: ['balanceOf(address)(uint256)', this.myAccount],
-        convertResult: val => val / 10 ** 18
-      }, {
+        convertResult: (val) => val / 10 ** 18,
+      },
+      {
         key: 'BALANCE_OF_DAI',
         target: this.DAI.address,
         call: ['balanceOf(address)(uint256)', this.myAccount],
-        convertResult: val => val / 10 ** 18
-      }
-    ])
+        convertResult: (val) => val / 10 ** 18,
+      },
+    ]);
   }
 
   get isUnlocked(): boolean {
     return !!this.myAccount;
   }
 
-  getBoardrooms: () => ['arth', 'arthUniLiquidity', 'arthMlpLiquidity', 'mahaLiquidity']
-
+  getBoardrooms: () => ['arth', 'arthUniLiquidity', 'arthMlpLiquidity', 'mahaLiquidity'];
 
   getBoardroom(kind: Boardrooms, version: string): BoardroomInfo {
-    const contract = this.boardroomByVersion(kind, version)
+    const contract = this.boardroomByVersion(kind, version);
 
-    if (kind === 'arth') return {
-      kind: 'arth',
-      contract,
-      address: contract.address,
-      depositTokenName: 'ARTH',
-      earnTokenName: 'ARTH',
-      seionrageSupplyPercentage: 20,
-      history7dayAPY: 30,
-      lockInPeriodDays: 5,
-    }
+    if (kind === 'arth')
+      return {
+        kind: 'arth',
+        contract,
+        address: contract.address,
+        depositTokenName: 'ARTH',
+        earnTokenName: 'ARTH',
+        seionrageSupplyPercentage: 20,
+        history7dayAPY: 30,
+        lockInPeriodDays: 5,
+      };
 
     if (kind === 'mahaLiquidity')
       return {
@@ -158,7 +153,7 @@ export class BasisCash {
         seionrageSupplyPercentage: 10,
         history7dayAPY: 30,
         lockInPeriodDays: 1,
-      }
+      };
 
     if (kind === 'arthMlpLiquidity')
       return {
@@ -170,7 +165,7 @@ export class BasisCash {
         seionrageSupplyPercentage: 65,
         history7dayAPY: 30,
         lockInPeriodDays: 1,
-      }
+      };
 
     return {
       kind: 'arthUniLiquidity',
@@ -181,7 +176,7 @@ export class BasisCash {
       seionrageSupplyPercentage: 60,
       history7dayAPY: 30,
       lockInPeriodDays: 1,
-    }
+    };
   }
 
   gasOptions(gas: BigNumber): Overrides {
@@ -223,7 +218,9 @@ export class BasisCash {
     const cumulativePrice: BigNumber = await this.arthDai.price0CumulativeLast();
     const cumulativePriceLast = await SeigniorageOracle.price0CumulativeLast();
 
-    const elapsedSec = Math.floor(Date.now() / 1000 - (await SeigniorageOracle.blockTimestampLast()));
+    const elapsedSec = Math.floor(
+      Date.now() / 1000 - (await SeigniorageOracle.blockTimestampLast()),
+    );
 
     const denominator112 = BigNumber.from(2).pow(112);
     const denominator1e18 = BigNumber.from(10).pow(18);
@@ -243,17 +240,6 @@ export class BasisCash {
   async getTargetPrice(): Promise<BigNumber> {
     const { GMUOracle } = this.contracts;
     return GMUOracle.getPrice();
-  }
-
-  async getStabilityFees(): Promise<BigNumber> {
-    const { Treasury } = this.contracts;
-    return Treasury.stabilityFee()
-  }
-
-
-  async getCashPriceInLastTWAP(): Promise<BigNumber> {
-    const { Treasury } = this.contracts;
-    return Treasury.getSeigniorageOraclePrice();
   }
 
   async getBondOraclePriceInLastTWAP(): Promise<BigNumber> {
@@ -315,9 +301,11 @@ export class BasisCash {
     await this.provider.ready;
 
     try {
-      const result = await fetch(`https://api.coingecko.com/api/v3/simple/token_price/ethereum?contract_addresses=${tokenContract.address}&vs_currencies=usd`)
-      const json = await result.json()
-      return (json[tokenContract.address.toLowerCase()].usd).toFixed(3)
+      const result = await fetch(
+        `https://api.coingecko.com/api/v3/simple/token_price/ethereum?contract_addresses=${tokenContract.address}&vs_currencies=usd`,
+      );
+      const json = await result.json();
+      return json[tokenContract.address.toLowerCase()].usd.toFixed(3);
     } catch (err) {
       console.error(`Failed to fetch token price of ${tokenContract.symbol}: ${err}`);
     }
@@ -326,25 +314,28 @@ export class BasisCash {
   async estimateAmountOutFromUniswap(amountIn: number, path: ERC20[]): Promise<BigNumber> {
     await this.provider.ready;
 
-    if (amountIn <= 0) return BigNumber.from(0)
+    if (amountIn <= 0) return BigNumber.from(0);
 
     const denominator1e18 = BigNumber.from(10).pow(18).mul(Math.floor(amountIn));
-    const adjustedAmount = BigNumber.from(1).mul(denominator1e18)
+    const adjustedAmount = BigNumber.from(1).mul(denominator1e18);
 
     const UniswapV2Library = new Contract(
       this.config.deployments.UniswapV2Router02.address,
       UniswapV2Router02ABI,
       this.provider,
-    )
+    );
 
     try {
-      const result: BigNumber[] = await UniswapV2Library.getAmountsOut(adjustedAmount, path.map(p => p.address))
-      return result[result.length - 1]
+      const result: BigNumber[] = await UniswapV2Library.getAmountsOut(
+        adjustedAmount,
+        path.map((p) => p.address),
+      );
+      return result[result.length - 1];
     } catch (error) {
-      console.log('Uniswap estimation error', error)
+      console.log('Uniswap estimation error', error);
     }
 
-    return BigNumber.from(0)
+    return BigNumber.from(0);
   }
 
   /**
@@ -353,7 +344,10 @@ export class BasisCash {
    */
   async buyBonds(amount: string | number): Promise<TransactionResponse> {
     const { Treasury } = this.contracts;
-    return await Treasury.buyBonds(decimalToBalance(amount), await this.getBondOraclePriceInLastTWAP());
+    return await Treasury.buyBonds(
+      decimalToBalance(amount),
+      await this.getBondOraclePriceInLastTWAP(),
+    );
   }
 
   /**
@@ -457,7 +451,9 @@ export class BasisCash {
 
   async stakeShareToBoardroom(kind: Boardrooms, amount: string): Promise<TransactionResponse> {
     if (this.isOldBoardroomMember()) {
-      throw new Error("you're using old ArthBoardroom. please withdraw and deposit the MAHA again.");
+      throw new Error(
+        "you're using old ArthBoardroom. please withdraw and deposit the MAHA again.",
+      );
     }
     const boardroom = this.currentBoardroom(kind);
     return await boardroom.bond(decimalToBalance(amount));
@@ -473,8 +469,10 @@ export class BasisCash {
     return await boardroom.earned(this.myAccount);
   }
 
-
-  async getClaimableEarningsOnBoardroomV2(kind: Boardrooms, version: string): Promise<BigNumber> {
+  async getClaimableEarningsOnBoardroomV2(
+    kind: Boardrooms,
+    version: string,
+  ): Promise<BigNumber> {
     const boardroom = this.getBoardroom(kind, 'v2');
     return await boardroom.contract.estimateRewardsToClaim(this.myAccount);
   }
@@ -484,17 +482,26 @@ export class BasisCash {
     return await boardroom.withdraw();
   }
 
-  async withdrawShareFromBoardroomV1(kind: Boardrooms, amount: string): Promise<TransactionResponse> {
+  async withdrawShareFromBoardroomV1(
+    kind: Boardrooms,
+    amount: string,
+  ): Promise<TransactionResponse> {
     const boardroom = this.currentBoardroom(kind);
     return await boardroom.withdraw(decimalToBalance(amount));
   }
 
-  async unbondShareFromBoardroom(kind: Boardrooms, amount: string): Promise<TransactionResponse> {
+  async unbondShareFromBoardroom(
+    kind: Boardrooms,
+    amount: string,
+  ): Promise<TransactionResponse> {
     const boardroom = this.currentBoardroom(kind);
     return await boardroom.unbond(decimalToBalance(amount));
   }
 
-  async harvestCashFromBoardroom(kind: Boardrooms, version: string): Promise<TransactionResponse> {
+  async harvestCashFromBoardroom(
+    kind: Boardrooms,
+    version: string,
+  ): Promise<TransactionResponse> {
     const boardroom = this.currentBoardroom(kind);
     if (this.boardroomVersionOfUser === 'v1') {
       return await boardroom.claimDividends();
@@ -510,31 +517,17 @@ export class BasisCash {
   async getTreasuryEstimateBondsToIssue(price: BigNumber): Promise<BigNumber> {
     const { Treasury } = this.contracts;
     const est = await Treasury.estimateSeignorageToMint(price);
-    return est
+    return est;
   }
 
   async getTreasury() {
     const { Treasury } = this.contracts;
-    return Treasury
+    return Treasury;
   }
 
   async getTreasuryEstimateSeignorageToMint(price: BigNumber): Promise<BigNumber> {
     const { Treasury } = this.contracts;
     const est = await Treasury.estimateSeignorageToMint(price);
-    return est
-  }
-
-  async getTreasuryNextAllocationTime(): Promise<TreasuryAllocationTime> {
-    const { Treasury } = this.contracts;
-    const nextEpochTimestamp: BigNumber = await Treasury.nextEpochPoint();
-    const period: BigNumber = await Treasury.getPeriod();
-    const currentEpoch: BigNumber = await Treasury.getCurrentEpoch();
-
-    const nextAllocation = new Date(nextEpochTimestamp.mul(1000).toNumber());
-    const prevAllocation = new Date(nextAllocation.getTime() - period.toNumber() * 1000);
-
-    console.log('nextAllocation', nextAllocation, nextEpochTimestamp)
-
-    return { prevAllocation, nextAllocation, currentEpoch: 1 + currentEpoch.toNumber() };
+    return est;
   }
 }
