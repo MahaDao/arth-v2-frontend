@@ -93,33 +93,6 @@ export class BasisCash {
         console.error(`Failed to fetch boardroom version: ${err.stack}`);
         this.boardroomVersionOfUser = 'latest';
       });
-
-    this.multicall.addCalls([
-      {
-        key: 'BALANCE_OF_ARTH',
-        target: this.ARTH.address,
-        call: ['balanceOf(address)(uint256)', this.myAccount],
-        convertResult: (val) => val / 10 ** 18,
-      },
-      {
-        key: 'BALANCE_OF_ARTHB',
-        target: this.ARTHB.address,
-        call: ['balanceOf(address)(uint256)', this.myAccount],
-        convertResult: (val) => val / 10 ** 18,
-      },
-      {
-        key: 'BALANCE_OF_MAHA',
-        target: this.MAHA.address,
-        call: ['balanceOf(address)(uint256)', this.myAccount],
-        convertResult: (val) => val / 10 ** 18,
-      },
-      {
-        key: 'BALANCE_OF_DAI',
-        target: this.DAI.address,
-        call: ['balanceOf(address)(uint256)', this.myAccount],
-        convertResult: (val) => val / 10 ** 18,
-      },
-    ]);
   }
 
   get isUnlocked(): boolean {

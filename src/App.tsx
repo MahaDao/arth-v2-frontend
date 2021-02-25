@@ -27,8 +27,8 @@ const Providers: React.FC = ({ children }) => {
     <ThemeProvider theme={theme}>
       <UseWalletProvider chainId={config.chainId} connectors={{ injected: {} }}>
         <Provider store={store}>
-          <Updaters />
           <BasisCashProvider>
+            <Updaters />
             <AppContent>{children}</AppContent>
           </BasisCashProvider>
         </Provider>
@@ -72,16 +72,9 @@ const App: React.FC = () => {
 const AppContent: React.FC = ({ children }) => {
   // const { account } = useWallet();
   const basisCash = useBasisCash();
-  const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (basisCash) {
-      initMulticallListners(basisCash, dispatch);
-    }
-  }, [basisCash, dispatch]);
-
-  // if (!!!account) return <UnlockWallet />;
   if (!basisCash) return <div>Loading</div>;
+  // if (!!!account) return <UnlockWallet />;
 
   return (
     <ModalsProvider>
