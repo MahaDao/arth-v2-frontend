@@ -210,6 +210,7 @@ export class BasisCash {
     };
   }
 
+  // NOT USED ANYMIORE. REPLACED BY REDUX_MULTICALL.
   async getTargetPrice(): Promise<BigNumber> {
     const { GMUOracle } = this.contracts;
     return GMUOracle.getPrice();

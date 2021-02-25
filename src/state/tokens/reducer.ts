@@ -12,51 +12,55 @@ import {
 } from './actions';
 
 export interface TokenState {
-  balanceOfArth: number;
-  balanceOfArthb: number;
-  balanceOfDai: number;
-  balanceOfMaha: number;
-  totalSupplyArth: string;
-  totalSupplyArthb: string;
-  totalSupplyDai: string;
-  totalSupplyMaha: string;
+  [symbol: string]: {
+    balance: string;
+    totalSupply: string;
+  };
 }
 
 export const initialState: TokenState = {
-  balanceOfArth: 1,
-  balanceOfArthb: 1,
-  balanceOfDai: 1,
-  balanceOfMaha: 1,
-  totalSupplyArth: '1',
-  totalSupplyArthb: '1',
-  totalSupplyDai: '1',
-  totalSupplyMaha: '1',
+  DAI: {
+    balance: '0',
+    totalSupply: '0',
+  },
+  ARTH: {
+    balance: '0',
+    totalSupply: '0',
+  },
+  ARTHB: {
+    balance: '0',
+    totalSupply: '0',
+  },
+  MAHA: {
+    balance: '0',
+    totalSupply: '0',
+  },
 };
 
 export default createReducer(initialState, (builder) =>
   builder
-    .addCase(updateBalanceOfArth, (t, { payload }) => {
-      t.balanceOfArth = payload;
+    .addCase(updateBalanceOfArth, (state, { payload }) => {
+      state.ARTH.balance = payload;
     })
-    .addCase(updateBalanceOfArthb, (t, { payload }) => {
-      t.balanceOfArthb = payload;
+    .addCase(updateBalanceOfArthb, (state, { payload }) => {
+      state.ARTHB.balance = payload;
     })
-    .addCase(updateBalanceOfMaha, (t, { payload }) => {
-      t.balanceOfMaha = payload;
+    .addCase(updateBalanceOfMaha, (state, { payload }) => {
+      state.MAHA.balance = payload;
     })
-    .addCase(updateBalanceOfDai, (t, { payload }) => {
-      t.balanceOfDai = payload;
+    .addCase(updateBalanceOfDai, (state, { payload }) => {
+      state.DAI.balance = payload;
     })
-    .addCase(updateTotalSupplyArth, (t, { payload }) => {
-      t.totalSupplyArth = payload;
+    .addCase(updateTotalSupplyArth, (state, { payload }) => {
+      state.ARTH.totalSupply = payload;
     })
-    .addCase(updateTotalSupplyArthb, (t, { payload }) => {
-      t.totalSupplyArthb = payload;
+    .addCase(updateTotalSupplyArthb, (state, { payload }) => {
+      state.ARTHB.totalSupply = payload;
     })
-    .addCase(updateTotalSupplyMaha, (t, { payload }) => {
-      t.totalSupplyDai = payload;
+    .addCase(updateTotalSupplyMaha, (state, { payload }) => {
+      state.MAHA.totalSupply = payload;
     })
-    .addCase(updateTotalSupplyDai, (t, { payload }) => {
-      t.totalSupplyMaha = payload;
+    .addCase(updateTotalSupplyDai, (state, { payload }) => {
+      state.DAI.totalSupply = payload;
     }),
 );
