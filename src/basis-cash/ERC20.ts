@@ -3,7 +3,7 @@ import { Signer } from '@ethersproject/abstract-signer';
 import { Provider } from '@ethersproject/abstract-provider';
 import { TransactionResponse } from '@ethersproject/providers';
 import { formatUnits } from 'ethers/lib/utils';
-
+import { default as state } from '../state';
 class ERC20 {
   private contract: Contract;
 
@@ -26,12 +26,14 @@ class ERC20 {
     return this.contract.estimateGas;
   }
 
-  totalSupply(): Promise<BigNumber> {
-    return this.contract.totalSupply();
+  async totalSupply(): Promise<BigNumber> {
+    const store = state.getState();
+    return BigNumber.from(store.tokens[this.symbol.toLocaleUpperCase()].totalSupply);
   }
 
-  balanceOf(account: string): Promise<BigNumber> {
-    return this.contract.balanceOf(account);
+  async balanceOf(account: string): Promise<BigNumber> {
+    const store = state.getState();
+    return BigNumber.from(store.tokens[this.symbol.toLocaleUpperCase()].balance);
   }
 
   transfer(recipient: string, amount: BigNumber): Promise<TransactionResponse> {
@@ -51,7 +53,7 @@ class ERC20 {
     recipient: string,
     amount: BigNumber,
   ): Promise<TransactionResponse> {
-    return this.contract.transferFro (sender, recipient, amount);
+    return this.contract.transferFro(sender, recipient, amount);
   }
 
   async displayedBalanceOf(account: string): Promise<string> {
@@ -62,7 +64,8 @@ class ERC20 {
   async displayedTotalSupply(): Promise<string> {
     const supply = await this.totalSupply();
     return Number(formatUnits(supply, this.decimal)).toFixed(0);
-  }}
+  }
+}
 
 export default ERC20;
 

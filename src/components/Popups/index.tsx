@@ -50,7 +50,7 @@ export default function Popups() {
 
   return (
     <>
-      {activePopups.map(p => (
+      {activePopups.map((p: any) => (
 
         <TranscationSnackbar
         notificationCount={1}

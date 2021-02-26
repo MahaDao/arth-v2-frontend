@@ -13,24 +13,24 @@ export const init = (basisCash: BasisCash, dispatch: Dispatch) => {
     dispatch(updateSMGOracleBlockTimestampLast(val)),
   );
 
-  basisCash.multicall.addCalls([
+  return [
     {
       key: 'ORACLE_GMU_PRICE',
       target: basisCash.contracts.GMUOracle.address,
       call: ['getPrice()(uint256)'],
-      convertResult: (val) => val.toString(),
+      convertResult: (val: any) => val.toString(),
     },
     {
       key: 'ORACLE_SMG_PRICE',
       target: basisCash.contracts.SeigniorageOracle.address,
       call: ['price0CumulativeLast()(uint256)'],
-      convertResult: (val) => val.toString(),
+      convertResult: (val: any) => val.toString(),
     },
     {
       key: 'ORACLE_SMG_BLOCKTIMESTAMP',
       target: basisCash.contracts.SeigniorageOracle.address,
       call: ['blockTimestampLast()(uint256)'],
-      convertResult: (val) => val.toString(),
+      convertResult: (val: any) => val.toString(),
     },
-  ]);
+  ];
 };
