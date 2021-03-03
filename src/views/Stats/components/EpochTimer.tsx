@@ -9,6 +9,8 @@ import moment from 'moment';
 import Button from '../../../components/Button/TransperantButton';
 import useAdvanceEpoch from '../../../hooks/useAdvanceEpoch';
 import { useWallet } from 'use-wallet';
+import { Description, DescriptionRounded } from '@material-ui/icons';
+import { Text } from 'recharts';
 
 const useStylesFacebook = makeStyles((theme: Theme) =>
   createStyles({
@@ -27,6 +29,15 @@ const useStylesFacebook = makeStyles((theme: Theme) =>
     circle: {
       strokeLinecap: 'round',
     },
+    description: {
+      // paddingTop: 15,
+      fontSize: 14,
+      color: '#D9D5D3',
+      fontFamily: 'Inter',
+      fontStyle: 'normal',
+      fontWeight: 300,
+      lineHeight: '140%'
+    }
   }),
 );
 
@@ -74,11 +85,14 @@ const EpochTimer: React.FC = () => {
         <TitleString>Next Epoch</TitleString>
         <CurrentEpoch>{`Current Epoch: ${currentEpoch.toFixed(0)}`}</CurrentEpoch>
       </div>
-      {/* <Desc>
-        The 12hr TWAP will get updated to ${getDisplayBalance(estimatedPrice)}.
-        Based on this price, the protocol will not do anything as price is
-        within the safe range.
-      </Desc> */}
+      <Text className={classes.description}>
+        Based on the 1hr TWAP price, the protocol will not do anything as price is within the safe range (0.95$-1$).
+      </Text>
+      <br />
+      <Text className={classes.description}>
+        Note that the 12hr TWAP is used to decide if the supply expands or contracts.
+      </Text>
+      <br />
       <LearnMore href="https://docs.arthcoin.com/arth-201/dynamic-epochs" target="">
         Learn more about Epoch
       </LearnMore>
@@ -128,7 +142,7 @@ const EpochTimer: React.FC = () => {
             )}
         </div>
       </div>
-    </Card>
+    </Card >
   );
 };
 

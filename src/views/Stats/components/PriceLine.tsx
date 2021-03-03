@@ -49,7 +49,7 @@ const PriceLine: React.FC<IProps> = (props) => {
         <TitleBold>{arthPrice && arthPrice.gt(0) ? `$${getDisplayBalance(arthPrice)}` : '-'}</TitleBold>
         {/* <IncreasedText>+0.15%</IncreasedText> */}
       </div>
-      {false && (<LinearProgressDiv>
+      {true && (<LinearProgressDiv>
         <TimeComponent>24hr</TimeComponent>
         <ResponsiveLabelContainer>
           <LabelComponentLite noMargin>Low</LabelComponentLite>

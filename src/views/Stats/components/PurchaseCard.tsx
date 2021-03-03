@@ -15,7 +15,7 @@ const HtmlTooltip = withStyles((theme: Theme) => ({
     fontWeight: 300,
     fontSize: '13px',
     borderRadius: '6px',
-    padding: '20px',
+    // padding: '20px',
   },
 }))(Tooltip);
 interface StatProps {
@@ -128,18 +128,18 @@ const PurchaseCard: React.FC<StatProps> = ({
             </HtmlTooltip>
           </StyledTitle>
           <TitleBold>{getDisplayBalance(price)}</TitleBold>
-          {/* <IncreasedText>{percenTageIncreaseText}</IncreasedText> */}
+          <IncreasedText>{percenTageIncreaseText}</IncreasedText>
         </div>
-        {/* <div className="dialog-class">
+        <div className="dialog-class">
           <TimeComponent>{timeRemaining}</TimeComponent>
           <HtmlTooltip enterTouchDelay={0} title={<span>{timeRemainingToolTip}</span>}>
             <img src={InfoIcon} alt="Inof" width="16px" />
           </HtmlTooltip>
-        </div> */}
+        </div>
       </InfoContent>
-      {/* <StyledDesc>{buttonTopDesc}</StyledDesc>
+      <StyledDesc>{buttonTopDesc}</StyledDesc>
       <Button disabled={buttonDisabled} text={buttonText} />
-      <ConditionText>{buttonBottomDesc}</ConditionText> */}
+      <ConditionText>{buttonBottomDesc}</ConditionText>
     </PurChaseCardPadding>
   );
 };
@@ -156,6 +156,7 @@ const StyledTitle = styled.div`
   line-height: 150%;
   color: #ffffff;
   opacity: 0.64;
+  flex-direction: row;
 `;
 const TimeComponent = styled.div`
   background: rgba(255, 255, 255, 0.1);
@@ -167,13 +168,13 @@ const TimeComponent = styled.div`
   opacity: 0.6;
   padding: 5px 10px;
 `;
-// const IncreasedText = styled.div`
-//   font-style: normal;
-//   font-weight: 300;
-//   font-size: 12px;
-//   line-height: 130%;
-//   color: #178a50;
-// `;
+const IncreasedText = styled.div`
+  font-style: normal;
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 130%;
+  color: #178a50;
+`;
 const TitleBold = styled.div`
   font-style: normal;
   margin-top: 13px;

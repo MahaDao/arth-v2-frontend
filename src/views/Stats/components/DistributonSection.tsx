@@ -45,21 +45,21 @@ const DistributonSection: React.FC = () => {
             <ChartIconColor color="#178A50" />
             <div>
               <ChartLabelTitle>ARTH-DAI MahaSwap LP</ChartLabelTitle>
-              <ChartLabelTitleBold>70% {/* (65,0000 ARTH) */}</ChartLabelTitleBold>
+              <ChartLabelTitleBold>70% (70,0000 ARTH-DAI)</ChartLabelTitleBold>
             </div>
           </PieChartLables>
           <PieChartLables>
             <ChartIconColor color="#20C974" />
             <div>
               <ChartLabelTitle>ARTH</ChartLabelTitle>
-              <ChartLabelTitleBold>20% {/* (20,000 ARTH) */}</ChartLabelTitleBold>
+              <ChartLabelTitleBold>20% (20,000 ARTH)</ChartLabelTitleBold>
             </div>
           </PieChartLables>
           <PieChartLables>
             <ChartIconColor color="#C4F7DD" />
             <div>
               <ChartLabelTitle>MAHA</ChartLabelTitle>
-              <ChartLabelTitleBold>10% {/* (10,000 MAHA) */}</ChartLabelTitleBold>
+              <ChartLabelTitleBold>10% (10,000 MAHA)</ChartLabelTitleBold>
             </div>
           </PieChartLables>
         </div>

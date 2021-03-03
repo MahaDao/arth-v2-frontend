@@ -30,7 +30,7 @@ const TWAPInformation: React.FC<IProps> = (props) => {
             price1hr
           }
           timeRemaining="00:23:22"
-          toolTipTitle="dwdmwkemfwefmwkefm"
+          toolTipTitle="Test Tool Tip"
           percenTageIncreaseText="+0.15%"
           timeRemainingToolTip="Time left for next 12 hr twap updation."
         />
@@ -43,7 +43,7 @@ const TWAPInformation: React.FC<IProps> = (props) => {
           price={price1hr}
           priceToCompare1Twap={price1hr}
           priceToCompare12Twap={price12hr}
-          toolTipTitle="dwdmwkemfwefmwkefm"
+          toolTipTitle="Test Tool Tip"
           percenTageIncreaseText="+0.15%"
           timeRemainingToolTip="Time left for next 1 hr twap updation."
         />
