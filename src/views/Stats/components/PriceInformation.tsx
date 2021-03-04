@@ -15,6 +15,7 @@ const PriceInformation: React.FC<IProps> = (props) => {
       <PriceLine stat={props.stat} />
       <div className="border-bottom width-100" />
       <TWAPInformation stat={props.stat} />
+      <br />
     </CardTyep2>
   );
 };

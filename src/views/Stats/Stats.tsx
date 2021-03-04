@@ -103,7 +103,7 @@ const Home: React.FC = () => {
                 statData={[
                   {
                     title: `${getDisplayBalance(cashToBondConversionLimit)} ARTH`,
-                    subTitle: 'Debt Available for Purchase',
+                    subTitle: 'Debt Available',
                     tooltipHtml:
                       'The amount of debt issued by the protocol that is available for purchase.',
                   },
@@ -123,7 +123,7 @@ const Home: React.FC = () => {
               />
             </Grid>
             <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
-              <Grid container spacing={2}>
+              <Grid container>
                 <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                   <StatCard
                     statData={[
