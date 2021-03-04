@@ -74,11 +74,12 @@ const EpochTimer: React.FC = () => {
         <TitleString>Next Epoch</TitleString>
         <CurrentEpoch>{`Current Epoch: ${currentEpoch.toFixed(0)}`}</CurrentEpoch>
       </div>
-      {/* <Desc>
-        The 12hr TWAP will get updated to ${getDisplayBalance(estimatedPrice)}.
-        Based on this price, the protocol will not do anything as price is
-        within the safe range.
-      </Desc> */}
+      <Desc>
+        Based on the 1hr TWAP price, the protocol will not do anything as price is within the safe range (0.95$-1$).
+      </Desc>
+      <Desc>
+        Note that the 12hr TWAP is used to decide if the supply expands or contracts.
+      </Desc>
       <LearnMore href="https://docs.arthcoin.com/arth-201/dynamic-epochs" target="">
         Learn more about Epoch
       </LearnMore>
@@ -133,15 +134,15 @@ const EpochTimer: React.FC = () => {
 };
 
 
-// const Desc = styled.div`
-//   font-style: normal;
-//   font-weight: 300;
-//   font-size: 14px;
-//   line-height: 140%;
-//   color: #d9d5d3;
-//   opacity: 0.64;
-//   margin-bottom: 5px;
-// `;
+const Desc = styled.div`
+  font-style: normal;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 140%;
+  color: #d9d5d3;
+  opacity: 0.64;
+  margin-bottom: 5px;
+`;
 
 const CurrentEpoch = styled.div`
   background: #423b38;

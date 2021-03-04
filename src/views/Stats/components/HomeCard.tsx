@@ -8,6 +8,7 @@ import config from '../../../config';
 // import Card from '../../../components/InfoCard';
 import Spacer from '../../../components/Spacer';
 import { getDisplayBalance } from '../../../utils/formatBalance';
+import CallMadeIcon from '@material-ui/icons/CallMade';
 
 interface HomeCardProps {
   title: string;
@@ -46,7 +47,7 @@ const HomeCard: React.FC<HomeCardProps> = ({
         <CardContent>
           <CardSection>
             <div style={{ color: 'rgba(255, 255, 255, 0.64)' }} className="font15">
-              Price
+              {title} Price
             </div>
             {stat ? (
               <StyledValue>
@@ -56,12 +57,12 @@ const HomeCard: React.FC<HomeCardProps> = ({
                 '-'
               )}
           </CardSection>
-          {/* <CardSection>
+          <CardSection>
             <div style={{ color: 'rgba(255, 255, 255, 0.64)' }} className="font15">
-              Liquidity
+              {title} Liquidity
             </div>
             {liquidity ? <StyledValue>{liquidity}</StyledValue> : '-'}
-          </CardSection> */}
+          </CardSection>
           <CardSection>
             <StyledSupplyLabel href={tokenUrl} target="_blank" color={'#ffffff99'}>
               {supplyLabel}
@@ -69,13 +70,12 @@ const HomeCard: React.FC<HomeCardProps> = ({
             {stat ? <StyledValue>{commify(stat.totalSupply)}</StyledValue> : '-'}
           </CardSection>
         </CardContent>
-
-        {/* <UniswapLink
+        <UniswapLink
           target="_blank"
           href={`https://app.uniswap.org/#/swap?inputCurrency=${uniswapInputAddress}&outputCurrency=${address}`}
         >
-          <LinkText>Buy {symbol} from Uniswap </LinkText>
-        </UniswapLink> */}
+          <LinkText>Buy {symbol} from MahaSwap <CallMadeIcon style={{ fontSize: 15 }} /></LinkText>
+        </UniswapLink>
       </Card>
     </Wrapper>
   );

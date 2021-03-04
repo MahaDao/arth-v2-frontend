@@ -95,10 +95,10 @@ const Home: React.FC = () => {
         </Grid>
         <div className="margin-top-bottom-20">
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={12} md={9} lg={9} xl={9}>
+            <Grid item xs={12} sm={12} md={5} lg={5} xl={5}>
               <DistributonSection />
             </Grid>
-            {/* <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
+            <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
               <StatCard
                 statData={[
                   {
@@ -121,10 +121,10 @@ const Home: React.FC = () => {
                   },
                 ]}
               />
-            </Grid> */}
+            </Grid>
             <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
-              <Grid container spacing={2}>
-                {/* <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+              {/* <Grid container spacing={2}> */}
+                <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                   <StatCard
                     statData={[
                       {
@@ -135,12 +135,6 @@ const Home: React.FC = () => {
                         tooltipHtml:
                           'A fund that\'ll be used during a black friday event. When new ARTH is minted during an expansion phase, 2% of minted ARTH is deposited to the rainy day fund. ',
                       },
-                    ]}
-                  />
-                </Grid> */}
-                <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                  <StatCard
-                    statData={[
                       {
                         title: ecosystemFund
                           ? `${commify(getDisplayBalance(ecosystemFund, 18, 0))} ARTH`
@@ -149,10 +143,18 @@ const Home: React.FC = () => {
                         tooltipHtml:
                           'A fund that’ll be used purely for ecosystem development. When new ARTH is minted during an expansion phase, 2% of minted ARTH is deposited to this fund.',
                       },
+                      {
+                        title: ecosystemFund
+                          ? `1%`
+                          : '-',
+                        subTitle: 'Stability',
+                        tooltipHtml:
+                          'A fund that’ll be used purely for ecosystem development. When new ARTH is minted during an expansion phase, 2% of minted ARTH is deposited to this fund.',
+                      },
                     ]}
                   />
                 </Grid>
-              </Grid>
+              {/* </Grid> */}
             </Grid>
           </Grid>
         </div>

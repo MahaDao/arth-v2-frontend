@@ -4,10 +4,11 @@ import { createStyles, Theme, withStyles } from '@material-ui/core/styles';
 import { getDisplayBalance } from '../../../utils/formatBalance';
 import { useSelector } from 'react-redux';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import useBasisCash from '../../../hooks/useBasisCash';
 import { TokenStat } from '../../../basis-cash/types';
+import UpTriangle from '../../../assets/svg/UpTriangle.svg';
 
 const BorderLinearProgress = withStyles((theme: Theme) =>
   createStyles({
@@ -39,7 +40,13 @@ interface IProps {
 const PriceLine: React.FC<IProps> = (props) => {
   const basisCash = useBasisCash();
 
-  const cashTargetPrice = useSelector<AppState, BigNumber>(s => s.treasury.coreState.cashTargetPrice)
+  const [targetPrice, setTargetPrice] = useState<BigNumber>(useSelector<AppState, BigNumber>(s => s.treasury.coreState.cashTargetPrice))
+  useEffect(() => {
+    if (basisCash) {
+      basisCash.getTargetPrice().then(setTargetPrice)
+      // basisCash.getCashPriceInLastTWAP().then(res => console.log('await', getDisplayBalance(res)))
+    }
+  }, [basisCash])
   const arthPrice = props.stat?.priceInDAI
 
   return (
@@ -47,29 +54,34 @@ const PriceLine: React.FC<IProps> = (props) => {
       <div style={{ padding: '30px' }}>
         <StyledTitle>ARTH Price</StyledTitle>
         <TitleBold>{arthPrice && arthPrice.gt(0) ? `$${getDisplayBalance(arthPrice)}` : '-'}</TitleBold>
-        {/* <IncreasedText>+0.15%</IncreasedText> */}
+        <IncreasedText>+0.15%</IncreasedText>
       </div>
-      {false && (<LinearProgressDiv>
-        <TimeComponent>24hr</TimeComponent>
-        <ResponsiveLabelContainer>
-          <LabelComponentLite noMargin>Low</LabelComponentLite>
-          <LabelComponentBold>$0.96</LabelComponentBold>
-        </ResponsiveLabelContainer>
+      {true && (<LinearProgressDiv>
+        <TimeComponent>24 h</TimeComponent>
+        {/* <ResponsiveLabelContainer> */}
+        <LabelComponentLite noMargin>Low</LabelComponentLite>
+        <LabelComponentBold>$0.96</LabelComponentBold>
+        {/* </ResponsiveLabelContainer> */}
         <div style={{ position: 'relative' }}>
           <div className="dialog-class margin-bottom-10">
             <LabelComponentLite>Target Price</LabelComponentLite>
-            <LabelComponentBold>${getDisplayBalance(cashTargetPrice)}</LabelComponentBold>
+            <LabelComponentBold>${getDisplayBalance(targetPrice)}</LabelComponentBold>
           </div>
           <BorderLinearProgress variant="determinate" value={50} />
           <div className="dialog-class margin-top-10">
-            <LabelComponentLite>Current Price</LabelComponentLite>
-            <LabelComponentBold color="#F7653B">$0.98</LabelComponentBold>
+            {/* <ResponsiveLabelContainer> */}
+              {/* <img src={UpTriangle} height="5" style={{ marginTop: -3 }} /> */}
+              {/* <div> */}
+                <LabelComponentLite>Current Price</LabelComponentLite>
+                <LabelComponentBold color="#F7653B">${'0.98'}</LabelComponentBold>
+              {/* </div> */}
+            {/* </ResponsiveLabelContainer> */}
           </div>
         </div>
-        <ResponsiveLabelContainer>
-          <LabelComponentLite noMargin>High</LabelComponentLite>
-          <LabelComponentBold>$1.6</LabelComponentBold>
-        </ResponsiveLabelContainer>
+        {/* <ResponsiveLabelContainer> */}
+        <LabelComponentLite noMargin>High</LabelComponentLite>
+        <LabelComponentBold>$1.6</LabelComponentBold>
+        {/* </ResponsiveLabelContainer> */}
       </LinearProgressDiv>)}
     </StatContainer>
   );
@@ -77,7 +89,9 @@ const PriceLine: React.FC<IProps> = (props) => {
 
 const ResponsiveLabelContainer = styled.div`
   @media (max-width: 768px) {
-    flex-direction: column-reverse;
+    flex-direction: column;
+    // width: 50%
+    // background: red
     display: flex;
     justify-content: center;
     align-items: center;
@@ -114,7 +128,7 @@ const LinearProgressDiv = styled.div`
   display: flex !important;
   align-items: center;
   justify-content: center;
-  padding-right: 30px;
+  padding-right: 50px;
   @media (max-width: 768px) {
     padding-bottom: 30px;
   }
@@ -142,7 +156,7 @@ const TimeComponent = styled.div`
   color: #ffffff;
   opacity: 0.6;
   padding: 2px 5px;
-  margin: 0px 4px;
+  margin: 0px 10px;
 `;
 
 const LabelComponentLite = styled.div`

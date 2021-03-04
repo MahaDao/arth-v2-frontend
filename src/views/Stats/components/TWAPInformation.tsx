@@ -33,6 +33,7 @@ const TWAPInformation: React.FC<IProps> = (props) => {
           toolTipTitle="dwdmwkemfwefmwkefm"
           percenTageIncreaseText="+0.15%"
           timeRemainingToolTip="Time left for next 12 hr twap updation."
+          cardType={'12hr'}
         />
       </Grid>
       <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
@@ -46,6 +47,7 @@ const TWAPInformation: React.FC<IProps> = (props) => {
           toolTipTitle="dwdmwkemfwefmwkefm"
           percenTageIncreaseText="+0.15%"
           timeRemainingToolTip="Time left for next 1 hr twap updation."
+          cardType={'1hr'}
         />
       </Grid>
     </Grid>
