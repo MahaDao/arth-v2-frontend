@@ -166,7 +166,13 @@ const HideOnBigScreen = styled.div`
     display: block;
   } ;
 `;
-const StyledTopBar = styled.div``;
+const StyledTopBar = styled.div`
+  position: fixed;
+  display: flex;
+  width: 100%;
+  z-index: 2;
+  background: #151414;
+`;
 const ShowWarningInner = styled.div`
   font-weight: 600;
   font-size: 16px;
