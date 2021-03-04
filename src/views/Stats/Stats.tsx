@@ -49,15 +49,16 @@ const FaqData = [
 const Home: React.FC = () => {
   const basisCash = useBasisCash();
 
-  const [{ cash, bond, share }, setStats] = useState<OverviewData>({});
+  const [{ cash, bond, share, targetPrice }, setStats] = useState<OverviewData>({});
   const fetchStats = useCallback(async () => {
     const [cash, bond, share] = await Promise.all([
       basisCash.getCashStat(),
       basisCash.getBondStat(),
       basisCash.getShareStat(),
+      basisCash.getTargetPrice(),
     ]);
 
-    setStats({ cash, bond, share });
+    setStats({ cash, bond, share, targetPrice });
   }, [basisCash, setStats]);
 
   useEffect(() => {
@@ -90,7 +91,7 @@ const Home: React.FC = () => {
             <EpochTimer />
           </Grid>
           <Grid item xs={12} sm={6} md={8} lg={8} xl={8}>
-            <PriceInformation stat={cash} />
+            <PriceInformation stat={cash} targetPrice={targetPrice} />
           </Grid>
         </Grid>
         <div className="margin-top-bottom-20">

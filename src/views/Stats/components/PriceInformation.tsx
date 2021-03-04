@@ -1,3 +1,4 @@
+import { BigNumber } from 'ethers';
 import React from 'react';
 import styled from 'styled-components';
 import { TokenStat } from '../../../basis-cash/types';
@@ -6,13 +7,14 @@ import TWAPInformation from './TWAPInformation';
 
 interface IProps {
   stat?: TokenStat;
+  targetPrice?: BigNumber;
 }
 
 
 const PriceInformation: React.FC<IProps> = (props) => {
   return (
     <CardTyep2>
-      <PriceLine stat={props.stat} />
+      <PriceLine stat={props.stat} targetPrice={props.targetPrice}/>
       <div className="border-bottom width-100" />
       <TWAPInformation stat={props.stat} />
       <br />

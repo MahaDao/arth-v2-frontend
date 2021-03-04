@@ -4,7 +4,7 @@ import { createStyles, Theme, withStyles } from '@material-ui/core/styles';
 import { getDisplayBalance } from '../../../utils/formatBalance';
 import { useSelector } from 'react-redux';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import useBasisCash from '../../../hooks/useBasisCash';
 import { TokenStat } from '../../../basis-cash/types';
@@ -34,12 +34,18 @@ const BorderLinearProgress = withStyles((theme: Theme) =>
 
 interface IProps {
   stat?: TokenStat
+  targetPrice?: BigNumber
 }
 
 const PriceLine: React.FC<IProps> = (props) => {
   const basisCash = useBasisCash();
-
-  const cashTargetPrice = useSelector<AppState, BigNumber>(s => s.treasury.coreState.cashTargetPrice)
+  const [targetPrice, setTargetPrice] = useState<BigNumber>(useSelector<AppState, BigNumber>(s => s.treasury.coreState.cashTargetPrice))
+  useEffect(() => {
+    if (basisCash) {
+      basisCash.getTargetPrice().then(setTargetPrice)
+      basisCash.getCashPriceInLastTWAP().then(res => console.log('await', getDisplayBalance(res)))
+    }
+  }, [basisCash])
   const arthPrice = props.stat?.priceInDAI
 
   return (
@@ -58,12 +64,12 @@ const PriceLine: React.FC<IProps> = (props) => {
         <div style={{ position: 'relative' }}>
           <div className="dialog-class margin-bottom-10">
             <LabelComponentLite>Target Price</LabelComponentLite>
-            <LabelComponentBold>${getDisplayBalance(cashTargetPrice)}</LabelComponentBold>
+            <LabelComponentBold>${getDisplayBalance(targetPrice)}</LabelComponentBold>
           </div>
           <BorderLinearProgress variant="determinate" value={50} />
           <div className="dialog-class margin-top-10">
             <LabelComponentLite>Current Price</LabelComponentLite>
-            <LabelComponentBold color="#F7653B">$0.98</LabelComponentBold>
+            <LabelComponentBold color="#F7653B">${'0.98'}</LabelComponentBold>
           </div>
         </div>
         <ResponsiveLabelContainer>

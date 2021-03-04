@@ -120,14 +120,14 @@ const TopBar: React.FC = () => {
                     onClick={() => toggleMobileMenu(true)}
                   />
                 ) : (
-                  <img
-                    src={CloseIcon}
-                    width="24px"
-                    alt=""
-                    className="pointer"
-                    onClick={() => toggleMobileMenu(false)}
-                  />
-                )}
+                    <img
+                      src={CloseIcon}
+                      width="24px"
+                      alt=""
+                      className="pointer"
+                      onClick={() => toggleMobileMenu(false)}
+                    />
+                  )}
               </div>
             </HideOnBigScreen>
             {showMobileMenu && <MobileNav />}
@@ -168,7 +168,6 @@ const HideOnBigScreen = styled.div`
 `;
 const StyledTopBar = styled.div`
   position: fixed;
-  display: flex;
   width: 100%;
   z-index: 2;
   background: #151414;
