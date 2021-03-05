@@ -8,6 +8,7 @@ interface PageHeaderProps {
   title?: string;
   secondParaTitle?: string;
   secondParaDescription?: string;
+  learnMoreLink?: string;
 }
 
 const PageHeader: React.FC<PageHeaderProps> = ({
@@ -15,7 +16,8 @@ const PageHeader: React.FC<PageHeaderProps> = ({
   subtitle,
   title,
   secondParaTitle,
-  secondParaDescription
+  secondParaDescription,
+  learnMoreLink,
 }) => {
 
   return (
@@ -24,7 +26,12 @@ const PageHeader: React.FC<PageHeaderProps> = ({
         <StyledPageContent>
           <StyledTextContainer>
             <StyledTitle>{title}</StyledTitle>
-            <StyledSubtitle>{subtitle}</StyledSubtitle>
+            <StyledSubtitle>
+              {subtitle}
+              {learnMoreLink && <LearnMore href={learnMoreLink} target="">
+                &nbsp; Learn more.
+          </LearnMore>}
+            </StyledSubtitle>
             {secondParaTitle && <SecondParaTitle>{secondParaTitle}</SecondParaTitle>}
             {secondParaDescription && (
               <SecondParaDescription>{secondParaDescription}</SecondParaDescription>
@@ -116,5 +123,20 @@ const StyledTitle = styled.h1`
   z-index: 1;
   margin: 0;
   padding: 0;
+`;
+
+const LearnMore = styled.a`
+  font-style: normal;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 140%;
+  margin-top: 10px;
+  cursor: pointer;
+  color: #f7653b;
+  opacity: 0.88;
+  &:hover {
+    color: #f7653b;
+    opacity: 0.88;
+  }
 `;
 export default PageHeader;
