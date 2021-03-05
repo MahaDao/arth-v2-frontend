@@ -5,6 +5,8 @@ import basLogo from '../../assets/img/basis-share-logo.svg';
 // import babLogo from '../../assets/img/basis-bond-logo.svg';
 import mahaLogo from '../../assets/img/MAHA.png';
 import arthLogo from '../../assets/img/ARTH.png';
+import arthDaiLogo from '../../assets/img/ARTH_DAI.png';
+import mahaSwapLogo from '../../assets/img/MahaSwap.png';
 import arthBLogo from '../../assets/img/ARTHB.png';
 import yCRVLogo from '../../assets/img/ycrv.png';
 import DAILogo from '../../assets/img/DAI.png';
@@ -27,6 +29,7 @@ import MATIC from '../../assets/img/Matic.webp';
 import RSR from '../../assets/img/RSR.webp';
 
 const logosBySymbol: { [title: string]: string } = {
+  ARTH_DAI: arthDaiLogo,
   ARTH: arthLogo,
   MAHA: mahaLogo,
   ARTHB: arthBLogo,
@@ -54,9 +57,12 @@ const logosBySymbol: { [title: string]: string } = {
   'ARTH_DAI-UNI-LPv2': bacLogo,
   'ARTH_DAI-MAHA-LPv1': bacLogo,
   'ARTH_DAI-MLP-LPv1': bacLogo,
+  'ARTH_ETH-MLP-LPv1': bacLogo,
   'BAC_DAI-UNI-LPv2': bacLogo,
   'MAHA_ETH-UNI-LPv2': mahaLogo,
   'BAS_DAI-UNI-LPv2': basLogo,
+
+  'MahaSwap': mahaSwapLogo
 };
 
 type BasisLogoProps = {
@@ -64,21 +70,23 @@ type BasisLogoProps = {
   size?: number;
   zIndex?: number;
   style?: any;
+  left?: number;
+
 };
 
-const TokenSymbol: React.FC<BasisLogoProps> = ({ symbol, size = 64, zIndex, style }) => {
+const TokenSymbol: React.FC<BasisLogoProps> = ({ symbol, size = 64, left = null, zIndex, style }) => {
   if (!logosBySymbol[symbol]) {
     // throw new Error(`Invalid BasisLogo symbol: ${symbol}`);
-    return <img src={logosBySymbol['DAI']} alt={`${symbol} Logo`} width={size} height={size} style={style} />;
+    // return <img src={logosBySymbol['DAI']} alt={`${symbol} Logo`} height={size} />;
+    return null;
   }
 
   return (
     <img
       src={logosBySymbol[symbol]}
       alt={`${symbol} Logo`}
-      style={{ borderRadius: '100%' }}
-      width={size}
       height={size}
+      style={left ? { marginLeft: left, zIndex: 10 + left, position: 'relative' } : { zIndex: 10, position: 'relative' }}
     />
   );
 };

@@ -29,7 +29,7 @@ const MigrationDisclaimerModal: React.FC<MigrationDisclaimerModalProps> = ({ onC
         </StyledText>
       </div>
       <ModalActions>
-        <Button text="Cancel" variant="secondary" onClick={handleDismiss} />
+        <Button text="Cancel" theme="secondary" onClick={handleDismiss} />
         <Button text="I understand" onClick={handleConfirm} />
       </ModalActions>
     </Modal>

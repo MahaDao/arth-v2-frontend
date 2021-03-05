@@ -46,13 +46,13 @@ const StyledButton = styled.button<StyledButtonProps>`
   text-transform: uppercase;
   width: 56px;
   &:hover {
-    background-color: rgba(255, 255, 255, 0.32);
+    background-color: ${(props) => props.theme.color.alpha[32]};
   }
   &:focus {
     outline: none;
   }
   &:disabled {
-    background-color: rgba(255, 255, 255, 0.08);
+    background-color: ${(props) => props.theme.color.alpha[8]};
     cursor: nonde;
   }
 `;

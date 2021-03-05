@@ -107,6 +107,7 @@ const configurations: { [env: string]: Configuration } = {
       'MAHA_ETH-UNI-LPv2': ['0xc0897d6ba893e31f42f658eead777aa15b8f824d', 18],
       'ARTH_DAI-UNI-LPv2': ['0x35b6f9e6300aa6c722ea189e096b0b073025806f', 18],
       'ARTH_DAI-MAHA-LPv1': ['0x1c36d9e60cac6893652b74e357f3829a0f5095e0', 18],
+      'ARTH_ETH-MAHA-LPv1': ['0x4A3201A61a998E8f43C942532a72B9c80708Aa58', 18],
       'ARTHB_DAI-UNI-LPv2': ['0xa3d0e590cf468f41dae22a2be88c51bd3243cb87', 18]
     },
 

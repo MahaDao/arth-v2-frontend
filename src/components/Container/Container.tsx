@@ -1,6 +1,5 @@
 import React, { useContext } from 'react'
 import styled, { ThemeContext } from 'styled-components'
-import bgImg from '../../assets/img/bgImg.jpeg';
 
 interface ContainerProps {
   children?: React.ReactNode,

@@ -1,19 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import InfoCard from '../../../components/InfoCard';
-import { withStyles, Theme } from '@material-ui/core/styles';
 import InfoIcon from '../../../assets/img/InfoWarning.svg';
-import Tooltip from '@material-ui/core/Tooltip';
-const HtmlTooltip = withStyles((theme: Theme) => ({
-  tooltip: {
-    backgroundColor: '#2A2827',
-    color: 'white',
-    fontWeight: 300,
-    fontSize: '13px',
-    borderRadius: '6px',
-    padding: '20px',
-  },
-}))(Tooltip);
+import HtmlTooltip from '../../../components/HtmlTooltip';
+
 interface ExchangeStatProps {
   title: string;
   description: string;

@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Provider, useDispatch } from 'react-redux';
 import { HashRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
-import { UseWalletProvider } from 'use-wallet';
+import { useWallet, UseWalletProvider } from 'use-wallet';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import BanksProvider from './contexts/Banks';
@@ -21,6 +21,8 @@ import Popups from './components/Popups';
 import config from './config';
 import useBasisCash from './hooks/useBasisCash';
 import * as Treasury from './state/treasury/controller';
+import * as Vaults from './state/vault/controller';
+
 
 import './index.css';
 import './App.css';
@@ -76,15 +78,24 @@ const App: React.FC = () => {
 };
 
 const AppContent: React.FC = ({ children }) => {
-  // const { account } = useWallet();
+  const { account } = useWallet();
   const basisCash = useBasisCash();
   const dispatch = useDispatch();
+
 
   useEffect(() => {
     if (basisCash) {
       Treasury.init(basisCash, dispatch);
     }
+
   }, [basisCash, dispatch]);
+
+  useEffect(() => {
+    console.log('test', account)
+    if (account) {
+      Vaults.init(account, basisCash, dispatch)
+    }
+  }, [account, basisCash, dispatch]);
 
   // if (!!!account) return <UnlockWallet />;
   if (!basisCash) return <div>Loading</div>;

@@ -43,12 +43,14 @@ export default function Updater(): null {
     provider
       .getBlockNumber()
       .then(blockNumberCallback)
-      .catch((error) =>
+      .catch((error: any) =>
         console.error(`Failed to get block number for chainId: ${chainId}`, error),
       );
 
     provider.on('block', blockNumberCallback)
-    return () => provider.removeListener('block', blockNumberCallback);
+    return () => {
+      provider.removeListener('block', blockNumberCallback);
+    }  
   }, [dispatch, chainId, ethereum, blockNumberCallback, windowVisible]);
 
   const debouncedState = useDebounce(state, 100);

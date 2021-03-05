@@ -1,18 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { withStyles, Theme } from '@material-ui/core/styles';
 import InfoIcon from '../../../assets/img/ToolTipColored.svg';
-import Tooltip from '@material-ui/core/Tooltip';
-const HtmlTooltip = withStyles((theme: Theme) => ({
-  tooltip: {
-    backgroundColor: '#2A2827',
-    color: 'white',
-    fontWeight: 300,
-    fontSize: '13px',
-    borderRadius: '6px',
-    padding: '20px',
-  },
-}))(Tooltip);
+import HtmlTooltip from '../../../components/HtmlTooltip';
 interface StatProps {
   statData: Array<{ title: string; subTitle: string, tooltipHtml: string, }>;
 }

@@ -1,6 +1,5 @@
 import React, { useContext, useMemo } from 'react';
 import styled, { ThemeContext } from 'styled-components';
-
 import { Link } from 'react-router-dom';
 
 interface ButtonProps {
@@ -11,7 +10,50 @@ interface ButtonProps {
   size?: 'sm' | 'md' | 'lg';
   text?: string;
   to?: string;
-  variant?: 'default' | 'secondary' | 'tertiary';
+  theme?: 'default' | 'secondary' | 'tertiary';
+  variant?: 'default' | 'transparent' | 'outlined' | 'rounded';
+}
+
+function variantToStyle(variant: string = 'default', color: any) {
+  if (variant === 'transparent') {
+    return {
+      fg: {
+        normal: color.white,
+      },
+      bg: {
+        normal: color.transparent,
+        hover: color.dark[400],
+        selected: color.dark[200]
+      },
+      border: {
+        normal: `1px solid ${color.alpha[88]}`,
+        hover: `1px solid ${color.white}`,
+        radius: '8px',
+        radiusHover: '6px'
+      }
+    }
+  } else if (variant === 'outlined') {
+    return {
+      fg: {normal: '#F5F5F5', hover: '#F5F5F5'},
+      bg: {normal: color.transparent, hover: color.transparent, disabled: color.transparent},
+      border: {
+        normal: `1px solid ${color.alpha[32]}`,
+        hover: `1px solid ${color.alpha[64]}`,
+      }
+    }
+  } else if (variant === 'rounded') {
+    return {
+      fg: {normal: color.pink[300]},
+      bg: {normal: color.alpha[8], disabled: color.transparent},
+      border: {radius: '19px', radiusHover: '19px'}
+    }
+  } else {
+    return {
+      fg: {},
+      bg: {},
+      border: {}
+    }
+  }
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -22,18 +64,32 @@ const Button: React.FC<ButtonProps> = ({
   size,
   text,
   to,
+  theme,
   variant,
 }) => {
   const { color, spacing } = useContext(ThemeContext);
 
-  let buttonColor: string;
-  switch (variant) {
-    case 'secondary':
-      buttonColor = color.teal[200];
-      break;
-    case 'default':
-    default:
-      buttonColor = color.primary.main;
+  const variantStyle = variantToStyle(variant, color);
+  let fg = {
+    normal: theme === 'secondary' ? color.teal[200] : color.white, 
+    hover: color.white, 
+    selected: 'rgba(255, 255, 255, 0.32)', 
+    disabled: '',
+    ...variantStyle.fg
+  };
+  let bg = {
+    normal: `linear-gradient(38.44deg, ${color.pink[200]} 15.81%, ${color.pink[400]} 87.57%)`, 
+    hover: color.pink[300], 
+    selected: `linear-gradient(180deg, ${color.pink[200]} -11.33%, ${color.pink[400]} 100%)`, 
+    disabled: color.alpha[32],
+    ...variantStyle.bg
+  };
+  let border = {
+    normal: '0',
+    hover: '0',
+    radius: '6px',
+    radiusHover: variantStyle.border.radiusHover || '6px',
+    ...variantStyle.border
   }
 
   let boxShadow: string;
@@ -75,7 +131,9 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <StyledButton
       boxShadow={boxShadow}
-      color={buttonColor}
+      fg={fg}
+      bg={bg}
+      border={border}
       disabled={disabled}
       fontSize={fontSize}
       onClick={onClick}
@@ -89,8 +147,10 @@ const Button: React.FC<ButtonProps> = ({
 };
 
 interface StyledButtonProps {
+  fg: {normal: string, hover: string, selected: string, disabled: string}
+  bg: {normal: string, hover: string, selected: string, disabled: string}
+  border: {normal: string, hover: string, radius: string, radiusHover: string}
   boxShadow: string;
-  color: string;
   disabled?: boolean;
   fontSize: number;
   padding: number;
@@ -98,35 +158,42 @@ interface StyledButtonProps {
 }
 
 const StyledButton = styled.button<StyledButtonProps>`
-  align-items: center;
-  white-space: nowrap;
-  background: linear-gradient(38.44deg, #F47F57 15.81%, #FD5656 87.57%);
-  border: 0;
-  border-radius: 6px;
+  color: ${({fg}) => fg.normal};
+  background: ${({bg}) => bg.normal};
+  border: ${({border}) => border.normal};
+  border-radius: ${({border}) => border.radius};
   box-shadow: ${(props) => props.boxShadow};
-  color: #fff;
+  pointer-events: ${(props) => (!props.disabled ? undefined : 'none')};
+
+  align-items: center;  
+  text-align: center;
+  white-space: nowrap;
   cursor: pointer;
   display: flex;
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 600;
   height: 38px;
   justify-content: center;
   outline: none !important;
   padding: 10px 22px;
-  pointer-events: ${(props) => (!props.disabled ? undefined : 'none')};
   width: 100%;
+
   &:hover {
-    background: #FF7F57;
+    color: ${({fg}) => fg.hover};
+    background: ${({bg}) => bg.hover};
+    border: ${({border}) => border.hover};
+    border-radius: ${({border}) => border.radiusHover}
   }
   &:selected {
-    background: linear-gradient(180deg, #F47F57 -11.33%, #FD5656 100%);
+    color: ${({fg}) => fg.selected};
+    background: ${({bg}) => bg.selected};
   }
   &:focus: {
     outline: none;
   }
   &:disabled {
-    background: rgba(255,255,255,0.32);
-    color: rgba(255, 255, 255, 0.88);
+    color: ${({fg}) => fg.disabled};
+    background: ${({bg}) => bg.disabled};
     cursor: not-allowed;
   }
 `;

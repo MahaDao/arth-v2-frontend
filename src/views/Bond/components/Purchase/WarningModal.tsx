@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Button from '../../../../components/Button';
 import Modal from '../../../../components/NewModal/index';
-import ButtonTransperant from '../../../../components/Button/TransperantButton';
 
 import styled from 'styled-components';
 
@@ -44,7 +43,7 @@ const WarningModal: React.FC<ExchangeModalProps> = ({ onConfirm, onCancel }) => 
 
       <ActionButton>
         <ResponsiveButtonWidth>
-          <ButtonTransperant text="No" variant="secondary" onClick={handleClose} />
+          <Button text="No" theme="secondary" variant="transparent" onClick={handleClose} />
         </ResponsiveButtonWidth>
         <ResponsiveButtonWidth>
           <Button text={'Proceed'} onClick={onConfirm} />
@@ -61,12 +60,6 @@ const StyledLabel = styled.div`
   text-align: center;
 `;
 
-const RorSpan = styled.span`
-  font-weight: 600;
-  font-size: 16px;
-  line-height: 24px;
-  color: rgba(255, 255, 255, 0.88);
-`;
 const ActionButton = styled.div`
   align-items: center;
   background-color: ${(props) => props.theme.color.grey[100]}00;

@@ -1,6 +1,10 @@
+import { KeyboardArrowRight } from '@material-ui/icons';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Container from '../../components/Container';
+import { useMediaQuery } from 'react-responsive';
+import theme from '../../theme';
 
 interface PageHeaderProps {
   icon?: React.ReactNode;
@@ -9,6 +13,8 @@ interface PageHeaderProps {
   secondParaTitle?: string;
   secondParaDescription?: string;
   learnMoreLink?: string;
+  parentLink?: string;
+  parentLinkTitle?: string;
 }
 
 const PageHeader: React.FC<PageHeaderProps> = ({
@@ -18,13 +24,24 @@ const PageHeader: React.FC<PageHeaderProps> = ({
   secondParaTitle,
   secondParaDescription,
   learnMoreLink,
+  parentLink,
+  parentLinkTitle
 }) => {
+
+  const isDesktopOrLaptop = useMediaQuery({query: '(min-device-width: 800px)'});
 
   return (
     <StyledPageHeader>
       <Container size="lg">
         <StyledPageContent>
-          <StyledTextContainer>
+          <StyledTextContainer>            
+          {(isDesktopOrLaptop && parentLink) && (
+            <StyledNav>
+              <StyledNavLink to={parentLink}>{parentLinkTitle}</StyledNavLink>
+              <KeyboardArrowRight style={{color: theme.color.grey[500]}} />
+              <StyledNavTitle>{title}</StyledNavTitle>
+            </StyledNav>
+          )}
             <StyledTitle>{title}</StyledTitle>
             <StyledSubtitle>
               {subtitle}
@@ -64,13 +81,34 @@ const StyledPageContent = styled.div`
   } ;
 `;
 
+const StyledNav = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-top: -30px;
+  margin-bottom: 20px;
+`;
+
+const StyledNavLink = styled(Link)`
+  color: ${props => props.theme.color.grey[400]};
+  font-size: 14px;
+  margin-right: -4px;
+  &:hover {
+    color: white !important;
+  }
+`;
+
+const StyledNavTitle = styled.span`
+  color: white;
+  font-size: 14px;
+`;
+
 const StyledTextContainer = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
-  @media (max-width: 768px) {
-    margin-top: -100px;
-  } ;
+  // @media (max-width: 768px) {
+  //   margin-top: -100px;
+  // } ;
 `;
 
 const StyledPageHeader = styled.div`
@@ -78,7 +116,7 @@ const StyledPageHeader = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
-  background: linear-gradient(180deg, #2a2827 0%, rgba(42, 40, 39, 0) 100%);
+  background: linear-gradient(180deg, #${(props) => props.theme.color.dark[200]} 0%, rgba(42, 40, 39, 0) 100%);
   padding-bottom: ${(props) => props.theme.spacing[6]}px;
   padding-top: ${(props) => props.theme.spacing[6]}px;
   padding-left: 15px;

@@ -6,7 +6,7 @@ import useTreasuryAllocationTimes from '../../../hooks/useTreasuryAllocationTime
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Box from '@material-ui/core/Box';
 import moment from 'moment';
-import Button from '../../../components/Button/TransperantButton';
+import Button from '../../../components/Button/Button';
 import useAdvanceEpoch from '../../../hooks/useAdvanceEpoch';
 import { useWallet } from 'use-wallet';
 
@@ -121,9 +121,9 @@ const EpochTimer: React.FC = () => {
       <div className="dialog-class">
         <div className="margin-top-30" style={{ width: '170px' }}>
           {!account ? (
-            <Button onClick={() => connect('injected')} size="sm" text="Connect Wallet" />
+            <Button variant='transparent' onClick={() => connect('injected')} size="sm" text="Connect Wallet" />
           ) : (
-              <Button onClick={advanceEpoch} disabled={percentage < 100}>
+              <Button variant='transparent' onClick={advanceEpoch} disabled={percentage < 100}>
                 Advance Epoch
               </Button>
             )}

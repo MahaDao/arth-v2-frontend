@@ -1,17 +1,20 @@
 import React from 'react';
 import styled from 'styled-components';
 import Countdown, { CountdownRenderProps } from 'react-countdown';
+import { Info } from '@material-ui/icons';
 
 interface ProgressCountdownProps {
   base: Date;
   deadline: Date;
   description: string;
+  tooltip?: string;
 }
 
 const ProgressCountdown: React.FC<ProgressCountdownProps> = ({
   base,
   deadline,
   description,
+  tooltip
 }) => {
   const percentage =
     Date.now() >= deadline.getTime()
@@ -32,7 +35,7 @@ const ProgressCountdown: React.FC<ProgressCountdownProps> = ({
 
   return (
     <StyledCardContentInner>
-      <StyledDesc>{description}</StyledDesc>
+      <StyledDesc>{description} {tooltip && <Info style={{transform: "scale(0.7)"}} />} </StyledDesc>
       <Countdown date={deadline} renderer={countdownRenderer} />
       <StyledProgressOuter>
         <StyledProgress progress={percentage} />
@@ -67,16 +70,18 @@ const StyledDesc = styled.span`
   font-weight: 400;
   font-size: 12px;
   text-align: center;
+  justify-content: flex-end;
+  display: flex;
+  align-items: center;
 `;
 
 const StyledCardContentInner = styled.div`
-  height: 100%;
   display: flex;
   align-items: start;
   justify-content: center;
   flex-direction: column;
   width: 100%;
-  margin-top: 15px;
+  margin: 20px 0;
 `;
 
 export default ProgressCountdown;

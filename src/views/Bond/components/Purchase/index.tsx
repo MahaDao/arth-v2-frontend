@@ -1,8 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Tooltip from '@material-ui/core/Tooltip';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
-import { withStyles, Theme } from '@material-ui/core/styles';
 import Button from '../../../../components/Button';
 import CardContent from '../../../../components/CardContent';
 import useBasisCash from '../../../../hooks/useBasisCash';
@@ -17,6 +15,7 @@ import useApprove, { ApprovalState } from '../../../../hooks/useApprove';
 import useCatchError from '../../../../hooks/useCatchError';
 import Spacer from '../../../../components/Spacer';
 import { useWallet } from 'use-wallet';
+import HtmlTooltip from '../../../../components/HtmlTooltip';
 
 interface ExchangeCardProps {
   action: string;
@@ -31,16 +30,7 @@ interface ExchangeCardProps {
   disabled?: boolean;
   disabledDescription?: string;
 }
-const HtmlTooltip = withStyles((theme: Theme) => ({
-  tooltip: {
-    backgroundColor: '#2A2827',
-    color: 'white',
-    fontWeight: 300,
-    fontSize: '13px',
-    borderRadius: '6px',
-    padding: '20px',
-  },
-}))(Tooltip);
+
 const PurchaseBonds: React.FC<ExchangeCardProps> = ({
   action,
   fromToken,

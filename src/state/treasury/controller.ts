@@ -2,7 +2,6 @@ import { Dispatch } from '@reduxjs/toolkit'
 import { BasisCash } from '../../basis-cash/BasisCash'
 import * as Actions from './actions'
 import { IMulticallInput } from '../../basis-cash/Mulitcall'
-import { useCallback } from 'react'
 
 
 export const init = (basisCash: BasisCash, dispatch: Dispatch) => {
@@ -34,7 +33,8 @@ export const init = (basisCash: BasisCash, dispatch: Dispatch) => {
   }
 
   const updateJob =  async () => {
-    const t = await basisCash.getTreasury()
+    await basisCash.getTreasury()
+    // const t = await basisCash.getTreasury()
     // const state = await t.getState();
     // dispatch(Actions.updateState(state))
   }

@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
 import Button from '../../../../components/Button';
-import ButtonTransperant from '../../../../components/Button/TransperantButton';
 import Modal from '../../../../components/NewModal/index';
 import ModalActions from '../../../../components/ModalActions';
 import TokenInput from '../../../../components/TokenInput';
@@ -57,9 +56,10 @@ const DepositModal: React.FC<DepositModalProps> = ({
           symbol={tokenName}
         />
         <ModalActions>
-          <ButtonTransperant
+          <Button
             text="Cancel"
-            variant="secondary"
+            theme="secondary"
+            variant="transparent"
             onClick={() => toggleModal(false)}
           />
           <Button text="Confirm" onClick={() => onConfirm(val)} />

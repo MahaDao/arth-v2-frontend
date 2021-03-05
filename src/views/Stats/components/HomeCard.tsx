@@ -1,12 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import UniswapArrowIcon from '../../../assets/img/uniswapArrow.svg';
 import { TokenStat } from '../../../basis-cash/types';
 import TokenSymbol from '../../../components/TokenSymbol';
 import { commify } from 'ethers/lib/utils';
 import config from '../../../config';
-// import Card from '../../../components/InfoCard';
-import Spacer from '../../../components/Spacer';
 import { getDisplayBalance } from '../../../utils/formatBalance';
 import CallMadeIcon from '@material-ui/icons/CallMade';
 
@@ -23,7 +20,6 @@ interface HomeCardProps {
 const HomeCard: React.FC<HomeCardProps> = ({
   title,
   symbol,
-  uniswapInputAddress,
   address,
   liquidity,
   supplyLabel = 'Total Supply',
@@ -100,34 +96,6 @@ const Wrapper = styled.div`
   }
 `;
 
-const UniswapLink = styled.a`
-  color: #fff;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  text-align: center;
-  display: flex;
-  width: 100%;
-  justify-content: center;
-  text-decoration: none;
-  padding: 20px;
-`;
-
-const LinkText = styled.span`
-  text-align: center;
-  margin: 0 15px 5px;
-  color: #f7653b;
-  font-size: 16px;
-  padding: 20px;
-  &:hover {
-    background: #2a2827;
-    border-radius: 6px;
-    padding: 20px;
-  }
-  &:focus {
-    background: #423b38;
-    border-radius: 6px;
-    padding: 20px;
-  }
-`;
 
 const CardContent = styled.div`
   display: flex;
@@ -146,14 +114,6 @@ const CardHeader = styled.h2`
   align-items: center;
   text-align: center;
   padding: 20px;
-`;
-
-const StyledCards = styled.div`
-  padding: 5px 0;
-  color: #fff;
-  @media (max-width: 768px) {
-    width: 100%;
-  }
 `;
 
 const StyledValue = styled.span`

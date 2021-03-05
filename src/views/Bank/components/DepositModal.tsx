@@ -51,7 +51,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
         symbol={tokenName}
       />
       <ModalActions>
-        <Button text="Cancel" variant="secondary" onClick={onDismiss} />
+        <Button text="Cancel" theme="secondary" onClick={onDismiss} />
         <Button text="Confirm" onClick={() => onConfirm(val)} />
       </ModalActions>
     </Modal>

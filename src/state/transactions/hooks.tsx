@@ -47,6 +47,7 @@ export function useTransactionAdder(): (
 
       dispatch(addTransaction({ hash, from: account, chainId, approval, summary }));
     },
+    // eslint-disable-next-line
     [dispatch, chainId, account],
   );
 }

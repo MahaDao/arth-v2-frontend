@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
-import Button from '../../Button/TransperantButton';
+import Button from '../../Button/Button';
 import ButtonColored from '../../Button/';
 import AccountModal from './AccountModal';
 import AccountBalanceWalletOutlinedIcon from '@material-ui/icons/AccountBalanceWalletOutlined';
@@ -30,7 +30,7 @@ const AccountButton: React.FC<AccountButtonProps> = (props) => {
       {showModal && <AccountModal onCancel={() => toggleModal(false)} />}
       <StyledAccountButton>
         {!account ? (
-          <Button onClick={() => connect('injected')} size="sm" text="Connect" />
+          <Button variant='transparent' onClick={() => connect('injected')} size="sm" text="Connect" />
         ) : (
           <ButtonColored
             onClick={() => toggleModal(true)}

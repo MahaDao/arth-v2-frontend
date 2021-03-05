@@ -1,7 +1,6 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useContext } from 'react';
 import styled, { ThemeContext } from 'styled-components';
 
-import { Link } from 'react-router-dom';
 
 interface ButtonProps {
   children?: React.ReactNode;
@@ -11,10 +10,10 @@ interface ButtonProps {
   size?: 'sm' | 'md' | 'lg';
   text?: string;
   to?: string;
-  variant?: 'default' | 'secondary' | 'tertiary';
+  variant?: 'default' | 'secondary' | 'tertiary' | 'outlined' | 'rounded';
 }
 
-const Button: React.FC<ButtonProps> = ({
+const LinkButton: React.FC<ButtonProps> = ({
   children,
   disabled,
   href,
@@ -58,33 +57,24 @@ const Button: React.FC<ButtonProps> = ({
       fontSize = 16;
   }
 
-  const ButtonChild = useMemo(() => {
-    if (to) {
-      return <StyledLink to={to}>{text}</StyledLink>;
-    } else if (href) {
-      return (
-        <StyledExternalLink href={href} target="__blank">
-          {text}
-        </StyledExternalLink>
-      );
-    } else {
-      return text;
-    }
-  }, [href, text, to]);
 
   return (
-    <StyledButton
-      boxShadow={boxShadow}
-      color={buttonColor}
-      disabled={disabled}
-      fontSize={fontSize}
-      onClick={onClick}
-      padding={buttonPadding}
-      size={buttonSize}
-    >
-      {children}
-      {ButtonChild}
-    </StyledButton>
+    <StyledExternalLink href={href} target="__blank">
+      <StyledButton
+        boxShadow={boxShadow}
+        color={buttonColor}
+        disabled={disabled}
+        fontSize={fontSize}
+        onClick={onClick}
+        padding={buttonPadding}
+        size={buttonSize}
+        outlined={variant === 'outlined'}
+        rounded={variant === 'rounded'}
+      >
+        {children}
+      </StyledButton>
+    </StyledExternalLink>
+
   );
 };
 
@@ -95,62 +85,44 @@ interface StyledButtonProps {
   fontSize: number;
   padding: number;
   size: number;
+  outlined: boolean;
+  rounded: boolean;
 }
 
 const StyledButton = styled.button<StyledButtonProps>`
   align-items: center;
-  text-align: center;
-  color: #FFFFFF;
-  background: transparent;
-  opacity: 0.88;
-  flex: none;
-  border: 1px solid white;
-  border-radius: 8px;
+  white-space: nowrap;
+  background: ${(props) => props.rounded ? 'rgba(255, 255, 255, 0.08)' : (props.outlined ? 'transparent' : 'linear-gradient(38.44deg, #F47F57 15.81%, #FD5656 87.57%)')};
+  border: ${(props) => props.outlined ? '1px solid rgba(255, 255, 255, 0.32)' : '0'};
+  border-radius: ${(props) => props.rounded ? '19px' : '6px'};
   box-shadow: ${(props) => props.boxShadow};
-  color: #fff;
+  color: ${(props) => props.rounded ? '#FF7F57' : (props.outlined ? '#F5F5F5' : '#fff')};
   cursor: pointer;
   display: flex;
-  font-size: ${(props) => props.fontSize}px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 600;
   height: 38px;
   justify-content: center;
-  outline: none;
+  outline: none !important;
   padding: 10px 22px;
   pointer-events: ${(props) => (!props.disabled ? undefined : 'none')};
   width: 100%;
-  width: 100%;
   &:hover {
-    background: #423b38;
-    border: 1px solid rgba(255, 255, 255, 0.88);
-    box-sizing: border-box;
-    border-radius: 6px;
+    background: ${(props) => props.outlined ? 'transparent' : '#FF7F57'};
+    border: ${(props) => props.outlined ? '1px solid rgba(255, 255, 255, 0.64)' : '0'};
+    color: ${(props) => props.outlined ? '#F5F5F5' : '#fff'};
   }
   &:selected {
-    background: #2a2827;
-    border: 1px solid rgba(255, 255, 255, 0.32);
-    box-sizing: border-box;
-    border-radius: 6px;
+    background: linear-gradient(180deg, #F47F57 -11.33%, #FD5656 100%);
   }
-  &:disabled {
-    border: 1px solid rgba(255, 255, 255, 0.32);
-    box-sizing: border-box;
-    border-radius: 6px;
-  }
-  &:focus {
+  &:focus: {
     outline: none;
   }
-`;
-
-const StyledLink = styled(Link)`
-  align-items: center;
-  color: inherit;
-  display: flex;
-  flex: 1;
-  height: 38px;
-  justify-content: center;
-  margin: 0 ${(props) => -props.theme.spacing[4]}px;
-  padding: 0 ${(props) => props.theme.spacing[4]}px;
-  text-decoration: none;
+  &:disabled {
+    background: ${(props) => props.outlined ? 'transparent' : 'rgba(255,255,255,0.32)'};
+    color: rgba(255, 255, 255, 0.32);
+    cursor: not-allowed;
+  }
 `;
 
 const StyledExternalLink = styled.a`
@@ -165,4 +137,4 @@ const StyledExternalLink = styled.a`
   text-decoration: none;
 `;
 
-export default Button;
+export default LinkButton;

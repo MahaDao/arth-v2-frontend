@@ -1,22 +1,9 @@
 import React from 'react';
-import { Theme, withStyles } from '@material-ui/core/styles';
 import styled from 'styled-components';
 
 import PieChart from '../components/PieChart';
 import InfoIcon from '../../../assets/img/ToolTipColored.svg';
-import Tooltip from '@material-ui/core/Tooltip';
-
-
-const HtmlTooltip = withStyles((theme: Theme) => ({
-  tooltip: {
-    backgroundColor: '#2A2827',
-    color: 'white',
-    fontWeight: 300,
-    fontSize: '13px',
-    borderRadius: '6px',
-    padding: '20px',
-  },
-}))(Tooltip);
+import HtmlTooltip from '../../../components/HtmlTooltip';
 
 
 const DistributonSection: React.FC = () => {
@@ -24,7 +11,7 @@ const DistributonSection: React.FC = () => {
     <Card>
       <TitleString>
         ARTH Seigniorage Distribution
-                  <HtmlTooltip
+        <HtmlTooltip
           enterTouchDelay={0}
           title={
             <span>
@@ -49,6 +36,13 @@ const DistributonSection: React.FC = () => {
             </div>
           </PieChartLables>
           <PieChartLables>
+            <ChartIconColor color="#178A50" />
+            <div>
+              <ChartLabelTitle>ARTH-ETH MahaSwap LP</ChartLabelTitle>
+              <ChartLabelTitleBold>10% (65,0000 ARTH)</ChartLabelTitleBold>
+            </div>
+          </PieChartLables>
+          <PieChartLables>
             <ChartIconColor color="#20C974" />
             <div>
               <ChartLabelTitle>ARTH</ChartLabelTitle>
@@ -59,9 +53,10 @@ const DistributonSection: React.FC = () => {
             <ChartIconColor color="#C4F7DD" />
             <div>
               <ChartLabelTitle>MAHA</ChartLabelTitle>
-              <ChartLabelTitleBold>10% (10,000 MAHA)</ChartLabelTitleBold>
+              <ChartLabelTitleBold>20% (10,000 MAHA)</ChartLabelTitleBold>
             </div>
           </PieChartLables>
+
         </div>
       </PieChartCard>
     </Card>

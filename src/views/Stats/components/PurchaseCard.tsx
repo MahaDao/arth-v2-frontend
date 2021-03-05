@@ -1,11 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import Button from '../../../components/Button/Button';
-import { withStyles, Theme } from '@material-ui/core/styles';
 import InfoIcon from '../../../assets/img/ToolTipColored.svg';
-import Tooltip from '@material-ui/core/Tooltip';
 import { BigNumber } from 'ethers';
 import { getDisplayBalance } from '../../../utils/formatBalance';
+import { Theme, Tooltip, withStyles } from '@material-ui/core';
+import Button from '../../../components/Button/Button';
 
 
 const HtmlTooltip = withStyles((theme: Theme) => ({
@@ -34,15 +33,15 @@ interface StatProps {
 
 const PurchaseCard: React.FC<StatProps> = ({
   isPurchase,
-  timeRemaining,
   price,
-  priceToCompare12Twap,
-  priceToCompare1Twap,
-  percenTageIncreaseText,
   title,
   toolTipTitle,
   timeRemainingToolTip,
-  cardType
+  priceToCompare12Twap,
+  priceToCompare1Twap,
+  cardType,
+  percenTageIncreaseText,
+  timeRemaining
 }) => {
   let buttonText = 'Purchase ARTHB at 20% Discount';
   let buttonTopDesc = 'ARTH Bonds ($ARTHB) can be purchased at 20% discount';

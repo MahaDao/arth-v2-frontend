@@ -3,10 +3,8 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Grid from '@material-ui/core/Grid';
 import Container from '../../../components/Container';
-import ExchangeStat from '../../Bond/components/ExchangeStat';
-import { BoardroomInfo } from '../../../basis-cash';
 import PageHeader from '../../../components/PageHeader';
-import Button from '../../../components/Button/TransperantButton';
+import Button from '../../../components/Button/Button';
 import useBasisCash from '../../../hooks/useBasisCash';
 import Harvest from './components/Harvest';
 import Stake from './components/Stake';
@@ -34,7 +32,7 @@ const Boardroom = () => {
         {/* // eslint-disable-next-line jsx-a11y/accessible-emoji */}
         <Notice>
           New Upgraded Distribution contracts are coming soon and will replace this contract!
-          🚀🚀 These contracts will stop receiving rewards.
+          <span role="img" aria-label="Rocket">🚀🚀</span>These contracts will stop receiving rewards.
         </Notice>
         <Notice>
           You are advised to withdraw funds from these contracts and deposit into new ones when
@@ -51,7 +49,7 @@ const Boardroom = () => {
               </Grid>
             </Grid>
             <div style={{ marginTop: '20px', maxWidth: '200px' }}>
-              <Button onClick={onRedeem} size="sm" text="Settle & Withdraw" />
+              <Button variant='transparent' onClick={onRedeem} size="sm" text="Settle & Withdraw" />
             </div>
           </Grid>
           {/* <Grid container item xs={12} md={4} lg={4} xl={4}>
@@ -74,33 +72,6 @@ const Boardroom = () => {
   );
 };
 
-const LPTokenHelpText: React.FC<{ boardroom: BoardroomInfo }> = ({ boardroom }) => {
-  let pairName: string;
-  let uniswapUrl: string;
-
-  const basisCash = useBasisCash();
-
-  if (boardroom.depositTokenName.includes('ARTH')) {
-    pairName = 'ARTH-DAI pair';
-    uniswapUrl = `https://app.uniswap.org/#/add/${basisCash.ARTH.address}/${basisCash.DAI.address}`;
-  } else {
-    pairName = 'MAHA-WETH pair';
-    uniswapUrl =
-      'https://app.uniswap.org/#/add/0xa7ED29B253D8B4E3109ce07c80fc570f81B63696/0x6B175474E89094C44Da98b954EedeAC495271d0F';
-  }
-
-  return (
-    <StyledLink href={uniswapUrl} target="_blank">
-      {`🦄  Provide liquidity to ${pairName} on Uniswap  🦄`}
-    </StyledLink>
-  );
-};
-
-const StyledLink = styled.a`
-  font-weight: 700;
-  text-decoration: none;
-  color: ${(props) => props.theme.color.primary.main};
-`;
 
 const Notice = styled.p`
   font-size: 18;

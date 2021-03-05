@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Button from '../../../../components/Button';
 import Modal from '../../../../components/NewModal/index';
-import ButtonTransperant from '../../../../components/Button/TransperantButton';
 import TokenInput from '../../../../components/TokenInput';
 import { getDisplayBalance, getFullDisplayBalance } from '../../../../utils/formatBalance';
 import { BigNumber } from 'ethers';
@@ -179,7 +178,7 @@ const ExchangeModal: React.FC<ExchangeModalProps> = ({
 
       <ActionButton>
         <ResponsiveButtonWidth>
-          <ButtonTransperant text="Cancel" variant="secondary" onClick={() => handleClose()} />
+          <Button text="Cancel" theme="secondary" variant="transparent" onClick={() => handleClose()} />
         </ResponsiveButtonWidth>
         <ResponsiveButtonWidth>
           <Button

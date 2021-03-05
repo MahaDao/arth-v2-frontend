@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import Grid from '@material-ui/core/Grid';
 import { useParams } from 'react-router-dom';
-import Button from '../../components/Button/TransperantButton';
+import Button from '../../components/Button/Button';
 import Container from '../../components/Container';
  import PageHeader from '../../components/PageHeader';
 import Harvest from './components/Harvest';
@@ -58,19 +58,15 @@ const Bank: React.FC = () => {
 };
 
 const LPTokenHelpText: React.FC<{ bank: BankEntity }> = ({ bank }) => {
-  let pairName: string;
   let uniswapUrl: string;
   if (bank.depositTokenName.includes('ARTH')) {
-    pairName = 'ARTH-DAI pair';
     uniswapUrl =
       'https://app.uniswap.org/#/add/0x6B175474E89094C44Da98b954EedeAC495271d0F/0x0e3cc2c4fb9252d17d07c67135e48536071735d9';
   } else {
-    pairName = 'MAHA-ETH pair';
     uniswapUrl = 'https://app.uniswap.org/#/add/ETH/0xB4d930279552397bbA2ee473229f89Ec245bc365';
   }
   return (
     <StyledLink href={uniswapUrl} target="_blank">
-      {/* {`Provide liquidity to ${pairName} on Uniswap`} */}
     </StyledLink>
   );
 };
@@ -107,7 +103,7 @@ const StyledCardsWrapper = styled.div`
   max-width: 800px;
   width: 100%;
 
-  background: linear-gradient(180deg, #48423e 0%, #373030 100%);
+  background: ${(props) => props.theme.color.gradients.dark_linear};
   box-shadow: 0px 12px 20px rgba(0, 0, 0, 0.25);
   border-radius: 12px;
 `;

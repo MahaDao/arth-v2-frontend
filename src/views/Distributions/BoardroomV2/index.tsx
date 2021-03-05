@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import useBasisCash from '../../../hooks/useBasisCash';
 
 import Button from '../../../components/Button';
-import BoardroomChild from './Boardroom';
+import BoardroomCards from './BoardroomCards';
 
 const Boardroom = () => {
   const { account } = useWallet();
@@ -13,7 +13,7 @@ const Boardroom = () => {
 
   if (!!!account || !basisCash) return <UnlockWallet />;
 
-  return <BoardroomChild />;
+  return <BoardroomCards />;
 };
 
 const UnlockWallet = () => {

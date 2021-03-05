@@ -26,8 +26,6 @@ export interface IVFatAPY {
     staked_tvl: number;
 }
 
-const requestQueue: string[] = []
-
 var tokens = {};
 var prices = {
     // '0x0E3cC2c4FB9252d17d07C67135E48536071735D9': {usd: 2.1}
@@ -39,9 +37,6 @@ export const getAPYFromPool = (contractName: string) => {
     return vfat.loadSynthetixPool(vfatApp, tokens, prices, contract.abi, contract.address, contract.rewardTokenFunction, contract.stakeTokenFunction)
 }
 
-
-
-const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
 export const init = async (): Promise<IVFatApp> => {
     if (vfatApp) return

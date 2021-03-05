@@ -8,21 +8,9 @@ import CardIcon from '../../../components/CardIcon';
 import TokenSymbol from '../../../components/TokenSymbol';
 import { useWallet } from 'use-wallet';
 import useBasisCash from '../../../hooks/useBasisCash';
-import { withStyles, Theme } from '@material-ui/core/styles';
 import InfoIcon from '../../../assets/img/InfoIcon.svg';
-import Tooltip from '@material-ui/core/Tooltip';
 import { Vaults } from '../../../basis-cash/config';
-
-const HtmlTooltip = withStyles((theme: Theme) => ({
-  tooltip: {
-    backgroundColor: '#2A2827',
-    color: 'white',
-    fontWeight: 300,
-    fontSize: '13px',
-    borderRadius: '6px',
-    padding: '20px',
-  },
-}))(Tooltip);
+import HtmlTooltip from '../../../components/HtmlTooltip';
 
 
 interface BoardroomProps {

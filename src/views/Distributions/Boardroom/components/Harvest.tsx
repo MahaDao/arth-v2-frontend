@@ -1,11 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import Button from '../../../../components/Button';
 import TokenSymbol from '../../../../components/TokenSymbol';
 import CardContent from '../../../../components/CardContent';
 import CardIcon from '../../../../components/CardIcon';
-import useHarvestFromBoardroom from '../../../../hooks/useHarvestFromBoardroom';
 import useEarningsOnBoardroom from '../../../../hooks/useEarningsOnBoardroom';
 import { getDisplayBalance } from '../../../../utils/formatBalance';
 import { BoardroomInfo } from '../../../../basis-cash';
@@ -54,12 +52,7 @@ const StyledCardHeader = styled.div`
   width: 100%;
   flex-direction: row;
 `;
-const StyledCardActions = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-left: ${(props) => props.theme.spacing[4]}px;
-  width: 100%;
-`;
+
 
 const StyledCardContentInner = styled.div`
   align-items: center;

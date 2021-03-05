@@ -1,9 +1,6 @@
-import { AppState } from '../../state';
-import { BigNumber } from 'ethers';
 import { commify } from 'ethers/lib/utils';
 import { getDisplayBalance } from '../../utils/formatBalance';
 import { OverviewData } from './types';
-import { useSelector } from 'react-redux';
 import Container from '../../components/Container';
 import DistributonSection from './components/DistributonSection';
 import EpochTimer from './components/EpochTimer';
@@ -66,17 +63,12 @@ const Home: React.FC = () => {
     }
   }, [basisCash, fetchStats]);
 
-  const accumulatedSeigniorage = useSelector<AppState, BigNumber>(s => s.treasury.coreState.accumulatedSeigniorage)
-  const cashToBondConversionLimit = useSelector<AppState, BigNumber>(s => s.treasury.coreState.cashToBondConversionLimit)
-  const bondCirculatingSupply = useSelector<AppState, BigNumber>(s => s.treasury.bondCirculatingSupply)
-
   const cashAddr = useMemo(() => basisCash.ARTH.address, [basisCash]);
   const shareAddr = useMemo(() => basisCash.MAHA.address, [basisCash]);
   const bondAddr = useMemo(() => basisCash.ARTHB.address, [basisCash]);
 
   const ecosystemFund = useFundAmount('ecosystem');
-  const rainyDayFund = useFundAmount('ecosystem');
-
+  
   return (
     <Page>
       <PageHeader

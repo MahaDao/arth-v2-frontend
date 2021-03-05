@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
 import useBasisCash from './useBasisCash';
-import config from '../config';
 import { BigNumber } from 'ethers';
 
 const useCashPriceInLastTWAP = () => {

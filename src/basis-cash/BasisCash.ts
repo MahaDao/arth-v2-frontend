@@ -10,6 +10,7 @@ import Multicall from './Mulitcall';
 import UniswapPair from './UniswapPair';
 import ABIS from './deployments/abi';
 
+
 /**
  * An API module of ARTH contracts.
  * All contract-interacting domain logic should be defined in here.
@@ -23,6 +24,7 @@ export class BasisCash {
   externalTokens: { [name: string]: ERC20 };
   boardroomVersionOfUser?: string;
 
+  arthEth: UniswapPair;
   arthDai: UniswapPair;
   mahaEth: UniswapPair;
 
@@ -63,6 +65,12 @@ export class BasisCash {
       'ARTH-DAI-LP'
     );
 
+    this.arthEth = new UniswapPair(
+      deployments.ArthEthMLP.address,
+      provider,
+      'ARTH-ETH-LP'
+    );
+
     this.mahaEth = new UniswapPair(
       deployments.MahaEthLP.address,
       provider,
@@ -85,7 +93,7 @@ export class BasisCash {
     for (const [name, contract] of Object.entries(this.contracts)) {
       this.contracts[name] = contract.connect(this.signer);
     }
-    const tokens = [this.ARTH, this.MAHA, this.ARTHB, this.DAI, this.arthDai, ...Object.values(this.externalTokens)];
+    const tokens = [this.ARTH, this.MAHA, this.ARTHB, this.DAI, this.arthDai, this.arthEth, ...Object.values(this.externalTokens)];
     for (const token of tokens) {
       token.connect(this.signer);
     }
@@ -98,29 +106,29 @@ export class BasisCash {
         this.boardroomVersionOfUser = 'latest';
       });
 
-    this.multicall.addCalls([
-      {
-        key: 'BALANCE_OF_ARTH',
-        target: this.ARTH.address,
-        call: ['balanceOf(address)(uint256)', this.myAccount],
-        convertResult: val => val / 10 ** 18
-      }, {
-        key: 'BALANCE_OF_ARTHB',
-        target: this.ARTHB.address,
-        call: ['balanceOf(address)(uint256)', this.myAccount],
-        convertResult: val => val / 10 ** 18
-      }, {
-        key: 'BALANCE_OF_MAHA',
-        target: this.MAHA.address,
-        call: ['balanceOf(address)(uint256)', this.myAccount],
-        convertResult: val => val / 10 ** 18
-      }, {
-        key: 'BALANCE_OF_DAI',
-        target: this.DAI.address,
-        call: ['balanceOf(address)(uint256)', this.myAccount],
-        convertResult: val => val / 10 ** 18
-      }
-    ])
+    // this.multicall.addCalls([
+    //   {
+    //     key: 'BALANCE_OF_ARTH',
+    //     target: this.ARTH.address,
+    //     call: ['balanceOf(address)(uint256)', this.myAccount],
+    //     convertResult: val => val / 10 ** 18
+    //   }, {
+    //     key: 'BALANCE_OF_ARTHB',
+    //     target: this.ARTHB.address,
+    //     call: ['balanceOf(address)(uint256)', this.myAccount],
+    //     convertResult: val => val / 10 ** 18
+    //   }, {
+    //     key: 'BALANCE_OF_MAHA',
+    //     target: this.MAHA.address,
+    //     call: ['balanceOf(address)(uint256)', this.myAccount],
+    //     convertResult: val => val / 10 ** 18
+    //   }, {
+    //     key: 'BALANCE_OF_DAI',
+    //     target: this.DAI.address,
+    //     call: ['balanceOf(address)(uint256)', this.myAccount],
+    //     convertResult: val => val / 10 ** 18
+    //   }
+    // ])
   }
 
   get isUnlocked(): boolean {
@@ -133,16 +141,27 @@ export class BasisCash {
   getBoardroom(kind: Boardrooms, version: BoardroomVersion): BoardroomInfo {
     const contract = this.boardroomByVersion(kind, version)
 
-    if (kind === 'arth' || kind === 'arthArth' || kind == 'arthMaha') return {
+    if (kind === 'arth' || kind === 'arthArth' || kind === 'arthMaha') return {
       kind,
       contract,
       address: contract.address,
-      depositTokenName: 'ARTH',
+      depositTokenName: 'ARTH_DAI',
       earnTokenName: 'ARTH',
       seionrageSupplyPercentage: 20,
       history7dayAPY: 30,
       lockInPeriodDays: 5,
     }
+
+    // if (kind === 'maha') return {
+    //   kind: 'maha',
+    //   contract,
+    //   address: contract.address,
+    //   depositTokenName: 'MAHA',
+    //   earnTokenName: 'ARTH',
+    //   seionrageSupplyPercentage: 20,
+    //   history7dayAPY: 30,
+    //   lockInPeriodDays: 5,
+    // }
 
     if (kind === 'mahaLiquidity')
       return {
@@ -183,7 +202,7 @@ export class BasisCash {
   getBoardroomV2(kind: BoardroomsV2): BoardroomInfoV2 {
     const contract = this.boardroomByVersion(kind, 'v2')
 
-    if (kind === 'arthArth' || kind === 'arthMaha' || kind === 'arthArthMlpLiquidity') return {
+    if (kind === 'arthArth' || kind === 'arthMaha' || kind === 'arthArthDaiLiquidity' || kind === 'arthArthEthLiquidity') return {
       kind,
       contract,
       address: contract.address,
@@ -203,12 +222,13 @@ export class BasisCash {
   getBoardroomVault(kind: Vaults): VaultInfo {
     const contract = (() => {
       if (kind === 'arth') return this.contracts.VaultArth;
-      if (kind === 'arthMlpLiquidity') return this.contracts.VaultArthMlp;
+      if (kind === 'arthDaiLiquidity') return this.contracts.VaultArthDaiMlp;
+      if (kind === 'arthEthLiquidity') return this.contracts.VaultArthEthMlp;
       return this.contracts.VaultMaha;
     })()
 
     if (kind === 'arth') return {
-      kind: 'arth',
+      kind: Vaults.arth,
       contract,
       address: contract.address,
       depositTokenName: 'ARTH',
@@ -221,25 +241,37 @@ export class BasisCash {
 
     if (kind === 'maha')
       return {
-        kind: 'maha',
+        kind: Vaults.maha,
         contract,
         address: contract.address,
         depositTokenName: 'MAHA',
-        seionrageSupplyPercentage: 10,
+        seionrageSupplyPercentage: 20,
         lockInPeriodDays: 5,
         arthBoardroom: 'arthMaha',
         mahaBoardroom: 'mahaMaha',
       }
 
+    if (kind === 'arthEthLiquidity')
+      return {
+        kind: Vaults.arthEthLiquidity,
+        contract,
+        address: contract.address,
+        depositTokenName: 'ARTH_ETH-MLP-LPv1',
+        seionrageSupplyPercentage: 10,
+        lockInPeriodDays: 1,
+        arthBoardroom: 'arthArthEthLiquidity',
+        mahaBoardroom: 'mahaArthEthLiquidity',
+      }
+
     return {
-      kind: 'arthMlpLiquidity',
+      kind: Vaults.arthDaiLiquidity,
       contract,
       address: contract.address,
       depositTokenName: 'ARTH_DAI-MLP-LPv1',
-      seionrageSupplyPercentage: 70,
+      seionrageSupplyPercentage: 50,
       lockInPeriodDays: 1,
-      arthBoardroom: 'arthArthMlpLiquidity',
-      mahaBoardroom: 'mahaArthMlpLiquidity',
+      arthBoardroom: 'arthArthDaiLiquidity',
+      mahaBoardroom: 'mahaArthDaiLiquidity',
     }
   }
 
@@ -465,11 +497,14 @@ export class BasisCash {
 
   boardroomByVersion(kind: Boardrooms, version: BoardroomVersion): Contract {
      if (version === 'v2') {
-       if (kind === 'arthArth') return this.contracts.ArthArthBoardroomV2;
+      if (kind === 'arthArth') return this.contracts.ArthArthBoardroomV2;
       if (kind === 'arthMaha') return this.contracts.ArthMahaBoardroomV2;
       if (kind === 'mahaArth') return this.contracts.MahaArthBoardroomV2;
       if (kind === 'mahaMaha') return this.contracts.MahaMahaBoardroomV2;
-      if (kind === 'mahaArthMlpLiquidity') return this.contracts.MahaArthMlpLiquidityBoardroomV2;
+      if (kind === 'mahaArthDaiLiquidity') return this.contracts.MahaArthMlpLiquidityBoardroomV2;
+      if (kind === 'arthArthDaiLiquidity') return this.contracts.ArthArthMlpLiquidityBoardroomV2;
+      if (kind === 'mahaArthEthLiquidity') return this.contracts.MahaArthEthLiquidityBoardroomV2;
+      if (kind === 'arthArthEthLiquidity') return this.contracts.ArthArthEthLiquidityBoardroomV2;
       return this.contracts.ArthArthMlpLiquidityBoardroomV2;
     }
 
@@ -503,7 +538,7 @@ export class BasisCash {
 
   async getEarningsOnBoardroom(kind: Boardrooms, version: BoardroomVersion): Promise<BigNumber> {
     const boardroom = this.currentBoardroom(kind, version);
-    return await boardroom.earned(this.myAccount);
+     return await boardroom.earned(this.myAccount);
   }
 
 

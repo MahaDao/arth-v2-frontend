@@ -1,6 +1,5 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
-import { getDisplayBalance } from '../../../utils/formatBalance';
 import PurchacseCard from './PurchaseCard';
 import { useSelector } from 'react-redux';
 import { AppState } from '../../../state';

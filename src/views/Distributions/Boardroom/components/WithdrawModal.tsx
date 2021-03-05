@@ -1,5 +1,4 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import ButtonTransperant from '../../../../components/Button/TransperantButton';
 import Button from '../../../../components/Button';
 import Modal from '../../../../components/NewModal/index';
 import ModalActions from '../../../../components/ModalActions';
@@ -52,9 +51,10 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
           symbol={tokenName}
         />
         <ModalActions>
-          <ButtonTransperant
+          <Button
             text="Cancel"
-            variant="secondary"
+            theme="secondary"
+            variant="transparent"
             onClick={() => toggleModal(false)}
           />
           <Button text="Confirm" onClick={() => onConfirm(val)} />

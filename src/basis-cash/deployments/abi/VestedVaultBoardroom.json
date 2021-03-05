@@ -168,18 +168,46 @@
         "internalType": "address",
         "name": "",
         "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "name": "bondingHistory",
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "firstBondedOn",
+        "name": "epoch",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "snapshotIndexWhenFirstBonded",
+        "name": "when",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "balance",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "valid",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "currentEpoch",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
         "type": "uint256"
       }
     ],
@@ -198,7 +226,22 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "rewardPending",
+        "name": "rewardClaimed",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "lastRPS",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "firstRPS",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "lastBoardSnapshotIndex",
         "type": "uint256"
       },
       {
@@ -213,13 +256,40 @@
       },
       {
         "internalType": "uint256",
-        "name": "rewardClaimedCurrEpoch",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
         "name": "lastSnapshotIndex",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "director",
+        "type": "address"
+      }
+    ],
+    "name": "earned",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "everyoneNewDirector",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -258,7 +328,7 @@
             "type": "uint256"
           }
         ],
-        "internalType": "struct VaultBoardroom.BoardSnapshot",
+        "internalType": "struct IBoardroom.BoardSnapshot",
         "name": "",
         "type": "tuple"
       }
@@ -272,6 +342,11 @@
         "internalType": "address",
         "name": "who",
         "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "epoch",
+        "type": "uint256"
       }
     ],
     "name": "getBondingHistory",
@@ -280,16 +355,26 @@
         "components": [
           {
             "internalType": "uint256",
-            "name": "firstBondedOn",
+            "name": "epoch",
             "type": "uint256"
           },
           {
             "internalType": "uint256",
-            "name": "snapshotIndexWhenFirstBonded",
+            "name": "when",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "balance",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "valid",
             "type": "uint256"
           }
         ],
-        "internalType": "struct VaultBoardroom.BondingSnapshot",
+        "internalType": "struct IBoardroom.BondingSnapshot",
         "name": "",
         "type": "tuple"
       }
@@ -311,7 +396,22 @@
         "components": [
           {
             "internalType": "uint256",
-            "name": "rewardPending",
+            "name": "rewardClaimed",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "lastRPS",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "firstRPS",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "lastBoardSnapshotIndex",
             "type": "uint256"
           },
           {
@@ -326,16 +426,11 @@
           },
           {
             "internalType": "uint256",
-            "name": "rewardClaimedCurrEpoch",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
             "name": "lastSnapshotIndex",
             "type": "uint256"
           }
         ],
-        "internalType": "struct VaultBoardroom.Boardseat",
+        "internalType": "struct IBoardroom.Boardseat",
         "name": "",
         "type": "tuple"
       }
@@ -363,6 +458,82 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "director",
+        "type": "address"
+      }
+    ],
+    "name": "getLastSnapshotOf",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "number",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "time",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "rewardReceived",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "rewardPerShare",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct IBoardroom.BoardSnapshot",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getLatestSnapshot",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "number",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "time",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "rewardReceived",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "rewardPerShare",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct IBoardroom.BoardSnapshot",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "isOperator",
     "outputs": [
@@ -383,6 +554,19 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "oldBoardroom",
+    "outputs": [
+      {
+        "internalType": "contract IBoardroom",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -509,12 +693,112 @@
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "epochTimestamp",
+        "type": "uint256"
+      }
+    ],
+    "name": "getVestedAmount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
-        "name": "director",
+        "name": "who",
         "type": "address"
       }
     ],
-    "name": "estimateEarned",
+    "name": "getLastEpochBalance",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "who",
+        "type": "address"
+      }
+    ],
+    "name": "getRewardsEarnedThisEpoch",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "who",
+        "type": "address"
+      }
+    ],
+    "name": "getStartingRPSof",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "who",
+        "type": "address"
+      }
+    ],
+    "name": "getRewardsEarnedPrevEpoch",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "who",
+        "type": "address"
+      }
+    ],
+    "name": "getClaimableRewards",
     "outputs": [
       {
         "internalType": "uint256",
@@ -567,6 +851,107 @@
       }
     ],
     "name": "updateReward",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "who",
+        "type": "address"
+      }
+    ],
+    "name": "isOldDirector",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "room",
+        "type": "address"
+      }
+    ],
+    "name": "setOldBoardroom",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bool",
+        "name": "val",
+        "type": "bool"
+      }
+    ],
+    "name": "setEveryoneNewDirector",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "who",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "epoch",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "lastSnapshotIndex",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "rps",
+        "type": "uint256"
+      }
+    ],
+    "name": "resinstateDirectorTo",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address[]",
+        "name": "who",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256",
+        "name": "epoch",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "lastSnapshotIndex",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "rps",
+        "type": "uint256"
+      }
+    ],
+    "name": "resinstateDirectorsTo",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

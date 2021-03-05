@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import InfoOutlinedIcon from '../../assets/img/InfoIcon.svg';
 import Modal from '../../components/NewModal/index';
 import TopBar from '../../components/TopBar';
 import './styles/index.sass';
@@ -79,7 +78,7 @@ const Home: React.FC = () => {
         </div>
 
         <div id="padding-top-30">
-          <a target="_blank" href="https://mahaswap.com/" id="no-txt-decoration">
+          <a target="_blank" href="https://mahaswap.com/" id="no-txt-decoration" rel="noopener noreferrer">
             <button className="button-small">Buy ARTH Now →</button>
           </a>
         </div>
@@ -429,7 +428,7 @@ const Home: React.FC = () => {
           </div>
         </div>
         <div id="padding-top-30">
-          <a target="_blank" href="https://mahaswap.com/" id="no-txt-decoration">
+          <a target="_blank" href="https://mahaswap.com/" rel="noopener noreferrer" id="no-txt-decoration">
             <button className="button-small">Buy ARTH Now →</button>
           </a>
         </div>

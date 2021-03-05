@@ -16,7 +16,7 @@ const HarvestArth = ({ boardroomId }: { boardroomId: BoardroomsV2 }) => {
   const boardroom = basisCash.getBoardroomV2(boardroomId)
 
   const { onReward } = useHarvestFromBoardroom(boardroom);
-  const [earnings, claimable] = useEarningsOnBoardroomV2(boardroomId);
+  const earnings = useEarningsOnBoardroomV2(boardroomId, 'v2');
 
   return (
     <Card>
@@ -33,11 +33,11 @@ const HarvestArth = ({ boardroomId }: { boardroomId: BoardroomsV2 }) => {
         <p style={{ color: '#fff9' }}>
           You earn ARTH rewards when the protocol is in expansion
         </p>
-        <p style={{ color: '#fff9' }}>
+        {/* <p style={{ color: '#fff9' }}>
           Your rewards are vested linearly across 8 hours from the last epoch.
-          {/* If you claim your rewards now you will be able to claim {getDisplayBalance(claimable)} ARTH */}
-        </p>
-        <br />
+          If you claim your rewards now you will be able to claim {getDisplayBalance(claimable)} ARTH
+        </p> */}
+        {/* <br /> */}
         <StyledCardActions>
           <Button onClick={onReward} text={`Claim ARTH Reward`} disabled={earnings.eq(0)} />
         </StyledCardActions>

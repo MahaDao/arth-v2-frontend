@@ -11,6 +11,12 @@ export const purple = {
   700: '#7b1fa2',
 }
 
+export const pink = {
+  200: '#F47F57',
+  300: '#FF7F57',
+  400: '#FD5656'
+}
+
 export const red = {
   100: '#C1C1FF',
   200: '#7575FF',
@@ -27,6 +33,25 @@ export const grey = {
   700: '#616161',
   800: '#424242',
   900: '#212121',
+}
+
+export const dark = {
+  100: "#151414",
+  200: '#2a2827',
+  400: '#423b38',
+}
+
+export const gradients = {
+  dark_linear: 'linear-gradient(180deg, #48423e 0%, #373030 100%)'
+}
+
+export const transparent = 'transparent';
+
+export const alpha = {
+  8: 'rgba(255, 255, 255, 0.08)',
+  32: 'rgba(255, 255, 255, 0.32)',
+  64: 'rgba(255, 255, 255, 0.64)',
+  88: 'rgba(255, 255, 255, 0.88)',
 }
 
 export const bg = '#000000';

@@ -3,66 +3,73 @@ const multicall = require('@makerdao/multicall')
 
 
 export interface IMulticallInput {
-    key: string
-    target: string
-    call: (string | number)[]
-    convertResult: (val: any) => any
+  key: string
+  target: string
+  call: (string | number)[]
+  convertResult: (val: any) => any
 }
 
 
 export default class Multicall extends EventEmitter {
-    calls: IMulticallInput[] = []
-    watcher: any
-    rpcUrl: string
-    address: string
+  calls: IMulticallInput[] = []
+  watcher: any
+  rpcUrl: string
+  address: string
 
-    constructor(rpcUrl: string, address: string) {
-        super()
-        this.rpcUrl = rpcUrl
-        this.address = address
-        this.calls = []
-        this._recreateWatcher()
-    }
+  constructor(rpcUrl: string, address: string) {
+    super()
+    this.rpcUrl = rpcUrl
+    this.address = address
+    this.calls = []
+    this._recreateWatcher()
+  }
 
 
-    addCall = (data: IMulticallInput): string => {
-        this.calls.push(data)
-        this._recreateWatcher()
-        this.watcher.tap(() => this._getMutlicallCalls([data]))
-        return data.key
-    }
+  addCall = (data: IMulticallInput): string => {
+    this.calls.push(data)
+    this._recreateWatcher()
+    this.watcher.tap(() => this._getMutlicallCalls([data]))
+    return data.key
+  }
 
-    addCalls = (data: IMulticallInput[]): string[] => {
-        data.forEach(d => this.calls.push(d))
-        this._recreateWatcher()
-        this.watcher.tap(() => this._getMutlicallCalls(data))
-        return data.map(d => d.key)
-    }
+  removeCall = (key: string): string => {
+    const index = this.calls.findIndex(d => d.key === key)
+    if (index <= 0) return
+    this.calls = this.calls.splice(index, 1)
+    this._recreateWatcher()
+  }
 
-    private _getMutlicallCalls = (calls: IMulticallInput[]) => {
-        return calls.map(c => ({
-            target: c.target,
-            call: c.call,
-            returns: [[c.key, c.convertResult]]
-        }))
-    }
+  addCalls = (data: IMulticallInput[]): string[] => {
+    data.forEach(d => this.calls.push(d))
+    this._recreateWatcher()
+    this.watcher.tap(() => this._getMutlicallCalls(data))
+    return data.map(d => d.key)
+  }
 
-    private _processUpdates = (update: { type: any; value: any; }) => {
-        this.emit(update.type, update.value)
-    }
+  private _getMutlicallCalls = (calls: IMulticallInput[]) => {
+    return calls.map(c => ({
+      target: c.target,
+      call: c.call,
+      returns: [[c.key, c.convertResult]]
+    }))
+  }
 
-    private _recreateWatcher = () => {
-        if (this.watcher) this.watcher.stop()
+  private _processUpdates = (update: { type: any; value: any; }) => {
+    this.emit(update.type, update.value)
+  }
 
-        const config = {
-            rpcUrl: this.rpcUrl,
-            multicallAddress: this.address
-        };
+  private _recreateWatcher = () => {
+    if (this.watcher) this.watcher.stop()
 
-        this.watcher = multicall.createWatcher(this._getMutlicallCalls(this.calls), config)
-        this.watcher.subscribe(this._processUpdates);
+    const config = {
+      rpcUrl: this.rpcUrl,
+      multicallAddress: this.address
+    };
 
-        // Start the watcher polling
-        this.watcher.start();
-    }
+    this.watcher = multicall.createWatcher(this._getMutlicallCalls(this.calls), config)
+    this.watcher.subscribe(this._processUpdates);
+
+    // Start the watcher polling
+    this.watcher.start();
+  }
 }

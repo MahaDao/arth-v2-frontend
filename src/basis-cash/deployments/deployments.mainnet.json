@@ -19,33 +19,45 @@
     "address": "0xa0B708358CDC1bA16214a382547c166314135302",
     "abi": "Vault"
   },
-  "VaultArthMlp": {
+  "VaultArthDaiMlp": {
     "address": "0xBC2199F9e42239C1003ADA698571b181aEa09f64",
     "abi": "Vault"
   },
+  "VaultArthEthMlp": {
+    "address": "0x4A3201A61a998E8f43C942532a72B9c80708Aa58",
+    "abi": "Vault"
+  },
   "ArthArthBoardroomV2": {
-    "address": "0xDd15E72441F3C28fb5528E62640DC233C5a0439D",
-    "abi": "VestedVaultBoardroom"
+    "address": "0x40436065DFed8eb07F8ea26E2a47114a82B58d80",
+    "abi": "VaultBoardroom"
   },
   "ArthArthMlpLiquidityBoardroomV2": {
-    "address": "0x3178fcCeA39C32983750C6C5b9B9E41BDB72F466",
-    "abi": "VestedVaultBoardroom"
+    "address": "0x5b0C55212b77617Bb50bd7F832Df2c72a0e46Bb7",
+    "abi": "VaultBoardroom"
   },
   "ArthMahaBoardroomV2": {
-    "address": "0x6A7cd1CeF2D28512779ad81A53d2Ab74F08AcF6b",
-    "abi": "VestedVaultBoardroom"
+    "address": "0x8a143266c8ddbedd360be9402e04d8d4ba103470",
+    "abi": "VaultBoardroom"
   },
   "MahaArthBoardroomV2": {
-    "address": "0x677d54d7DEf7Da25addE1827e000b81A65b1F408",
-    "abi": "VestedVaultBoardroom"
+    "address": "0x40436065DFed8eb07F8ea26E2a47114a82B58d80",
+    "abi": "VaultBoardroom"
+  },
+  "ArthArthEthLiquidityBoardroomV2": {
+    "address": "0xc7B70b9a5D1BcBf3623e02E33c7C4A672DdCb995",
+    "abi": "VaultBoardroom"
+  },
+  "MahaArthEthLiquidityBoardroomV2": {
+    "address": "0xc7B70b9a5D1BcBf3623e02E33c7C4A672DdCb995",
+    "abi": "VaultBoardroom"
   },
   "MahaArthMlpLiquidityBoardroomV2": {
-    "address": "0x677d54d7DEf7Da25addE1827e000b81A65b1F408",
-    "abi": "VestedVaultBoardroom"
+    "address": "0x5b0C55212b77617Bb50bd7F832Df2c72a0e46Bb7",
+    "abi": "VaultBoardroom"
   },
   "MahaMahaBoardroomV2": {
-    "address": "0x677d54d7DEf7Da25addE1827e000b81A65b1F408",
-    "abi": "VestedVaultBoardroom"
+    "address": "0x8a143266c8ddbedd360be9402e04d8d4ba103470",
+    "abi": "VaultBoardroom"
   },
   "ArthDaiLP": {
     "address": "0x35b6f9e6300aa6c722ea189e096b0b073025806f",
@@ -57,6 +69,10 @@
   },
   "ArthDaiMLP": {
     "address": "0x1c36d9e60cac6893652b74e357f3829a0f5095e0",
+    "abi": "IUniswapV2Pair"
+  },
+  "ArthEthMLP": {
+    "address": "0xe207492fad13324b3b80b1a4324a203b61fc11a6",
     "abi": "IUniswapV2Pair"
   },
   "DAI": {

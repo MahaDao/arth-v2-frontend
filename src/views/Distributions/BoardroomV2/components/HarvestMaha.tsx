@@ -33,11 +33,11 @@ const HarvestMaha = ({ boardroomId }: { boardroomId: BoardroomsV2 }) => {
         <p style={{ color: '#fff9' }}>
           You earn MAHA rewards when the protocol is in contraction.
         </p>
-        <p style={{ color: '#fff9' }}>
+        {/* <p style={{ color: '#fff9' }}>
           Your rewards are vested linearly across 8 hours from the last epoch.
-          {/* If you claim your rewards now you will be able to claim {getDisplayBalance(claimable)} MAHA */}
-        </p>
-        <br />
+          If you claim your rewards now you will be able to claim {getDisplayBalance(claimable)} MAHA
+        </p> */}
+        {/* <br /> */}
         <StyledCardActions>
           {/* <Button onClick={onReward} text={`Claim ${getDisplayBalance(claimable)} MAHA`} disabled={earnings.eq(0)} /> */}
           {/* <Button onClick={onReward} text={`Claim   MAHA`} disabled={earnings.eq(0)} /> */}

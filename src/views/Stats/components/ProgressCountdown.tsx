@@ -1,23 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import Card from '../../../components/InfoCard';
-import { withStyles, Theme } from '@material-ui/core/styles';
 import Countdown, { CountdownRenderProps } from 'react-countdown';
 import InfoIcon from '../../../assets/img/InfoWarning.svg';
-import Tooltip from '@material-ui/core/Tooltip';
 import Button from '../../../components/Button';
 import useAdvanceEpoch from '../../../hooks/useAdvanceEpoch';
 import { useWallet } from 'use-wallet';
-const HtmlTooltip = withStyles((theme: Theme) => ({
-  tooltip: {
-    backgroundColor: '#2A2827',
-    color: 'white',
-    fontWeight: 300,
-    fontSize: '13px',
-    borderRadius: '6px',
-    padding: '20px',
-  },
-}))(Tooltip);
+import HtmlTooltip from '../../../components/HtmlTooltip';
 interface ProgressCountdownProps {
   base: Date;
   deadline: Date;
