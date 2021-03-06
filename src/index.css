@@ -7,6 +7,10 @@ input {
   border-right: 1px solid rgba(255,255,255,0.12);
   border-bottom: none;
 }
+.dynamicMandatoryBorder {
+  border-right: 1px solid rgba(255,255,255,0.12);
+  border-bottom: none;
+}
 @media (max-width: 768px) {
   .custom-dialog-class {
     margin-top: 250px !important;
