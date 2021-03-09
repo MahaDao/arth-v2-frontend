@@ -82,7 +82,7 @@ const TitleString = styled.div`
 `;
 const Card = styled.div`
   background: rgba(255, 255, 255, 0.02);
-  backdrop-filter: blur(70px);
+  // backdrop-filter: blur(70px);
   border-radius: 12px;
   padding: 20px;
   height: 100%;

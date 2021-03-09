@@ -281,7 +281,7 @@ const OuterCard = styled.div`
   
   border-radius: 12px;
   padding: 2% 4% 4% 3%;
-  backdrop-filter: blur(70px);
+  // backdrop-filter: blur(70px);
 `;
 
 const CardContainer = styled.div`

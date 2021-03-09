@@ -31,7 +31,7 @@ const StatCard: React.FC<StatProps> = ({ statData }) => {
 };
 const Card = styled.div`
   background: rgba(255, 255, 255, 0.02);
-  backdrop-filter: blur(21px);
+  // backdrop-filter: blur(21px);
   border-radius: 12px;
   padding: 30px;
   height: 100%;

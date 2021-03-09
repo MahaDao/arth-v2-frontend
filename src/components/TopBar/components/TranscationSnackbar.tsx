@@ -158,7 +158,7 @@ const NotificationCount = styled.div`
 `;
 const SnackBarParent = styled.div`
   background: rgba(255, 255, 255, 0.02);
-  backdrop-filter: blur(70px);
+  // backdrop-filter: blur(70px);
   border-radius: 4px 4px 0px 0px;
   border: 1px solid;
   min-width: 300px;

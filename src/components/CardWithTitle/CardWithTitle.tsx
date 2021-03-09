@@ -26,7 +26,7 @@ const StyledCard = styled.div`
   border-left: 1px solid rgba(255, 116, 38, 0.08);
   border-right: 1px solid rgba(255, 116, 38, 0.08);
   border-bottom: 1px solid rgba(255, 116, 38, 0.01);
-  backdrop-filter: blur(70px);
+  // backdrop-filter: blur(70px);
 `;
 
 const StyledHeader = styled.header`
