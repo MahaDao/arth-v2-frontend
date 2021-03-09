@@ -90,7 +90,7 @@ const StakingCard: React.FC<AccountButtonProps> = ({ bank }) => {
             <div style={{
               zIndex: 4,
               position: 'absolute',
-              left: isTabletOrMobile? 45 : 60
+              left: isTabletOrMobile ? 45 : 60
             }}>
               <TokenSymbol symbol={logos[2]} size={44} style={{}} />
             </div>
@@ -109,7 +109,8 @@ const StakingCard: React.FC<AccountButtonProps> = ({ bank }) => {
         )
         }
         <div style={{ paddingTop: 30 }}>
-          <PoolTitle>{bank?.name}</PoolTitle>
+          <StyledSubTitle>{bank?.name.substr(0,18)}</StyledSubTitle>
+          <StyledSubSubTitle>Earn Maha</StyledSubSubTitle>
         </div>
 
         <Grid container direction="row" alignItems={'center'} style={{ marginTop: '10px', width: '80%' }}>
@@ -417,4 +418,28 @@ const TitleText = styled.div`
   align-items: center;
   color: #FFFFFF;
 `;
+
+const StyledSubTitle = styled.div`
+font-family: Inter;
+font-style: normal;
+font-weight: 600;
+font-size: 14px;
+line-height: 20px;
+text-align: center;
+color: #FFFFFF;
+opacity: 0.88;
+`;
+
+const StyledSubSubTitle = styled.div`
+font-family: Inter;
+font-style: normal;
+font-weight: 300;
+font-size: 14px;
+line-height: 140%;
+text-align: center;
+color: #FFFFFF;
+opacity: 0.88;
+margin-bottom: 5px
+`;
+
 export default StakingCard;
