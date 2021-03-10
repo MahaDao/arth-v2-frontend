@@ -21,7 +21,7 @@ const PriceInformation: React.FC<IProps> = (props) => {
 
 const CardTyep2 = styled.div`
   background: rgba(255, 255, 255, 0.02);
-  backdrop-filter: blur(70px);
+  // backdrop-filter: blur(70px);
   border-radius: 12px;
 `;
 

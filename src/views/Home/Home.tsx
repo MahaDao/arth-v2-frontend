@@ -64,7 +64,7 @@ const Home: React.FC = () => {
           data-aos-duration="2000"
           data-aos-once="true"
         >
-          <span className="main-title">Timeless value</span>
+          <span className="main-title">Timeless value.</span>
           <br />
           World’s first non-depreciating money.
         </div>

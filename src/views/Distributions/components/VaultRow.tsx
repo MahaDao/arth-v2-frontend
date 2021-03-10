@@ -23,7 +23,8 @@ const VaultRow: React.FC<BoardroomProps> = (props) => {
   const history = useHistory();
 
   const vault = basisCash.getBoardroomVault(props.vault);
-  const hasDetail = vault.depositTokenName === "ARTH";
+  // const hasDetail = vault.depositTokenName === "ARTH";
+  const hasDetail = false;
   const handleCardClick = () => {
     history.push(`/distribution/v2/${vault.kind}`)
   }

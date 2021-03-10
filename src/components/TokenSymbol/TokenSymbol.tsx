@@ -68,10 +68,13 @@ const logosBySymbol: { [title: string]: string } = {
 type BasisLogoProps = {
   symbol: string;
   size?: number;
+  zIndex?: number;
+  style?: any;
   left?: number;
+
 };
 
-const TokenSymbol: React.FC<BasisLogoProps> = ({ symbol, left = null, size = 64 }) => {
+const TokenSymbol: React.FC<BasisLogoProps> = ({ symbol, size = 64, left = null, zIndex, style }) => {
   if (!logosBySymbol[symbol]) {
     // throw new Error(`Invalid BasisLogo symbol: ${symbol}`);
     // return <img src={logosBySymbol['DAI']} alt={`${symbol} Logo`} height={size} />;

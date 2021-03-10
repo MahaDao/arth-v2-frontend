@@ -62,7 +62,7 @@ const StyledCardContentInner = styled.div`
 `;
 const Card = styled.div`
   background: rgba(255, 255, 255, 0.02);
-  backdrop-filter: blur(21px);
+  // backdrop-filter: blur(21px);
   border-radius: 12px;
   display: flex;
   flex-direction: column;

@@ -32,28 +32,28 @@ const DistributonSection: React.FC = () => {
             <ChartIconColor color="#178A50" />
             <div>
               <ChartLabelTitle>ARTH-DAI MahaSwap LP</ChartLabelTitle>
-              <ChartLabelTitleBold>50% {/* (65,0000 ARTH) */}</ChartLabelTitleBold>
+              <ChartLabelTitleBold>70% (65,0000 ARTH)</ChartLabelTitleBold>
             </div>
           </PieChartLables>
           <PieChartLables>
             <ChartIconColor color="#178A50" />
             <div>
               <ChartLabelTitle>ARTH-ETH MahaSwap LP</ChartLabelTitle>
-              <ChartLabelTitleBold>10% {/* (65,0000 ARTH) */}</ChartLabelTitleBold>
+              <ChartLabelTitleBold>10% (65,0000 ARTH)</ChartLabelTitleBold>
             </div>
           </PieChartLables>
           <PieChartLables>
             <ChartIconColor color="#20C974" />
             <div>
               <ChartLabelTitle>ARTH</ChartLabelTitle>
-              <ChartLabelTitleBold>20% {/* (20,000 ARTH) */}</ChartLabelTitleBold>
+              <ChartLabelTitleBold>20% (20,000 ARTH)</ChartLabelTitleBold>
             </div>
           </PieChartLables>
           <PieChartLables>
             <ChartIconColor color="#C4F7DD" />
             <div>
               <ChartLabelTitle>MAHA</ChartLabelTitle>
-              <ChartLabelTitleBold>20% {/* (10,000 MAHA) */}</ChartLabelTitleBold>
+              <ChartLabelTitleBold>20% (10,000 MAHA)</ChartLabelTitleBold>
             </div>
           </PieChartLables>
 
@@ -82,7 +82,7 @@ const TitleString = styled.div`
 `;
 const Card = styled.div`
   background: rgba(255, 255, 255, 0.02);
-  backdrop-filter: blur(70px);
+  // backdrop-filter: blur(70px);
   border-radius: 12px;
   padding: 20px;
   height: 100%;

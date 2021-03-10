@@ -118,7 +118,7 @@ const StyledNav = styled.nav`
   width: 100%;
   left: 0px;
   background: #1f1d1d;
-  backdrop-filter: blur(70px);
+  // backdrop-filter: blur(70px);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 `;
 
@@ -139,7 +139,7 @@ const StyledLink = styled(NavLink)`
   &:hover {
     color: rgba(255, 255, 255, 0.64);
     background: rgba(255, 255, 255, 0.04);
-    backdrop-filter: blur(70px);
+    // backdrop-filter: blur(70px);
   }
   &.active {
     color: rgba(255, 255, 255, 0.88);
@@ -162,7 +162,7 @@ const StyledButton = styled.div`
   &:hover {
     color: rgba(255, 255, 255, 0.64);
     background: rgba(255, 255, 255, 0.04);
-    backdrop-filter: blur(70px);
+    // backdrop-filter: blur(70px);
   }
   &.active {
     color: rgba(255, 255, 255, 0.88);

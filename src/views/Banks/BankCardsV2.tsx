@@ -41,16 +41,28 @@ const BankCardsV2: React.FC = () => {
       )} */}
 
 
-      <Grid container spacing={5} justify="center" alignItems="stretch">
-        {activeBanks.map((item, j) => (
-          <Grid key={j} container item xs={12} md={6} lg={4} xl={4}>
-            <StakingCard bank={item} />
-          </Grid>
-        ))}
+      <Grid container spacing={3} justify="center" alignItems="stretch">
+        {/* {activeBanks.map((item, j) => {
+          console.log(activeBanks);
+          return (
+            <Grid key={j} container item xs={12} md={6} lg={6} xl={6}>
+              <StakingCard bank={activeBanks[0]} />
+            </Grid>
+          )
+        })} */}
+        <Grid container item xs={12} md={6} lg={6} xl={6}>
+          <StakingCard bank={activeBanks[0]} />
+        </Grid>
+        <Grid container item xs={12} md={6} lg={6} xl={6}>
+          <StakingCard bank={activeBanks[0]} />
+        </Grid>
+        <Grid container item xs={12} md={6} lg={6} xl={6}>
+          <StakingCard bank={activeBanks[0]} />
+        </Grid>
       </Grid>
 
       {inactiveBanks.length > 0 && (<StyledInactiveBankTitle>Closed Pools</StyledInactiveBankTitle>)}
-      <Grid container spacing={5} justify="center" alignItems="stretch">
+      <Grid container justify="center" alignItems="stretch">
 
         {inactiveBanks.map((bank, j) => (
           <Grid key={j} container item xs={12} md={6} lg={4} xl={4}>
@@ -87,12 +99,12 @@ const StyledInactiveBankTitle = styled.p`
   margin-bottom: ${(props) => props.theme.spacing[4]}px;
 `;
 
-// const VFATAnn = styled.p`
-//   font-size: 24px;
-//   font-weight: 600;
-//   color: #fff9;
-//   margin-bottom: 30px;
-// `;
+const VFATAnn = styled.p`
+  font-size: 24px;
+  font-weight: 600;
+  color: #fff9;
+  margin-bottom: 30px;
+`;
 
 
 export default BankCardsV2;
