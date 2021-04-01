@@ -5,38 +5,40 @@ import Button from '../../../../components/Button';
 import TokenSymbol from '../../../../components/TokenSymbol';
 import CardContent from '../../../../components/CardContent';
 import CardIcon from '../../../../components/CardIcon';
-import useEarningsOnBoardroomV2 from '../../../../hooks/useEarningsOnBoardroomV2';
+import useEarningsFromSnapshot from '../../../../hooks/useEarningsFromSnapshot';
 import { getDisplayBalance } from '../../../../utils/formatBalance';
 import { VaultInfo } from '../../../../basis-cash/types';
+import { Grid } from '@material-ui/core';
 
-const HarvestArth = ({ vault }: { vault: VaultInfo }) => {
-  const [earnings, contractBalance, claimRewards, reinvestRewards] =
-    useEarningsOnBoardroomV2(vault, vault.arthBoardroom);
+const HarvestArthSnapshot = ({ vault }: { vault: VaultInfo }) => {
+  const [earnings, contractBalance, claimRewards, reinvestRewards] = useEarningsFromSnapshot(vault);
 
   const canClaim = earnings.lte(contractBalance) && !earnings.eq(0)
 
-  // if (earnings.eq(0)) return <div />
+  if (earnings.eq(0)) return <div />
 
   return (
-    <Card>
-      <CardContent>
-        <StyledCardContentInner>
-          <StyleLabel>ARTH Earned </StyleLabel>
-          <StyledCardHeader>
-            <CardIcon>
-              <TokenSymbol symbol="ARTH" />
-            </CardIcon>
-            <StyledValue>{getDisplayBalance(earnings)}</StyledValue>
-          </StyledCardHeader>
-        </StyledCardContentInner>
-        <p style={{ color: '#fff9' }}>
-          Your Rewards will now be airdropped back to you with the new ARTH 2.0 tokens.
-        </p>
-        <StyledCardActions>
-          <Button onClick={claimRewards} text={`Rewards will be available in ARTH v2`} disabled={true} />
-        </StyledCardActions>
-      </CardContent>
-    </Card>
+    <Grid container item xs={12} md={6} lg={4} xl={4}>
+      <Card>
+        <CardContent>
+          <StyledCardContentInner>
+            <StyleLabel>ARTH Earned (Old Rewards)</StyleLabel>
+            <StyledCardHeader>
+              <CardIcon>
+                <TokenSymbol symbol="ARTH" />
+              </CardIcon>
+              <StyledValue>{getDisplayBalance(earnings)}</StyledValue>
+            </StyledCardHeader>
+          </StyledCardContentInner>
+          <p style={{ color: '#fff9' }}>
+            Your Rewards will now be airdropped back to you with the new ARTH 2.0 tokens.
+          </p>
+          <StyledCardActions>
+            <Button onClick={claimRewards} text={`Rewards will be available in ARTH v2`} disabled={true} />
+          </StyledCardActions>
+        </CardContent>
+      </Card>
+    </Grid>
   );
 };
 const StyledValue = styled.div`
@@ -82,4 +84,5 @@ const Card = styled.div`
   max-width: 500px;
   flex-direction: column;
 `;
-export default HarvestArth;
+
+export default HarvestArthSnapshot;

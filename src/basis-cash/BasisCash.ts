@@ -235,6 +235,8 @@ export class BasisCash {
       seionrageSupplyPercentage: 20,
       lockInPeriodDays: 5,
 
+      reinvestVault: Vaults.arth,
+      arthSnapshotBoardroom: this.contracts.ArthArthSnapshotBoardoom,
       arthBoardroom: 'arthArth',
       mahaBoardroom: 'mahaArth',
     }
@@ -247,6 +249,8 @@ export class BasisCash {
         depositTokenName: 'MAHA',
         seionrageSupplyPercentage: 20,
         lockInPeriodDays: 5,
+        reinvestVault: Vaults.arth,
+        arthSnapshotBoardroom: this.contracts.ArthMahaSnapshotBoardoom,
         arthBoardroom: 'arthMaha',
         mahaBoardroom: 'mahaMaha',
       }
@@ -259,6 +263,8 @@ export class BasisCash {
         depositTokenName: 'ARTH_ETH-MLP-LPv1',
         seionrageSupplyPercentage: 10,
         lockInPeriodDays: 1,
+        reinvestVault: Vaults.arth,
+        arthSnapshotBoardroom: this.contracts.ArthArthEthLiquiditySnapshotBoardoom,
         arthBoardroom: 'arthArthEthLiquidity',
         mahaBoardroom: 'mahaArthEthLiquidity',
       }
@@ -270,6 +276,8 @@ export class BasisCash {
       depositTokenName: 'ARTH_DAI-MLP-LPv1',
       seionrageSupplyPercentage: 50,
       lockInPeriodDays: 1,
+      reinvestVault: Vaults.arth,
+      arthSnapshotBoardroom: this.contracts.ArthArthDaiLiquiditySnapshotBoardoom,
       arthBoardroom: 'arthArthDaiLiquidity',
       mahaBoardroom: 'mahaArthDaiLiquidity',
     }
@@ -501,11 +509,11 @@ export class BasisCash {
       if (kind === 'arthMaha') return this.contracts.ArthMahaBoardroomV2;
       if (kind === 'mahaArth') return this.contracts.MahaArthBoardroomV2;
       if (kind === 'mahaMaha') return this.contracts.MahaMahaBoardroomV2;
-      if (kind === 'mahaArthDaiLiquidity') return this.contracts.MahaArthMlpLiquidityBoardroomV2;
-      if (kind === 'arthArthDaiLiquidity') return this.contracts.ArthArthMlpLiquidityBoardroomV2;
+      if (kind === 'mahaArthDaiLiquidity') return this.contracts.MahaArthDaiLiquidityBoardroomV2;
+      if (kind === 'arthArthDaiLiquidity') return this.contracts.ArthArthDaiLiquidityBoardroomV2;
       if (kind === 'mahaArthEthLiquidity') return this.contracts.MahaArthEthLiquidityBoardroomV2;
       if (kind === 'arthArthEthLiquidity') return this.contracts.ArthArthEthLiquidityBoardroomV2;
-      return this.contracts.ArthArthMlpLiquidityBoardroomV2;
+      return this.contracts.ArthArthDaiLiquidityBoardroomV2;
     }
 
     if (kind === 'arthUniLiquidity') return this.contracts.ArthLiquidityBoardroomV1;

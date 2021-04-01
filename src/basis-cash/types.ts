@@ -46,6 +46,10 @@ export interface VaultInfo {
   seionrageSupplyPercentage: number
   lockInPeriodDays: number
 
+  arthSnapshotBoardroom: Contract
+
+  reinvestVault: Vaults
+
   mahaBoardroom: BoardroomsV2
   arthBoardroom: BoardroomsV2
 }

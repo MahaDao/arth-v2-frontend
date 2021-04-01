@@ -5,17 +5,15 @@ import Button from '../../../../components/Button';
 import TokenSymbol from '../../../../components/TokenSymbol';
 import CardContent from '../../../../components/CardContent';
 import CardIcon from '../../../../components/CardIcon';
-import useHarvestFromBoardroom from '../../../../hooks/useHarvestFromBoardroom';
 import useEarningsOnBoardroomV2 from '../../../../hooks/useEarningsOnBoardroomV2';
 import { getDisplayBalance } from '../../../../utils/formatBalance';
-import useBasisCash from '../../../../hooks/useBasisCash';
-import { BoardroomsV2 } from '../../../../basis-cash/config';
+import { VaultInfo } from '../../../../basis-cash/types';
 
-const HarvestMaha = ({ boardroomId }: { boardroomId: BoardroomsV2 }) => {
-  const basisCash = useBasisCash()
-  const boardroom = basisCash.getBoardroomV2(boardroomId)
-  // const { onReward } = useHarvestFromBoardroom(boardroom);
-  // const [earnings, claimable] = useEarningsOnBoardroomV2(boardroomId);
+const HarvestMaha = ({ vault }: { vault: VaultInfo }) => {
+  const [earnings, contractBalance, claimRewards, reinvestRewards] =
+    useEarningsOnBoardroomV2(vault, vault.mahaBoardroom);
+
+  const canClaim = earnings.lte(contractBalance) && !earnings.eq(0)
 
   return (
     <Card>
@@ -26,22 +24,26 @@ const HarvestMaha = ({ boardroomId }: { boardroomId: BoardroomsV2 }) => {
             <CardIcon>
               <TokenSymbol symbol="MAHA" />
             </CardIcon>
-            {/* <StyledValue>{getDisplayBalance(earnings)}</StyledValue> */}
-            <StyledValue>0.00</StyledValue>
+            <StyledValue>{getDisplayBalance(earnings)}</StyledValue>
+            {/* <StyledValue>0.00</StyledValue> */}
           </StyledCardHeader>
         </StyledCardContentInner>
         <p style={{ color: '#fff9' }}>
-          You earn MAHA rewards when the protocol is in contraction.
+          Your Rewards will now be airdropped back to you when ARTH 2.0 launches.
         </p>
         {/* <p style={{ color: '#fff9' }}>
           Your rewards are vested linearly across 8 hours from the last epoch.
           If you claim your rewards now you will be able to claim {getDisplayBalance(claimable)} MAHA
         </p> */}
         {/* <br /> */}
+        {/* <StyledCardActions>
+          <Button onClick={reinvestRewards} text={`Compound Rewards to MAHA Pool`} disabled={!canClaim} />
+        </StyledCardActions> */}
+        <br />
         <StyledCardActions>
           {/* <Button onClick={onReward} text={`Claim ${getDisplayBalance(claimable)} MAHA`} disabled={earnings.eq(0)} /> */}
           {/* <Button onClick={onReward} text={`Claim   MAHA`} disabled={earnings.eq(0)} /> */}
-          <Button text={`Claim   MAHA`} disabled={true} />
+          <Button onClick={claimRewards} text={`Rewards will be available in ARTH v2`} disabled={true} />
         </StyledCardActions>
       </CardContent>
     </Card>

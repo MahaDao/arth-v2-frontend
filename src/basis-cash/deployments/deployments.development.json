@@ -39,7 +39,7 @@
     "address": "0x564aD7993cC833E215B9D300c6A158B29de554C7",
     "abi": "VaultBoardroom"
   },
-  "ArthArthMlpLiquidityBoardroomV2": {
+  "ArthArthDaiLiquidityBoardroomV2": {
     "address": "0xB88C290B62536EBC79277BD06C3C20F1699c054a",
     "abi": "VaultBoardroom"
   },
@@ -51,7 +51,7 @@
     "address": "0x8E10090d2f39ee103C75E17c7ff543F65F62EddC",
     "abi": "VaultBoardroom"
   },
-  "MahaArthMlpLiquidityBoardroomV2": {
+  "MahaArthDaiLiquidityBoardroomV2": {
     "address": "0x053f8757a321A226aeeB2A8F27bcDC709a00e736",
     "abi": "VaultBoardroom"
   },

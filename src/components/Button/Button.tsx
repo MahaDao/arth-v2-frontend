@@ -34,8 +34,8 @@ function variantToStyle(variant: string = 'default', color: any) {
     }
   } else if (variant === 'outlined') {
     return {
-      fg: {normal: '#F5F5F5', hover: '#F5F5F5'},
-      bg: {normal: color.transparent, hover: color.transparent, disabled: color.transparent},
+      fg: { normal: '#F5F5F5', hover: '#F5F5F5' },
+      bg: { normal: color.transparent, hover: color.transparent, disabled: color.transparent },
       border: {
         normal: `1px solid ${color.alpha[32]}`,
         hover: `1px solid ${color.alpha[64]}`,
@@ -43,9 +43,9 @@ function variantToStyle(variant: string = 'default', color: any) {
     }
   } else if (variant === 'rounded') {
     return {
-      fg: {normal: color.pink[300]},
-      bg: {normal: color.alpha[8], disabled: color.transparent},
-      border: {radius: '19px', radiusHover: '19px'}
+      fg: { normal: color.pink[300] },
+      bg: { normal: color.alpha[8], disabled: color.transparent },
+      border: { radius: '19px', radiusHover: '19px' }
     }
   } else {
     return {
@@ -71,16 +71,16 @@ const Button: React.FC<ButtonProps> = ({
 
   const variantStyle = variantToStyle(variant, color);
   let fg = {
-    normal: theme === 'secondary' ? color.teal[200] : color.white, 
-    hover: color.white, 
-    selected: 'rgba(255, 255, 255, 0.32)', 
+    normal: theme === 'secondary' ? color.teal[200] : color.white,
+    hover: color.white,
+    selected: 'rgba(255, 255, 255, 0.32)',
     disabled: '',
     ...variantStyle.fg
   };
   let bg = {
-    normal: `linear-gradient(38.44deg, ${color.pink[200]} 15.81%, ${color.pink[400]} 87.57%)`, 
-    hover: color.pink[300], 
-    selected: `linear-gradient(180deg, ${color.pink[200]} -11.33%, ${color.pink[400]} 100%)`, 
+    normal: `linear-gradient(38.44deg, ${color.pink[200]} 15.81%, ${color.pink[400]} 87.57%)`,
+    hover: color.pink[300],
+    selected: `linear-gradient(180deg, ${color.pink[200]} -11.33%, ${color.pink[400]} 100%)`,
     disabled: color.alpha[32],
     ...variantStyle.bg
   };
@@ -147,9 +147,9 @@ const Button: React.FC<ButtonProps> = ({
 };
 
 interface StyledButtonProps {
-  fg: {normal: string, hover: string, selected: string, disabled: string}
-  bg: {normal: string, hover: string, selected: string, disabled: string}
-  border: {normal: string, hover: string, radius: string, radiusHover: string}
+  fg: { normal: string, hover: string, selected: string, disabled: string }
+  bg: { normal: string, hover: string, selected: string, disabled: string }
+  border: { normal: string, hover: string, radius: string, radiusHover: string }
   boxShadow: string;
   disabled?: boolean;
   fontSize: number;
@@ -158,14 +158,14 @@ interface StyledButtonProps {
 }
 
 const StyledButton = styled.button<StyledButtonProps>`
-  color: ${({fg}) => fg.normal};
-  background: ${({bg}) => bg.normal};
-  border: ${({border}) => border.normal};
-  border-radius: ${({border}) => border.radius};
+  color: ${({ fg }) => fg.normal};
+  background: ${({ bg }) => bg.normal};
+  border: ${({ border }) => border.normal};
+  border-radius: ${({ border }) => border.radius};
   box-shadow: ${(props) => props.boxShadow};
   pointer-events: ${(props) => (!props.disabled ? undefined : 'none')};
 
-  align-items: center;  
+  align-items: center;
   text-align: center;
   white-space: nowrap;
   cursor: pointer;
@@ -179,22 +179,23 @@ const StyledButton = styled.button<StyledButtonProps>`
   width: 100%;
 
   &:hover {
-    color: ${({fg}) => fg.hover};
-    background: ${({bg}) => bg.hover};
-    border: ${({border}) => border.hover};
-    border-radius: ${({border}) => border.radiusHover}
+    color: ${({ fg }) => fg.hover};
+    background: ${({ bg }) => bg.hover};
+    border: ${({ border }) => border.hover};
+    border-radius: ${({ border }) => border.radiusHover}
   }
   &:selected {
-    color: ${({fg}) => fg.selected};
-    background: ${({bg}) => bg.selected};
+    color: ${({ fg }) => fg.selected};
+    background: ${({ bg }) => bg.selected};
   }
   &:focus: {
     outline: none;
   }
   &:disabled {
-    color: ${({fg}) => fg.disabled};
-    background: ${({bg}) => bg.disabled};
+    color: ${({ fg }) => fg.disabled};
+    background: ${({ bg }) => bg.disabled};
     cursor: not-allowed;
+    opacity: 0.5;
   }
 `;
 

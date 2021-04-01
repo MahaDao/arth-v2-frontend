@@ -11,15 +11,15 @@ const Nav: React.FC = () => {
       {/*<StyledLink exact activeClassName="active" to="/supply">
         Supply
       </StyledLink> */}
-      <StyledLink exact activeClassName="active" to="/stats">
+      {/* <StyledLink exact activeClassName="active" to="/stats">
         Stats
-      </StyledLink>
+      </StyledLink> */}
       <StyledLink exact activeClassName="active" to="/distribution">
         Distribution
       </StyledLink>
-      <StyledLink exact activeClassName="active" to="/bonds">
+      {/* <StyledLink exact activeClassName="active" to="/bonds">
         Bonds
-      </StyledLink>
+      </StyledLink> */}
       <StyledLink exact activeClassName="active" to="/farming">
         Farming
       </StyledLink>

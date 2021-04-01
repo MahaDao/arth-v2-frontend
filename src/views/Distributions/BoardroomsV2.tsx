@@ -28,14 +28,14 @@ const Boardrooms: React.FC = () => {
         <CardWithTitle title="Bonding Pools">
           <Grid container>
             <Grid container item direction="row" justify="space-between" style={{ padding: 10 }}>
-              <Grid item xs={12} lg={4}>
+              <Grid item xs={12} lg={6}>
                 <StyledTableHeaderTextLeft>PAIR</StyledTableHeaderTextLeft>
               </Grid>
-              <Grid item lg={2}>
+              {/* <Grid item lg={2}>
                 <StyledTableHeaderTextCenter>POOL</StyledTableHeaderTextCenter>
-              </Grid>
+              </Grid> */}
               <Grid item lg={2}>
-                <StyledTableHeaderTextCenter>Seigniorage Supply</StyledTableHeaderTextCenter>
+                <StyledTableHeaderTextRight>Seigniorage Supply</StyledTableHeaderTextRight>
               </Grid>
               {/* <Grid item lg={2}>
                 <StyledTableHeaderText>APY</StyledTableHeaderText>

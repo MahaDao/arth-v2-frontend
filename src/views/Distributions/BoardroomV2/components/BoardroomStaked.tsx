@@ -161,6 +161,22 @@ const Stake = ({ vault }: { vault: VaultInfo }) => {
           )
         }
 
+        {
+          unbondedAmount.gt(0) && (
+            <Grid item md={12}>
+              <Button
+                onClick={onWithdraw}
+                variant="outlined"
+                disabled={endDate.getTime() > Date.now()}
+                text={
+                  "Process Withdrawal"
+                }
+              />
+              <br />
+            </Grid>
+          )
+        }
+
         {approveStatus !== ApprovalState.APPROVED ? (
           <Button
             // disabled={approveStatus !== ApprovalState.NOT_APPROVED}
@@ -168,36 +184,25 @@ const Stake = ({ vault }: { vault: VaultInfo }) => {
             text={`Approve`}
           />
         ) : (
-            <Grid container spacing={2} justify="center">
-              <Grid item md={6} lg={6}>
-                <Button
-                  onClick={onPresentUnBond}
-                  variant="outlined"
-                  disabled={endDate.getTime() > Date.now()}
-                  text="Withdraw"
-                />
-              </Grid>
-              <Grid item md={6} lg={6}>
-                <Button
-                  // disabled={approveStatus !== ApprovalState.NOT_APPROVED}
-                  onClick={onPresentBond}
-                  text="Deposit"
-                />
-              </Grid>
-              {
-                unbondedAmount.gt(0) && (
-                  <Grid item md={12}>
-                    <Button
-                      onClick={onWithdraw}
-                      variant="outlined"
-                      disabled={endDate.getTime() > Date.now()}
-                      text="Process Withdrawal"
-                    />
-                  </Grid>
-                )
-              }
+          <Grid container spacing={2} justify="center">
+            <Grid item md={6} lg={6}>
+              <Button
+                onClick={onPresentUnBond}
+                variant="outlined"
+                // disabled={endDate.getTime() > Date.now()}
+                text="Withdraw"
+              />
             </Grid>
-          )}
+            <Grid item md={6} lg={6}>
+              <Button
+                // disabled={approveStatus !== ApprovalState.NOT_APPROVED}
+                onClick={onPresentBond}
+                text="Deposit"
+              />
+            </Grid>
+
+          </Grid>
+        )}
       </StyledCardContent>
     </CardWithTitle>
   );
@@ -268,7 +273,7 @@ const StyledCardContent = styled.div`
   flex-direction: column;
   padding: ${props => props.theme.spacing[4]}px;
   width: 100%;
-  height: 400px;
+  // height: 400px;
 `
 
 const StyledCardContentInner = styled.div`

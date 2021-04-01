@@ -30,7 +30,7 @@ export const init = (account: string, basisCash: BasisCash, dispatch: Dispatch) 
     registerVariableBN(contracts.VaultArthEthMlp, 'balanceWithoutBonded(address)(uint256)', account, Actions.updateVaultArthEthBalance),
 
     registerVariableBN(contracts.ArthArthBoardroomV2, 'earned(address)(uint256)', account, Actions.updateArthArthEarnings),
-    registerVariableBN(contracts.ArthArthMlpLiquidityBoardroomV2, 'earned(address)(uint256)', account, Actions.updateArthArthMLPEarnings),
+    registerVariableBN(contracts.ArthArthDaiLiquidityBoardroomV2, 'earned(address)(uint256)', account, Actions.updateArthArthMLPEarnings),
     registerVariableBN(contracts.ArthMahaBoardroomV2, 'earned(address)(uint256)', account, Actions.updateArthMahaEarnings),
     registerVariableBN(contracts.ArthMahaBoardroomV2, 'earned(address)(uint256)', account, Actions.updateArthMahaEarnings),
     // registerVariableBN(contracts.VaultMaha, 'balanceWithoutBonded(address)(uint256)', account, Actions.updateVaultMahaBalance),

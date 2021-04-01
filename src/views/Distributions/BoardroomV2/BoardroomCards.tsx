@@ -6,6 +6,7 @@ import PageHeader from '../../../components/PageHeader';
 import useBasisCash from '../../../hooks/useBasisCash';
 import BoardroomStaked from './components/BoardroomStaked';
 import HarvestMaha from './components/HarvestMaha';
+import HarvestArthSnapshot from './components/HarvestArthSnapshot';
 import HarvestArth from './components/HarvestArth';
 import { Vaults } from '../../../basis-cash/config';
 
@@ -29,10 +30,11 @@ const Boardroom = () => {
             <BoardroomStaked vault={vault} />
           </Grid>
           <Grid container item xs={12} md={6} lg={4} xl={4}>
-            <HarvestArth boardroomId={vault.arthBoardroom} />
+            <HarvestArth vault={vault} />
           </Grid>
+          <HarvestArthSnapshot vault={vault} />
           <Grid container item xs={12} md={6} lg={4} xl={4}>
-            <HarvestMaha boardroomId={vault.mahaBoardroom} />
+            <HarvestMaha vault={vault} />
           </Grid>
         </Grid>
       </Container>
