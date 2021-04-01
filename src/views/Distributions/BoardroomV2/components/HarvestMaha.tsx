@@ -29,7 +29,7 @@ const HarvestMaha = ({ vault }: { vault: VaultInfo }) => {
           </StyledCardHeader>
         </StyledCardContentInner>
         <p style={{ color: '#fff9' }}>
-          You earn MAHA rewards when the protocol is in contraction.
+          Your Rewards will now be airdropped back to you when ARTH 2.0 launches.
         </p>
         {/* <p style={{ color: '#fff9' }}>
           Your rewards are vested linearly across 8 hours from the last epoch.
@@ -43,7 +43,7 @@ const HarvestMaha = ({ vault }: { vault: VaultInfo }) => {
         <StyledCardActions>
           {/* <Button onClick={onReward} text={`Claim ${getDisplayBalance(claimable)} MAHA`} disabled={earnings.eq(0)} /> */}
           {/* <Button onClick={onReward} text={`Claim   MAHA`} disabled={earnings.eq(0)} /> */}
-          <Button text={`Claim MAHA Rewards`} disabled={true} />
+          <Button onClick={claimRewards} text={`Rewards will be available in ARTH v2`} disabled={true} />
         </StyledCardActions>
       </CardContent>
     </Card>

@@ -31,25 +31,10 @@ const HarvestArthSnapshot = ({ vault }: { vault: VaultInfo }) => {
             </StyledCardHeader>
           </StyledCardContentInner>
           <p style={{ color: '#fff9' }}>
-            These are the rewards you've earned from the previous reward contract.
+            Your Rewards will now be airdropped back to you with the new ARTH 2.0 tokens.
           </p>
-          {/* <br /> */}
-          {
-            earnings.gt(contractBalance) && earnings.gt(0) && (
-              <p style={{ color: '#fff9' }}>
-                However the contract's claimable balance
-                is {getDisplayBalance(contractBalance)} ARTH. Which
-                is not sufficient for your rewards to get claimed.
-                By the next epoch rewards will be allocated for you to claim.
-              </p>
-            )
-          }
           <StyledCardActions>
-            <Button onClick={reinvestRewards} text={`Compound Rewards to ARTH Pool`} disabled={!canClaim} />
-          </StyledCardActions>
-          <br />
-          <StyledCardActions>
-            <Button onClick={claimRewards} text={`Claim Rewards`} disabled={!canClaim} />
+            <Button onClick={claimRewards} text={`Rewards will be available in ARTH v2`} disabled={true} />
           </StyledCardActions>
         </CardContent>
       </Card>
