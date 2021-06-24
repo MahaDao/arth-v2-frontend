@@ -54,12 +54,6 @@ const App: React.FC = () => {
   // Init animate on scroll
   useEffect(() => {
     AOS.init();
-
-    // @ts-ignore
-    window.ethereum.on('chainChanged', (chainId) => {
-      // handle the new network
-      console.log('change');
-    });
   }, []);
 
   const makeUnPassive = (ev: any) => {
@@ -81,20 +75,20 @@ const App: React.FC = () => {
               <Stats />
             </Page>
           </Route>
-          {/*<Route path="/" exact>
-            <Home />
-          </Route>*/}
-
-          {/* <Route path="/farming">
-            <Page availableNetworks={[137, 1337]}>
-              <Farming />
-            </Page>
-          </Route>
           <Route path="/mint/:paramType">
             <Page availableNetworks={[137, 1337]}>
               <Mint />
             </Page>
           </Route>
+          <Route path="/farming">
+            <Page availableNetworks={[137, 1337]}>
+              <Farming />
+            </Page>
+          </Route>
+          {/*<Route path="/" exact>
+            <Home />
+          </Route>*/}
+          {/* 
           <Route path="/trade">
             <Page availableNetworks={[137, 1337]}>
               <TemporaryTrade />
@@ -134,7 +128,6 @@ const App: React.FC = () => {
 
 const AppContent: React.FC = ({ children }) => {
   const core = useCore();
-  const { account, connect } = useWallet();
 
   useEffect(() => {
     // @ts-ignore
