@@ -273,7 +273,7 @@ const Genesis = (props: WithSnackbarProps) => {
                       )
                     )}*/}
 
-                    {totalArthsupply.totalArthsupplyLoading && totalCollateralCommitted.totalCollateralCommittedLoading
+                    {totalPercentageCompleted.totalPercentageCompletedLoading
                       ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
                       : prettyNumber(totalArthsupply.value - totalCollateralCommitted.value)}
 
