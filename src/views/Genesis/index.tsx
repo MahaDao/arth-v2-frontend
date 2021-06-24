@@ -349,6 +349,7 @@ const Genesis = (props: WithSnackbarProps) => {
 
   const showDepositWETH = config.blockchainToken === currentCoin.replace('W', '');
 
+
   return <>
     <CustomSuccessModal
       modalOpen={openModal === 2}

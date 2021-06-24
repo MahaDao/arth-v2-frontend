@@ -20,7 +20,9 @@ import { BigNumber } from '@ethersproject/bignumber';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
 import React, { useEffect, useMemo, useState } from 'react';
 import makeUrls, { TCalendarEvent } from 'add-event-to-calendar';
-import calendar from '../../assets/svg/calendar.svg';
+import ethereumChain from '../../assets/svg/ethereumChain.svg';
+import polygon from '../../assets/svg/polygon.svg';
+import { Mixpanel } from '../../analytics/Mixpanel';
 
 withStyles({
   root: {
@@ -136,20 +138,32 @@ const ConnectionNotice = () => {
       <ConnectionNote>
         To participate in the Genesis, you must either be connected to the
         Matic/Polygon network or to the Ethereum network.
-        <SwitchBox>
-          <Parts>
-            <img src={calendar} alt="calendar" height={64} style={{marginBottom: '12px'}}/>
+        <SwitchBox >
+          <Parts style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}
+                 onClick={() => {
+                   Mixpanel.track('Redirection:Polygon')
+                   window.open('https://polygon.arthcoin.com')
+                 }}>
+            <img src={polygon} alt="calendar" height={64} style={{marginBottom: '12px'}}/>
             <PartsTitle>Polygon chain</PartsTitle>
-            <PartsSubtitle>Add Polygon network to your Metamask & Connect</PartsSubtitle>
+            <PartsSubtitle> Move to polygon.arthcoin.com </PartsSubtitle>
+          </Parts>
+          <Parts onClick={() => {
+            Mixpanel.track('Redirection:Ethereum')
+            window.open('https://ethereum.arthcoin.com')
+          }}>
+            <img src={ethereumChain} alt="calendar" height={64} style={{marginBottom: '12px'}}/>
+            <PartsTitle>Ethereum Chain</PartsTitle>
+            <PartsSubtitle> Move to ethereum.arthcoin.com </PartsSubtitle>
           </Parts>
         </SwitchBox>
-        <AddPolygon onClick={addMaticToMetamask}>
-          Click here to add Polygon to your Metamask
-        </AddPolygon>
-        <br />
-        Once you are in the right network, you can connect your wallet and enter into the site.
-        <br />
-        <br />
+        {/*<AddPolygon onClick={addMaticToMetamask}>*/}
+        {/*  Click here to add Polygon to your Metamask*/}
+        {/*</AddPolygon>*/}
+        {/*<br />*/}
+        {/*Once you are in the right network, you can connect your wallet and enter into the site.*/}
+        {/*<br />*/}
+        {/*<br />*/}
       </ConnectionNote>
     </MainDiv>
   );
@@ -157,11 +171,11 @@ const ConnectionNotice = () => {
 
 const MainDiv = styled.div`
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - 72px);
 `
 
 const ConnectionNote = styled.div`
-  width: 60%;
+  max-width: 500px;
   text-align: center;
   color: #fff;
   margin: 24px auto 0 auto;
@@ -176,6 +190,12 @@ const ConnectionNote = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  @media (max-width: 600px) {
+    width: 90%;
+    top: 32px;
+    left: 5%;
+    transform: translate(0, 0);
+  }
 `;
 
 const SwitchBox = styled.div`
@@ -183,11 +203,13 @@ const SwitchBox = styled.div`
   box-shadow: 0px 8px 16px -2px rgba(0, 0, 0, 0.12);
   border-radius: 12px;
   text-align: center;
+  margin-top: 12px;
 `
 
 const Parts = styled.div`
   text-align: center;
   padding: 32px;
+  cursor: pointer;
 `
 
 const PartsTitle = styled.p`

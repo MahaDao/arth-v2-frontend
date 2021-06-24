@@ -1,7 +1,20 @@
 import mixpanel from 'mixpanel-browser';
-mixpanel.init('2742f0a859f9fd16638c1e86906497a2');
 
-let env_check = false;
+let key = '';
+if (process.env.NODE_ENV === "development") {
+  key = '84c19ce0c48dff4b147960872628919a'
+} else if (process.env.REACT_APP_NETWORK === "matic") {
+  key = 'b646039d2dd5e1e09deebb592cd041b1'
+} else if (process.env.REACT_APP_NETWORK === "ethereum") {
+  key = '66a957f18e2f2cb7cbb235d8bb6823b1'
+} else {
+  key = '2742f0a859f9fd16638c1e86906497a2'
+}
+
+mixpanel.init(key);
+console.log('key', key);
+
+let env_check = true;
 
 let actions = {
   identify: (id) => {

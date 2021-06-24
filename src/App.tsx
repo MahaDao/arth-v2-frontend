@@ -37,6 +37,7 @@ import BasisCashProvider from './contexts/BasisCashProvider';
 import config from './config';
 import Button from './components/Button';
 import ConnectionNotice from './views/Genesis/ConnectionNotice';
+import { Mixpanel } from './analytics/Mixpanel';
 
 const Providers: React.FC = ({ children }) => {
   const currentNetworkId = config.chainId;
@@ -149,9 +150,14 @@ const AppContent: React.FC = ({ children }) => {
       });
   }, []);
 
-  // if(true) return <ConnectionNotice/>;
-
   if (!core) return <div />;
+
+  console.log();
+
+  if (window.location.hostname === 'arthcoin.com' || true) {
+    Mixpanel.track(`ScreenView:${window.location.pathname}`)
+    return <ConnectionNotice/>;
+  }
 
   return (
     <ModalsProvider>
