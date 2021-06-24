@@ -20,47 +20,35 @@ const TransparentInfoDiv = (props: IProps) => {
     <TransInfoDiv>
       <InfoSpan>
         {props.labelData}
-        {
-          props.labelToolTipData && (
-            <InfoIcon
-              fontSize="small"
-              style={{ marginLeft: 2, marginTop: -2, transform: 'scale(0.8)' }}
-            />
-          )
-        }
+        {props.labelToolTipData && (
+          <InfoIcon
+            fontSize="small"
+            style={{ marginLeft: 2, marginTop: -2, transform: 'scale(0.8)' }}
+          />
+        )}
       </InfoSpan>
       <LabelInfoData>
-        {
-          props.rightLabelValue && (
-            <LabelInfoText>
-              {
-                props.countUp 
-                  ? (
-                    <CountUp
-                      start={props?.cStart}
-                      end={props.cEnd}
-                      delay={0}
-                      duration={props.cDuration}
-                      preserveValue={true}
-                      onUpdate={() => {
-                        console.log('test');
-                      }}
-                    />
-                  ) 
-                  : (
-                  props.rightLabelValue
-                )
-              }
-            </LabelInfoText>
-          )
-        }
-        {
-          props.rightLabelUnit && (
-            <LabelInfoDataChip>
-              <LabelInfoDataChipText>{props.rightLabelUnit}</LabelInfoDataChipText>
-            </LabelInfoDataChip>
-          )
-        }
+        {props.rightLabelValue && (
+          <LabelInfoText>
+            {props.countUp ? (
+              <CountUp
+                start={props?.cStart}
+                end={props.cEnd}
+                delay={0}
+                duration={props.cDuration}
+                preserveValue={true}
+                onUpdate={() => {}}
+              />
+            ) : (
+              props.rightLabelValue
+            )}
+          </LabelInfoText>
+        )}
+        {props.rightLabelUnit && (
+          <LabelInfoDataChip>
+            <LabelInfoDataChipText>{props.rightLabelUnit}</LabelInfoDataChipText>
+          </LabelInfoDataChip>
+        )}
       </LabelInfoData>
     </TransInfoDiv>
   );

@@ -4,12 +4,7 @@ import React, { useEffect } from 'react';
 import { SnackbarProvider } from 'notistack';
 import { useWallet, UseWalletProvider } from 'use-wallet';
 import { ThemeProvider } from 'styled-components';
-import {
-  HashRouter as Router,
-  Route,
-  Redirect,
-  Switch,
-} from 'react-router-dom';
+import { HashRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 
 import './App.css';
 import './index.css';
@@ -76,20 +71,20 @@ const App: React.FC = () => {
     return () => document.body.removeEventListener('touchmove', makeUnPassive);
   }, []);
 
-
   return (
     <Providers>
       <Router>
         <TopBar />
         <Switch>
-          {/*<Route path="/" exact>
-            <Home />
-          </Route>*/}
-          {/*<Route path="/stats">
+          <Route path="/stats">
             <Page availableNetworks={[137, 1337]}>
               <Stats />
             </Page>
+          </Route>
+          {/*<Route path="/" exact>
+            <Home />
           </Route>*/}
+
           {/* <Route path="/farming">
             <Page availableNetworks={[137, 1337]}>
               <Farming />
@@ -155,8 +150,8 @@ const AppContent: React.FC = ({ children }) => {
   console.log();
 
   if (window.location.hostname === 'arthcoin.com') {
-    Mixpanel.track(`ScreenView:${window.location.pathname}`)
-    return <ConnectionNotice/>;
+    Mixpanel.track(`ScreenView:${window.location.pathname}`);
+    return <ConnectionNotice />;
   }
 
   return (

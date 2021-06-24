@@ -21,11 +21,7 @@ const TransparentInfoDiv = (props: IProps) => {
     <TransInfoDiv>
       <InfoSpan>
         {props.labelData}
-        {
-          props.labelToolTipData && (
-            <CustomToolTip toolTipText={props?.labelToolTipData} />
-          )
-        }
+        {props.labelToolTipData && <CustomToolTip toolTipText={props?.labelToolTipData} />}
       </InfoSpan>
 
       <LabelInfoData>
@@ -39,9 +35,7 @@ const TransparentInfoDiv = (props: IProps) => {
                 decimals={5}
                 duration={props.cDuration}
                 preserveValue={true}
-                onUpdate={() => {
-                  console.log('test');
-                }}
+                onUpdate={() => {}}
               />
             ) : (
               props.rightLabelValue

@@ -43,8 +43,6 @@ export const WalletInternal = (props: IProps) => {
     account,
   );
 
-  console.log(account, 'fuck');
-
   const onClose = () => {
     setConfirmationModal(false);
   };

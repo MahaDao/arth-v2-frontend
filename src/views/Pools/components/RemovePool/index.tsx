@@ -109,7 +109,7 @@ const PrettoRestrictSlider = withStyles({
 
 const RemovePool = (props: props & WithSnackbarProps) => {
   const { selectedPair, onBack } = props;
-  console.log(selectedPair);
+
   const [simpleType, setType] = useState<boolean>(true);
   const core = useCore();
   const sliderClasses = useSliderStyles();
