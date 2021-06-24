@@ -255,7 +255,7 @@ const Genesis = (props: WithSnackbarProps) => {
 
   useEffect(() => {
     if (!totalArthsupply.totalArthsupplyLoading && !totalCollateralCommitted.totalCollateralCommittedLoading && totalArthsupply.value !== 0){
-      const temp =  totalCollateralCommitted.value / totalArthsupply.value
+      const temp =  (totalCollateralCommitted.value / totalArthsupply.value) * 100
       setTotalPercentageCompleted({
         totalPercentageCompletedLoading: false,
         value: temp,
