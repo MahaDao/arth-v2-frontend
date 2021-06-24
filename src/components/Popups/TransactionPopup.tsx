@@ -4,8 +4,7 @@ import styled, { ThemeContext } from 'styled-components';
 import { AutoColumn } from '../Column';
 import { AutoRow } from '../Row';
 import { useWallet } from 'use-wallet';
-import useConfig from '../../hooks/useConfig';
-
+import config from '../../config';
 const RowNoFlex = styled(AutoRow)`
   flex-wrap: nowrap;
 `;
@@ -21,8 +20,6 @@ export default function TransactionPopup({
 }) {
   const { chainId } = useWallet();
   const theme = useContext(ThemeContext);
-
-  const config = useConfig()
 
   return (
     <RowNoFlex>

@@ -11,7 +11,7 @@ import USDLogo from './images/logo/USD.svg';
 import warning from '../../assets/svg/warning.svg';
 
 import useCore from '../../hooks/useCore';
-import useConfig from '../../hooks/useConfig';
+import config from '../../config';
 import { platformURL } from '../../config';
 
 const useSliderStyles = makeStyles((theme: Theme) =>
@@ -110,18 +110,14 @@ const Home: React.FC = () => {
   };
 
   const core = useCore();
-  const config = useConfig();
-
   const token1 = core.tokens.ARTH;
 
   const tradelink =
     platformURL[config.platform] && platformURL[config.platform].swapUrl
-      ? `${platformURL[config.platform].swapUrl}?inputCurrency=${'ETH'}&outputCurrency=${
-          token1.address
-        }`
-      : `https://app.uniswap.org/#/swap?inputCurrency=${'ETH'}&outputCurrency=${
-          token1.address
-        }&use=V2`;
+      ? `${platformURL[config.platform].swapUrl}?inputCurrency=${'ETH'}&outputCurrency=${token1.address
+      }`
+      : `https://app.uniswap.org/#/swap?inputCurrency=${'ETH'}&outputCurrency=${token1.address
+      }&use=V2`;
 
   return (
     <div>
@@ -137,9 +133,9 @@ const Home: React.FC = () => {
         }
         open={openModal}
         handleClose={handleClose}
-        // titleLogo={
-        //   <img src={InfoOutlinedIcon} alt="" width="24px" style={{ marginRight: '10px' }} />
-        // }
+      // titleLogo={
+      //   <img src={InfoOutlinedIcon} alt="" width="24px" style={{ marginRight: '10px' }} />
+      // }
       >
         <ModalText>
           <b>

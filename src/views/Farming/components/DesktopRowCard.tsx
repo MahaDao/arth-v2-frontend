@@ -18,7 +18,7 @@ import { StakingContract } from '../../../basis-cash';
 import useTokenDecimals from '../../../hooks/useTokenDecimals';
 import { getDisplayBalance } from '../../../utils/formatBalance';
 import useTokenBalance from '../../../hooks/state/useTokenBalance';
-import useConfig from '../../../hooks/useConfig';
+import config from '../../../config';
 
 type IProps = {
   pool: StakingContract;
@@ -37,7 +37,6 @@ type IProps = {
 export default (props: IProps) => {
   const core = useCore();
   const { account, connect } = useWallet();
-  const config = useConfig();
 
   const depositTokenContract = core.tokens[props.pool.depositToken];
   const tokenDecimals = useTokenDecimals(props.pool.depositToken);

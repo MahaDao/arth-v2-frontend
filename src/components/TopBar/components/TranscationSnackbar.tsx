@@ -8,7 +8,8 @@ import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone';
 
 import CloseIcon from '../../../assets/img/CloseIcon.svg';
 import { PopupContent } from '../../../state/application/actions';
-import useConfig from '../../../hooks/useConfig';
+import config from '../../../config';
+
 
 interface TxButtonProps {
   notificationCount?: number;
@@ -32,7 +33,6 @@ const CustomizedSnackbars: React.FC<TxButtonProps> = ({
   content,
   handleCancel,
 }) => {
-  const config = useConfig();
 
   const classes = useStyles();
   const [openSnackbar, setOpen] = React.useState(open);

@@ -193,4 +193,5 @@ export const tradingPairs: TradingPairs[] = [
   },
 ];
 
-export default configurations;
+console.log(process.env);
+export default configurations[process.env.REACT_APP_NETWORK || 'matic'];

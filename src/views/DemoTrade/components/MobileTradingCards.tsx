@@ -11,7 +11,6 @@ import { TradingPairs } from '../../../basis-cash/types';
 import useCore from '../../../hooks/useCore';
 
 import config, { platformURL } from '../../../config';
-import useConfig from '../../../hooks/useConfig';
 
 interface IProps {
   info: TradingPairs;
@@ -30,7 +29,6 @@ export default (props: IProps) => {
   const token2 = core.tokens[props.info.tokens[1]];
   const address1 = token1.symbol === 'WMATIC' ? 'ETH' : token1.address;
   const address2 = token2.symbol === 'WMATIC' ? 'ETH' : token2.address;
-  const config = useConfig();
 
   const link =
     platformURL[config.platform] && platformURL[config.platform].addLiquidityUrl
@@ -39,9 +37,8 @@ export default (props: IProps) => {
 
   const tradelink =
     platformURL[config.platform] && platformURL[config.platform].swapUrl
-      ? `${
-          platformURL[config.platform].swapUrl
-        }?inputCurrency=${address1}&outputCurrency=${address2}`
+      ? `${platformURL[config.platform].swapUrl
+      }?inputCurrency=${address1}&outputCurrency=${address2}`
       : `https://app.uniswap.org/#/swap?inputCurrency=${address1}&outputCurrency=${address2}&use=V2`;
 
   return (

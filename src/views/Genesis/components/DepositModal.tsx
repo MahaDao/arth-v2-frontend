@@ -15,7 +15,7 @@ import styled from 'styled-components';
 import { useMediaQuery } from 'react-responsive';
 import { useWallet } from 'use-wallet';
 import useDepositWETH from '../../../hooks/callbacks/useDepositWETH';
-import useConfig from '../../../hooks/useConfig';
+import config from '../../../config';
 
 interface IProps {
   onCancel: () => void;
@@ -28,7 +28,6 @@ export default (props: IProps) => {
   const isMobile = useMediaQuery({ maxWidth: '600px' });
   const { balance } = useWallet()
 
-  const config = useConfig()
   const symbol = config.blockchainToken // change this for the collateral
 
   const decimals = BigNumber.from(10).pow(18)

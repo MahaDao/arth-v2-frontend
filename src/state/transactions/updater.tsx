@@ -5,7 +5,8 @@ import { useAddPopup, useBlockNumber } from '../application/hooks';
 import { AppDispatch, AppState } from '../index';
 import { checkedTransaction, finalizeTransaction } from './actions';
 import { getDefaultProvider } from '../../utils/provider';
-import useConfig from '../../hooks/useConfig';
+import config from '../../config';
+
 
 export function shouldCheck(
   lastBlockNumber: number,
@@ -35,7 +36,6 @@ export default function Updater(): null {
 
   const dispatch = useDispatch<AppDispatch>();
   const state = useSelector<AppState, AppState['transactions']>((state) => state.transactions);
-  const config = useConfig();
 
   const transactions = chainId ? state[chainId] ?? {} : {};
 
@@ -90,7 +90,7 @@ export default function Updater(): null {
             console.error(`failed to check transaction hash: ${hash}`, error);
           });
       });
-  }, [chainId, ethereum, transactions, lastBlockNumber, dispatch, addPopup, config]);
+  }, [chainId, ethereum, transactions, lastBlockNumber, dispatch, addPopup]);
 
   return null;
 }

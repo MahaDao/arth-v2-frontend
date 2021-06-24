@@ -7,7 +7,6 @@ import useCore from '../../../hooks/useCore';
 import { TradingPairs } from '../../../basis-cash/types';
 
 import config, { platformURL } from '../../../config';
-import useConfig from '../../../hooks/useConfig';
 
 interface IProps {
   info: TradingPairs;
@@ -15,7 +14,6 @@ interface IProps {
 
 const CustomRowCard = (props: IProps) => {
   const core = useCore();
-  const config = useConfig();
 
   const token1 = core.tokens[props.info.tokens[0]];
   const token2 = core.tokens[props.info.tokens[1]];
@@ -30,9 +28,8 @@ const CustomRowCard = (props: IProps) => {
 
   const tradelink =
     platformURL[config.platform] && platformURL[config.platform].swapUrl
-      ? `${
-          platformURL[config.platform].swapUrl
-        }?inputCurrency=${address2}&outputCurrency=${address1}`
+      ? `${platformURL[config.platform].swapUrl
+      }?inputCurrency=${address2}&outputCurrency=${address1}`
       : `https://app.uniswap.org/#/swap?inputCurrency=${address2}&outputCurrency=${address1}&use=V2`;
 
   return (

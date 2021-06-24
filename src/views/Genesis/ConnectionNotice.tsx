@@ -20,40 +20,8 @@ import { BigNumber } from '@ethersproject/bignumber';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
 import React, { useEffect, useMemo, useState } from 'react';
 import makeUrls, { TCalendarEvent } from 'add-event-to-calendar';
-
-import calendar from '../../assets/svg/calendar.svg';
-import arrowDown from '../../assets/svg/arrowDown.svg';
-import TicketGreen from '../../assets/svg/TicketGreen.svg';
-
-import Button from '../../components/Button';
-import Container from '../../components/Container';
-import TransparentInfoDiv from './components/InfoDiv';
-import CustomModal from '../../components/CustomModal';
-import { CustomSnack } from '../../components/SnackBar';
-import prettyNumber from '../../components/PrettyNumber';
-import UnderstandMore from './components/UnderstandMore';
-import CustomToolTip from '../../components/CustomTooltip';
-import SlippageContainer from '../../components/SlippageContainer';
-import CustomSuccessModal from '../../components/CustomSuccesModal';
-import { WalletAutoConnect } from '../../components/WalletAutoConnect';
-import CustomInputContainer from '../../components/CustomInputContainer';
-import { ValidateNumber } from '../../components/CustomInputContainer/RegexValidation';
-
-import useCore from '../../hooks/useCore';
-import useTokenDecimals from '../../hooks/useTokenDecimals';
-import { getDisplayBalance, getDisplayBalanceToken } from '../../utils/formatBalance';
-import useTokenBalance from '../../hooks/state/useTokenBalance';
-import useApprove, { ApprovalState } from '../../hooks/callbacks/useApprove';
-import useARTHXOraclePrice from '../../hooks/state/controller/useARTHXPrice';
-import useGlobalCollateralValue from '../../hooks/state/useGlobalCollateralValue';
-import useARTHCirculatingSupply from '../../hooks/state/useARTHCirculatingSupply';
-import useCollateralPoolPrice from '../../hooks/state/pools/useCollateralPoolPrice';
-import usePerformRecollateralize from '../../hooks/callbacks/performRecollateralize';
-import usePercentageCompleted from '../../hooks/state/controller/usePercentageCompleted';
-import useRedeemAlgorithmicARTH from '../../hooks/callbacks/pools/useRedeemAlgorithmicARTH';
-import useRecollateralizationDiscount from '../../hooks/state/controller/useRecollateralizationDiscount';
-import useConfig from '../../hooks/useConfig';
-import DepositModal from './components/DepositModal';
+import ethereumChain from '../../assets/svg/ethereumChain.svg';
+import polygon from '../../assets/svg/polygon.svg';
 import { Mixpanel } from '../../analytics/Mixpanel';
 
 withStyles({
@@ -166,24 +134,48 @@ const ConnectionNotice = () => {
   };
 
   return (
-    <ConnectionNote>
-      To participate in the Genesis, you must either be connected to the Ethereum network or to
-      the Matic/Polygon network.
-      <br />
-      <br />
-      <AddPolygon onClick={addMaticToMetamask}>
-        Click here to add Polygon to your Metamask
-      </AddPolygon>
-      <br />
-      Once you are in the right network, you can connect your wallet and enter into the site.
-      <br />
-      <br />
-    </ConnectionNote>
+    <MainDiv>
+      <ConnectionNote>
+        To participate in the Genesis, you must either be connected to the
+        Matic/Polygon network or to the Ethereum network.
+        <SwitchBox >
+          <Parts style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}
+                 onClick={() => {
+                   Mixpanel.track('Redirection:Polygon')
+                   window.open('https://polygon.arthcoin.com')
+                 }}>
+            <img src={polygon} alt="calendar" height={64} style={{marginBottom: '12px'}}/>
+            <PartsTitle>Polygon chain</PartsTitle>
+            <PartsSubtitle> Move to polygon.arthcoin.com </PartsSubtitle>
+          </Parts>
+          <Parts onClick={() => {
+            Mixpanel.track('Redirection:Ethereum')
+            window.open('https://ethereum.arthcoin.com')
+          }}>
+            <img src={ethereumChain} alt="calendar" height={64} style={{marginBottom: '12px'}}/>
+            <PartsTitle>Ethereum Chain</PartsTitle>
+            <PartsSubtitle> Move to ethereum.arthcoin.com </PartsSubtitle>
+          </Parts>
+        </SwitchBox>
+        {/*<AddPolygon onClick={addMaticToMetamask}>*/}
+        {/*  Click here to add Polygon to your Metamask*/}
+        {/*</AddPolygon>*/}
+        {/*<br />*/}
+        {/*Once you are in the right network, you can connect your wallet and enter into the site.*/}
+        {/*<br />*/}
+        {/*<br />*/}
+      </ConnectionNote>
+    </MainDiv>
   );
 };
 
+const MainDiv = styled.div`
+  width: 100vw;
+  height: calc(100vh - 72px);
+`
+
 const ConnectionNote = styled.div`
-  width: 60%;
+  max-width: 500px;
   text-align: center;
   color: #fff;
   margin: 24px auto 0 auto;
@@ -194,7 +186,53 @@ const ConnectionNote = styled.div`
   line-height: 150%;
   text-align: center;
   color: rgba(255, 255, 255, 0.88);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  @media (max-width: 600px) {
+    width: 90%;
+    top: 32px;
+    left: 5%;
+    transform: translate(0, 0);
+  }
 `;
+
+const SwitchBox = styled.div`
+  background: linear-gradient(180deg, #48423E 0%, #373030 100%);
+  box-shadow: 0px 8px 16px -2px rgba(0, 0, 0, 0.12);
+  border-radius: 12px;
+  text-align: center;
+  margin-top: 12px;
+`
+
+const Parts = styled.div`
+  text-align: center;
+  padding: 32px;
+  cursor: pointer;
+`
+
+const PartsTitle = styled.p`
+  font-family: Inter;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 32px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.88);
+  margin-bottom: 2px;
+`
+
+const PartsSubtitle = styled.p`
+  font-family: Inter;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 135%;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.64);
+  margin-bottom: 0;
+`
 
 const AddPolygon = styled.p`
   font-family: Inter;

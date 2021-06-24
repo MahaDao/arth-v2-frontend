@@ -11,7 +11,6 @@ import { getDisplayBalance } from '../../../utils/formatBalance';
 import useUniswapLiquidity from '../../../hooks/useUniswapLiquidity';
 import useCirculatingSupply from '../../../hooks/useCirculatingSupply';
 import Loader from 'react-spinners/BeatLoader';
-import useConfig from '../../../hooks/useConfig';
 
 interface HomeCardProps {
   title: string;
@@ -28,7 +27,6 @@ const HomeCard: React.FC<HomeCardProps> = ({ title, symbol, address }) => {
     value: circulatingSupply,
   } = useCirculatingSupply(symbol);
 
-  const config = useConfig();
   const tokenUrl = `${config.etherscanUrl}/address/${address}`;
 
   return (

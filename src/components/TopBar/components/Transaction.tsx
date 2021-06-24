@@ -6,7 +6,7 @@ import { TransactionDetails } from '../../../state/transactions/reducer';
 import SuccessIcon from '../../../assets/svg/SuccessTransaction.svg';
 import FailedIcon from '../../../assets/svg/failedTransaction.svg';
 import PendingIcon from '../../../assets/svg/pendingTransaction.svg';
-import useConfig from '../../../hooks/useConfig';
+import config from '../../../config';
 
 const TransactionWrapper = styled.div`
   display: flex;
@@ -59,8 +59,6 @@ const Transaction: React.FC<TransactionProps> = ({ tx }) => {
   const success =
     !pending && tx && (tx.receipt?.status === 1 || typeof tx.receipt?.status === 'undefined');
   const date = tx?.confirmedTime || tx?.addedTime
-
-  const config = useConfig();
 
   return (
     <TransactionWrapper>

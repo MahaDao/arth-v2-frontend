@@ -9,10 +9,7 @@ import {
   Route,
   Redirect,
   Switch,
-  useLocation,
-  useHistory,
 } from 'react-router-dom';
-import ConnectionNotice from './views/Genesis/ConnectionNotice';
 
 import './App.css';
 import './index.css';
@@ -34,17 +31,16 @@ import TopBar from './components/TopBar';
 import Popups from './components/Popups';
 
 import store from './state';
-import config from './config';
 import useCore from './hooks/useCore';
 import Updaters from './state/Updaters';
 import ModalsProvider from './contexts/Modals';
 import BasisCashProvider from './contexts/BasisCashProvider';
-import useConfig from './hooks/useConfig';
+import config from './config';
 import Button from './components/Button';
-import LoadingPage from './components/LoadingPage';
+import ConnectionNotice from './views/Genesis/ConnectionNotice';
+import { Mixpanel } from './analytics/Mixpanel';
 
 const Providers: React.FC = ({ children }) => {
-  const config = useConfig();
   const currentNetworkId = config.chainId;
 
   return (
@@ -76,8 +72,6 @@ const App: React.FC = () => {
     return () => document.body.removeEventListener('touchmove', makeUnPassive);
   }, []);
 
-  const config = useConfig();
-  if (!config) return <LoadingPage/>;
 
   return (
     <Providers>

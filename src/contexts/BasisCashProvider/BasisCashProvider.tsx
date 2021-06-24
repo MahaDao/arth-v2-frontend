@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { useWallet } from 'use-wallet';
 import BasisCash from '../../basis-cash';
-import useConfig from '../../hooks/useConfig';
+import config from '../../config';
 
 export interface BasisCashContext {
   core: BasisCash;
@@ -13,7 +13,6 @@ export const BasisCashProvider: React.FC = ({ children }) => {
   const { ethereum, account } = useWallet();
   const [core, setBasisCash] = useState<BasisCash>();
 
-  const config = useConfig();
 
   useEffect(() => {
     if (!core && config) {
@@ -26,7 +25,7 @@ export const BasisCashProvider: React.FC = ({ children }) => {
     } else if (account) {
       core.unlockWallet(ethereum, account);
     }
-  }, [account, config, core, ethereum]);
+  }, [account, core, ethereum]);
 
   return <Context.Provider value={{ core }}>{children}</Context.Provider>;
 };
