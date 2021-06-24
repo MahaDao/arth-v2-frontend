@@ -163,6 +163,19 @@ const Genesis = (props: WithSnackbarProps) => {
   const tokenDecimals = useTokenDecimals(selectedCollateral);
   const collateralGenesis = core.getCollatearalGenesis(selectedCollateral);
 
+  const [totalArthsupply, setTotalArthsupply] = useState<{ totalArthsupplyLoading: boolean, value: number }>({
+    totalArthsupplyLoading: true,
+    value: 0,
+  });
+  const [totalCollateralCommitted, setTotalCollateralCommitted] = useState<{ totalCollateralCommittedLoading: boolean, value: number, }>({
+    totalCollateralCommittedLoading: true,
+    value: 0,
+  });
+  const [ totalPercentageCompleted, setTotalPercentageCompleted] = useState<{ totalPercentageCompletedLoading: boolean, value: number} >({
+    totalPercentageCompletedLoading: true,
+    value: 0,
+  })
+
   const { isLoading: isARTHXPriceLoading, value: arthxPrice } = useARTHXOraclePrice();
   const {
     isLoading: isRecollateralizationDiscountLoading,
@@ -206,6 +219,49 @@ const Genesis = (props: WithSnackbarProps) => {
     window.scrollTo(0, 0);
     onClick();
   }, []);
+
+  useEffect(() => {
+    const headers = {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+      "Access-Control-Allow-Headers": "access-control-allow-headers,access-control-allow-methods,access-control-allow-origin,content-type",
+    }
+    fetch('http://172.105.59.250:3000/api/collateral/totalCollateral', {headers})
+      .then((res: any) => res.json())
+      .then((data: {collateralRaised: number}) => {
+        console.log('totalCollateral', data.collateralRaised);
+        setTotalCollateralCommitted({
+          totalCollateralCommittedLoading: false,
+          value: data.collateralRaised,
+        })
+      })
+      .catch((error: any) => {
+        console.log('totalCollateral error', error);
+      })
+
+    fetch('http://172.105.59.250:3000/api/collateral/arthsupply', {headers})
+      .then((res: any) => res.json())
+      .then((data: {arthsupply: number}) => {
+        console.log('arthsupply', data.arthsupply);
+        setTotalArthsupply({
+          totalArthsupplyLoading: false,
+          value: data.arthsupply,
+        })
+      })
+      .catch((error: any) => {
+        console.log('arthsupply error', error);
+      })
+  }, []);
+
+  useEffect(() => {
+    if (!totalArthsupply.totalArthsupplyLoading && !totalCollateralCommitted.totalCollateralCommittedLoading && totalArthsupply.value !== 0){
+      const temp =  totalCollateralCommitted.value / totalArthsupply.value
+      setTotalPercentageCompleted({
+        totalPercentageCompletedLoading: false,
+        value: temp,
+      })
+    }
+  }, [totalArthsupply.value, totalCollateralCommitted.value])
 
   const calcDiscountOnCommit = (amount: BigNumber, discount: BigNumber) =>
     amount.mul(discount).div(1e6);
@@ -293,466 +349,435 @@ const Genesis = (props: WithSnackbarProps) => {
 
   const showDepositWETH = config.blockchainToken === currentCoin.replace('W', '');
 
-  return (
-    <>
-      <CustomSuccessModal
-        modalOpen={openModal === 2}
-        setModalOpen={() => setOpenModal(0)}
-        title={type === 'Commit' ? 'Committing collateral!' : 'Swapping ARTH'}
-        subsubTitle={
-          'Your transaction is now being mined on the blockchain. You should consider adding collateral to earn NFT rewards.'
-        }
-      // buttonText={'Stake your ARTHX'}
-      // buttonType={'default'}
-      // buttonTo={'/farming'}
-      />
-      <CustomModal
-        closeButton
-        handleClose={() => setOpenModal(0)}
-        open={openModal === 1}
-        modalTitleStyle={{}}
-        modalContainerStyle={{}}
-        modalBodyStyle={{}}
-        title={`Confirm ${type}`}
-      >
-        <>
-          <TransparentInfoDiv
-            labelData={`You will transfer`}
-            rightLabelUnit={currentCoin}
-            rightLabelValue={Number(currentValue).toLocaleString()}
-          />
-          <Divider style={{ background: 'rgba(255, 255, 255, 0.08)', margin: '15px 0px' }} />
-          <TransparentInfoDiv
-            labelData={`You will receive`}
-            rightLabelUnit={'ARTHX'}
-            rightLabelValue={Number(
-              getDisplayBalance(type === 'Commit' ? totalArthxRecieve : arthxRecieve, 18, 3),
-            ).toLocaleString()}
-          />
-          <Grid
-            container
-            spacing={2}
-            style={{
-              marginTop: '32px',
-              display: 'flex',
-              flexDirection: isMobile ? 'column-reverse' : 'row',
-            }}
-          >
-            <Grid item lg={6} md={6} sm={12} xs={12}>
-              <Button
-                variant={'transparent'}
-                text="Cancel"
-                size={'lg'}
-                onClick={() => {
-                  setOpenModal(0);
-                  let options = {
-                    content: () =>
-                      CustomSnack({
-                        onClose: props.closeSnackbar,
-                        type: 'red',
-                        data1: `${type} ${Number(
-                          currentValue,
-                        ).toLocaleString()} ${currentCoin} cancelled`,
-                      }),
-                  };
-                  props.enqueueSnackbar('timepass', options);
-                }}
-                tracking_id={
-                  type === 'Commit' ? 'cancel_commit_collateral' : 'cancel_swap_arth'
-                }
-                value={
-                  type === 'Commit'
-                    ? { value: collateralValue, collateral: selectedCollateral }
-                    : { value: arthValue, collateral: selectedCollateral }
-                }
-              />
-            </Grid>
-            <Grid item lg={6} md={6} sm={12} xs={12}>
-              <Button
-                disabled={
-                  percentageCompleted.gt(BigNumber.from(10).pow(18)) ||
-                  isInputFieldError ||
-                  (type === 'Commit' ? !Number(collateralValue) : !Number(arthValue)) ||
-                  !Number(currentValue) ||
-                  (type === 'Commit' ? !Number(totalArthxRecieve) : !Number(arthxRecieve))
-                }
-                text={type === 'Commit' ? 'Commit Collateral' : 'Swap ARTH'}
-                size={'lg'}
-                onClick={() => {
-                  if (type === 'Commit') recollateralize(() => setOpenModal(2));
-                  else redeemARTH(() => setOpenModal(2));
-                }}
-                tracking_id={
-                  type === 'Commit' ? 'confirm_commit_collateral' : 'confirm_swap_arth'
-                }
-                value={
-                  type === 'Commit'
-                    ? { value: collateralValue, collateral: selectedCollateral }
-                    : { value: arthValue, collateral: selectedCollateral }
-                }
-              />
-            </Grid>
+  return <>
+    <CustomSuccessModal
+      modalOpen={openModal === 2}
+      setModalOpen={() => setOpenModal(0)}
+      title={type === 'Commit' ? 'Committing collateral!' : 'Swapping ARTH'}
+      subsubTitle={
+        'Your transaction is now being mined on the blockchain. You should consider adding collateral to earn NFT rewards.'
+      }
+    // buttonText={'Stake your ARTHX'}
+    // buttonType={'default'}
+    // buttonTo={'/farming'}
+    />
+    <CustomModal
+      closeButton
+      handleClose={() => setOpenModal(0)}
+      open={openModal === 1}
+      modalTitleStyle={{}}
+      modalContainerStyle={{}}
+      modalBodyStyle={{}}
+      title={`Confirm ${type}`}
+    >
+      <>
+        <TransparentInfoDiv
+          labelData={`You will transfer`}
+          rightLabelUnit={currentCoin}
+          rightLabelValue={Number(currentValue).toLocaleString()}
+        />
+        <Divider style={{ background: 'rgba(255, 255, 255, 0.08)', margin: '15px 0px' }} />
+        <TransparentInfoDiv
+          labelData={`You will receive`}
+          rightLabelUnit={'ARTHX'}
+          rightLabelValue={Number(
+            getDisplayBalance(type === 'Commit' ? totalArthxRecieve : arthxRecieve, 18, 3),
+          ).toLocaleString()}
+        />
+        <Grid
+          container
+          spacing={2}
+          style={{
+            marginTop: '32px',
+            display: 'flex',
+            flexDirection: isMobile ? 'column-reverse' : 'row',
+          }}
+        >
+          <Grid item lg={6} md={6} sm={12} xs={12}>
+            <Button
+              variant={'transparent'}
+              text="Cancel"
+              size={'lg'}
+              onClick={() => {
+                setOpenModal(0);
+                let options = {
+                  content: () =>
+                    CustomSnack({
+                      onClose: props.closeSnackbar,
+                      type: 'red',
+                      data1: `${type} ${Number(
+                        currentValue,
+                      ).toLocaleString()} ${currentCoin} cancelled`,
+                    }),
+                };
+                props.enqueueSnackbar('timepass', options);
+              }}
+              tracking_id={
+                type === 'Commit' ? 'cancel_commit_collateral' : 'cancel_swap_arth'
+              }
+              value={
+                type === 'Commit'
+                  ? { value: collateralValue, collateral: selectedCollateral }
+                  : { value: arthValue, collateral: selectedCollateral }
+              }
+            />
           </Grid>
-        </>
-      </CustomModal>
-      <GradientDiv />
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          padding: '40px 0px',
-        }}
-      >
-        <PageHeading>{timerHeader ? 'JOIN THE GENESIS' : 'GENESIS'}</PageHeading>
+          <Grid item lg={6} md={6} sm={12} xs={12}>
+            <Button
+              disabled={
+                percentageCompleted.gt(BigNumber.from(10).pow(18)) ||
+                isInputFieldError ||
+                (type === 'Commit' ? !Number(collateralValue) : !Number(arthValue)) ||
+                !Number(currentValue) ||
+                (type === 'Commit' ? !Number(totalArthxRecieve) : !Number(arthxRecieve))
+              }
+              text={type === 'Commit' ? 'Commit Collateral' : 'Swap ARTH'}
+              size={'lg'}
+              onClick={() => {
+                if (type === 'Commit') recollateralize(() => setOpenModal(2));
+                else redeemARTH(() => setOpenModal(2));
+              }}
+              tracking_id={
+                type === 'Commit' ? 'confirm_commit_collateral' : 'confirm_swap_arth'
+              }
+              value={
+                type === 'Commit'
+                  ? { value: collateralValue, collateral: selectedCollateral }
+                  : { value: arthValue, collateral: selectedCollateral }
+              }
+            />
+          </Grid>
+        </Grid>
+      </>
+    </CustomModal>
+    <GradientDiv />
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: '40px 0px',
+      }}
+    >
+      <PageHeading>{timerHeader ? 'JOIN THE GENESIS' : 'GENESIS'}</PageHeading>
 
-        {!timerHeader ? (
-          <PageSubHeading>
-            <div style={{}}>
-              <BorderLinearProgress
-                variant="determinate"
-                value={
-                  percentageCompleted.gt(BigNumber.from(10).pow(18))
-                    ? 100
-                    : Number(getDisplayBalance(percentageCompleted, 16, 3))
-                }
-              />
-            </div>
-            <HeaderSpan>
-              {isPercentageCompletedLoading ? (
-                <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
-              ) : (
-                Number(getDisplayBalance(percentageCompleted, 16, 3)).toLocaleString('en-US', {
-                  maximumFractionDigits: 2,
-                })
-              )}
-              % Completed
-            </HeaderSpan>
-          </PageSubHeading>
-        ) : (
-          <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
-            <PageSubHeading>
-              <StartsIn>Starts in</StartsIn>
-              <Countdown
-                date={new Date(config.genesisLaunchDate)}
-                renderer={({ days, hours, minutes, seconds, completed }) => {
-                  return (
-                    <HeaderSpan>
-                      {days}d : {hours}h : {minutes}m : {seconds}s
-                    </HeaderSpan>
-                  );
-                }}
-              />
-            </PageSubHeading>
-            {calendarLink && (
-              <HeaderButton onClick={() => window.open(calendarLink, '_blank')}>
-                <img src={calendar} alt="calendar" height={24} />
-                <span style={{ marginLeft: 8 }}>Add to Calendar</span>
-              </HeaderButton>
-            )}
+      {!timerHeader ? <PageSubHeading>
+         {/* <div style={{}}>
+            <BorderLinearProgress
+              variant="determinate"
+              value={
+                percentageCompleted.gt(BigNumber.from(10).pow(18))
+                  ? 100
+                  : Number(getDisplayBalance(percentageCompleted, 16, 3))
+              }
+            />
           </div>
-        )}
+          <HeaderSpan>
+            {isPercentageCompletedLoading ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} /> : Number(getDisplayBalance(percentageCompleted, 16, 3)).toLocaleString('en-US', {
+                maximumFractionDigits: 2,
+              })}
+            % Completed
+          </HeaderSpan>*/}
 
-        <br />
+        <div style={{}}>
+          <BorderLinearProgress
+            variant="determinate"
+            value={totalPercentageCompleted.value}
+          />
+        </div>
+        <HeaderSpan>
+          {totalPercentageCompleted.totalPercentageCompletedLoading ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} /> : totalPercentageCompleted.value.toLocaleString('en-US', {
+            maximumFractionDigits: 2,
+          })}
+          % Completed
+        </HeaderSpan>
 
-        {/* <ConnectionNote>Connect/Switch network popup here</ConnectionNote> */}
-      </div>
-      <Container size="lg">
-        <Grid container style={{}} spacing={2}>
-          <Grid item lg={1} />
-          <Grid item lg={5} md={12} sm={12} xs={12}>
-            <CustomInfoCard className={'custom-mahadao-box'}>
-              <CustomInfoCardDetails>
-                <OneLineInputwomargin style={{ marginBottom: '20px' }}>
-                  <TextForInfoTitle>
-                    ARTH Circulating Supply
-                    <CustomToolTip toolTipText={'The amount of ARTH already in circulation.'} />
-                  </TextForInfoTitle>
-                  <BeforeChipDark>
-                    {isARTHCirculatingSupplyLoading ? (
-                      <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
-                    ) : (
-                      prettyNumber(getDisplayBalance(arthCirculatingSupply))
-                    )}
-                  </BeforeChipDark>
-                </OneLineInputwomargin>
-                <OneLineInputwomargin>
-                  <TextForInfoTitle>
-                    Committed Collateral
-                    <CustomToolTip
-                      toolTipText={'$GMU worth of collateral currently in the protocol.'}
-                    />
-                  </TextForInfoTitle>
-                  <BeforeChipDark>
-                    {isCommitedCollateralLoading ? (
-                      <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
-                    ) : (
-                      prettyNumber(getDisplayBalance(committedCollateral, 18))
-                    )}
-                  </BeforeChipDark>
-                </OneLineInputwomargin>
-              </CustomInfoCardDetails>
-            </CustomInfoCard>
-            <LeftTopCard className={'custom-mahadao-container'}>
-              <LeftTopCardHeader className={'custom-mahadao-container-header'}>
-                <div style={{ display: 'flex', flex: '1' }}>
-                  <TabContainer
-                    onClick={() => {
-                      if (type !== 'Commit') {
-                        Mixpanel.track(`buttonClick:commitCollateral_tab`);
-                        setType('Commit');
-                      }
-                    }}
-                    id={'commitCollateral_tab'}
-                  >
-                    {type === 'Commit' && <ActiveTab />}
-                    {type !== 'Commit' ? (
-                      <TabText>Commit Collateral</TabText>
-                    ) : (
-                      <TabTextActive>Commit Collateral</TabTextActive>
-                    )}
-                  </TabContainer>
-                  <TabContainer
-                    onClick={() => {
-                      if (type !== 'Swap') {
-                        Mixpanel.track(`buttonClick:swap_tab`);
-                        setType('Swap');
-                      }
-                    }}
-                    id={'swap_tab'}
-                  >
-                    {type === 'Swap' && <ActiveTab />}
-                    {type !== 'Swap' ? (
-                      <TabText>Swap ARTH</TabText>
-                    ) : (
-                      <TabTextActive>Swap ARTH</TabTextActive>
-                    )}
-                  </TabContainer>
-                  <SlippageContainer />
-                </div>
-              </LeftTopCardHeader>
-              <LeftTopCardContainer className={'custom-mahadao-container-content'}>
-                {type === 'Commit' ? (
-                  <CustomInputContainer
-                    ILabelValue={'Enter Collateral'}
-                    IBalanceValue={getDisplayBalanceToken(collateralBalnace, currentToken)}
-                    isBalanceLoading={isCollateralBalanceLoading}
-                    ILabelInfoValue={''}
-                    DefaultValue={collateralValue.toString()}
-                    LogoSymbol={selectedCollateral}
-                    hasDropDown={true}
-                    dropDownValues={collateralTypes}
-                    ondropDownValueChange={setSelectedCollateralCoin}
-                    SymbolText={selectedCollateral}
-                    inputMode={'numeric'}
-                    disabled={
-                      percentageCompleted.gt(BigNumber.from(10).pow(18)) ||
-                      isCollateralBalanceLoading
-                    }
-                    setText={(val: string) => {
-                      setCollateralValue(ValidateNumber(val) ? val : '0');
-                    }}
-                    tagText={'MAX'}
-                    errorCallback={(flag: boolean) => {
-                      setIsInputFieldError(flag);
-                    }}
-                    DisableMsg={
-                      percentageCompleted.gt(BigNumber.from(10).pow(18))
-                        ? 'Currently Genesis is 100% Completed'
-                        : ''
-                    }
+
+
+        </PageSubHeading> : <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+          <PageSubHeading>
+            <StartsIn>Starts in</StartsIn>
+            <Countdown
+              date={new Date(config.genesisLaunchDate)}
+              renderer={({ days, hours, minutes, seconds, completed }) => {
+                return <HeaderSpan>
+                    {days}d : {hours}h : {minutes}m : {seconds}s
+                  </HeaderSpan>;
+              }}
+            />
+          </PageSubHeading>
+          {calendarLink && <HeaderButton onClick={() => window.open(calendarLink, '_blank')}>
+              <img src={calendar} alt="calendar" height={24} />
+              <span style={{ marginLeft: 8 }}>Add to Calendar</span>
+            </HeaderButton>}
+        </div>}
+
+      <br />
+
+      {/* <ConnectionNote>Connect/Switch network popup here</ConnectionNote> */}
+    </div>
+    <Container size="lg">
+      <Grid container style={{}} spacing={2}>
+        <Grid item lg={1} />
+        <Grid item lg={5} md={12} sm={12} xs={12}>
+          <CustomInfoCard className={'custom-mahadao-box'}>
+            <CustomInfoCardDetails>
+              <OneLineInputwomargin style={{ marginBottom: '20px' }}>
+                <TextForInfoTitle>
+                  ARTH Circulating Supply
+                  <CustomToolTip toolTipText={'The amount of ARTH already in circulation.'} />
+                </TextForInfoTitle>
+                <BeforeChipDark>
+                  {/*{isARTHCirculatingSupplyLoading ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} /> : prettyNumber(getDisplayBalance(arthCirculatingSupply))}*/}
+                  {totalArthsupply.totalArthsupplyLoading ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} /> : prettyNumber(totalArthsupply.value)}
+
+                </BeforeChipDark>
+              </OneLineInputwomargin>
+              <OneLineInputwomargin>
+                <TextForInfoTitle>
+                  Committed Collateral
+                  <CustomToolTip
+                    toolTipText={'$GMU worth of collateral currently in the protocol.'}
                   />
-                ) : (
-                  <CustomInputContainer
-                    ILabelValue={'Enter ARTH'}
-                    IBalanceValue={getDisplayBalance(arthBalance)}
-                    isBalanceLoading={isARTHBalanceLoading}
-                    ILabelInfoValue={''}
-                    DefaultValue={arthValue.toString()}
-                    LogoSymbol={'ARTH'}
-                    hasDropDown={false}
-                    SymbolText={'ARTH'}
-                    disabled={
-                      percentageCompleted.gt(BigNumber.from(10).pow(18)) || isARTHBalanceLoading
+                </TextForInfoTitle>
+                <BeforeChipDark>
+                  {/*{isCommitedCollateralLoading ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} /> : prettyNumber(getDisplayBalance(committedCollateral, 18))}*/}
+                  {totalCollateralCommitted.totalCollateralCommittedLoading ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} /> : prettyNumber(totalCollateralCommitted.value)}
+                </BeforeChipDark>
+              </OneLineInputwomargin>
+            </CustomInfoCardDetails>
+          </CustomInfoCard>
+          <LeftTopCard className={'custom-mahadao-container'}>
+            <LeftTopCardHeader className={'custom-mahadao-container-header'}>
+              <div style={{ display: 'flex', flex: '1' }}>
+                <TabContainer
+                  onClick={() => {
+                    if (type !== 'Commit') {
+                      Mixpanel.track(`buttonClick:commitCollateral_tab`);
+                      setType('Commit');
                     }
-                    inputMode={'numeric'}
-                    setText={(val: string) => {
-                      setArthValue(ValidateNumber(val) ? val : '0');
-                    }}
-                    tagText={'MAX'}
-                    errorCallback={(flag: boolean) => {
-                      setIsInputFieldError(flag);
-                    }}
-                    DisableMsg={
-                      percentageCompleted.gt(BigNumber.from(10).pow(18))
-                        ? 'Currently Genesis is 100% Completed'
-                        : ''
+                  }}
+                  id={'commitCollateral_tab'}
+                >
+                  {type === 'Commit' && <ActiveTab />}
+                  {type !== 'Commit' ? <TabText>Commit Collateral</TabText> : <TabTextActive>Commit Collateral</TabTextActive>}
+                </TabContainer>
+                <TabContainer
+                  onClick={() => {
+                    if (type !== 'Swap') {
+                      Mixpanel.track(`buttonClick:swap_tab`);
+                      setType('Swap');
                     }
-                  />
-                )}
-                <PlusMinusArrow>
-                  <img src={arrowDown} alt={'Arrow down'} />
-                </PlusMinusArrow>
-                <div style={{ marginBottom: '32px' }}>
-                  <TextWithIcon style={{ marginBottom: '12px' }}>You Receive</TextWithIcon>
-                  <ReceiveContainer>
+                  }}
+                  id={'swap_tab'}
+                >
+                  {type === 'Swap' && <ActiveTab />}
+                  {type !== 'Swap' ? <TabText>Swap ARTH</TabText> : <TabTextActive>Swap ARTH</TabTextActive>}
+                </TabContainer>
+                <SlippageContainer />
+              </div>
+            </LeftTopCardHeader>
+            <LeftTopCardContainer className={'custom-mahadao-container-content'}>
+              {type === 'Commit' ? <CustomInputContainer
+                  ILabelValue={'Enter Collateral'}
+                  IBalanceValue={getDisplayBalanceToken(collateralBalnace, currentToken)}
+                  isBalanceLoading={isCollateralBalanceLoading}
+                  ILabelInfoValue={''}
+                  DefaultValue={collateralValue.toString()}
+                  LogoSymbol={selectedCollateral}
+                  hasDropDown={true}
+                  dropDownValues={collateralTypes}
+                  ondropDownValueChange={setSelectedCollateralCoin}
+                  SymbolText={selectedCollateral}
+                  inputMode={'numeric'}
+                  disabled={
+                    percentageCompleted.gt(BigNumber.from(10).pow(18)) ||
+                    isCollateralBalanceLoading
+                  }
+                  setText={(val: string) => {
+                    setCollateralValue(ValidateNumber(val) ? val : '0');
+                  }}
+                  tagText={'MAX'}
+                  errorCallback={(flag: boolean) => {
+                    setIsInputFieldError(flag);
+                  }}
+                  DisableMsg={
+                    percentageCompleted.gt(BigNumber.from(10).pow(18))
+                      ? 'Currently Genesis is 100% Completed'
+                      : ''
+                  }
+                /> : <CustomInputContainer
+                  ILabelValue={'Enter ARTH'}
+                  IBalanceValue={getDisplayBalance(arthBalance)}
+                  isBalanceLoading={isARTHBalanceLoading}
+                  ILabelInfoValue={''}
+                  DefaultValue={arthValue.toString()}
+                  LogoSymbol={'ARTH'}
+                  hasDropDown={false}
+                  SymbolText={'ARTH'}
+                  disabled={
+                    percentageCompleted.gt(BigNumber.from(10).pow(18)) || isARTHBalanceLoading
+                  }
+                  inputMode={'numeric'}
+                  setText={(val: string) => {
+                    setArthValue(ValidateNumber(val) ? val : '0');
+                  }}
+                  tagText={'MAX'}
+                  errorCallback={(flag: boolean) => {
+                    setIsInputFieldError(flag);
+                  }}
+                  DisableMsg={
+                    percentageCompleted.gt(BigNumber.from(10).pow(18))
+                      ? 'Currently Genesis is 100% Completed'
+                      : ''
+                  }
+                />}
+              <PlusMinusArrow>
+                <img src={arrowDown} alt={'Arrow down'} />
+              </PlusMinusArrow>
+              <div style={{ marginBottom: '32px' }}>
+                <TextWithIcon style={{ marginBottom: '12px' }}>You Receive</TextWithIcon>
+                <ReceiveContainer>
+                  <OneLineInputwomargin>
+                    <div style={{ flex: 1 }}>
+                      <TextWithIcon>
+                        ARTHX
+                        <CustomToolTip
+                          toolTipText={'Amount of ARTHX received for commiting collateral.'}
+                        />
+                      </TextWithIcon>
+                    </div>
                     <OneLineInputwomargin>
+                      <BeforeChip className={'custom-mahadao-chip'}>
+                        {Number(
+                          getDisplayBalanceToken(arthxRecieve, core.ARTHX, 3),
+                        ).toLocaleString()}
+                      </BeforeChip>
+                      <TagChips>ARTHX</TagChips>
+                    </OneLineInputwomargin>
+                  </OneLineInputwomargin>
+                  {type === 'Commit' && <OneLineInputwomargin>
                       <div style={{ flex: 1 }}>
                         <TextWithIcon>
-                          ARTHX
+                          Bonus
                           <CustomToolTip
-                            toolTipText={'Amount of ARTHX received for commiting collateral.'}
+                            toolTipText={
+                              'Extra ARTHX rewarded for committing collateral when the protocol is in genesis.'
+                            }
                           />
                         </TextWithIcon>
                       </div>
                       <OneLineInputwomargin>
                         <BeforeChip className={'custom-mahadao-chip'}>
-                          {Number(
-                            getDisplayBalanceToken(arthxRecieve, core.ARTHX, 3),
-                          ).toLocaleString()}
+                          {Number(getDisplayBalance(arthxDiscount, 18, 3)).toLocaleString()}
                         </BeforeChip>
                         <TagChips>ARTHX</TagChips>
                       </OneLineInputwomargin>
-                    </OneLineInputwomargin>
-                    {type === 'Commit' && (
-                      <OneLineInputwomargin>
-                        <div style={{ flex: 1 }}>
-                          <TextWithIcon>
-                            Bonus
-                            <CustomToolTip
-                              toolTipText={
-                                'Extra ARTHX rewarded for committing collateral when the protocol is in genesis.'
-                              }
-                            />
-                          </TextWithIcon>
-                        </div>
-                        <OneLineInputwomargin>
-                          <BeforeChip className={'custom-mahadao-chip'}>
-                            {Number(getDisplayBalance(arthxDiscount, 18, 3)).toLocaleString()}
-                          </BeforeChip>
-                          <TagChips>ARTHX</TagChips>
-                        </OneLineInputwomargin>
-                      </OneLineInputwomargin>
-                    )}
-                  </ReceiveContainer>
-                </div>
-                {type === 'Commit' && (
-                  <CustomBadgeAlert>
-                    <Logo src={TicketGreen} alt="TicketBg" />
-                    <Text>
-                      You will get{' '}
-                      {Number(
-                        getDisplayBalanceToken(lotteryAmount, currentToken, 0),
-                      ).toLocaleString()}{' '}
-                      lottery ticket(s) to win NFT prize(s).
-                    </Text>
-                  </CustomBadgeAlert>
-                )}
-                {!!!account ? (
-                  <Button
-                    text={'Connect Wallet'}
-                    size={'lg'}
-                    onClick={() =>
-                      connect('injected').then(() => {
-                        localStorage.removeItem('disconnectWallet');
-                      })
-                    }
-                  />
-                ) : (
-                  <>
-                    {showDepositWETH && (
-                      <>
-                        <Button
-                          text={`Convert your ${config.blockchainToken} into ${currentCoin}`}
-                          size={'lg'}
-                          onClick={() => setdepositModal(true)}
-                          tracking_id={'deposit_weth'}
-                        />
-                        <br />
-                      </>
-                    )}
-                    {!isApproved ? (
-                      <Button
-                        text={!isApproving ? `Approve ${currentCoin}` : 'Approving...'}
-                        size={'lg'}
-                        disabled={
-                          percentageCompleted.gt(BigNumber.from(10).pow(18)) ||
-                          isInputFieldError ||
-                          isApproving ||
-                          (type === 'Commit' && Number(collateralValue) === 0) ||
-                          (type === 'Commit' &&
-                            percentageCompleted.gt(BigNumber.from(10).pow(18))) ||
-                          (type === 'Swap' && Number(arthValue) === 0)
-                        }
-                        onClick={approve}
-                        loading={isApproving}
-                      />
-                    ) : (
-                      <Button
-                        text={type === 'Commit' ? 'Commit Collateral' : 'Swap ARTH'}
-                        size={'lg'}
-                        variant={'default'}
-                        disabled={
-                          percentageCompleted.gt(BigNumber.from(10).pow(18)) ||
-                          isInputFieldError ||
-                          (type === 'Commit'
-                            ? !Number(collateralValue) ||
-                            percentageCompleted.gt(BigNumber.from(10).pow(18))
-                            : !Number(arthValue)) ||
-                          !isApproved
-                        }
-                        onClick={() => setOpenModal(1)}
-                        tracking_id={type === 'Commit' ? 'commit_collateral' : 'swap_arth'}
-                        value={
-                          type === 'Commit'
-                            ? { value: collateralValue, collateral: selectedCollateral }
-                            : { value: arthValue, collateral: selectedCollateral }
-                        }
-                      />
-                    )}
-                  </>
-                )}
-              </LeftTopCardContainer>
-            </LeftTopCard>
-          </Grid>
-          <Grid item lg={5} md={12} sm={12} xs={12}>
-            <UnderstandMore dataObj={understandMore} />
-            <LotteryBox className={'custom-mahadao-box'}>
-              <LotteryBoxText>
-                Genesis participants can issue lottery tickets to win exciting MAHA Prizes
-              </LotteryBoxText>
-              <LotteryBoxAction>
-                <Button
-                  text={'Learn More'}
+                    </OneLineInputwomargin>}
+                </ReceiveContainer>
+              </div>
+              {type === 'Commit' && <CustomBadgeAlert>
+                  <Logo src={TicketGreen} alt="TicketBg" />
+                  <Text>
+                    You will get{' '}
+                    {Number(
+                      getDisplayBalanceToken(lotteryAmount, currentToken, 0),
+                    ).toLocaleString()}{' '}
+                    lottery ticket(s) to win NFT prize(s).
+                  </Text>
+                </CustomBadgeAlert>}
+              {!!!account ? <Button
+                  text={'Connect Wallet'}
                   size={'lg'}
-                  variant={'transparent'}
-                  to={'/lottery'}
-                  tracking_id={'learn_more_genesis_to_lottery'}
-                />
-              </LotteryBoxAction>
-            </LotteryBox>
-          </Grid>
-          <Grid item lg={1} />
+                  onClick={() =>
+                    connect('injected').then(() => {
+                      localStorage.removeItem('disconnectWallet');
+                    })
+                  }
+                /> : <>
+                  {showDepositWETH && <>
+                      <Button
+                        text={`Convert your ${config.blockchainToken} into ${currentCoin}`}
+                        size={'lg'}
+                        onClick={() => setdepositModal(true)}
+                        tracking_id={'deposit_weth'}
+                      />
+                      <br />
+                    </>}
+                  {!isApproved ? <Button
+                      text={!isApproving ? `Approve ${currentCoin}` : 'Approving...'}
+                      size={'lg'}
+                      disabled={
+                        percentageCompleted.gt(BigNumber.from(10).pow(18)) ||
+                        isInputFieldError ||
+                        isApproving ||
+                        type === 'Commit' && Number(collateralValue) === 0 ||
+                        type === 'Commit' &&
+                          percentageCompleted.gt(BigNumber.from(10).pow(18)) ||
+                        type === 'Swap' && Number(arthValue) === 0
+                      }
+                      onClick={approve}
+                      loading={isApproving}
+                    /> : <Button
+                      text={type === 'Commit' ? 'Commit Collateral' : 'Swap ARTH'}
+                      size={'lg'}
+                      variant={'default'}
+                      disabled={
+                        percentageCompleted.gt(BigNumber.from(10).pow(18)) ||
+                        isInputFieldError ||
+                        (type === 'Commit'
+                          ? !Number(collateralValue) ||
+                          percentageCompleted.gt(BigNumber.from(10).pow(18))
+                          : !Number(arthValue)) ||
+                        !isApproved
+                      }
+                      onClick={() => setOpenModal(1)}
+                      tracking_id={type === 'Commit' ? 'commit_collateral' : 'swap_arth'}
+                      value={
+                        type === 'Commit'
+                          ? { value: collateralValue, collateral: selectedCollateral }
+                          : { value: arthValue, collateral: selectedCollateral }
+                      }
+                    />}
+                </>}
+            </LeftTopCardContainer>
+          </LeftTopCard>
         </Grid>
-      </Container>
+        <Grid item lg={5} md={12} sm={12} xs={12}>
+          <UnderstandMore dataObj={understandMore} />
+          <LotteryBox className={'custom-mahadao-box'}>
+            <LotteryBoxText>
+              Genesis participants can issue lottery tickets to win exciting MAHA Prizes
+            </LotteryBoxText>
+            <LotteryBoxAction>
+              <Button
+                text={'Learn More'}
+                size={'lg'}
+                variant={'transparent'}
+                to={'/lottery'}
+                tracking_id={'learn_more_genesis_to_lottery'}
+              />
+            </LotteryBoxAction>
+          </LotteryBox>
+        </Grid>
+        <Grid item lg={1} />
+      </Grid>
+    </Container>
 
-      {depositModal && (
-        <DepositModal onCancel={() => setdepositModal(false)} onDeposit={() => { }} />
-      )}
+    {depositModal && <DepositModal onCancel={() => setdepositModal(false)} onDeposit={() => { }} />}
 
-      <CustomSuccessModal
-        modalOpen={successModal}
-        setModalOpen={() => setSuccessModal(false)}
-        title={'Minting ARTHX successful!'}
-      // subsubTitle={'You should consider stake your ARTHX to earn higher APY'}
-      // subTitleLink={'/#/farming'}
-      // buttonText={'Stake your ARTHX'}
-      // buttonType={'default'}
-      // buttonHref={'/#/farming'}
-      />
-    </>
-  );
+    <CustomSuccessModal
+      modalOpen={successModal}
+      setModalOpen={() => setSuccessModal(false)}
+      title={'Minting ARTHX successful!'}
+    // subsubTitle={'You should consider stake your ARTHX to earn higher APY'}
+    // subTitleLink={'/#/farming'}
+    // buttonText={'Stake your ARTHX'}
+    // buttonType={'default'}
+    // buttonHref={'/#/farming'}
+    />
+  </>;
 };
 
 const CustomBadgeAlert = styled.div`

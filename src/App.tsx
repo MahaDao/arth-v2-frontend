@@ -36,6 +36,7 @@ import ModalsProvider from './contexts/Modals';
 import BasisCashProvider from './contexts/BasisCashProvider';
 import config from './config';
 import Button from './components/Button';
+import ConnectionNotice from './views/Genesis/ConnectionNotice';
 
 const Providers: React.FC = ({ children }) => {
   const currentNetworkId = config.chainId;
@@ -147,6 +148,8 @@ const AppContent: React.FC = ({ children }) => {
         window.location.reload();
       });
   }, []);
+
+  // if(true) return <ConnectionNotice/>;
 
   if (!core) return <div />;
 

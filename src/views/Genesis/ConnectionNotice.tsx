@@ -20,6 +20,7 @@ import { BigNumber } from '@ethersproject/bignumber';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
 import React, { useEffect, useMemo, useState } from 'react';
 import makeUrls, { TCalendarEvent } from 'add-event-to-calendar';
+import calendar from '../../assets/svg/calendar.svg';
 
 withStyles({
   root: {
@@ -131,21 +132,33 @@ const ConnectionNotice = () => {
   };
 
   return (
-    <ConnectionNote>
-      To participate in the Genesis, you must either be connected to the Ethereum network or to
-      the Matic/Polygon network.
-      <br />
-      <br />
-      <AddPolygon onClick={addMaticToMetamask}>
-        Click here to add Polygon to your Metamask
-      </AddPolygon>
-      <br />
-      Once you are in the right network, you can connect your wallet and enter into the site.
-      <br />
-      <br />
-    </ConnectionNote>
+    <MainDiv>
+      <ConnectionNote>
+        To participate in the Genesis, you must either be connected to the
+        Matic/Polygon network or to the Ethereum network.
+        <SwitchBox>
+          <Parts>
+            <img src={calendar} alt="calendar" height={64} style={{marginBottom: '12px'}}/>
+            <PartsTitle>Polygon chain</PartsTitle>
+            <PartsSubtitle>Add Polygon network to your Metamask & Connect</PartsSubtitle>
+          </Parts>
+        </SwitchBox>
+        <AddPolygon onClick={addMaticToMetamask}>
+          Click here to add Polygon to your Metamask
+        </AddPolygon>
+        <br />
+        Once you are in the right network, you can connect your wallet and enter into the site.
+        <br />
+        <br />
+      </ConnectionNote>
+    </MainDiv>
   );
 };
+
+const MainDiv = styled.div`
+  width: 100vw;
+  height: 100vh;
+`
 
 const ConnectionNote = styled.div`
   width: 60%;
@@ -159,7 +172,45 @@ const ConnectionNote = styled.div`
   line-height: 150%;
   text-align: center;
   color: rgba(255, 255, 255, 0.88);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
+
+const SwitchBox = styled.div`
+  background: linear-gradient(180deg, #48423E 0%, #373030 100%);
+  box-shadow: 0px 8px 16px -2px rgba(0, 0, 0, 0.12);
+  border-radius: 12px;
+  text-align: center;
+`
+
+const Parts = styled.div`
+  text-align: center;
+  padding: 32px;
+`
+
+const PartsTitle = styled.p`
+  font-family: Inter;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 32px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.88);
+  margin-bottom: 2px;
+`
+
+const PartsSubtitle = styled.p`
+  font-family: Inter;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 135%;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.64);
+  margin-bottom: 0;
+`
 
 const AddPolygon = styled.p`
   font-family: Inter;
