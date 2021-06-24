@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Countdown from 'react-countdown';
@@ -121,6 +121,63 @@ const Genesis = (props: WithSnackbarProps) => {
   const { isLoading: isGlobalCollateralLoading, value: committedCollateral } = useGlobalCollateralValue();
   const { isLoading: isARTHCirculatingLoading, value: arthCirculatingSupply } = useARTHCirculatingSupply();
 
+
+  const [totalArthsupply, setTotalArthsupply] = useState<{ totalArthsupplyLoading: boolean, value: number }>({
+    totalArthsupplyLoading: true,
+    value: 0,
+  });
+  const [totalCollateralCommitted, setTotalCollateralCommitted] = useState<{ totalCollateralCommittedLoading: boolean, value: number, }>({
+    totalCollateralCommittedLoading: true,
+    value: 0,
+  });
+  const [ totalPercentageCompleted, setTotalPercentageCompleted] = useState<{ totalPercentageCompletedLoading: boolean, value: number} >({
+    totalPercentageCompletedLoading: true,
+    value: 0,
+  })
+
+  useEffect(() => {
+    const headers = {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+      "Access-Control-Allow-Headers": "access-control-allow-headers,access-control-allow-methods,access-control-allow-origin,content-type",
+    }
+    fetch('http://172.105.59.250:3000/api/collateral/totalCollateral', {headers})
+      .then((res: any) => res.json())
+      .then((data: {collateralRaised: number}) => {
+        console.log('totalCollateral', data.collateralRaised);
+        setTotalCollateralCommitted({
+          totalCollateralCommittedLoading: false,
+          value: data.collateralRaised,
+        })
+      })
+      .catch((error: any) => {
+        console.log('totalCollateral error', error);
+      })
+
+    fetch('http://172.105.59.250:3000/api/collateral/arthsupply', {headers})
+      .then((res: any) => res.json())
+      .then((data: {arthsupply: number}) => {
+        console.log('arthsupply', data.arthsupply);
+        setTotalArthsupply({
+          totalArthsupplyLoading: false,
+          value: data.arthsupply,
+        })
+      })
+      .catch((error: any) => {
+        console.log('arthsupply error', error);
+      })
+  }, []);
+
+  useEffect(() => {
+    if (!totalArthsupply.totalArthsupplyLoading && !totalCollateralCommitted.totalCollateralCommittedLoading && totalArthsupply.value !== 0){
+      const temp =  100 - ((totalCollateralCommitted.value / totalArthsupply.value) * 100)
+      setTotalPercentageCompleted({
+        totalPercentageCompletedLoading: false,
+        value: temp,
+      })
+    }
+  }, [totalArthsupply.value, totalCollateralCommitted.value])
+
   WalletAutoConnect();
 
   const rebasePercentage = useMemo(() => {
@@ -168,15 +225,19 @@ const Genesis = (props: WithSnackbarProps) => {
           <div style={{}}>
             <BorderLinearProgress
               variant="determinate"
-              value={
+              /*value={
                 rebasePercentage.gt(BigNumber.from(10).pow(18))
                   ? 100
                   : Number(getDisplayBalance(rebasePercentage, 16, 3))
-              }
+              }*/
+              value={totalPercentageCompleted.value}
             />
           </div>
           <HeaderSpan>
-            {Number(getDisplayBalance(rebasePercentage, 16, 3)).toLocaleString('en-US', {
+            {/*{Number(getDisplayBalance(rebasePercentage, 16, 3)).toLocaleString('en-US', {
+              maximumFractionDigits: 2,
+            })}*/}
+            {totalPercentageCompleted.totalPercentageCompletedLoading ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} /> : totalPercentageCompleted.value.toLocaleString('en-US', {
               maximumFractionDigits: 2,
             })}
             % Rebase
@@ -200,7 +261,7 @@ const Genesis = (props: WithSnackbarProps) => {
                     />
                   </TextForInfoTitle>
                   <BeforeChipDark>
-                    {isARTHCirculatingLoading && isGlobalCollateralLoading ? (
+                    {/*{isARTHCirculatingLoading && isGlobalCollateralLoading ? (
                       <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
                     ) : (
                       prettyNumber(
@@ -210,7 +271,12 @@ const Genesis = (props: WithSnackbarProps) => {
                             : arthCirculatingSupply.sub(committedCollateral),
                         ),
                       )
-                    )}
+                    )}*/}
+
+                    {totalArthsupply.totalArthsupplyLoading && totalCollateralCommitted.totalCollateralCommittedLoading
+                      ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
+                      : prettyNumber(totalArthsupply.value - totalCollateralCommitted.value)}
+
                   </BeforeChipDark>
                 </OneLineInputwomargin>
                 <OneLineInputwomargin>
@@ -219,11 +285,15 @@ const Genesis = (props: WithSnackbarProps) => {
                     <CustomToolTip toolTipText={'$GMU worth of collateral currently in the protocol.'} />
                   </TextForInfoTitle>
                   <BeforeChipDark>
-                    {isGlobalCollateralLoading ? (
+                    {/*{isGlobalCollateralLoading ? (
                       <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
                     ) : (
                       prettyNumber(getDisplayBalance(committedCollateral, 18))
-                    )}
+                    )}*/}
+                    {totalCollateralCommitted.totalCollateralCommittedLoading
+                      ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
+                      : prettyNumber(totalCollateralCommitted.value)}
+
                   </BeforeChipDark>
                 </OneLineInputwomargin>
               </CustomInfoCardDetails>
