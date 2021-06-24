@@ -12,8 +12,6 @@ if (process.env.NODE_ENV === "development") {
 }
 
 mixpanel.init(key);
-console.log('key', key);
-
 let env_check = true;
 
 let actions = {

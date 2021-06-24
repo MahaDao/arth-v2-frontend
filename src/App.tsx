@@ -2,7 +2,7 @@ import AOS from 'aos';
 import { Provider } from 'react-redux';
 import React, { useEffect } from 'react';
 import { SnackbarProvider } from 'notistack';
-import { useWallet, UseWalletProvider } from 'use-wallet';
+import { UseWalletProvider } from 'use-wallet';
 import { ThemeProvider } from 'styled-components';
 import { HashRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 
@@ -23,19 +23,20 @@ import Farming from './views/Farming';
 import Lottery from './views/Lottery';
 import TopBar from './components/TopBar';
 import Popups from './components/Popups';
+import NoMetamaskNotice from './components/NoMetamaskNotice';
+import ConnectionNotice from './views/Genesis/ConnectionNotice';
 
 import store from './state';
+import config from './config';
 import useCore from './hooks/useCore';
 import Updaters from './state/Updaters';
 import ModalsProvider from './contexts/Modals';
-import BasisCashProvider from './contexts/BasisCashProvider';
-import config from './config';
-import Button from './components/Button';
-import ConnectionNotice from './views/Genesis/ConnectionNotice';
 import { Mixpanel } from './analytics/Mixpanel';
+import BasisCashProvider from './contexts/BasisCashProvider';
 
 const Providers: React.FC = ({ children }) => {
   const currentNetworkId = config.chainId;
+
   return (
     <ThemeProvider theme={theme}>
       <UseWalletProvider chainId={currentNetworkId} connectors={{ injected: {} }}>
@@ -138,9 +139,8 @@ const AppContent: React.FC = ({ children }) => {
       });
   }, []);
 
+  if (!window.ethereum) return <NoMetamaskNotice />;
   if (!core) return <div />;
-
-  console.log();
 
   if (window.location.hostname === 'arthcoin.com') {
     Mixpanel.track(`ScreenView:${window.location.pathname}`);
