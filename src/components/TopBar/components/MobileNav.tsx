@@ -97,13 +97,13 @@ const MobileNav = (props: props) => {
           >
             Farming
           </StyledLink>*/}
-          {
+          {/*{
             !props.isMainnet && (
               <StyledLink exact activeClassName="active" to="/faucet" onClick={() => props.onClick()}>
                 Faucet
               </StyledLink>
             )
-          }
+          }*/}
           <StyledLink exact activeClassName="active" to="/rebase" onClick={() => props.onClick()}>
             Rebase
           </StyledLink>
