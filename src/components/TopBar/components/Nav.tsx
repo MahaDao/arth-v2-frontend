@@ -12,18 +12,18 @@ const Nav = (props: props) => {
       <StyledLink exact activeClassName="active" to="/genesis">
         Genesis
       </StyledLink>
-      <StyledLink exact activeClassName="active" to="/mint/mint">
+      {/* <StyledLink exact activeClassName="active" to="/mint/mint">
         Mint/Redeem
-      </StyledLink>
-      <StyledLink exact activeClassName="active" to="/stats">
+      </StyledLink> */}
+      {/* <StyledLink exact activeClassName="active" to="/stats">
         Analytics
-      </StyledLink>
+      </StyledLink> */}
       {/* <StyledLink exact activeClassName="active" to="/stabilize/recollateralize">
         Stabilize
       </StyledLink> */}
-      <StyledLink exact activeClassName="active" to="/farming">
+      {/* <StyledLink exact activeClassName="active" to="/farming">
         Farming
-      </StyledLink>
+      </StyledLink> */}
       {/* <StyledLink exact activeClassName="active" to="/trade">
         Trade
       </StyledLink> */}

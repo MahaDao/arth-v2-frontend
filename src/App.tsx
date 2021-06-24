@@ -76,20 +76,20 @@ const App: React.FC = () => {
               <Stats />
             </Page>
           </Route>
+          {/*<Route path="/" exact>
+            <Home />
+          </Route>*/}
+
+          {/* <Route path="/farming">
+            <Page availableNetworks={[137, 1337]}>
+              <Farming />
+            </Page>
+          </Route>
           <Route path="/mint/:paramType">
             <Page availableNetworks={[137, 1337]}>
               <Mint />
             </Page>
           </Route>
-          <Route path="/farming">
-            <Page availableNetworks={[137, 1337]}>
-              <Farming />
-            </Page>
-          </Route>
-          {/*<Route path="/" exact>
-            <Home />
-          </Route>*/}
-          {/* 
           <Route path="/trade">
             <Page availableNetworks={[137, 1337]}>
               <TemporaryTrade />
