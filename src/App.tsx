@@ -154,7 +154,7 @@ const AppContent: React.FC = ({ children }) => {
 
   console.log();
 
-  if (window.location.hostname === 'arthcoin.com' || true) {
+  if (window.location.hostname === 'arthcoin.com') {
     Mixpanel.track(`ScreenView:${window.location.pathname}`)
     return <ConnectionNotice/>;
   }
