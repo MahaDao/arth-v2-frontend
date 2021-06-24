@@ -41,9 +41,7 @@ const TransparentInfoDiv = (props: IProps) => {
                 decimals={5}
                 duration={props.cDuration}
                 preserveValue={true}
-                onUpdate={() => {
-                  console.log('test');
-                }}
+                onUpdate={() => {}}
               />
             ) : (
               props.rightLabelValue

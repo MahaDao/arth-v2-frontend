@@ -8,9 +8,8 @@ export default (message: string): string => {
   if (message.includes('balance < required')) return 'Balance < Required';
   if (message.includes('overflow')) return 'Error';
   if (message.includes('is inactive')) return 'This action has been deactivated';
-  
+
   // Fail safes like overflows etc.;
-  console.log(message[0].toUpperCase() + message.slice(1).toLowerCase());
   return 'Error';
 
   // For testing to know errors.
