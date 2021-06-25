@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
 import ArrowBackIos from '@material-ui/icons/ArrowBackIos';
 
@@ -23,6 +23,8 @@ import { withSnackbar, WithSnackbarProps } from 'notistack';
 import { CustomSnack } from '../../../../components/SnackBar';
 import useCore from '../../../../hooks/useCore';
 import { ValidateNumber } from '../../../../components/CustomInputContainer/RegexValidation';
+import useTokenBalance from '../../../../hooks/state/useTokenBalance';
+import { getDisplayBalanceToken } from '../../../../utils/formatBalance';
 
 type props = {
   selectedPair: {
@@ -111,21 +113,54 @@ const RemovePool = (props: props & WithSnackbarProps) => {
   const { selectedPair, onBack } = props;
 
   const [simpleType, setType] = useState<boolean>(true);
-  const core = useCore();
   const sliderClasses = useSliderStyles();
   const [sliderValue, setSliderValue] = React.useState(30);
   const isMobile = useMediaQuery({ query: '(max-device-width: 1284px)' });
-  const defaultDropdownValues = core.getCollateralTypes();
-  const [balance, setBalance] = useState<number>(500.0);
-  const [firstCoin, setFirstCoin] = useState<string>('ARTH');
-  const [secondCoin, setSecondCoin] = useState<string>('ETH');
-  const [firstCoinAmount, setFirstCoinAmount] = useState<string>('0.0');
-  const [secondCoinAmount, setSecondCoinAmount] = useState<string>('0.0');
-  const [secondCoinDropDown, setSecondCoinDropDown] = useState<string[]>(defaultDropdownValues);
+
+  const core = useCore();
+
+  const collateralTypes = useMemo(() => core.getCollateralTypes(), [core]);
+
+  const [isInputFieldError, setIsInputFieldError] = useState<boolean>(false);
+
+  const [pairValue, setPairValue] = useState<string>('0');
+
+  const [firstCoin, setFirstCoin] = useState(core.getDefaultCollateral());
+  const [secondCoin, setSecondCoin] = useState(core.getDefaultCollateral());
+
+  const firstToken = core.tokens[firstCoin];
+  const secondToken = core.tokens[secondCoin];
+
+  const [firstCoinValue, setFirstCoinValue] = useState<string>('0');
+  const [secondCoinValue, setSecondCoinValue] = useState<string>('0');
+
+  const firstCoinDropDown = useMemo(() => {
+    var arr: string[];
+    arr = collateralTypes.filter(e => e !== firstCoin && e !== secondCoin);
+    return arr;
+  }, [core, firstCoin, secondCoin]);
+
+  const secondCoinDropDown = useMemo(() => {
+    var arr: string[];
+    arr = collateralTypes.filter(e => e !== firstCoin && e !== secondCoin);
+    return arr;
+  }, [core, firstCoin, secondCoin]);
+
+  //Balance
+  const { isLoading: isFirstCoinLoading, value: firstCoinBalance } = useTokenBalance(
+    core.tokens[firstCoin],
+  );
+
+  const { isLoading: isSecondCoinLoading, value: secondCoinBalance } = useTokenBalance(
+    core.tokens[secondCoin],
+  );
+
   const [confirmModal, setConfirmModal] = useState<boolean>(false);
+
   const handleSliderChange = (event: any, value: any) => {
     setSliderValue(value);
   };
+
   const simple = () => {
     return (
       <div>
@@ -226,25 +261,18 @@ const RemovePool = (props: props & WithSnackbarProps) => {
         </div>
         <CustomInputContainer
           ILabelValue={'Enter Token Amount'}
-          IBalanceValue={`Balance ${balance}`}
-          // ILabelInfoValue={'How can i get it?'}
-          DefaultValue={firstCoinAmount.toString()}
-          LogoSymbol={firstCoin}
+          IBalanceValue={'0'}
+          isBalanceLoading={true}
+          DefaultValue={'0'}
+          LogoSymbol={''}
           hasDropDown={false}
           multiIcons
-          // symbol1={selectedPair?.liquidity?.symbol1}
-          // symbol2={selectedPair?.liquidity?.symbol2}
-          // dropDownValues={firstCoinDropDown}
-          // ondropDownValueChange={(data) => {
-          //   if (data !== secondCoin) {
-          //     setFirstCoin(data);
-          //   }
-          // }}
+          symbols={[selectedPair?.liquidity?.symbol1, selectedPair?.liquidity?.symbol2]}
           SymbolText={selectedPair?.liquidity?.pairName}
-          inputMode={'decimal'}
-          setText={(val: string) =>
-            setFirstCoinAmount(ValidateNumber(val) ? val : String(Number(val)))
-          }
+          inputMode={'numeric'}
+          setText={(val: string) => {
+            setPairValue(ValidateNumber(val) ? val : '0');
+          }}
           tagText={'MAX'}
         />
         <PlusMinusArrow>
@@ -252,46 +280,46 @@ const RemovePool = (props: props & WithSnackbarProps) => {
         </PlusMinusArrow>
         <CustomInputContainer
           ILabelValue={'You Receive'}
-          IBalanceValue={`Balance ${balance}`}
-          // ILabelInfoValue={'How can i get it?'}
-          DefaultValue={secondCoinAmount.toString()}
-          LogoSymbol={secondCoin}
+          IBalanceValue={getDisplayBalanceToken(firstCoinBalance, firstToken)}
+          isBalanceLoading={isFirstCoinLoading}
+          DefaultValue={firstCoinValue.toString()}
+          LogoSymbol={firstCoin}
           hasDropDown={true}
-          dropDownValues={secondCoinDropDown}
-          ondropDownValueChange={(data) => {
-            if (firstCoin !== data) {
-              setSecondCoin(data);
-            }
+          dropDownValues={firstCoinDropDown}
+          ondropDownValueChange={setFirstCoin}
+          SymbolText={firstCoin}
+          inputMode={'numeric'}
+          setText={(val: string) => {
+            setFirstCoinValue(ValidateNumber(val) ? val : '0');
           }}
-          SymbolText={secondCoin}
-          inputMode={'decimal'}
-          setText={(val: string) =>
-            setSecondCoinAmount(ValidateNumber(val) ? val : String(Number(val)))
-          }
           tagText={'MAX'}
+          disabled={isFirstCoinLoading}
+          errorCallback={(flag: boolean) => {
+            setIsInputFieldError(flag);
+          }}
         />
         <PlusMinusArrow>
           <img src={plus} alt="plus" />
         </PlusMinusArrow>
         <CustomInputContainer
-          ILabelValue={'You Receive'}
-          IBalanceValue={`Balance ${balance}`}
-          // ILabelInfoValue={'How can i get it?'}
-          DefaultValue={secondCoinAmount.toString()}
+          ILabelValue={'Enter Amount'}
+          IBalanceValue={getDisplayBalanceToken(secondCoinBalance, secondToken)}
+          isBalanceLoading={isSecondCoinLoading}
+          DefaultValue={secondCoinValue.toString()}
           LogoSymbol={secondCoin}
           hasDropDown={true}
           dropDownValues={secondCoinDropDown}
-          ondropDownValueChange={(data) => {
-            if (firstCoin !== data) {
-              setSecondCoin(data);
-            }
-          }}
+          ondropDownValueChange={setSecondCoin}
           SymbolText={secondCoin}
-          inputMode={'decimal'}
-          setText={(val: string) =>
-            setSecondCoinAmount(ValidateNumber(val) ? val : String(Number(val)))
-          }
+          inputMode={'numeric'}
+          setText={(val: string) => {
+            setSecondCoinValue(ValidateNumber(val) ? val : '0');
+          }}
           tagText={'MAX'}
+          disabled={isSecondCoinLoading}
+          errorCallback={(flag: boolean) => {
+            setIsInputFieldError(flag);
+          }}
         />
         <OneLine style={{ marginTop: '15px' }}>
           <div style={{ flex: 1 }}>
@@ -323,12 +351,12 @@ const RemovePool = (props: props & WithSnackbarProps) => {
           <TransparentInfoDiv
             labelData={`You will receive ARTH`}
             rightLabelUnit={firstCoin}
-            rightLabelValue={firstCoinAmount.toString()}
+            rightLabelValue={firstCoinValue.toString()}
           />
           <TransparentInfoDiv
             labelData={`You will receive ETH`}
             rightLabelUnit={secondCoin}
-            rightLabelValue={secondCoinAmount.toString()}
+            rightLabelValue={secondCoinValue.toString()}
           />
           <Divider style={{ background: 'rgba(255, 255, 255, 0.08)', margin: '15px 0px' }} />
 
@@ -395,14 +423,14 @@ const RemovePool = (props: props & WithSnackbarProps) => {
           </EachElement>
           <EachElement>
             {' '}
-            <Detailed onClick={() => setType(!simpleType)}>
+            {/*<Detailed onClick={() => setType(!simpleType)}>
               {simpleType ? 'Detailed' : 'Simple'}
-            </Detailed>
+            </Detailed>*/}
           </EachElement>
         </CustomCardHeader>
         <CustomCardContainer className={'custom-mahadao-container-content'}>
-          {/* <div> */}
-          {simpleType ? simple() : detailed()}
+          {/*{simpleType ? simple() : detailed()}*/}
+          {detailed()}
           <ButtonContainer>
             <div style={isMobile ? {} : { marginRight: 5, width: '100%' }}>
               <Button
@@ -411,6 +439,7 @@ const RemovePool = (props: props & WithSnackbarProps) => {
                 onClick={() => {
                   setConfirmModal(true);
                 }}
+                disabled={isInputFieldError}
               />
             </div>
             <div style={isMobile ? { marginTop: 5 } : { marginLeft: 5, width: '100%' }}>

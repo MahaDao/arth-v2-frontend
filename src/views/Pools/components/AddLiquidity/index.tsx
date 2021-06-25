@@ -1,20 +1,14 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import ArrowBackIos from '@material-ui/icons/ArrowBackIos'
-import TokenSymbol from '../../../../components/TokenSymbol';
-import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
-import plus from '../../../../assets/svg/plus.svg';
-import InfoIcon from '@material-ui/icons/Info';
+import { Divider } from '@material-ui/core';
+import Grid from '@material-ui/core/Grid';
+
 import CustomInputContainer from '../../../../components/CustomInputContainer';
 import arrowDown from '../../../../assets/svg/arrowDown.svg';
 import Button from '../../../../components/Button';
 import TransparentInfoDiv from '../../../Stablize/components/InfoDiv';
-import { Divider } from '@material-ui/core';
 import CustomModal from '../../../../components/CustomModal';
-import Grid from '@material-ui/core/Grid';
-import { ICards, IPoolData } from '../OpenableCard';
-import { withSnackbar, WithSnackbarProps } from 'notistack';
-import { CustomSnack } from '../../../../components/SnackBar';
 import { ValidateNumber } from '../../../../components/CustomInputContainer/RegexValidation';
 import useCore from '../../../../hooks/useCore';
 import { useWallet } from 'use-wallet';
@@ -25,7 +19,7 @@ type props = {
   onBack: () => void;
 };
 
-const AddLiquidity = (props: props & WithSnackbarProps) => {
+const AddLiquidity = (props: props) => {
   const { onBack } = props;
 
   const core = useCore();
@@ -38,7 +32,6 @@ const AddLiquidity = (props: props & WithSnackbarProps) => {
 
   const firstToken = core.tokens[firstCoin];
   const secondToken = core.tokens[secondCoin];
-
 
   const [firstCoinValue, setFirstCoinValue] = useState<string>('0');
   const [secondCoinValue, setSecondCoinValue] = useState<string>('0');
@@ -222,7 +215,7 @@ const AddLiquidity = (props: props & WithSnackbarProps) => {
   )
 }
 
-export default withSnackbar(AddLiquidity)
+export default AddLiquidity
 
 const CustomCard = styled.div`
   

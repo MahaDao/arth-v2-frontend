@@ -17,7 +17,7 @@ const Boardrooms = () => {
   useEffect(() => window.scrollTo(0, 0), []);
   const core = useCore();
   WalletAutoConnect();
-  const [action, setAction] = useState<'Details' | 'Import' | 'Add' | 'Remove'>('Add');
+  const [action, setAction] = useState<'Details' | 'Import' | 'Add' | 'Remove'>('Remove');
   const [selectedSwap, setSelectedSwap] = useState<'Uniswap' | 'Sushiswap'>('Uniswap');
   const [noLiquidity, setNoLiquidity] = useState<boolean>(false);
   const [deposit, setDeposit] = useState<boolean>(false);
