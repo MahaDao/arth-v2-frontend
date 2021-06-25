@@ -64,7 +64,7 @@ const configurations: { [env: string]: Configuration } = {
     blockchainTokenDecimals: 18,
   },
   stagingMaticMainnet: {
-    networkName: 'Matic Mainnet',
+    networkName: 'Staging Matic',
     chainId: 137,
     etherscanUrl: 'https://polygonscan.com',
     defaultProvider:
