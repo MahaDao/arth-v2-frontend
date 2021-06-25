@@ -3,9 +3,8 @@ import { createStyles, withStyles, Theme } from '@material-ui/core/styles';
 import styled from 'styled-components';
 import MenuIcon from '@material-ui/icons/Menu';
 import InputBase from '@material-ui/core/InputBase';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import Container from '../Container';
+import detectEthereumProvider from '@metamask/detect-provider';
+
 import Logo from '../Logo';
 import { useWallet } from 'use-wallet';
 import AccountButton from './components/AccountButton';
@@ -19,6 +18,8 @@ import useCore from '../../hooks/useCore';
 import Button from '../Button';
 import { useLocation } from 'react-router-dom';
 import { Mixpanel } from '../../analytics/Mixpanel';
+import { useCallback } from 'react';
+import config from '../../config';
 
 const BootstrapInput = withStyles((theme: Theme) =>
   createStyles({
@@ -51,6 +52,8 @@ const TopBar: React.FC = () => {
   const { account, chainId } = useWallet();
   const core = useCore();
 
+  const [showWarning, setShowWarning] = React.useState(false);
+
   const [netWrokType, setNetworkType] = React.useState('mainnet');
   const [showMobileMenu, toggleMobileMenu] = useState(false);
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -59,7 +62,14 @@ const TopBar: React.FC = () => {
 
   const isMainnet = core.config.chainId in [137, 1, 'bsc'];
 
-  const showWarning = false; // core.config.chainId !== chainId;
+  const processNetwork = useCallback(async () => {
+    const provider: any = await detectEthereumProvider();
+
+    if (provider) {
+      const chainId = Number(await provider.request({ method: 'eth_chainId' }));
+      setShowWarning(chainId !== config.chainId);
+    }
+  }, []);
 
   // ScreenView Analytics
   let location = useLocation();
@@ -73,7 +83,9 @@ const TopBar: React.FC = () => {
       Mixpanel.identify(account);
       Mixpanel.people.set({ walletId: account });
     }
-  }, [account])
+
+    processNetwork();
+  }, [account, processNetwork]);
 
   return (
     <TopBarContainer>
@@ -87,12 +99,24 @@ const TopBar: React.FC = () => {
             </HideonPhone>
           </div>
           <HideonPhone>
-            <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end', width: '100%', alignItems: 'center' }}>
+            <div
+              style={{
+                flex: 1,
+                display: 'flex',
+                justifyContent: 'flex-end',
+                width: '100%',
+                alignItems: 'center',
+              }}
+            >
               <div style={{ marginRight: '12px' }}>
                 <Button
                   text={'Get MAHA'}
                   size={'sm'}
-                  onClick={() => window.open('https://app.uniswap.org/#/swap?outputCurrency=0xb4d930279552397bba2ee473229f89ec245bc365')}
+                  onClick={() =>
+                    window.open(
+                      'https://app.uniswap.org/#/swap?outputCurrency=0xb4d930279552397bba2ee473229f89ec245bc365',
+                    )
+                  }
                   tracking_id={'get_MAHA'}
                 />
               </div>
@@ -149,14 +173,14 @@ const TopBar: React.FC = () => {
         </StyledTopBarInner>
         {/*</Container>*/}
       </StyledTopBar>
-      {/* {showWarning && (
+      {showWarning && (
         <ShowWarning>
           <ShowWarningInner>
             <img src={InfoIcon} alt="" width="24px" className="margin-right-5" />
             Please make sure that you are connected to {core.config.networkName}.
           </ShowWarningInner>
         </ShowWarning>
-      )} */}
+      )}
     </TopBarContainer>
   );
 };
@@ -233,16 +257,17 @@ const ShowWarningInner = styled.div`
 
 const ShowWarning = styled.div`
   background: #ba1e38;
-  border: 1px solid #ff9eae;
+  // border: 1px solid #ff9eae;
   box-sizing: border-box;
-  border-radius: 6px;
+  // border-radius: 6px;
   padding: 10px 0px;
+  margin-bottom: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
   // max-width: 600px;
   z-index: 50;
-  position: absolute;
+  // position: absolute;
   left: 28%;
   right: 28%;
   top: 90px;

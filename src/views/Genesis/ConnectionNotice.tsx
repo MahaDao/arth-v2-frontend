@@ -100,6 +100,7 @@ const ConnectionNotice = () => {
     if (window.ethereum) {
       // @ts-ignore
       window.ethereum
+        // @ts-ignore
         .request({
           method: 'wallet_addEthereumChain',
           params: [
@@ -136,23 +137,32 @@ const ConnectionNotice = () => {
   return (
     <MainDiv>
       <ConnectionNote>
-        To participate in the Genesis, you must either be connected to the
-        Matic/Polygon network or to the Ethereum network.
-        <SwitchBox >
-          <Parts style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}
-                 onClick={() => {
-                   Mixpanel.track('Redirection:Polygon')
-                   window.open('https://polygon.arthcoin.com')
-                 }}>
-            <img src={polygon} alt="calendar" height={64} style={{marginBottom: '12px'}}/>
+        To participate in the Genesis, you must either be connected to the Matic/Polygon network
+        or to the Ethereum network.
+        <SwitchBox>
+          <Parts
+            style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}
+            onClick={() => {
+              Mixpanel.track('Redirection:Polygon');
+              window.open('https://polygon.arthcoin.com');
+            }}
+          >
+            <img src={polygon} alt="calendar" height={64} style={{ marginBottom: '12px' }} />
             <PartsTitle>Polygon chain</PartsTitle>
             <PartsSubtitle> Move to polygon.arthcoin.com </PartsSubtitle>
           </Parts>
-          <Parts onClick={() => {
-            Mixpanel.track('Redirection:Ethereum')
-            window.open('https://ethereum.arthcoin.com')
-          }}>
-            <img src={ethereumChain} alt="calendar" height={64} style={{marginBottom: '12px'}}/>
+          <Parts
+            onClick={() => {
+              Mixpanel.track('Redirection:Ethereum');
+              window.open('https://ethereum.arthcoin.com');
+            }}
+          >
+            <img
+              src={ethereumChain}
+              alt="calendar"
+              height={64}
+              style={{ marginBottom: '12px' }}
+            />
             <PartsTitle>Ethereum Chain</PartsTitle>
             <PartsSubtitle> Move to ethereum.arthcoin.com </PartsSubtitle>
           </Parts>
@@ -172,7 +182,7 @@ const ConnectionNotice = () => {
 const MainDiv = styled.div`
   width: 100vw;
   height: calc(100vh - 72px);
-`
+`;
 
 const ConnectionNote = styled.div`
   max-width: 500px;
@@ -199,18 +209,18 @@ const ConnectionNote = styled.div`
 `;
 
 const SwitchBox = styled.div`
-  background: linear-gradient(180deg, #48423E 0%, #373030 100%);
+  background: linear-gradient(180deg, #48423e 0%, #373030 100%);
   box-shadow: 0px 8px 16px -2px rgba(0, 0, 0, 0.12);
   border-radius: 12px;
   text-align: center;
   margin-top: 12px;
-`
+`;
 
 const Parts = styled.div`
   text-align: center;
   padding: 32px;
   cursor: pointer;
-`
+`;
 
 const PartsTitle = styled.p`
   font-family: Inter;
@@ -221,7 +231,7 @@ const PartsTitle = styled.p`
   text-align: center;
   color: rgba(255, 255, 255, 0.88);
   margin-bottom: 2px;
-`
+`;
 
 const PartsSubtitle = styled.p`
   font-family: Inter;
@@ -232,7 +242,7 @@ const PartsSubtitle = styled.p`
   text-align: center;
   color: rgba(255, 255, 255, 0.64);
   margin-bottom: 0;
-`
+`;
 
 const AddPolygon = styled.p`
   font-family: Inter;

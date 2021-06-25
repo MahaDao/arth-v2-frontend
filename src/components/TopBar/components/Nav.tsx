@@ -12,11 +12,11 @@ const Nav = (props: props) => {
       <StyledLink exact activeClassName="active" to="/genesis">
         Genesis
       </StyledLink>
+      {/* <StyledLink exact activeClassName="active" to="/mint/mint">
+        Mint/Redeem
+      </StyledLink> */}
       {/* <StyledLink exact activeClassName="active" to="/stats">
         Analytics
-      </StyledLink>
-      <StyledLink exact activeClassName="active" to="/mint/mint">rr
-        Mint/Redeem
       </StyledLink> */}
       {/* <StyledLink exact activeClassName="active" to="/stabilize/recollateralize">
         Stabilize

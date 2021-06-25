@@ -40,7 +40,7 @@ const configurations: { [env: string]: Configuration } = {
     arthxTradingPairs: ['ETH', 'ARTH'],
     platform: 'uniswap',
   },
-  stagingMatic: {
+  stagingMaticMumbai: {
     networkName: 'Matic Mumbai Testnet',
     chainId: 80001,
     etherscanUrl: 'https://explorer-mumbai.maticvigil.com',
@@ -56,6 +56,24 @@ const configurations: { [env: string]: Configuration } = {
     arthTradingPairs: ['ARTHX', 'MAHA'],
     arthxTradingPairs: ['ARTH'],
     platform: 'sushiswap',
+  },
+  stagingMaticMainnet: {
+    networkName: 'Matic Mainnet',
+    chainId: 137,
+    etherscanUrl: 'https://polygonscan.com',
+    defaultProvider:
+      'https://solitary-crimson-wind.matic.quiknode.pro/d9d5c0846efe6098a99c0a8a2c7238692ca33ce0/',
+    deployments: require('./basis-cash/deployments/stagingMatic.json'),
+    genesisLaunchDate: new Date('2021-06-22T15:00:00Z'),
+    genesisEndDate: new Date('2021-06-29T15:00:00Z'),
+    refreshInterval: 10000,
+    gasLimitMultiplier: 1.1,
+    defaultCollateral: 'USDT',
+    blockchainToken: 'MATIC',
+    supportedCollaterals: ['USDC', 'USDT', 'WBTC', 'WMATIC', 'WETH'],
+    arthTradingPairs: ['ARTHX', 'MAHA'],
+    arthxTradingPairs: ['ARTH'],
+    platform: 'dfyn',
   },
   matic: {
     networkName: 'Matic Mainnet',
@@ -129,7 +147,7 @@ export const platformURL: { [platform: string]: Platform } = {
 
 export const stakingContracts: StakingContract[] = [
   {
-    platform: 'sushiswap',
+    platform: 'dfyn',
     contract: 'StakeARTHXARTH',
     kind: 'unlocked',
     depositToken: 'ArthArthxLP',
@@ -155,7 +173,7 @@ export const stakingContracts: StakingContract[] = [
     categories: ['all', 'arthx'],
   },
   {
-    platform: 'sushiswap',
+    platform: 'dfyn',
     contract: 'StakeARTHMAHA',
     kind: 'unlocked',
     depositToken: 'ArthMahaLP',
@@ -185,13 +203,12 @@ export const stakingContracts: StakingContract[] = [
 export const tradingPairs: TradingPairs[] = [
   {
     tokens: ['MAHA', 'ARTH'],
-    platform: 'sushiswap',
+    platform: 'dfyn',
   },
   {
-    tokens: ['ARTHX', 'ARTHX'],
-    platform: 'sushiswap',
+    tokens: ['ARTHX', 'ARTH'],
+    platform: 'dfyn',
   },
 ];
 
-console.log(process.env);
 export default configurations[process.env.REACT_APP_NETWORK || 'matic'];
