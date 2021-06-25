@@ -169,9 +169,9 @@ export const stakingContracts: StakingContract[] = [
     earnTokenName: 'MAHA',
     finished: false,
     rewardTokenSymbols: ['MAHA'],
-    networks: [ChainId.MAINNET, ChainId.RINKEBY, 1337, 137],
+    networks: [137],
     sort: 0,
-    categories: ['all', 'arthx', 'maha'],
+    categories: ['all', 'arthx'],
   },
   // {
   //   platform: 'dfyn',

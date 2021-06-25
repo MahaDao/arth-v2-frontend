@@ -8,8 +8,9 @@ import TransparentInfoDiv from '../../Genesis/components/InfoDiv';
 
 import { StakingContract } from '../../../basis-cash';
 import useTokenDecimals from '../../../hooks/useTokenDecimals';
-import { getDisplayBalance } from '../../../utils/formatBalance';
+import { getDisplayBalance, getDisplayBalanceToken } from '../../../utils/formatBalance';
 import useStakingQuit from '../../../hooks/callbacks/staking/useStakingQuit';
+import useCore from '../../../hooks/useCore';
 
 interface IProps {
   toggleSuccessModal?: () => void;
@@ -39,6 +40,8 @@ export default (props: IProps) => {
     });
   }
 
+  const core = useCore()
+
   const pow = BigNumber.from(10).pow(18);
   const initEarnedARTHX = useMemo(() => {
     return Number(getDisplayBalance(
@@ -49,12 +52,18 @@ export default (props: IProps) => {
   }, [props, pow]);
 
   const initEarnedMAHA = useMemo(() => {
-    return Number(getDisplayBalance(
-      props?.claimableBalance?.mul(props?.rates?.maha).div(pow),
-      18,
-      6
-    ))
-  }, [props, pow]);
+    if (props.pool.rewardTokenKind === 'multiple') {
+      return Number(getDisplayBalanceToken(
+        props?.claimableBalance?.mul(props?.rates?.maha).div(pow),
+        core.tokens.MAHA,
+        6
+      ))
+    }
+
+    if (props.pool.rewardTokenKind === 'single') {
+      return Number(getDisplayBalanceToken(props?.claimableBalance, core.tokens.MAHA, 6))
+    }
+  }, [props, pow, core.tokens.MAHA]);
 
   return (
     <CustomModal
