@@ -160,7 +160,6 @@ const TopBarContainer = styled.div`
   top: 0;
 `;
 
-
 const HideonPhone = styled.div`
   display: flex;
   justify-content: center;
@@ -178,12 +177,6 @@ const HideOnBigScreen = styled.div`
 `;
 
 const StyledTopBar = styled.div`
-  // position: fixed;
-  // z-index: 100;
-  // display: flex;
-  // width: 100%;
-  // top: 0;
-  //background: #151414;
   ox-sizing: border-box;
   margin: 0 auto;
   width: 100%;
@@ -196,7 +189,6 @@ const ShowWarningInner = styled.div`
   font-weight: 600;
   font-size: 16px;
   line-height: 24px;
-  // margin: 0px 20px;
   color: rgba(255, 255, 255, 0.88);
   text-align: center;
   display: flex;
@@ -208,22 +200,17 @@ const ShowWarningInner = styled.div`
 
 const ShowWarning = styled.div`
   background: #ba1e38;
-  // border: 1px solid #ff9eae;
   box-sizing: border-box;
-  // border-radius: 6px;
   padding: 10px 0px;
   margin-bottom: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
-  // max-width: 600px;
   z-index: 50;
-  // position: absolute;
   left: 28%;
   right: 28%;
   top: 90px;
   @media (max-width: 768px) {
-    // max-width: 200px;
     width: 95%;
     left: 2.5%;
     right: 2.5%;
@@ -245,7 +232,6 @@ const StyledTopBarInner = styled.div`
   display: flex;
   height: ${(props) => props.theme.topBarSize}px;
   justify-content: space-between;
-  //max-width: ${(props) => props.theme.siteWidth}px;
   width: 100%;
   padding: 0 24px;
   flex-wrap: wrap;
@@ -260,7 +246,6 @@ const ColorIcon = styled.div`
   border-radius: 50%;
   height: 10px;
   margin-right: 5px;
-  //margin-left: -10px;
 `;
 
 export default TopBar;
