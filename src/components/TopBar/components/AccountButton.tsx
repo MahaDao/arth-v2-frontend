@@ -1,73 +1,122 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
+
 import Button from '../../Button/Button';
 import AccountModal from './AccountModal';
+
 import walletIcon from '../../../assets/svg/wallet-24.svg';
-import CustomModal from '../../CustomModal';
-import Loader from 'react-spinners/PulseLoader';
-import { Mixpanel } from '../../../analytics/Mixpanel';
 
-interface AccountButtonProps { }
+import config from '../../../config';
+import { truncateMiddle } from '../../../utils/formatBalance';
 
-const truncateMiddle = function (fullStr: string, strLen: number, separator: string) {
-  if (fullStr.length <= strLen) return fullStr;
+interface AccountButtonProps {
+  showWarning: boolean;
+}
 
-  separator = separator || '...';
-
-  var sepLen = separator.length,
-    charsToShow = strLen - sepLen,
-    frontChars = Math.ceil(charsToShow / 2),
-    backChars = Math.floor(charsToShow / 2);
-
-  return fullStr.substr(0, frontChars) + separator + fullStr.substr(fullStr.length - backChars);
-};
-
-const AccountButton: React.FC<AccountButtonProps> = () => {
+const AccountButton: React.FC<AccountButtonProps> = ({
+  showWarning = false
+}: AccountButtonProps) => {
   const [showModal, toggleModal] = React.useState(false);
   const { account, connect } = useWallet();
 
+  const switchMetamaskChain = () => {
+    // @ts-ignore
+    if (window.ethereum) {
+      // @ts-ignore
+      window.ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: '0x' + Number(config.chainId).toString(16) }],
+      })
+        .then(() => {
+          window.location.reload();
+        })
+        .catch((error: any) => {
+          if (error.code === 4902) addNetworkToMetamask();
+        });
+    }
+  }
+
+  const addNetworkToMetamask = () => {
+    // @ts-ignore
+    if (window.ethereum) {
+      // @ts-ignore
+      window.ethereum
+        // @ts-ignore
+        .request({
+          method: 'wallet_addEthereumChain',
+          params: [
+            {
+              chainId: '0x' + Number(config.chainId).toString(16),
+              chainName: config.networkName,
+              rpcUrls: [config.defaultRPCURL],
+              iconUrls: [config.defaultIconURL || ''],
+              blockExplorerUrls: [config.etherscanUrl],
+              nativeCurrency: {
+                name: config.blockchainTokenName,
+                symbol: config.blockchainToken,
+                decimals: config.blockchainTokenDecimals
+              },
+            },
+          ],
+        })
+        .then(() => {
+          window.location.reload();
+        })
+        .catch((error: any) => {
+          if (error.code === 4001) {
+            // EIP-1193 userRejectedRequest error.
+            console.log('We cannot encrypt anything without the key.');
+          }
+        });
+    }
+  }
+
+
   return (
     <>
-      {showModal && <AccountModal onClose={() => toggleModal(!showModal)} />}
+      {
+        showModal && <AccountModal onClose={() => toggleModal(!showModal)} />
+      }
       <StyledAccountButton>
-        {!account ? (
-          <Button
-            variant="transparent"
-            onClick={() => {
-              connect('injected').then(() => {
-                // Mixpanel.identify(account);
-                localStorage.removeItem('disconnectWallet')
-              })
-            }}
-            size="sm"
-            text="Connect"
-            tracking_id={'connect_wallet'}
-          />
-        ) : (
-          <Button
-            onClick={() => toggleModal(true)}
-            size="sm"
-            variant={'transparent'}
-            text={truncateMiddle(account, 11, '.....')}
-          >
-            <img alt="wallet" src={walletIcon} className="margin-right-10" onClick={() => toggleModal(true)} />
-          </Button>
-        )}
+        {
+          showWarning ? (
+            <Button
+              variant="transparent"
+              onClick={switchMetamaskChain}
+              size="sm"
+              text="Switch network"
+            />
+          ) : (
+            !account ? (
+              <Button
+                variant="transparent"
+                onClick={() => {
+                  connect('injected').then(() => {
+                    localStorage.removeItem('disconnectWallet')
+                  })
+                }}
+                size="sm"
+                text="Connect"
+                tracking_id={'connect_wallet'}
+              />
+            ) : (
+              <Button
+                onClick={() => toggleModal(true)}
+                size="sm"
+                variant={'transparent'}
+                text={truncateMiddle(account, 12, '...')}
+              >
+                <img alt="wallet" src={walletIcon} className="margin-right-10" onClick={() => toggleModal(true)} />
+              </Button>
+            )
+          )
+        }
       </StyledAccountButton>
     </>
   );
 };
 
 const StyledAccountButton = styled.div``;
-const ModalSpan = styled.span`
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 20px;
-  text-align: center;
-  color: rgba(255, 255, 255, 0.88);
-  margin: 15px 0px 0px 0px;
-`;
+
 export default AccountButton;

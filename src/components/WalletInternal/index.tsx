@@ -25,8 +25,9 @@ interface IProps {
 
 export const WalletInternal = (props: IProps) => {
   const [ConfirmationModal, setConfirmationModal] = useState<boolean>(props.disconnect);
-  const isMobile = useMediaQuery({ maxWidth: '600px' });
   const [toolTipText, settoolTipText] = useState<string>('copy');
+
+  const isMobile = useMediaQuery({ maxWidth: '600px' });
 
   const core = useCore();
   const { account, reset } = useWallet();

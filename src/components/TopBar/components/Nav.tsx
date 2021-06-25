@@ -27,11 +27,13 @@ const Nav = (props: props) => {
       {/* <StyledLink exact activeClassName="active" to="/trade">
         Trade
       </StyledLink> */}
-      {/* {!props.isMainnet && (
-        <StyledLink exact activeClassName="active" to="/faucet">
-          Faucet
-        </StyledLink>
-      )} */}
+      {
+        !props.isMainnet && (
+          <StyledLink exact activeClassName="active" to="/faucet">
+            Faucet
+          </StyledLink>
+        )
+      }
       <StyledLink exact activeClassName="active" to="/rebase">
         Rebase
       </StyledLink>

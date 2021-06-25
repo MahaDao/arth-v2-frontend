@@ -1,141 +1,171 @@
-import React, { useState } from 'react';
 import styled from 'styled-components';
-import { createStyles, withStyles, Theme } from '@material-ui/core/styles';
-import InputBase from '@material-ui/core/InputBase';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
+import { useWallet } from 'use-wallet';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import AccountButton from './AccountButton';
-import ExpandMore from '../../../assets/img/ExpandMore.svg';
+
 import Button from '../../Button';
 import { WalletInternal } from '../../WalletInternal';
-import { useWallet } from 'use-wallet';
-const BootstrapInput = withStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      borderRadius: 8,
-      color: 'white',
-      border: '1px solid white',
-      fontSize: 14,
-      padding: '0px 15px',
-      marginRight: '20px',
-      'label + &': {
-        marginTop: theme.spacing(3),
-      },
-    },
-    input: {
-      position: 'relative',
-      backgroundColor: 'transparent',
-      display: 'flex',
-      alignItems: 'center',
-      padding: '10px 26px 10px 12px',
-      transition: theme.transitions.create(['border-color', 'box-shadow']),
-      '&:focus': {
-        borderRadius: 8,
-      },
-    },
-  }),
-)(InputBase);
+
+import config from '../../../config';
 
 interface props {
-  isMainnet: boolean
+  isMainnet: boolean;
+  showWarning: boolean;
   onClick: () => void;
 }
 
 const MobileNav = (props: props) => {
-  // const { walletInfo: Wallet } = props
   const { account, connect } = useWallet();
 
-  const [netWrokType, setNetworkType] = React.useState('mainnet');
-  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setNetworkType(event.target.value as string);
-  };
-  const [walletInfo, setWallet] = useState<boolean>(false);
+  const [walletInfo, setWalletInfo] = useState<boolean>(false);
   const [disconnect, setDisconnect] = useState<boolean>(false);
+
+  const switchMetamaskChain = () => {
+    // @ts-ignore
+    if (window.ethereum) {
+      // @ts-ignore
+      window.ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: '0x' + Number(config.chainId).toString(16) }],
+      })
+        .then(() => {
+          window.location.reload();
+        })
+        .catch((error: any) => {
+          if (error.code === 4902) addNetworkToMetamask();
+        });
+    }
+  }
+
+  const addNetworkToMetamask = () => {
+    // @ts-ignore
+    if (window.ethereum) {
+      // @ts-ignore
+      window.ethereum
+        // @ts-ignore
+        .request({
+          method: 'wallet_addEthereumChain',
+          params: [
+            {
+              chainId: '0x' + Number(config.chainId).toString(16),
+              chainName: config.networkName,
+              rpcUrls: [config.defaultRPCURL],
+              iconUrls: [config.defaultIconURL || ''],
+              blockExplorerUrls: [config.etherscanUrl],
+              nativeCurrency: {
+                name: config.blockchainTokenName,
+                symbol: config.blockchainToken,
+                decimals: config.blockchainTokenDecimals
+              },
+            },
+          ],
+        })
+        .then(() => {
+          window.location.reload();
+        })
+        .catch((error: any) => {
+          if (error.code === 4001) {
+            // EIP-1193 userRejectedRequest error.
+            console.log('We cannot encrypt anything without the key.');
+          }
+        });
+    }
+  }
 
   return (
     <StyledNav>
-      {!walletInfo ? (
-        <div style={{ width: '100%', background: '#1e1d1d', marginTop: -2 }}>
-          <StyledLink
-            exact
-            activeClassName="active"
-            to="/genesis"
-            onClick={() => props.onClick()}
-          >
-            Genesis
-          </StyledLink>
-          {/*<StyledLink
-            exact
-            activeClassName="active"
-            to="/stats"
-            onClick={() => props.onClick()}
-          >
-            Analytics
-          </StyledLink>*/}
-          {/*<StyledLink
-            exact
-            activeClassName="active"
-            to="/mint/mint"
-            onClick={() => props.onClick()}
-          >
-            Mint/Redeem
-          </StyledLink>*/}
-          {/* <StyledLink
-            exact
-            activeClassName="active"
-            to="/stabilize/recollateralize"
-            onClick={() => props.onClick()}
-          >
-            Stabilize
-          </StyledLink> */}
-         {/* <StyledLink
-            exact
-            activeClassName="active"
-            to="/farming"
-            onClick={() => props.onClick()}
-          >
-            Farming
-          </StyledLink>*/}
-          {/*{
-            !props.isMainnet && (
-              <StyledLink exact activeClassName="active" to="/faucet" onClick={() => props.onClick()}>
-                Faucet
-              </StyledLink>
-            )
-          }*/}
-          <StyledLink exact activeClassName="active" to="/rebase" onClick={() => props.onClick()}>
-            Rebase
-          </StyledLink>
-          <StyledLink exact activeClassName="active" to="/lottery" onClick={() => props.onClick()}>
-            Prizes
-          </StyledLink>
-          {/*<StyledLink exact activeClassName="active" to="/farming">
-            Pools
-          </StyledLink>*/}
-        </div>
-      ) : (
-        <WalletInternal disconnect={disconnect} walletInfo={walletInfo} setWalletInfo={(val: boolean) => setWallet(val)} />
-      )}
+      {
+        !walletInfo ? (
+          <div style={{ width: '100%', background: '#1e1d1d', marginTop: -2 }}>
+            <StyledLink
+              exact
+              activeClassName="active"
+              to="/genesis"
+              onClick={() => props.onClick()}
+            >
+              Genesis
+            </StyledLink>
+            {/*<StyledLink
+              exact
+              activeClassName="active"
+              to="/stats"
+              onClick={() => props.onClick()}
+            >
+              Analytics
+            </StyledLink>*/}
+            {/*<StyledLink
+              exact
+              activeClassName="active"
+              to="/mint/mint"
+              onClick={() => props.onClick()}
+            >
+              Mint/Redeem
+            </StyledLink>*/}
+            {/* <StyledLink
+              exact
+              activeClassName="active"
+              to="/stabilize/recollateralize"
+              onClick={() => props.onClick()}
+            >
+              Stabilize
+            </StyledLink> */}
+            {/* <StyledLink
+              exact
+              activeClassName="active"
+              to="/farming"
+              onClick={() => props.onClick()}
+            >
+              Farming
+            </StyledLink>*/}
+            {/*{
+              !props.isMainnet && (
+                <StyledLink exact activeClassName="active" to="/faucet" onClick={() => props.onClick()}>
+                  Faucet
+                </StyledLink>
+              )
+            }*/}
+            <StyledLink exact activeClassName="active" to="/rebase" onClick={() => props.onClick()}>
+              Rebase
+            </StyledLink>
+            <StyledLink exact activeClassName="active" to="/lottery" onClick={() => props.onClick()}>
+              Prizes
+            </StyledLink>
+            {/*<StyledLink exact activeClassName="active" to="/farming">
+              Pools
+            </StyledLink>*/}
+          </div>
+        ) : (
+          <WalletInternal disconnect={disconnect} walletInfo={walletInfo} setWalletInfo={(val: boolean) => setWalletInfo(val)} />
+        )
+      }
       <StyledButton>
         <div style={{ maxWidth: '340px', width: '100%', margin: '10px 10px 0px 10px' }}>
-          {/* <AccountButton /> */}
-          {!walletInfo && <Button
-            variant={'transparent'}
-            text={!account ? 'Connect' : 'Wallet Info'}
-            onClick={async () => {
-              if (!account) {
-                await connect('injected')
-                  .then(() => {
-                    setWallet(!walletInfo);
-                    localStorage.removeItem('disconnectWallet')
-                  })
-              } else {
-                setWallet(!walletInfo);
-              }
-            }}
-            tracking_id={!account ? 'connect_wallet' : ''}
-          />}
+          {
+            props.showWarning ? (
+              <Button
+                variant={'transparent'}
+                text={'Switch Network'}
+                onClick={switchMetamaskChain}
+              />
+            ) : (
+              !walletInfo && <Button
+                variant={'transparent'}
+                text={!account ? 'Connect' : 'Wallet Info'}
+                onClick={async () => {
+                  if (!account) {
+                    await connect('injected')
+                      .then(() => {
+                        setWalletInfo(!walletInfo);
+                        localStorage.removeItem('disconnectWallet')
+                      })
+                  } else {
+                    setWalletInfo(!walletInfo);
+                  }
+                }}
+                tracking_id={!account ? 'connect_wallet' : ''}
+              />
+            )
+          }
         </div>
       </StyledButton>
     </StyledNav>
@@ -147,7 +177,6 @@ const StyledNav = styled.nav`
   display: flex;
   z-index: 100;
   flex-direction: column;
-  // justify-content: center;
   position: fixed;
   top: 73px;
   width: 100%;
@@ -182,6 +211,7 @@ const StyledLink = styled(NavLink)`
   }
   background: #1e1d1d;
 `;
+
 const StyledButton = styled.div`
   height: 80px;
   width: 100%;
@@ -198,19 +228,9 @@ const StyledButton = styled.div`
   padding-bottom: ${(props) => props.theme.spacing[3]}px;
   &:hover {
     color: rgba(255, 255, 255, 0.64);
-    // background: rgba(255, 255, 255, 0.04);
-    // backdrop-filter: blur(70px);
   }
   &.active {
-    // color: rgba(255, 255, 255, 0.88);
   }
 `;
-const ColorIcon = styled.div`
-  background: ${(colorProps: { colorCode: string }) => colorProps.colorCode};
-  width: 10px;
-  border-radius: 50%;
-  height: 10px;
-  margin-right: 5px;
-  margin-left: -10px;
-`;
+
 export default MobileNav;
