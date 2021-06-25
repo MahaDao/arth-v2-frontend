@@ -40,9 +40,7 @@ const TransparentInfoDiv = (props: IProps) => {
                 delay={0}
                 duration={props.cDuration}
                 preserveValue={true}
-                onUpdate={() => {
-                  console.log('test');
-                }}
+                onUpdate={() => {}}
               />
             ) : (
               props.rightLabelValue

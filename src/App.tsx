@@ -2,14 +2,9 @@ import AOS from 'aos';
 import { Provider } from 'react-redux';
 import React, { useEffect } from 'react';
 import { SnackbarProvider } from 'notistack';
-import { useWallet, UseWalletProvider } from 'use-wallet';
+import { UseWalletProvider } from 'use-wallet';
 import { ThemeProvider } from 'styled-components';
-import {
-  HashRouter as Router,
-  Route,
-  Redirect,
-  Switch,
-} from 'react-router-dom';
+import { HashRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 
 import './App.css';
 import './index.css';
@@ -26,19 +21,18 @@ import Page from './components/Page';
 import Genesis from './views/Genesis';
 import Farming from './views/Farming';
 import Lottery from './views/Lottery';
-import Trade from './views/Trade';
 import TopBar from './components/TopBar';
 import Popups from './components/Popups';
+import NoMetamaskNotice from './components/NoMetamaskNotice';
+import ConnectionNotice from './views/Genesis/ConnectionNotice';
 
 import store from './state';
+import config from './config';
 import useCore from './hooks/useCore';
 import Updaters from './state/Updaters';
 import ModalsProvider from './contexts/Modals';
-import BasisCashProvider from './contexts/BasisCashProvider';
-import config from './config';
-import Button from './components/Button';
-import ConnectionNotice from './views/Genesis/ConnectionNotice';
 import { Mixpanel } from './analytics/Mixpanel';
+import BasisCashProvider from './contexts/BasisCashProvider';
 
 const Providers: React.FC = ({ children }) => {
   const currentNetworkId = config.chainId;
@@ -72,21 +66,21 @@ const App: React.FC = () => {
     return () => document.body.removeEventListener('touchmove', makeUnPassive);
   }, []);
 
-
   return (
     <Providers>
       <Router>
         <TopBar />
         <Switch>
-          {/*<Route path="/" exact>
-            <Home />
-          </Route>*/}
           <Route path="/stats">
             <Page availableNetworks={[137, 1337]}>
               <Stats />
             </Page>
           </Route>
-           <Route path="/farming">
+          {/*<Route path="/" exact>
+            <Home />
+          </Route>*/}
+
+          {/* <Route path="/farming">
             <Page availableNetworks={[137, 1337]}>
               <Farming />
             </Page>
@@ -98,14 +92,14 @@ const App: React.FC = () => {
           </Route>
           <Route path="/trade">
             <Page availableNetworks={[137, 1337]}>
-              <Trade />
+              <TemporaryTrade />
             </Page>
           </Route>
           <Route path="/pools">
             <Page availableNetworks={[137, 1337]}>
               <Pools />
             </Page>
-          </Route>
+          </Route> */}
           <Route path="/genesis">
             <Page>
               <Genesis />
@@ -135,7 +129,6 @@ const App: React.FC = () => {
 
 const AppContent: React.FC = ({ children }) => {
   const core = useCore();
-  const { account, connect } = useWallet();
 
   useEffect(() => {
     // @ts-ignore
@@ -146,16 +139,13 @@ const AppContent: React.FC = ({ children }) => {
       });
   }, []);
 
-  if (!core) return <LoadingPage/>;
-  if (!account)
-    return (
-      <div style={{ maxWidth: 500, margin: '100px auto', padding: 15, textAlign: 'center' }}>
-        <ConnectionNotice />
-        <Button onClick={() => connect('injected')}>Connect Wallet</Button>
-        <br />
-        <div>v3.0.0</div>
-      </div>
-    );
+  if (!window.ethereum) return <NoMetamaskNotice />;
+  if (!core) return <div />;
+
+  if (window.location.hostname === 'arthcoin.com') {
+    Mixpanel.track(`ScreenView:${window.location.pathname}`);
+    return <ConnectionNotice />;
+  }
 
   return (
     <ModalsProvider>

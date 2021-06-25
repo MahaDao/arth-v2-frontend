@@ -124,7 +124,7 @@ const CustomInputContainer: React.FC<props> = (props) => {
     if (!checkForAfterDecimalDigits(val)) {
       const temp: ICStatesInterface = {
         IWarningState: 'warning',
-        IMsg: 'Only 10 digits before decimal and 6 digits after decimal is allowed.',
+        IMsg: 'Only 7 digits before decimal and 6 digits after decimal is allowed.',
       };
       setICWarningStates(temp);
       DigitsStatus = false

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Countdown from 'react-countdown';
@@ -118,8 +118,82 @@ const BorderLinearProgress = withStyles((theme: Theme) =>
 
 const Genesis = (props: WithSnackbarProps) => {
   const { isLoading: isPercLoading, value: percentageCompleted } = usePercentageCompleted();
-  const { isLoading: isGlobalCollateralLoading, value: committedCollateral } = useGlobalCollateralValue();
-  const { isLoading: isARTHCirculatingLoading, value: arthCirculatingSupply } = useARTHCirculatingSupply();
+  const {
+    isLoading: isGlobalCollateralLoading,
+    value: committedCollateral,
+  } = useGlobalCollateralValue();
+  const {
+    isLoading: isARTHCirculatingLoading,
+    value: arthCirculatingSupply,
+  } = useARTHCirculatingSupply();
+
+  const [totalArthsupply, setTotalArthsupply] = useState<{
+    totalArthsupplyLoading: boolean;
+    value: number;
+  }>({
+    totalArthsupplyLoading: true,
+    value: 0,
+  });
+  const [totalCollateralCommitted, setTotalCollateralCommitted] = useState<{
+    totalCollateralCommittedLoading: boolean;
+    value: number;
+  }>({
+    totalCollateralCommittedLoading: true,
+    value: 0,
+  });
+  const [totalPercentageCompleted, setTotalPercentageCompleted] = useState<{
+    totalPercentageCompletedLoading: boolean;
+    value: number;
+  }>({
+    totalPercentageCompletedLoading: true,
+    value: 0,
+  });
+
+  useEffect(() => {
+    const headers = {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
+      'Access-Control-Allow-Headers':
+        'access-control-allow-headers,access-control-allow-methods,access-control-allow-origin,content-type',
+    };
+
+    fetch('https://api.arthcoin.com/api/collateral/totalCollateral', { headers })
+      .then((res: any) => res.json())
+      .then((data: { collateralRaised: number }) => {
+        setTotalCollateralCommitted({
+          totalCollateralCommittedLoading: false,
+          value: data.collateralRaised,
+        });
+      });
+
+    fetch('https://api.arthcoin.com/api/collateral/arthsupply', { headers })
+      .then((res: any) => res.json())
+      .then((data: { arthsupply: number }) => {
+        setTotalArthsupply({
+          totalArthsupplyLoading: false,
+          value: data.arthsupply,
+        });
+      });
+  }, []);
+
+  useEffect(() => {
+    if (
+      !totalArthsupply.totalArthsupplyLoading &&
+      !totalCollateralCommitted.totalCollateralCommittedLoading &&
+      totalArthsupply.value !== 0
+    ) {
+      const temp = 100 - (totalCollateralCommitted.value / totalArthsupply.value) * 100;
+      setTotalPercentageCompleted({
+        totalPercentageCompletedLoading: false,
+        value: temp,
+      });
+    }
+  }, [
+    totalArthsupply.totalArthsupplyLoading,
+    totalArthsupply.value,
+    totalCollateralCommitted.totalCollateralCommittedLoading,
+    totalCollateralCommitted.value,
+  ]);
 
   WalletAutoConnect();
 
@@ -168,17 +242,25 @@ const Genesis = (props: WithSnackbarProps) => {
           <div style={{}}>
             <BorderLinearProgress
               variant="determinate"
-              value={
+              /*value={
                 rebasePercentage.gt(BigNumber.from(10).pow(18))
                   ? 100
                   : Number(getDisplayBalance(rebasePercentage, 16, 3))
-              }
+              }*/
+              value={totalPercentageCompleted.value}
             />
           </div>
           <HeaderSpan>
-            {Number(getDisplayBalance(rebasePercentage, 16, 3)).toLocaleString('en-US', {
+            {/*{Number(getDisplayBalance(rebasePercentage, 16, 3)).toLocaleString('en-US', {
               maximumFractionDigits: 2,
-            })}
+            })}*/}
+            {totalPercentageCompleted.totalPercentageCompletedLoading ? (
+              <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
+            ) : (
+              totalPercentageCompleted.value.toLocaleString('en-US', {
+                maximumFractionDigits: 2,
+              })
+            )}
             % Rebase
           </HeaderSpan>
         </PageSubHeading>
@@ -200,7 +282,7 @@ const Genesis = (props: WithSnackbarProps) => {
                     />
                   </TextForInfoTitle>
                   <BeforeChipDark>
-                    {isARTHCirculatingLoading && isGlobalCollateralLoading ? (
+                    {/*{isARTHCirculatingLoading && isGlobalCollateralLoading ? (
                       <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
                     ) : (
                       prettyNumber(
@@ -210,19 +292,32 @@ const Genesis = (props: WithSnackbarProps) => {
                             : arthCirculatingSupply.sub(committedCollateral),
                         ),
                       )
+                    )}*/}
+
+                    {totalPercentageCompleted.totalPercentageCompletedLoading ? (
+                      <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
+                    ) : (
+                      prettyNumber(totalArthsupply.value - totalCollateralCommitted.value)
                     )}
                   </BeforeChipDark>
                 </OneLineInputwomargin>
                 <OneLineInputwomargin>
                   <TextForInfoTitle>
                     Committed Collateral
-                    <CustomToolTip toolTipText={'$GMU worth of collateral currently in the protocol.'} />
+                    <CustomToolTip
+                      toolTipText={'$GMU worth of collateral currently in the protocol.'}
+                    />
                   </TextForInfoTitle>
                   <BeforeChipDark>
-                    {isGlobalCollateralLoading ? (
+                    {/*{isGlobalCollateralLoading ? (
                       <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
                     ) : (
                       prettyNumber(getDisplayBalance(committedCollateral, 18))
+                    )}*/}
+                    {totalCollateralCommitted.totalCollateralCommittedLoading ? (
+                      <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
+                    ) : (
+                      prettyNumber(totalCollateralCommitted.value)
                     )}
                   </BeforeChipDark>
                 </OneLineInputwomargin>

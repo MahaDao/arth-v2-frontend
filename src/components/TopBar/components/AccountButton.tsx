@@ -45,16 +45,15 @@ const AccountButton: React.FC<AccountButtonProps> = () => {
             tracking_id={'connect_wallet'}
           />
         ) : (
-          /*<Button
+          <Button
             onClick={() => toggleModal(true)}
             size="sm"
             variant={'transparent'}
-            text={truncateMiddle(account, 15, '.....')}
+            text={truncateMiddle(account, 11, '.....')}
           >
-            <img alt="wallet" src={walletIcon} className="margin-right-10" onClick={() => toggleModal(true)}/>
-          </Button>*/
-          <img alt="wallet" src={walletIcon} className="margin-right-10" onClick={() => toggleModal(true)} id={'disconnect_wallet'}/>
-          )}
+            <img alt="wallet" src={walletIcon} className="margin-right-10" onClick={() => toggleModal(true)} />
+          </Button>
+        )}
       </StyledAccountButton>
     </>
   );

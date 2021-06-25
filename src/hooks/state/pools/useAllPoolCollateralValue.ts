@@ -15,7 +15,7 @@ type State = {
 }
 
 export default () => {
-  const [value, setValue] = useState<State>({ isLoading: true, value: []});
+  const [value, setValue] = useState<State>({ isLoading: true, value: [] });
 
   const core = useCore();
   const blockNumber = useBlockNumber();
@@ -23,7 +23,6 @@ export default () => {
   const fetchValue = useCallback(async () => {
     const promises = core.getCollateralTypes().map((collateralPoolToken) => {
       const pool = core.getCollatearalPool(collateralPoolToken);
-      console.log('test', collateralPoolToken);
       return pool.getCollateralGMUBalance();
     });
 
@@ -34,9 +33,7 @@ export default () => {
       value: val,
     }));
 
-    console.log('fuck', results);
-
-    setValue({isLoading: false, value: results});
+    setValue({ isLoading: false, value: results });
   }, [core]);
 
   useEffect(() => {
