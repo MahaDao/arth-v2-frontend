@@ -82,7 +82,6 @@ const AccountButton: React.FC<AccountButtonProps> = ({
         {
           showWarning ? (
             <Button
-              variant="transparent"
               onClick={switchMetamaskChain}
               size="sm"
               text="Switch network"

@@ -143,7 +143,6 @@ const MobileNav = (props: props) => {
           {
             props.showWarning ? (
               <Button
-                variant={'transparent'}
                 text={'Switch Network'}
                 onClick={switchMetamaskChain}
               />

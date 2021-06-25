@@ -29,10 +29,10 @@ const AccountModal: React.FC<props> = (props) => {
 
   const core = useCore();
   const { account, reset } = useWallet();
-  const {isLoading: isARTHBalanceLoading, value: arthBalance} = useTokenBalanceOf(core.ARTH, account);
-  const {isLoading: isMAHABalanceLoading, value: mahaBalance} = useTokenBalanceOf(core.MAHA, account);
-  const {isLoading: isARTHXBalanceLoading, value: arthxBalance} = useTokenBalanceOf(core.ARTHX, account);
-  
+  const { isLoading: isARTHBalanceLoading, value: arthBalance } = useTokenBalanceOf(core.ARTH, account);
+  const { isLoading: isMAHABalanceLoading, value: mahaBalance } = useTokenBalanceOf(core.MAHA, account);
+  const { isLoading: isARTHXBalanceLoading, value: arthxBalance } = useTokenBalanceOf(core.ARTHX, account);
+
   return (
     <MainDiv>
       <BackgroundAbsolute onClick={props.onClose} />
@@ -76,7 +76,7 @@ const AccountModal: React.FC<props> = (props) => {
         <WalletDiv>
           <StyledLink>
             <AccountDetails>
-              <IconButton style={{marginLeft: '-12px'}}>
+              <IconButton style={{ marginLeft: '-12px' }}>
                 <img height={32} src={metamask} alt="metamask" />
               </IconButton>
               <span>{truncateMiddle(account, 15)}</span>
@@ -91,13 +91,12 @@ const AccountModal: React.FC<props> = (props) => {
                   navigator.clipboard.writeText(account.toString())
                   settoolTipText('Copied!')
                 }}>
-                <img height={24} src={copy} alt="copy" />
+                  <img height={24} src={copy} alt="copy" />
                 </IconButton>
               </HtmlTooltip>
-             {/* <NetworkDiv colorCode={'#FCB40012'}>
-                <NetworkName colorCode={'#FCB400'}> TestNet </NetworkName>
-              </NetworkDiv>*/}
-
+              <NetworkDiv colorCode={'#FCB40012'}>
+                <NetworkName colorCode={'#FCB400'}>{core.config.networkName}</NetworkName>
+              </NetworkDiv>
             </AccountDetails>
           </StyledLink>
           <div style={{ height: '4px', width: '100%' }} />
@@ -257,7 +256,7 @@ const NetworkDiv = styled.div`
   background: ${(colorProps: { colorCode: string }) => colorProps.colorCode};
   border-radius: 6px;
   padding: 4px 12px;
-`
+`;
 
 const NetworkName = styled.div`
   color: ${(colorProps: { colorCode: string }) => colorProps.colorCode};
@@ -268,9 +267,7 @@ const NetworkName = styled.div`
   font-weight: 300;
   font-size: 16px;
   line-height: 150%;
-`
-
-
+`;
 
 const StyledRows = styled.div`
   display: flex;

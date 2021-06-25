@@ -14,8 +14,8 @@ import CustomModal from '../CustomModal';
 import HtmlTooltip from '../HtmlTooltip';
 
 import useCore from '../../hooks/useCore';
-import { getDisplayBalance } from '../../utils/formatBalance';
 import useTokenBalanceOf from '../../hooks/state/useTokenBalanceOf';
+import { getDisplayBalance, truncateMiddle } from '../../utils/formatBalance';
 
 interface IProps {
   disconnect?: boolean;
@@ -46,25 +46,6 @@ export const WalletInternal = (props: IProps) => {
 
   const onClose = () => {
     setConfirmationModal(false);
-  };
-
-  const truncateMiddle = function (
-    fullStr: string = '12345678922500025',
-    strLen: number,
-    separator?: string,
-  ) {
-    if (fullStr.length <= strLen) return fullStr;
-
-    separator = separator || '...';
-
-    var sepLen = separator.length,
-      charsToShow = strLen - sepLen,
-      frontChars = Math.ceil(charsToShow / 3),
-      backChars = Math.floor(charsToShow / 3);
-
-    return (
-      fullStr.substr(0, frontChars) + separator + fullStr.substr(fullStr.length - backChars)
-    );
   };
 
   return (
@@ -144,7 +125,14 @@ export const WalletInternal = (props: IProps) => {
             </HtmlTooltip>
           </AccountDetails>
         </StyledLink>
-
+        <StyledLink>
+          <span>Network: </span>
+          <RowName style={{ textAlign: 'center' }}>
+            <NetworkDiv colorCode={'#FCB40012'}>
+              <NetworkName colorCode={'#FCB400'}>{core.config.networkName}</NetworkName>
+            </NetworkDiv>
+          </RowName>
+        </StyledLink>
         <StyledRows>
           <RowName>
             <IconButton>
@@ -161,7 +149,6 @@ export const WalletInternal = (props: IProps) => {
           </RowName>
           <DollarValue>{/* ${props?.walletData?.mahaDollars} */}</DollarValue>
         </StyledRows>
-
         <StyledRows>
           <RowName>
             <IconButton>
@@ -178,7 +165,6 @@ export const WalletInternal = (props: IProps) => {
           </RowName>
           <DollarValue>{/* ${props?.walletData?.arthDollars} */}</DollarValue>
         </StyledRows>
-
         <StyledRows>
           <RowName>
             <IconButton>
@@ -195,7 +181,6 @@ export const WalletInternal = (props: IProps) => {
           </RowName>
           <DollarValue>{/* ${props?.walletData?.arthxDollars} */}</DollarValue>
         </StyledRows>
-
         <StyledRows style={{ marginBottom: -5 }}>
           <Button
             variant={'transparent'}
@@ -231,6 +216,23 @@ const StyledLink = styled.div`
   line-height: 24px;
   color: #ffffff;
   cursor: pointer;
+`;
+
+const NetworkDiv = styled.div`
+  background: ${(colorProps: { colorCode: string }) => colorProps.colorCode};
+  border-radius: 6px;
+  padding: 4px 12px;
+`;
+
+const NetworkName = styled.div`
+  color: ${(colorProps: { colorCode: string }) => colorProps.colorCode};
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 150%;
 `;
 
 const PrimaryText = styled.p`
