@@ -108,7 +108,7 @@
     "abi": "ARTHShares"
   },
   "MahaToken": {
-    "address": "0x988DA2d34a40Ec084962E1De31F6e20f40a76215",
+    "address": "0xedd6ca8a4202d4a36611e2fff109648c4863ae19",
     "abi": "MahaToken"
   },
   "UniswapV2Factory": {

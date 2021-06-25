@@ -28,6 +28,10 @@ interface IProps {
     maha: BigNumber;
     arthx: BigNumber;
   };
+  apyState: {
+    isLoading: boolean;
+    apy: string;
+  };
   onExitClick: () => void;
   onDepositClick: () => void;
   onWithdrawClick: () => void;
@@ -155,6 +159,26 @@ export const MobileFarm = (props: IProps) => {
                       isTokenBalanceLoading
                         ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
                         : Number(getDisplayBalance(tokenBalance, tokenDecimals, 3)).toLocaleString()
+                    }
+                  </MainSpan>
+                </div>
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                direction={'row'}
+                justify={'space-between'}
+                style={{ display: 'flex', marginTop: 5 }}
+              >
+                <DescriptionDiv>
+                  APY
+                </DescriptionDiv>
+                <div style={{ flexDirection: 'column', display: 'flex' }}>
+                  <MainSpan>
+                    {
+                      props?.apyState?.isLoading
+                        ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
+                        : props?.apyState?.apy
                     }
                   </MainSpan>
                 </div>
