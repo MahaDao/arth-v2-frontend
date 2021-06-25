@@ -24,6 +24,10 @@ export type Configuration = {
   refreshInterval: number;
   gasLimitMultiplier: number;
   platform: string;
+  defaultRPCURL?: string;
+  defaultIconURL?: string;
+  blockchainTokenName: string;
+  blockchainTokenDecimals: number;
 };
 
 export type EthereumConfig = {
