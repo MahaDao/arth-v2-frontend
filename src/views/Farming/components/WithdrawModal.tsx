@@ -35,7 +35,7 @@ export default (props: IProps) => {
   const symbol = props.pool.depositTokenSymbols.join('-');
 
   const tokenDecimals = useTokenDecimals(props.pool.depositToken);
-  
+
   const withdraw = useStakingWithdraw(
     props.pool.contract,
     Number(val),
@@ -105,14 +105,14 @@ export default (props: IProps) => {
           <Button variant={'transparent'} text="Cancel" size={'lg'} onClick={props.onCancel} />
         </Grid>
         <Grid item lg={6} md={6} sm={12} xs={12}>
-          <Button 
-            text={'Withdraw'} 
+          <Button
+            text={'Withdraw'}
             size={'lg'}
             disabled={
-              isInputFieldError || 
+              isInputFieldError ||
               !Number(val)
             }
-            onClick={handleWithdraw} 
+            onClick={handleWithdraw}
           />
         </Grid>
       </Grid>

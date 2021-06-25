@@ -127,7 +127,7 @@ export default (props: IProps) => {
           <TableMainTextStyle>{/* {props?.apy} */}</TableMainTextStyle>
         </Grid>
         <Grid item lg={2}>
-          <TableMainTextStyle>MAHA + ARTHX</TableMainTextStyle>
+          <TableMainTextStyle>MAHA</TableMainTextStyle>
         </Grid>
         <Grid item lg={2}>
           {
@@ -169,11 +169,11 @@ export default (props: IProps) => {
               <>
                 Earned:
                 <TableMainTextStyle style={{ marginLeft: '10px' }}>
-                  <span>{currentEarnedARTHX}</span>
+                  {/* <span>{currentEarnedARTHX}</span>
                   {' '}
                   ARTHX
-                  {' + '}
-                  <span>{currentEarnedMAHA}</span>
+                  {' + '} */}
+                  <span>{Number(getDisplayBalance(props.claimableBalance)).toLocaleString()}</span>
                   {' '}
                   MAHA
                 </TableMainTextStyle>

@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, { useMemo } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { BigNumber } from '@ethersproject/bignumber';
 
@@ -26,8 +26,11 @@ interface IProps {
 }
 
 export default (props: IProps) => {
-  const claim = useStakingClaim(props.pool.contract);
-  
+  const claim = useStakingClaim(
+    props.pool.contract,
+    props.pool.rewardTokenKind === 'multiple' ? 'multiple' : 'single'
+  );
+
   const handleClaim = () => {
     claim(() => {
       props.onCancel();
@@ -76,7 +79,7 @@ export default (props: IProps) => {
           rightLabelUnit={'MAHA'}
           rightLabelValue={
             Number(initEarnedMAHA)
-              .toLocaleString('en-US', {maximumFractionDigits: 6})
+              .toLocaleString('en-US', { maximumFractionDigits: 6 })
           }
         />
         <Grid
@@ -99,7 +102,7 @@ export default (props: IProps) => {
           <Grid item lg={6} md={6} sm={12} xs={12}>
             <Button
               disabled={
-                !Number(initEarnedARTHX) || 
+                !Number(initEarnedARTHX) ||
                 !Number(initEarnedMAHA)
               }
               text={'Claim'}

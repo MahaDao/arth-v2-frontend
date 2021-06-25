@@ -9,8 +9,8 @@ import formatErrorMessage from '../../../utils/formatErrorMessage';
 import { useTransactionAdder } from '../../../state/transactions/hooks';
 
 export default function (
-  stakingContract: string, 
-  amount: number, 
+  stakingContract: string,
+  amount: number,
   depositToken: string,
   symbol: string
 ) {
@@ -22,7 +22,7 @@ export default function (
   const action = useCallback(async (callback: () => void): Promise<void> => {
     const contract = core.contracts[stakingContract];
 
-    try{
+    try {
       const response = await contract.withdraw(
         BigNumber.from(parseUnits(`${amount}`, tokenDecimals))
       );
@@ -32,7 +32,7 @@ export default function (
       });
 
       if (callback) callback();
-    } catch(e) {
+    } catch (e) {
       addPopup({
         error: {
           message: formatErrorMessage(e?.data?.message || e?.message),
@@ -41,12 +41,12 @@ export default function (
       });
     }
   }, [
-    core.contracts, 
-    tokenDecimals, 
-    stakingContract, 
+    core.contracts,
+    tokenDecimals,
+    stakingContract,
     amount,
     addPopup,
-    addTransaction, 
+    addTransaction,
     symbol
   ]);
 

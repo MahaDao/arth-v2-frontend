@@ -29,7 +29,7 @@ interface IProps {
 export default (props: IProps) => {
   const [val, setValue] = useState<string>('0');
   const [isInputFieldError, setIsInputFieldError] = useState<boolean>(false);
-  
+
   const core = useCore();
   const contract = core.contracts[props.pool.contract];
   const tokenDecimals = useTokenDecimals(props.pool.depositToken);
@@ -41,8 +41,8 @@ export default (props: IProps) => {
   const symbol = props.pool.depositTokenSymbols.join('-');
 
   const stake = useStakingDeposit(
-    props.pool.contract, 
-    Number(val), 
+    props.pool.contract,
+    Number(val),
     props.pool.depositToken,
     symbol
   );
@@ -94,7 +94,7 @@ export default (props: IProps) => {
             <TagChips>{symbol}</TagChips>
           </OneLine>
         </OneLine>
-        
+
         <Grid
           container
           spacing={2}
@@ -123,15 +123,15 @@ export default (props: IProps) => {
                 }
               />
             ) : (
-              <Button 
+              <Button
                 disabled={
                   isInputFieldError ||
                   !isApproved ||
                   !Number(val)
                 }
-                text={'Deposit'} 
-                size={'lg'} 
-                onClick={handleStaking} 
+                text={'Deposit'}
+                size={'lg'}
+                onClick={handleStaking}
               />
             )}
           </Grid>
