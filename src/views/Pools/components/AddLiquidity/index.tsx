@@ -33,8 +33,6 @@ const AddLiquidity = (props: props & WithSnackbarProps) => {
   const collateralTypes = useMemo(() => core.getCollateralTypes(), [core]);
   const [isInputFieldError, setIsInputFieldError] = useState<boolean>(false);
 
-  const [balance, setBalance] = useState<number>(500.00);
-
   const [firstCoin, setFirstCoin] = useState(core.getDefaultCollateral());
   const [secondCoin, setSecondCoin] = useState(core.getDefaultCollateral());
 
@@ -121,10 +119,6 @@ const AddLiquidity = (props: props & WithSnackbarProps) => {
                 size={'lg'}
                 onClick={() => {
                   setConfirmModal(false)
-                  let options = {
-                    content: () => (CustomSnack({ onClose: props.closeSnackbar, type: 'red', data1: `Add-Liquidity order for ${123} ARTH cancelled` }))
-                  }
-                  props.enqueueSnackbar('timepass', options)
                 }}
               />
             </Grid>
@@ -134,10 +128,6 @@ const AddLiquidity = (props: props & WithSnackbarProps) => {
                 size={'lg'}
                 onClick={() => {
                   setConfirmModal(false)
-                  let options = {
-                    content: () => (CustomSnack({ onClose: props.closeSnackbar, type: 'green', data1: `Adding-Liquidity for ${123} ARTH` }))
-                  }
-                  props.enqueueSnackbar('timepass', options)
                 }}
               />
             </Grid>
@@ -218,9 +208,14 @@ const AddLiquidity = (props: props & WithSnackbarProps) => {
               </OneLine>
             </OneLine>
           </TcContainer>
-          <Button text={'Supply'} size={'lg'} onClick={() => {
-            setConfirmModal(true)
-          }} />
+          <Button
+            text={'Supply'}
+            size={'lg'}
+            onClick={() => {
+              setConfirmModal(true)
+            }}
+            disabled={isInputFieldError}
+            />
         </CustomCardContainer>
       </CustomCard>
     </div>
