@@ -11,14 +11,13 @@ import OpenableCard from './components/OpenableCard';
 import ImportPool from './components/ImportPool';
 import RemovePool from './components/RemovePool';
 import AddLiquidity from './components/AddLiquidity';
-import { withSnackbar, WithSnackbarProps } from 'notistack';
 import { WalletAutoConnect } from '../../components/WalletAutoConnect';
 
-const Boardrooms = (props: WithSnackbarProps) => {
+const Boardrooms = () => {
   useEffect(() => window.scrollTo(0, 0), []);
   const core = useCore();
   WalletAutoConnect();
-  const [action, setAction] = useState<'Details' | 'Import' | 'Add' | 'Remove'>('Details');
+  const [action, setAction] = useState<'Details' | 'Import' | 'Add' | 'Remove'>('Add');
   const [selectedSwap, setSelectedSwap] = useState<'Uniswap' | 'Sushiswap'>('Uniswap');
   const [noLiquidity, setNoLiquidity] = useState<boolean>(false);
   const [deposit, setDeposit] = useState<boolean>(false);
@@ -339,4 +338,4 @@ const ImportIt = styled.div`
   cursor: pointer;
 `;
 
-export default withSnackbar(Boardrooms);
+export default Boardrooms;

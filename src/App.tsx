@@ -94,12 +94,12 @@ const App: React.FC = () => {
             <Page availableNetworks={[137, 1337]}>
               <TemporaryTrade />
             </Page>
-          </Route>
+          </Route> */}
           <Route path="/pools">
             <Page availableNetworks={[137, 1337]}>
               <Pools />
             </Page>
-          </Route> */}
+          </Route>
           <Route path="/genesis">
             <Page>
               <Genesis />

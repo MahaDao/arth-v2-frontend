@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import ArrowBackIos from '@material-ui/icons/ArrowBackIos'
 import TokenSymbol from '../../../../components/TokenSymbol';
@@ -16,6 +16,10 @@ import { ICards, IPoolData } from '../OpenableCard';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
 import { CustomSnack } from '../../../../components/SnackBar';
 import { ValidateNumber } from '../../../../components/CustomInputContainer/RegexValidation';
+import useCore from '../../../../hooks/useCore';
+import { useWallet } from 'use-wallet';
+import useTokenBalance from '../../../../hooks/state/useTokenBalance';
+import { getDisplayBalanceToken } from '../../../../utils/formatBalance';
 
 type props = {
   onBack: () => void;
@@ -23,22 +27,39 @@ type props = {
 
 const AddLiquidity = (props: props & WithSnackbarProps) => {
   const { onBack } = props;
-  const defaultDropdownValues = ['MAHA', 'ARTH', 'USDT', 'USDC', 'ETH', 'WBTC'];
+
+  const core = useCore();
+  const { account, connect } = useWallet();
+  const collateralTypes = useMemo(() => core.getCollateralTypes(), [core]);
 
   const [balance, setBalance] = useState<number>(500.00);
 
-  const [firstCoin, setFirstCoin] = useState<string>('ARTH');
-  const [secondCoin, setSecondCoin] = useState<string>('ETH');
+  const [firstCoin, setFirstCoin] = useState(core.getDefaultCollateral());
+  const [secondCoin, setSecondCoin] = useState(core.getDefaultCollateral());
 
-  const [firstCoinAmount, setFirstCoinAmount] = useState<string>('0.00');
-  const [secondCoinAmount, setSecondCoinAmount] = useState<string>('0.00');
+  const firstToken = core.tokens[firstCoin];
+  const secondToken = core.tokens[secondCoin];
 
-  const [firstCoinDropDown, setFirstCoinDropDown] = useState<string[]>([]);
-  const [secondCoinDropDown, setSecondCoinDropDown] = useState<string[]>([]);
+  const [firstCoinValue, setFirstCoinValue] = useState<string>('0.00');
+  const [secondCoinValue, setSecondCoinValue] = useState<string>('0.00');
+
+  const [firstCoinDropDown, setFirstCoinDropDown] = useState<string[]>(core.getCollateralTypes());
+  const [secondCoinDropDown, setSecondCoinDropDown] = useState<string[]>(core.getCollateralTypes());
+
+  //Balance
+  const { isLoading: isFirstCoinLoading, value: firstCoinBalance } = useTokenBalance(
+    core.tokens[firstCoin],
+  );
+
+  const { isLoading: isSecondCoinLoading, value: secondCoinBalance } = useTokenBalance(
+    core.tokens[secondCoin],
+  );
 
   const [confirmModal, setConfirmModal] = useState<boolean>(false);
 
-  useEffect(() => {
+  // Keep this code will need this later
+
+  /*useEffect(() => {
     var arr: string[];
     arr = defaultDropdownValues.filter(e => e !== firstCoin);
     setFirstCoinDropDown(arr);
@@ -48,7 +69,7 @@ const AddLiquidity = (props: props & WithSnackbarProps) => {
     var arr: string[];
     arr = defaultDropdownValues.filter(e => e !== secondCoin);
     setSecondCoinDropDown(arr);
-  }, [secondCoin])
+  }, [secondCoin])*/
 
   return (
     <div>
@@ -64,12 +85,12 @@ const AddLiquidity = (props: props & WithSnackbarProps) => {
           <TransparentInfoDiv
             labelData={`${firstCoin} Deposit`}
             rightLabelUnit={firstCoin}
-            rightLabelValue={firstCoinAmount.toString()}
+            rightLabelValue={firstCoinValue.toString()}
           />
           <TransparentInfoDiv
             labelData={`${secondCoin} Deposit`}
             rightLabelUnit={secondCoin}
-            rightLabelValue={secondCoinAmount.toString()}
+            rightLabelValue={secondCoinValue.toString()}
           />
           <TransparentInfoDiv
             labelData={`Your share of pool`}
@@ -120,20 +141,16 @@ const AddLiquidity = (props: props & WithSnackbarProps) => {
         <CustomCardContainer className={'custom-mahadao-container-content'}>
           <CustomInputContainer
             ILabelValue={'Enter Amount'}
-            IBalanceValue={`Balance ${balance}`}
-            // ILabelInfoValue={'How can i get it?'}
-            DefaultValue={firstCoinAmount.toString()}
+            IBalanceValue={`Balance ${getDisplayBalanceToken(firstCoinBalance, firstToken)}`}
+            isBalanceLoading={isFirstCoinLoading}
+            DefaultValue={firstCoinValue.toString()}
             LogoSymbol={firstCoin}
             hasDropDown={true}
-            dropDownValues={firstCoinDropDown}
-            ondropDownValueChange={(data) => {
-              if (data !== secondCoin) {
-                setFirstCoin(data);
-              }
-            }}
+            dropDownValues={collateralTypes}
+            ondropDownValueChange={setFirstCoin}
             SymbolText={firstCoin}
-            inputMode={'decimal'}
-            setText={(val: string) => setFirstCoinAmount(ValidateNumber(val) ? val : String(Number(val)))}
+            inputMode={'numeric'}
+            setText={(val: string) => setFirstCoinValue(ValidateNumber(val) ? val : String(Number(val)))}
             tagText={'MAX'}
           />
           <PlusMinusArrow>
@@ -141,20 +158,16 @@ const AddLiquidity = (props: props & WithSnackbarProps) => {
           </PlusMinusArrow>
           <CustomInputContainer
             ILabelValue={'Enter Amount'}
-            IBalanceValue={`Balance ${balance}`}
-            // ILabelInfoValue={'How can i get it?'}
-            DefaultValue={secondCoinAmount.toString()}
+            IBalanceValue={`Balance ${getDisplayBalanceToken(secondCoinBalance, secondToken)}`}
+            isBalanceLoading={isSecondCoinLoading}
+            DefaultValue={secondCoinValue.toString()}
             LogoSymbol={secondCoin}
             hasDropDown={true}
-            dropDownValues={secondCoinDropDown}
-            ondropDownValueChange={(data) => {
-              if (firstCoin !== data) {
-                setSecondCoin(data);
-              }
-            }}
+            dropDownValues={collateralTypes}
+            ondropDownValueChange={setSecondCoin}
             SymbolText={secondCoin}
-            inputMode={'decimal'}
-            setText={(val: string) => setSecondCoinAmount(ValidateNumber(val) ? val : String(Number(val)))}
+            inputMode={'numeric'}
+            setText={(val: string) => setSecondCoinValue(ValidateNumber(val) ? val : String(Number(val)))}
             tagText={'MAX'}
           />
           <TcContainer>
