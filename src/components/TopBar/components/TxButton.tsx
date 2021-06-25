@@ -1,44 +1,37 @@
-import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
-import useModal from '../../../hooks/useModal';
-import TxModal from './TxModal';
-import transcationIcon from '../../../assets/img/transcation.png';
-import HtmlTooltip from '../../../components/HtmlTooltip';
+import React, { useState } from 'react';
 
-interface TxButtonProps {}
+import TxModal from './TxModal';
+import HtmlTooltip from '../../../components/HtmlTooltip';
+import transcationIcon from '../../../assets/img/transcation.png';
+
+interface TxButtonProps { }
 
 const TxButton: React.FC<TxButtonProps> = () => {
-  const { account } = useWallet();
-  
-  // const [onPresentTransactionModal, onDismissTransactionModal] = useModal(
-  //   <TxModal onDismiss={() => onDismissTransactionModal()} />,
-  // );
-
   const [modal, setModal] = useState<boolean>(false);
-  
+  const { account } = useWallet();
+
   return (
-    <div style={{display: 'flex'}}>
-      {!!account && (
-        <StyledTxButton>
-          <HtmlTooltip enterTouchDelay={5000} title="Transaction">
-            <img
-              src={transcationIcon}
-              width="24px"
-              className="pointer"
-              onClick={() => setModal(true)}
-              alt="transactionIcon"
-            />
-          </HtmlTooltip>
-          {/* <Button
-            size="sm"
-            text={pendingTransactions > 0 ? `${pendingTransactions} Pending` : `Transactions`}
-            variant={pendingTransactions > 0 ? 'secondary' : 'default'}
-            onClick={() => onPresentTransactionModal()}
-          /> */}
-        </StyledTxButton>
-      )}
-      {modal && <TxModal onDismiss={() => setModal(false)} />}
+    <div style={{ display: 'flex' }}>
+      {
+        !!account && (
+          <StyledTxButton>
+            <HtmlTooltip enterTouchDelay={5000} title="Transaction">
+              <img
+                src={transcationIcon}
+                width="24px"
+                className="pointer"
+                onClick={() => setModal(true)}
+                alt="transactionIcon"
+              />
+            </HtmlTooltip>
+          </StyledTxButton>
+        )
+      }
+      {
+        modal && <TxModal onDismiss={() => setModal(false)} />
+      }
     </div>
   );
 };

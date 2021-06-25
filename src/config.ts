@@ -17,6 +17,8 @@ const configurations: { [env: string]: Configuration } = {
     gasLimitMultiplier: 1.1,
     defaultCollateral: 'USDT',
     blockchainToken: 'ETH',
+    blockchainTokenName: 'Ethereum',
+    blockchainTokenDecimals: 18,
     supportedCollaterals: ['USDT', 'USDC', 'WETH', 'WBTC', 'MATIC'],
     arthTradingPairs: ['ETH', 'MAHA'],
     arthxTradingPairs: ['ETH', 'ARTH'],
@@ -39,6 +41,8 @@ const configurations: { [env: string]: Configuration } = {
     arthTradingPairs: ['ETH', 'MAHA'],
     arthxTradingPairs: ['ETH', 'ARTH'],
     platform: 'uniswap',
+    blockchainTokenName: 'Ethereum',
+    blockchainTokenDecimals: 18,
   },
   stagingMaticMumbai: {
     networkName: 'Matic Mumbai Testnet',
@@ -56,6 +60,8 @@ const configurations: { [env: string]: Configuration } = {
     arthTradingPairs: ['ARTHX', 'MAHA'],
     arthxTradingPairs: ['ARTH'],
     platform: 'sushiswap',
+    blockchainTokenName: 'MATIC',
+    blockchainTokenDecimals: 18,
   },
   stagingMaticMainnet: {
     networkName: 'Matic Mainnet',
@@ -74,6 +80,8 @@ const configurations: { [env: string]: Configuration } = {
     arthTradingPairs: ['ARTHX', 'MAHA'],
     arthxTradingPairs: ['ARTH'],
     platform: 'dfyn',
+    blockchainTokenName: 'MATIC',
+    blockchainTokenDecimals: 18,
   },
   matic: {
     networkName: 'Matic Mainnet',
@@ -92,6 +100,9 @@ const configurations: { [env: string]: Configuration } = {
     arthTradingPairs: ['ARTHX', 'MAHA'],
     arthxTradingPairs: ['ARTH'],
     platform: 'sushiswap',
+    blockchainTokenName: 'MATIC',
+    blockchainTokenDecimals: 18,
+
   },
   ethereum: {
     networkName: 'Ethereum Mainnet',
@@ -110,6 +121,8 @@ const configurations: { [env: string]: Configuration } = {
     arthxTradingPairs: ['ETH', 'ARTH'],
     supportedCollaterals: ['USDC', 'WBTC', 'MATIC', 'WETH'],
     platform: 'uniswap',
+    blockchainTokenName: 'Ethereum',
+    blockchainTokenDecimals: 18,
   },
 };
 
