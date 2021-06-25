@@ -144,7 +144,7 @@ const ConnectionNotice = () => {
             style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}
             onClick={() => {
               Mixpanel.track('Redirection:Polygon');
-              window.open('https://polygon.arthcoin.com');
+              window.open('https://polygon.arthcoin.com', '_self');
             }}
           >
             <img src={polygon} alt="calendar" height={64} style={{ marginBottom: '12px' }} />
@@ -154,7 +154,7 @@ const ConnectionNotice = () => {
           <Parts
             onClick={() => {
               Mixpanel.track('Redirection:Ethereum');
-              window.open('https://ethereum.arthcoin.com');
+              window.open('https://ethereum.arthcoin.com', '_self');
             }}
           >
             <img
