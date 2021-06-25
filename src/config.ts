@@ -102,7 +102,6 @@ const configurations: { [env: string]: Configuration } = {
     platform: 'sushiswap',
     blockchainTokenName: 'MATIC',
     blockchainTokenDecimals: 18,
-
   },
   ethereum: {
     networkName: 'Ethereum Mainnet',
@@ -161,12 +160,12 @@ export const platformURL: { [platform: string]: Platform } = {
 export const stakingContracts: StakingContract[] = [
   {
     platform: '',
-    contract: 'StakeARTHXRMAHA',
+    contract: 'StakeARTHXRMAHAGenesis',
     kind: 'unlocked',
     depositToken: 'ARTHX',
     depositTokenSymbols: ['ARTHX'],
     depositTokenKind: 'single',
-    rewardTokenKind: 'multiple',
+    rewardTokenKind: 'single',
     earnTokenName: 'MAHA',
     finished: false,
     rewardTokenSymbols: ['MAHA'],

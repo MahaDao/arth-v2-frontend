@@ -37,19 +37,19 @@ export default () => {
     }
     const { PoolToken } = core.contracts;
 
-    const tokenARTHXBalance = await core.ARTHX.balanceOf(PoolToken.address);
-    const tokenMAHABalance = await core.MAHA.balanceOf(PoolToken.address);
-    const tokenRTSupply = await core.PoolToken.totalSupply();
+    // const tokenARTHXBalance = await core.ARTHX.balanceOf(PoolToken.address);
+    // const tokenMAHABalance = await core.MAHA.balanceOf(PoolToken.address);
+    // const tokenRTSupply = await core.PoolToken.totalSupply();
 
-    const rateMaha = tokenMAHABalance.mul(pow).div(tokenRTSupply);
-    const rateARTHX = tokenARTHXBalance.mul(pow).div(tokenRTSupply);
-    const rates = { maha: rateMaha, arthx: rateARTHX };
+    // const rateMaha = tokenMAHABalance.mul(pow).div(tokenRTSupply);
+    // const rateARTHX = tokenARTHXBalance.mul(pow).div(tokenRTSupply);
+    // const rates = { maha: rateMaha, arthx: rateARTHX };
 
-    setValue({
-      isLoading: false,
-      value: rates,
-    });
-  }, [core.ARTHX, core.MAHA, account, core.PoolToken, core.contracts, pow]);
+    // setValue({
+    //   isLoading: false,
+    //   value: rates,
+    // });
+  }, [account, core.contracts]);
 
   useEffect(() => {
     if (core.isUnlocked) {

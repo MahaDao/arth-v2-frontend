@@ -27,8 +27,8 @@
     "address": "0x0000000000000000000000000000000000000000",
     "abi": "BasicStaking"
   },
-  "StakeARTHX": {
-    "address": "0x0000000000000000000000000000000000000000",
+  "StakeARTHXRMAHAGenesis": {
+    "address": "0x710b89933e82360b93bc4c4e6e2c4fa82fd2c7f0",
     "abi": "BasicStaking"
   },
   "Oracle_USDC": {
