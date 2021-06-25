@@ -80,11 +80,12 @@ const App: React.FC = () => {
             <Home />
           </Route>*/}
 
-          {/* <Route path="/farming">
+          <Route path="/farming">
             <Page availableNetworks={[137, 1337]}>
               <Farming />
             </Page>
           </Route>
+          {/* 
           <Route path="/mint/:paramType">
             <Page availableNetworks={[137, 1337]}>
               <Mint />
