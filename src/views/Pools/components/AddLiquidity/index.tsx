@@ -31,6 +31,7 @@ const AddLiquidity = (props: props & WithSnackbarProps) => {
   const core = useCore();
   const { account, connect } = useWallet();
   const collateralTypes = useMemo(() => core.getCollateralTypes(), [core]);
+  const [isInputFieldError, setIsInputFieldError] = useState<boolean>(false);
 
   const [balance, setBalance] = useState<number>(500.00);
 
@@ -40,11 +41,21 @@ const AddLiquidity = (props: props & WithSnackbarProps) => {
   const firstToken = core.tokens[firstCoin];
   const secondToken = core.tokens[secondCoin];
 
-  const [firstCoinValue, setFirstCoinValue] = useState<string>('0.00');
-  const [secondCoinValue, setSecondCoinValue] = useState<string>('0.00');
 
-  const [firstCoinDropDown, setFirstCoinDropDown] = useState<string[]>(core.getCollateralTypes());
-  const [secondCoinDropDown, setSecondCoinDropDown] = useState<string[]>(core.getCollateralTypes());
+  const [firstCoinValue, setFirstCoinValue] = useState<string>('0');
+  const [secondCoinValue, setSecondCoinValue] = useState<string>('0');
+
+  const firstCoinDropDown = useMemo(() => {
+    var arr: string[];
+    arr = collateralTypes.filter(e => e !== firstCoin && e !== secondCoin);
+    return arr;
+  }, [core, firstCoin, secondCoin]);
+
+  const secondCoinDropDown = useMemo(() => {
+    var arr: string[];
+    arr = collateralTypes.filter(e => e !== firstCoin && e !== secondCoin);
+    return arr;
+  }, [core, firstCoin, secondCoin]);
 
   //Balance
   const { isLoading: isFirstCoinLoading, value: firstCoinBalance } = useTokenBalance(
@@ -61,15 +72,15 @@ const AddLiquidity = (props: props & WithSnackbarProps) => {
 
   /*useEffect(() => {
     var arr: string[];
-    arr = defaultDropdownValues.filter(e => e !== firstCoin);
+    arr = collateralTypes.filter(e => e !== firstCoin);
     setFirstCoinDropDown(arr);
-  }, [firstCoin])
+  }, [firstCoin, core])*/
 
-  useEffect(() => {
+  /*useEffect(() => {
     var arr: string[];
-    arr = defaultDropdownValues.filter(e => e !== secondCoin);
+    arr = collateralTypes.filter(e => e !== secondCoin);
     setSecondCoinDropDown(arr);
-  }, [secondCoin])*/
+  }, [secondCoin, core])*/
 
   return (
     <div>
@@ -141,34 +152,46 @@ const AddLiquidity = (props: props & WithSnackbarProps) => {
         <CustomCardContainer className={'custom-mahadao-container-content'}>
           <CustomInputContainer
             ILabelValue={'Enter Amount'}
-            IBalanceValue={`Balance ${getDisplayBalanceToken(firstCoinBalance, firstToken)}`}
+            IBalanceValue={getDisplayBalanceToken(firstCoinBalance, firstToken)}
             isBalanceLoading={isFirstCoinLoading}
             DefaultValue={firstCoinValue.toString()}
             LogoSymbol={firstCoin}
             hasDropDown={true}
-            dropDownValues={collateralTypes}
+            dropDownValues={firstCoinDropDown}
             ondropDownValueChange={setFirstCoin}
             SymbolText={firstCoin}
             inputMode={'numeric'}
-            setText={(val: string) => setFirstCoinValue(ValidateNumber(val) ? val : String(Number(val)))}
+            setText={(val: string) => {
+              setFirstCoinValue(ValidateNumber(val) ? val : '0');
+            }}
             tagText={'MAX'}
+            disabled={isFirstCoinLoading}
+            errorCallback={(flag: boolean) => {
+              setIsInputFieldError(flag);
+            }}
           />
           <PlusMinusArrow>
             <img src={arrowDown} />
           </PlusMinusArrow>
           <CustomInputContainer
             ILabelValue={'Enter Amount'}
-            IBalanceValue={`Balance ${getDisplayBalanceToken(secondCoinBalance, secondToken)}`}
+            IBalanceValue={getDisplayBalanceToken(secondCoinBalance, secondToken)}
             isBalanceLoading={isSecondCoinLoading}
             DefaultValue={secondCoinValue.toString()}
             LogoSymbol={secondCoin}
             hasDropDown={true}
-            dropDownValues={collateralTypes}
+            dropDownValues={secondCoinDropDown}
             ondropDownValueChange={setSecondCoin}
             SymbolText={secondCoin}
             inputMode={'numeric'}
-            setText={(val: string) => setSecondCoinValue(ValidateNumber(val) ? val : String(Number(val)))}
+            setText={(val: string) => {
+              setSecondCoinValue(ValidateNumber(val) ? val : '0');
+            }}
             tagText={'MAX'}
+            disabled={isSecondCoinLoading}
+            errorCallback={(flag: boolean) => {
+              setIsInputFieldError(flag);
+            }}
           />
           <TcContainer>
             <OneLine style={{ marginTop: "10px" }}>
