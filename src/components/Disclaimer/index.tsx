@@ -42,13 +42,13 @@ const Disclaimer: React.FC = () => {
         national legislation this token may be deemed to be a security or a regulated
         financial instrument, and, if so, to respect the prohibition specified herein.
       </ModalText>
-      <ModalHyperLink
+      {/*<ModalHyperLink
         onClick={() =>
           window.open(`${config.etherscanUrl}/token/${token.address}`)
         }
       >
         View token contract on Explorer
-      </ModalHyperLink>
+      </ModalHyperLink>*/}
     </Modal>
   );
 };
