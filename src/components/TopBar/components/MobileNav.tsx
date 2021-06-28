@@ -80,14 +80,6 @@ const MobileNav = (props: props) => {
             <StyledLink
               exact
               activeClassName="active"
-              to="/genesis"
-              onClick={() => props.onClick()}
-            >
-              Genesis
-            </StyledLink>
-            <StyledLink
-              exact
-              activeClassName="active"
               to="/stats"
               onClick={() => props.onClick()}
             >
@@ -124,12 +116,6 @@ const MobileNav = (props: props) => {
                 </StyledLink>
               )
             }*/}
-            <StyledLink exact activeClassName="active" to="/rebase" onClick={() => props.onClick()}>
-              Rebase
-            </StyledLink>
-            <StyledLink exact activeClassName="active" to="/lottery" onClick={() => props.onClick()}>
-              Prizes
-            </StyledLink>
             {/*<StyledLink exact activeClassName="active" to="/farming">
               Pools
             </StyledLink>*/}

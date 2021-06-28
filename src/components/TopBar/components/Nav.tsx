@@ -9,14 +9,15 @@ interface props {
 const Nav = (props: props) => {
   return (
     <StyledNav>
-      <StyledLink exact activeClassName="active" to="/genesis">
-        Genesis
-      </StyledLink>
-       <StyledLink exact activeClassName="active" to="/mint/mint">
-        Mint/Redeem
-      </StyledLink>
-       <StyledLink exact activeClassName="active" to="/stats">
+      <StyledLink
+        exact
+        activeClassName="active"
+        to="/stats"
+      >
         Analytics
+      </StyledLink>
+      <StyledLink exact activeClassName="active" to="/mint/mint">
+        Mint/Redeem
       </StyledLink>
       {/* <StyledLink exact activeClassName="active" to="/stabilize/recollateralize">
         Stabilize
@@ -34,13 +35,7 @@ const Nav = (props: props) => {
           </StyledLink>
         )
       } */}
-      <StyledLink exact activeClassName="active" to="/rebase">
-        Rebase
-      </StyledLink>
-      <StyledLink exact activeClassName="active" to="/lottery">
-        Prizes
-      </StyledLink>
-       {/*<StyledLink exact activeClassName="active" to="/pools">
+      {/*<StyledLink exact activeClassName="active" to="/pools">
         Pools
       </StyledLink>*/}
     </StyledNav>
