@@ -33,6 +33,7 @@ export default () => {
       value: val,
     }));
 
+    console.log('Results are ', results);
     setValue({ isLoading: false, value: results });
   }, [core]);
 

@@ -23,16 +23,14 @@ import { colors } from './types';
 import useCore from '../../hooks/useCore';
 import { getDisplayBalance } from '../../utils/formatBalance';
 import useGlobalCollateralValue from '../../hooks/state/useGlobalCollateralValue';
-import useTargetCollateralValue from '../../hooks/state/useTargetCollateralValue';
 import useAllPoolCollateralValue from '../../hooks/state/pools/useAllPoolCollateralValue';
 
 const Home: React.FC = () => {
   const isMobile = useMediaQuery({ maxWidth: '600px' });
 
   const core = useCore();
-  const {isLoading: isPoolsValueLoading, value: allPoolsValue} = useAllPoolCollateralValue();
-  const {isLoading: isGlobalCollateralValueLoading, value: globalCollateralValue} = useGlobalCollateralValue();
-  const {isLoading: isTargetValueLoading, value: targetCollateralValue} = useTargetCollateralValue();
+  const { isLoading: isPoolsValueLoading, value: allPoolsValue } = useAllPoolCollateralValue();
+  const { isLoading: isGlobalCollateralValueLoading, value: globalCollateralValue } = useGlobalCollateralValue();
 
   WalletAutoConnect();
 
@@ -45,7 +43,7 @@ const Home: React.FC = () => {
     if (globalCollateralValue.eq(0)) return [false, []];
 
     return [
-      false, 
+      false,
       allPoolsValue.map(p => ({
         name: p.poolToken,
         amount: Number(getDisplayBalance(p.value)),
@@ -56,7 +54,6 @@ const Home: React.FC = () => {
 
   return (
     <Page>
-      {/*<GradientDiv />*/}
       <PageHeader
         subtitle="View information about the current ARTH protocol"
         title="Analytics"
@@ -72,7 +69,7 @@ const Home: React.FC = () => {
                     <CustomToolTip toolTipText={'$GMU worth of collateral currently present in each individual pool of the protocol.'} />
                   </TitleString>
                   <Grid container style={{}} direction={isMobile ? 'column' : 'row'}>
-                    { 
+                    {
                       isFormattedPoolValuesLoading
                         ? (
                           <Grid item sm={12} md={12} lg={12} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '210px' }}>
@@ -106,10 +103,10 @@ const Home: React.FC = () => {
                                       </PercentCardLabel>
                                       <PercentCardValue>
                                         ${
-                                        prettyNumber(b.amount)
-                                      } - {
-                                        Number(b.percentage).toLocaleString('en-US', { maximumFractionDigits: 2 })
-                                      }%
+                                          prettyNumber(b.amount)
+                                        } - {
+                                          Number(b.percentage).toLocaleString('en-US', { maximumFractionDigits: 2 })
+                                        }%
                                       </PercentCardValue>
                                     </PercentCardInfo>
                                   ))

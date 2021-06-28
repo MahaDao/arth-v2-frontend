@@ -13,7 +13,7 @@ type props = {
 };
 
 const BondingDiscount: React.FC<props> = (props: props) => {
-  const {isLoading: isDiscountLoading, value: discount} = useRecollateralizationDiscount();
+  const { isLoading: isDiscountLoading, value: discount } = useRecollateralizationDiscount();
 
   return (
     <CustomInfoCard className={'custom-mahadao-box'}>
@@ -29,7 +29,7 @@ const BondingDiscount: React.FC<props> = (props: props) => {
                     <ToolTipFont>The current % of reward given for committing collateral during genesis.</ToolTipFont>
                   </React.Fragment>
                 }>
-                <InfoIcon fontSize="default" style={{ transform: 'scale(0.6)', marginBottom: '4px'}} />
+                <InfoIcon fontSize="default" style={{ transform: 'scale(0.6)', marginBottom: '4px' }} />
               </HtmlTooltip>
             </TextWithIcon>
           </div>
@@ -38,8 +38,8 @@ const BondingDiscount: React.FC<props> = (props: props) => {
               {isDiscountLoading
                 ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
                 : Number(getDisplayBalance(discount, 4, 4))
-                  .toLocaleString('en-US', {maximumFractionDigits: 4})
-              }
+                  .toLocaleString('en-US', { maximumFractionDigits: 4 })
+              }%
             </BeforeChip>
           </OneLine>
         </OneLine>

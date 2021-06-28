@@ -18,7 +18,7 @@ type props = {
 };
 
 const BasicInfo: React.FC<props> = (props) => {
-  const {isLoading: isAvailabelToMintLoading, value: totalAvailableToMint} = useAllPoolAvailableToMint();
+  const { isLoading: isAvailabelToMintLoading, value: totalAvailableToMint } = useAllPoolAvailableToMint();
 
   return (
     <CustomInfoCard className={'custom-mahadao-box'}>
@@ -35,7 +35,7 @@ const BasicInfo: React.FC<props> = (props) => {
                   isAvailabelToMintLoading
                     ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
                     : prettyNumber(getDisplayBalance(totalAvailableToMint, 18, 6))
-                }
+                } ARTH
               </BeforeChip>
             </div>
             <ToLink to={'/mint/mint'}>
