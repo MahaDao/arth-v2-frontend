@@ -36,7 +36,7 @@ export default function (
         }
       });
     }
-  }, [core.contracts, addPopup, stakingContract, addTransaction]);
+  }, [core.contracts, addPopup, rewardTokenType, stakingContract, addTransaction]);
 
   return action;
 }

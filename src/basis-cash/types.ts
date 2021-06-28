@@ -27,7 +27,8 @@ export interface StakingContract {
   | 'uniswap-v2-lp'
   | 'sushiswap-v2-lp'
   | 'dfyn-v2-lp'
-  | 'cryption-v2-lp';
+  | 'cryption-v2-lp'
+  | 'pool-token';
   depositTokenSymbols: string[];
   rewardTokenSymbols: string[];
   depositToken: string;

@@ -5,7 +5,6 @@ import { Grid } from '@material-ui/core';
 import Container from '../../components/Container';
 import FarmingCards from './components/FarmingCards';
 import PageHeader from '../../components/PageHeader';
-import { WalletAutoConnect } from '../../components/WalletAutoConnect';
 
 import { stakingContracts } from '../../config';
 
@@ -17,10 +16,8 @@ export interface ModeProps {
 
 const Banks = () => {
   let initMode = { id: 'all', name: 'All', count: 3 };
-  
+
   const [mode, setMode] = useState<ModeProps>(initMode);
-  
-  WalletAutoConnect();
 
   let headerList: ModeProps[] = [
     {
@@ -61,9 +58,9 @@ const Banks = () => {
                   style={
                     mode.name === obj.name
                       ? {
-                          background: mode.name === obj.name ? '#423B38' : 'transparent',
-                          border: '1px solid rgba(255, 255, 255, 0.08)',
-                        }
+                        background: mode.name === obj.name ? '#423B38' : 'transparent',
+                        border: '1px solid rgba(255, 255, 255, 0.08)',
+                      }
                       : {}
                   }
                   key={obj?.id}

@@ -1,4 +1,5 @@
 import { BigNumber } from 'ethers';
+
 import ERC20 from '../basis-cash/ERC20';
 
 export const getDisplayBalance = (balance: BigNumber, decimals = 18, fractionDigits = 3) => {

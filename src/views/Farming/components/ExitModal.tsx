@@ -44,15 +44,21 @@ export default (props: IProps) => {
 
   const pow = BigNumber.from(10).pow(18);
   const initEarnedARTHX = useMemo(() => {
-    return Number(getDisplayBalance(
-      props?.claimableBalance?.mul(props?.rates?.arthx).div(pow),
-      18,
-      6
-    ))
-  }, [props, pow]);
+    if (props.pool.rewardTokenKind === 'pool-token') {
+      return Number(getDisplayBalanceToken(
+        props?.claimableBalance?.mul(props?.rates?.arthx).div(pow),
+        core.tokens.ARTHX,
+        6
+      ))
+    }
+
+    if (props.pool.rewardTokenKind === 'single') {
+      return Number(getDisplayBalanceToken(props?.claimableBalance, core.tokens.ARTHX, 6))
+    }
+  }, [props, pow, core.tokens.ARTHX]);
 
   const initEarnedMAHA = useMemo(() => {
-    if (props.pool.rewardTokenKind === 'multiple') {
+    if (props.pool.rewardTokenKind === 'pool-token') {
       return Number(getDisplayBalanceToken(
         props?.claimableBalance?.mul(props?.rates?.maha).div(pow),
         core.tokens.MAHA,
@@ -84,14 +90,19 @@ export default (props: IProps) => {
               .toLocaleString('en-US', { maximumFractionDigits: 6 })
           }
         />
-        <TransparentInfoDiv
-          labelData={`You will receive`}
-          rightLabelUnit={'ARTHX'}
-          rightLabelValue={
-            Number(initEarnedARTHX)
-              .toLocaleString('en-US', { maximumFractionDigits: 6 })
-          }
-        />
+
+        {
+          props.pool.rewardTokenKind === 'pool-token' &&
+          <TransparentInfoDiv
+            labelData={`You will receive`}
+            rightLabelUnit={'ARTHX'}
+            rightLabelValue={
+              Number(initEarnedARTHX)
+                .toLocaleString('en-US', { maximumFractionDigits: 6 })
+            }
+          />
+        }
+
         <TransparentInfoDiv
           labelData={`You will receive`}
           rightLabelUnit={'MAHA'}
