@@ -5,6 +5,7 @@ import Loader from 'react-spinners/BeatLoader';
 import { Grid, Divider } from '@material-ui/core';
 import { BigNumber } from '@ethersproject/bignumber';
 
+import dfyn from '../../../assets/img/DFYN.png';
 import uniswap from '../../../assets/svg/UniswapWhite.svg';
 import sushiswap from '../../../assets/svg/SushiswapWhite.svg';
 
@@ -17,8 +18,8 @@ import config, { platformURL } from '../../../config';
 import useCore from '../../../hooks/useCore';
 import { StakingContract } from '../../../basis-cash';
 import useTokenDecimals from '../../../hooks/useTokenDecimals';
-import { getDisplayBalance } from '../../../utils/formatBalance';
 import useTokenBalance from '../../../hooks/state/useTokenBalance';
+import { getDisplayBalance, getDisplayBalanceToken } from '../../../utils/formatBalance';
 
 interface IProps {
   pool: StakingContract;
@@ -53,26 +54,39 @@ export const MobileFarm = (props: IProps) => {
   const etherscan = `${config.etherscanUrl}/address/${tokenAddresses[0]}`
   const pow = BigNumber.from(10).pow(18);
 
-  const currentEarnedARTHX = useMemo(() => {
-    return Number(getDisplayBalance(
-      props?.claimableBalance?.mul(props?.rates?.arthx).div(pow),
-      18,
-      6
-    ))
-  }, [props, pow]);
+  const initEarnedARTHX = useMemo(() => {
+    if (props.pool.rewardTokenKind === 'pool-token') {
+      return Number(getDisplayBalanceToken(
+        props?.claimableBalance?.mul(props?.rates?.arthx).div(pow),
+        core.tokens.ARTHX,
+        6
+      ))
+    }
 
-  const currentEarnedMAHA = useMemo(() => {
-    return Number(getDisplayBalance(
-      props?.claimableBalance?.mul(props?.rates?.maha).div(pow),
-      18,
-      6
-    ))
-  }, [props, pow]);
+    if (props.pool.rewardTokenKind === 'single') {
+      return Number(getDisplayBalanceToken(props?.claimableBalance, core.tokens.ARTHX, 6))
+    }
+  }, [props, pow, core.tokens.ARTHX]);
+
+  const initEarnedMAHA = useMemo(() => {
+    if (props.pool.rewardTokenKind === 'pool-token') {
+      return Number(getDisplayBalanceToken(
+        props?.claimableBalance?.mul(props?.rates?.maha).div(pow),
+        core.tokens.MAHA,
+        6
+      ))
+    }
+
+    if (props.pool.rewardTokenKind === 'single') {
+      return Number(getDisplayBalanceToken(props?.claimableBalance, core.tokens.MAHA, 6))
+    }
+  }, [props, pow, core.tokens.MAHA]);
 
   const isWalletConnected = !!account;
 
   const getImage = (platform: string) => {
     if (platform === 'sushiswap') return sushiswap;
+    if (platform === 'dfyn') return dfyn;
     return uniswap;
   }
 
@@ -231,14 +245,20 @@ export const MobileFarm = (props: IProps) => {
                 <InfoDiv>
                   <div>
                     <InfoDivLeftSpan>Unclaimed Rewards:</InfoDivLeftSpan>
-                    {/* <InfoDivRightSpan>
-                      <span>{currentEarnedARTHX}</span>
-                      {' '}
-                      ARTHX
-                    </InfoDivRightSpan>
-                    <InfoDivLeftSpan>+ </InfoDivLeftSpan> */}
+                    {
+                      props.pool.rewardTokenKind === 'pool-token' && (
+                        <InfoDivRightSpan>
+                          <span>{Number(initEarnedARTHX).toLocaleString('en-US', { maximumFractionDigits: 6 })}</span> ARTHX
+                        </InfoDivRightSpan>
+                      )
+                    }
+                    {
+                      props.pool.rewardTokenKind === 'pool-token' && (
+                        <InfoDivLeftSpan>+ </InfoDivLeftSpan>
+                      )
+                    }
                     <InfoDivRightSpan>
-                      <span>{Number(getDisplayBalance(props.claimableBalance)).toLocaleString()}</span>
+                      <span>{Number(initEarnedMAHA).toLocaleString('en-US', { maximumFractionDigits: 6 })}</span>
                       {' '}
                       MAHA
                     </InfoDivRightSpan>

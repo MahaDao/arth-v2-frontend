@@ -147,7 +147,10 @@ export default (props: IProps) => {
           }</TableMainTextStyle>
         </Grid>
         <Grid item lg={2}>
-          <TableMainTextStyle>MAHA</TableMainTextStyle>
+          <TableMainTextStyle>
+            {props.pool.rewardTokenKind === 'pool-token' && 'ARTHX +'}
+            MAHA
+          </TableMainTextStyle>
         </Grid>
         <Grid item lg={2}>
           {
