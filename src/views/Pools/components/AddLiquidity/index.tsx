@@ -51,7 +51,7 @@ const AddLiquidity = (props: props) => {
   const { isLoading: isReservesLoading, value: reserves } = usePairReserves(
     core.tokens[selectedPair.symbol1],
     core.tokens[selectedPair.symbol2]
-  )
+  );
   const { isLoading: isFirstCoinLoading, value: firstCoinBalance } = useTokenBalance(
     core.tokens[selectedPair.symbol1]
   );
@@ -83,7 +83,7 @@ const AddLiquidity = (props: props) => {
   }, [lpTotalSupply, isReservesLoading, reserves, firstCoinValue, secondCoinValue, isLPTotalSupplyLoading]);
 
   const [isYourShareLoading, yourShare] = useMemo(() => {
-    if (isYouWIllRecieveLoading) return [true, BigNumber.from(0)];
+    if (isYouWIllRecieveLoading || isLpBalanceLoading) return [true, BigNumber.from(0)];
 
     const newLPMintBN = BigNumber.from(parseUnits(`${Number(youWillReceive)}`, 18));
     return [
@@ -93,7 +93,7 @@ const AddLiquidity = (props: props) => {
         .mul(100)
         .div(lpTotalSupply.add(newLPMintBN))
     ];
-  }, [youWillReceive, isYouWIllRecieveLoading, lpTotalSupply, lpBalance]);
+  }, [youWillReceive, isLpBalanceLoading, isYouWIllRecieveLoading, lpTotalSupply, lpBalance]);
 
   const addLiquidity = useAddLiquidity(
     core.tokens[selectedPair.symbol1].address,
@@ -181,7 +181,7 @@ const AddLiquidity = (props: props) => {
           <Divider style={{ background: 'rgba(255, 255, 255, 0.08)', margin: '15px 0px' }} />
           <TransparentInfoDiv
             labelData={`You receiving pool token`}
-            rightLabelUnit={`${selectedPair.symbol1}/${selectedPair.symbol1}`}
+            rightLabelUnit={`${selectedPair.symbol1}/${selectedPair.symbol2}`}
             rightLabelValue={
               isYouWIllRecieveLoading
                 ? ' Loading...'

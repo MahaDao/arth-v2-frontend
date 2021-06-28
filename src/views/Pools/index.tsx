@@ -36,7 +36,7 @@ const Boardrooms = () => {
     },
     {
       liquidity: {
-        id: 1,
+        id: 2,
         symbol1: 'ARTH',
         symbol2: 'MAHA',
         pairName: 'ARTH-MAHA',
