@@ -20,7 +20,7 @@ export default function (
 
     try {
       let response: any;
-      if (rewardTokenType === 'multiple') response = await contract.getRewardAndDistribute();
+      if (rewardTokenType !== 'single') response = await contract.getRewardAndDistribute();
       else response = await contract.getReward();
 
       addTransaction(response, {
