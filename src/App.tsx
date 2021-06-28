@@ -13,6 +13,7 @@ import theme from './theme';
 
 import Home from './views/Home';
 import Mint from './views/Mint';
+import Trade from './views/Trade';
 import Pools from './views/Pools';
 import Stats from './views/Stats';
 import Rebase from './views/Rebase';
@@ -87,7 +88,6 @@ const App: React.FC = () => {
               <Farming />
             </Page>
           </Route>
-          {/* 
           <Route path="/mint/:paramType">
             <Page availableNetworks={[137, 1337]}>
               <Mint />
@@ -95,9 +95,9 @@ const App: React.FC = () => {
           </Route>
           <Route path="/trade">
             <Page availableNetworks={[137, 1337]}>
-              <TemporaryTrade />
+              <Trade />
             </Page>
-          </Route> */}
+          </Route>
           <Route path="/pools">
             <Page availableNetworks={[137, 1337]}>
               <Pools />
