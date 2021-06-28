@@ -77,7 +77,7 @@ const AddLiquidity = (props: props) => {
       false,
       Math.min(
         Number(firstCoinValue) * Number(getDisplayBalance(lpTotalSupply, 18)) / Number(reserves.firstCoin),
-        Number(firstCoinValue) * Number(getDisplayBalance(lpTotalSupply, 18)) / Number(reserves.secondCoin)
+        Number(secondCoinValue) * Number(getDisplayBalance(lpTotalSupply, 18)) / Number(reserves.secondCoin)
       )
     ];
   }, [lpTotalSupply, isReservesLoading, reserves, firstCoinValue, secondCoinValue, isLPTotalSupplyLoading]);
@@ -85,12 +85,13 @@ const AddLiquidity = (props: props) => {
   const [isYourShareLoading, yourShare] = useMemo(() => {
     if (isYouWIllRecieveLoading) return [true, BigNumber.from(0)];
 
+    const newLPMintBN = BigNumber.from(parseUnits(`${Number(youWillReceive)}`, 18));
     return [
       false,
-      BigNumber.from(parseUnits(`${Number(youWillReceive)}`, 18))
+      newLPMintBN
         .add(lpBalance)
         .mul(100)
-        .div(lpTotalSupply)
+        .div(lpTotalSupply.add(newLPMintBN))
     ];
   }, [youWillReceive, isYouWIllRecieveLoading, lpTotalSupply, lpBalance]);
 
