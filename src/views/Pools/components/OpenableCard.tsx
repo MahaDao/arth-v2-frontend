@@ -24,12 +24,11 @@ export interface ICards {
 interface IProps {
   liquidityPair: ICards;
   setSelected: (val: any) => void;
-  setRemove: (val: boolean) => void;
-  setDeposit: (val: boolean) => void;
+  setChangeAction: (val: 'Add' | 'Remove') => void;
 }
 
 export default (props: IProps) => {
-  const { liquidityPair, setSelected, setDeposit, setRemove } = props;
+  const { liquidityPair, setSelected, setChangeAction } = props;
   const [cardOpen, setCardOpen] = useState<boolean>(false);
 
   const onClick = () => {
@@ -107,9 +106,8 @@ export default (props: IProps) => {
                 text={'Remove'}
                 variant={'transparent'}
                 onClick={() => {
-                  setSelected({ liquidity: liquidityPair, pool: poolData });
-                  setDeposit(false);
-                  setRemove(true);
+                  setSelected({ liquidity: liquidityPair });
+                  setChangeAction('Remove')
                 }}
               />
             </div>
@@ -118,8 +116,7 @@ export default (props: IProps) => {
                 text={'Add Liquidity'}
                 onClick={() => {
                   setSelected({ liquidity: liquidityPair });
-                  setRemove(false);
-                  setDeposit(true);
+                  setChangeAction('Add');
                 }}
               />
             </div>
