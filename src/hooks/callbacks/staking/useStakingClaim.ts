@@ -5,11 +5,17 @@ import { useAddPopup } from '../../../state/application/hooks';
 import formatErrorMessage from '../../../utils/formatErrorMessage';
 import { useTransactionAdder } from '../../../state/transactions/hooks';
 
-type RewardTokenType = 'single' | 'multiple'
+type RewardTokenType = 'multiple'
+  | 'single'
+  | 'uniswap-v2-lp'
+  | 'sushiswap-v2-lp'
+  | 'dfyn-v2-lp'
+  | 'cryption-v2-lp'
+  | 'pool-token';
 
 export default function (
   stakingContract: string,
-  rewardTokenType: RewardTokenType = 'multiple'
+  rewardTokenType: RewardTokenType = 'pool-token'
 ) {
   const core = useCore();
   const addPopup = useAddPopup();
