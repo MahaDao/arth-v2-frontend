@@ -35,6 +35,7 @@ import Updaters from './state/Updaters';
 import ModalsProvider from './contexts/Modals';
 import { Mixpanel } from './analytics/Mixpanel';
 import BasisCashProvider from './contexts/BasisCashProvider';
+import LockDeposit from './views/LockDeposit';
 
 const Providers: React.FC = ({ children }) => {
   const currentNetworkId = config.chainId;
@@ -122,6 +123,11 @@ const App: React.FC = () => {
               <Lottery />
             </Page>
           </Route> */}
+          <Route path="/lock-deposit">
+            <Page availableNetworks={[137, 1337]}>
+              <LockDeposit />
+            </Page>
+          </Route>
           <Redirect to="/"></Redirect>
         </Switch>
       </Router>
