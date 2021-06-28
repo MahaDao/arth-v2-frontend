@@ -40,9 +40,9 @@ const Nav = (props: props) => {
       <StyledLink exact activeClassName="active" to="/lottery">
         Prizes
       </StyledLink>
-       <StyledLink exact activeClassName="active" to="/pools">
+       {/*<StyledLink exact activeClassName="active" to="/pools">
         Pools
-      </StyledLink>
+      </StyledLink>*/}
     </StyledNav>
   );
 };
