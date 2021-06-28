@@ -74,15 +74,14 @@ const App: React.FC = () => {
         <TopBar />
         <Disclaimer />
         <Switch>
+          <Route path="/" exact>
+            <Home />
+          </Route>
           <Route path="/stats">
             <Page availableNetworks={[137, 1337]}>
               <Stats />
             </Page>
           </Route>
-          {/*<Route path="/" exact>
-            <Home />
-          </Route>*/}
-
           <Route path="/farming">
             <Page availableNetworks={[137, 1337]}>
               <Farming />
@@ -103,17 +102,17 @@ const App: React.FC = () => {
               <Pools />
             </Page>
           </Route>
-          <Route path="/genesis">
+          {/* <Route path="/genesis">
             <Page>
               <Genesis />
             </Page>
-          </Route>
+          </Route> */}
           {/* <Route path="/faucet">
             <Page availableNetworks={[1337]}>
               <Faucet />
             </Page>
           </Route> */}
-          <Route path="/rebase">
+          {/* <Route path="/rebase">
             <Page>
               <Rebase />
             </Page>
@@ -122,8 +121,8 @@ const App: React.FC = () => {
             <Page>
               <Lottery />
             </Page>
-          </Route>
-          <Redirect to="/genesis"></Redirect>
+          </Route> */}
+          <Redirect to="/"></Redirect>
         </Switch>
       </Router>
     </Providers>
