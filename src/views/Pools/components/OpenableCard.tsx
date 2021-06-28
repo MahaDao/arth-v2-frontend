@@ -1,39 +1,35 @@
-import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import Container from '../../../components/Container';
-import useCore from '../../../hooks/useCore';
+import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
-import uniswapLogo from '../../assets/svg/uniswapLogo.svg';
-import shushiswap from '../../assets/svg/sushiswapLogo.svg';
+import { useMediaQuery } from 'react-responsive';
+
+import useCore from '../../../hooks/useCore';
+import Container from '../../../components/Container';
+
+import TransparentInfoDiv from './InfoDiv';
 import Button from '../../../components/Button';
 import TokenSymbol from '../../../components/TokenSymbol';
-import arrowDown from '../../../assets/svg/arrowDown2.svg';
+
 import arrowUp from '../../../assets/svg/arrowUp.svg';
-import TransparentInfoDiv from './InfoDiv';
-import { useMediaQuery } from 'react-responsive';
+import arrowDown from '../../../assets/svg/arrowDown2.svg';
 
 export interface ICards {
   id: number;
   symbol1: string;
   symbol2: string;
   pairName: string;
+  pairToken: string;
 }
-export interface IPoolData {
-  total: string;
-  arth: string;
-  eth: string;
-  share: string;
-}
+
 interface IProps {
   liquidityPair: ICards;
-  poolData: IPoolData;
   setSelected: (val: any) => void;
   setRemove: (val: boolean) => void;
   setDeposit: (val: boolean) => void;
 }
 
 export default (props: IProps) => {
-  const { liquidityPair, poolData, setSelected, setDeposit, setRemove } = props;
+  const { liquidityPair, setSelected, setDeposit, setRemove } = props;
   const [cardOpen, setCardOpen] = useState<boolean>(false);
 
   const onClick = () => {
@@ -62,7 +58,7 @@ export default (props: IProps) => {
         </LLabel>
         <Manage onClick={onClick}>
           Manage
-          <img src={cardOpen ? arrowUp : arrowDown} height={8} style={{ marginLeft: 6 }} />
+          <img alt='Arrow' src={cardOpen ? arrowUp : arrowDown} height={8} style={{ marginLeft: 6 }} />
         </Manage>
       </div>
       {cardOpen && (
@@ -70,27 +66,27 @@ export default (props: IProps) => {
           <div style={{ height: '20px' }} />
           <TransparentInfoDiv
             labelData={'Your total pool tokens'}
-            rightLabelValue={poolData.total}
-            rightLabelUnit={'ARTH/ETH'}
+            rightLabelValue={'100'}
+            rightLabelUnit={'ARTH/ARTHX'}
           />
 
           <TransparentInfoDiv
             labelData={'Pooled ARTH'}
-            rightLabelValue={poolData.arth}
+            rightLabelValue={'100'}
             rightLabelUnit={'ARTH'}
           />
 
           <TransparentInfoDiv
             labelData={'Pooled ETH'}
-            rightLabelValue={poolData.eth}
+            rightLabelValue={'100'}
             rightLabelUnit={'ETH'}
           />
 
           <TransparentInfoDiv
             labelData={'Your pool share'}
-            rightLabelValue={`${poolData.share}%`}
-            // rightLabelUnit={'ETH'}
+            rightLabelValue={`${90}%`}
           />
+
           <div
             style={{
               marginTop: 32,
@@ -121,7 +117,7 @@ export default (props: IProps) => {
               <Button
                 text={'Add Liquidity'}
                 onClick={() => {
-                  setSelected({ liquidity: liquidityPair, pool: poolData });
+                  setSelected({ liquidity: liquidityPair });
                   setRemove(false);
                   setDeposit(true);
                 }}

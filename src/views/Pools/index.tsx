@@ -32,12 +32,7 @@ const Boardrooms = () => {
         symbol1: 'ARTH',
         symbol2: 'ARTHX',
         pairName: 'ARTH-ARTHX',
-      },
-      pool: {
-        total: '1500.00',
-        arth: '1500.00',
-        share: '0.06',
-        eth: '1500.00',
+        pairToken: 'ArthArthxLP',
       },
     },
     {
@@ -46,12 +41,7 @@ const Boardrooms = () => {
         symbol1: 'ARTH',
         symbol2: 'MAHA',
         pairName: 'ARTH-MAHA',
-      },
-      pool: {
-        total: '1500.00',
-        arth: '1500.00',
-        share: '0.06',
-        eth: '1500.00',
+        pairToken: 'ArthMahaLP',
       },
     },
   ];
@@ -62,13 +52,7 @@ const Boardrooms = () => {
       symbol1: 'ARTH',
       symbol2: 'ARTHX',
       pairName: 'ARTH-ARTHX',
-    },
-    pool: {
-      total: '1500.00',
-      arth: '1500.00',
-      share: '0.06',
-      eth: '1500.00',
-    },
+    }
   });
 
   if (!core) return <div />;
@@ -95,7 +79,6 @@ const Boardrooms = () => {
           : liquidityPairs.map((pair) => (
             <OpenableCard
               liquidityPair={pair.liquidity}
-              poolData={pair.pool}
               setSelected={(val: any) => {
                 setSelectedPair(val);
               }}
