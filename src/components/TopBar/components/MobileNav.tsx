@@ -85,22 +85,22 @@ const MobileNav = (props: props) => {
             >
               Genesis
             </StyledLink>
-            {/*<StyledLink
+            <StyledLink
               exact
               activeClassName="active"
               to="/stats"
               onClick={() => props.onClick()}
             >
               Analytics
-            </StyledLink>*/}
-            {/*<StyledLink
+            </StyledLink>
+            <StyledLink
               exact
               activeClassName="active"
               to="/mint/mint"
               onClick={() => props.onClick()}
             >
               Mint/Redeem
-            </StyledLink>*/}
+            </StyledLink>
             {/* <StyledLink
               exact
               activeClassName="active"
