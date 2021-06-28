@@ -21,7 +21,7 @@ const Boardrooms = () => {
   const [deposit, setDeposit] = useState<boolean>(false);
   const [noLiquidity, setNoLiquidity] = useState<boolean>(false);
   const [selectedSwap, setSelectedSwap] = useState<'Uniswap' | 'Sushiswap' | 'DFYN'>('Uniswap');
-  const [action, setAction] = useState<'Details' | 'Add' | 'Remove'>('Add');
+  const [action, setAction] = useState<'Details' | 'Add' | 'Remove'>('Details');
 
   const core = useCore();
 
@@ -99,11 +99,8 @@ const Boardrooms = () => {
               setSelected={(val: any) => {
                 setSelectedPair(val);
               }}
-              setRemove={(val: boolean) => {
-                setAction('Remove');
-              }}
-              setDeposit={(val: boolean) => {
-                setDeposit(val);
+              setChangeAction={(val) => {
+                setAction(val);
               }}
             />
           ))}
