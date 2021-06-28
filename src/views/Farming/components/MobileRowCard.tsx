@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, { useMemo } from 'react';
 import { useWallet } from 'use-wallet';
 import styled from 'styled-components';
 import Loader from 'react-spinners/BeatLoader';
@@ -28,6 +28,10 @@ interface IProps {
     maha: BigNumber;
     arthx: BigNumber;
   };
+  apyState: {
+    isLoading: boolean;
+    apy: string;
+  };
   onExitClick: () => void;
   onDepositClick: () => void;
   onWithdrawClick: () => void;
@@ -40,7 +44,7 @@ export const MobileFarm = (props: IProps) => {
   const { account, connect } = useWallet();
 
   const depositTokenContract = core.tokens[props.pool.depositToken];
-  const {isLoading: isTokenBalanceLoading, value: tokenBalance} = useTokenBalance(depositTokenContract);
+  const { isLoading: isTokenBalanceLoading, value: tokenBalance } = useTokenBalance(depositTokenContract);
   const tokenDecimals = useTokenDecimals(props.pool.depositToken);
 
   const tokens = props.pool.depositTokenSymbols.map((p) => core.tokens[p]);
@@ -74,11 +78,15 @@ export const MobileFarm = (props: IProps) => {
 
   return (
     <StyledCardWrapper>
-      <CardIcon>
-        <div style={{ zIndex: 15, background: '#2A2827', borderRadius: 36 }}>
-          <img src={getImage(props.pool.platform)} alt="Uniswap logo" height={32} />
-        </div>
-      </CardIcon>
+      {
+        props.pool.platform && (
+          <CardIcon>
+            <div style={{ zIndex: 15, background: '#2A2827', borderRadius: 36 }}>
+              <img src={getImage(props.pool.platform)} alt="Uniswap logo" height={32} />
+            </div>
+          </CardIcon>
+        )
+      }
       <Card>
         <CardContent>
           <StyledContent>
@@ -118,15 +126,15 @@ export const MobileFarm = (props: IProps) => {
               <div style={{ display: 'flex', flexDirection: 'column', marginLeft: 40 }}>
                 <StyledTitle>{props.pool.depositTokenSymbols.join('-')}</StyledTitle>
                 {
-                  props.pool.platform 
+                  props.pool.platform
                     ? (
                       <StyledSubTitle onClick={() => window.open(uniswapLink, '_blank')}>
                         Add Liquidity
                       </StyledSubTitle>
                     ) : (
-                        <StyledSubTitle onClick={() => window.open(etherscan, '_blank')}>
+                      <StyledSubTitle onClick={() => window.open(etherscan, '_blank')}>
                         View on Explorer
-                        </StyledSubTitle>
+                      </StyledSubTitle>
                     )
                 }
               </div>
@@ -155,18 +163,38 @@ export const MobileFarm = (props: IProps) => {
                   </MainSpan>
                 </div>
               </Grid>
+              <Grid
+                item
+                xs={12}
+                direction={'row'}
+                justify={'space-between'}
+                style={{ display: 'flex', marginTop: 5 }}
+              >
+                <DescriptionDiv>
+                  APY
+                </DescriptionDiv>
+                <div style={{ flexDirection: 'column', display: 'flex' }}>
+                  <MainSpan>
+                    {
+                      props?.apyState?.isLoading
+                        ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
+                        : props?.apyState?.apy
+                    }
+                  </MainSpan>
+                </div>
+              </Grid>
             </Grid>
             <ButtonContainer>
               <div style={{ marginTop: 15 }}>
                 {!isWalletConnected ? (
-                  <Button 
-                    text={'Connect Wallet'} 
-                    size={'lg'} 
+                  <Button
+                    text={'Connect Wallet'}
+                    size={'lg'}
                     onClick={() =>
                       connect('injected').then(() => {
                         localStorage.removeItem('disconnectWallet')
-                      })} 
-                    />
+                      })}
+                  />
                 ) : (
                   <Button
                     disabled={tokenBalance.lte(0)}
@@ -180,7 +208,7 @@ export const MobileFarm = (props: IProps) => {
           </StyledContent>
         </CardContent>
         {
-          props.stakedBalance.gt(0) 
+          props.stakedBalance.gt(0)
             ? (
               <OpenableDiv>
                 <InfoDiv>
@@ -198,27 +226,27 @@ export const MobileFarm = (props: IProps) => {
                     background: 'rgba(255, 255, 255, 0.08)',
                     margin: '15px 0px',
                   }}
-                variant={'middle'}
+                  variant={'middle'}
                 />
                 <InfoDiv>
                   <div>
-                      <InfoDivLeftSpan>Unclaimed Rewards:</InfoDivLeftSpan>
-                      <InfoDivRightSpan>
-                        <span>{currentEarnedARTHX}</span>
-                        {' '}
-                        ARTHX
-                      </InfoDivRightSpan>
-                      <InfoDivLeftSpan>+ </InfoDivLeftSpan>
-                      <InfoDivRightSpan>
-                        <span>{currentEarnedMAHA}</span>
-                        {' '}
-                        MAHA
-                      </InfoDivRightSpan>
-                      <Withdraw
-                        onClick={props.onClaimClick}
-                      >
-                        Claim
-                      </Withdraw>
+                    <InfoDivLeftSpan>Unclaimed Rewards:</InfoDivLeftSpan>
+                    {/* <InfoDivRightSpan>
+                      <span>{currentEarnedARTHX}</span>
+                      {' '}
+                      ARTHX
+                    </InfoDivRightSpan>
+                    <InfoDivLeftSpan>+ </InfoDivLeftSpan> */}
+                    <InfoDivRightSpan>
+                      <span>{Number(getDisplayBalance(props.claimableBalance)).toLocaleString()}</span>
+                      {' '}
+                      MAHA
+                    </InfoDivRightSpan>
+                    <Withdraw
+                      onClick={props.onClaimClick}
+                    >
+                      Claim
+                    </Withdraw>
                   </div>
                 </InfoDiv>
                 <Divider
@@ -238,10 +266,10 @@ export const MobileFarm = (props: IProps) => {
                   </div>
                 </InfoDiv>
               </OpenableDiv>
-            ) 
+            )
             : (
-            <></>
-          )
+              <></>
+            )
         }
       </Card>
     </StyledCardWrapper>

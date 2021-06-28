@@ -109,14 +109,14 @@ const MobileNav = (props: props) => {
             >
               Stabilize
             </StyledLink> */}
-            {/* <StyledLink
+            <StyledLink
               exact
               activeClassName="active"
               to="/farming"
               onClick={() => props.onClick()}
             >
               Farming
-            </StyledLink>*/}
+            </StyledLink>
             {/*{
               !props.isMainnet && (
                 <StyledLink exact activeClassName="active" to="/faucet" onClick={() => props.onClick()}>
@@ -143,7 +143,6 @@ const MobileNav = (props: props) => {
           {
             props.showWarning ? (
               <Button
-                variant={'transparent'}
                 text={'Switch Network'}
                 onClick={switchMetamaskChain}
               />

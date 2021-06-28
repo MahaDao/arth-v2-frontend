@@ -28,6 +28,10 @@ type IProps = {
     maha: BigNumber;
     arthx: BigNumber;
   };
+  apyState: {
+    isLoading: boolean;
+    apy: string;
+  };
   onDepositClick: () => void;
   onWithdrawClick: () => void;
   onClaimClick: () => void;
@@ -124,10 +128,14 @@ export default (props: IProps) => {
           </TableMainTextStyle>
         </Grid>
         <Grid item lg={2}>
-          <TableMainTextStyle>{/* {props?.apy} */}</TableMainTextStyle>
+          <TableMainTextStyle>{
+            props?.apyState?.isLoading
+              ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
+              : props?.apyState?.apy
+          }</TableMainTextStyle>
         </Grid>
         <Grid item lg={2}>
-          <TableMainTextStyle>MAHA + ARTHX</TableMainTextStyle>
+          <TableMainTextStyle>MAHA</TableMainTextStyle>
         </Grid>
         <Grid item lg={2}>
           {
@@ -169,11 +177,11 @@ export default (props: IProps) => {
               <>
                 Earned:
                 <TableMainTextStyle style={{ marginLeft: '10px' }}>
-                  <span>{currentEarnedARTHX}</span>
+                  {/* <span>{currentEarnedARTHX}</span>
                   {' '}
                   ARTHX
-                  {' + '}
-                  <span>{currentEarnedMAHA}</span>
+                  {' + '} */}
+                  <span>{Number(getDisplayBalance(props.claimableBalance)).toLocaleString()}</span>
                   {' '}
                   MAHA
                 </TableMainTextStyle>

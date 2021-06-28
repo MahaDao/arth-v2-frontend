@@ -23,6 +23,7 @@ import Farming from './views/Farming';
 import Lottery from './views/Lottery';
 import TopBar from './components/TopBar';
 import Popups from './components/Popups';
+import Disclaimer from './components/Disclaimer';
 import NoMetamaskNotice from './components/NoMetamaskNotice';
 import ConnectionNotice from './views/Genesis/ConnectionNotice';
 
@@ -70,6 +71,7 @@ const App: React.FC = () => {
     <Providers>
       <Router>
         <TopBar />
+        <Disclaimer />
         <Switch>
           <Route path="/stats">
             <Page availableNetworks={[137, 1337]}>
@@ -80,11 +82,12 @@ const App: React.FC = () => {
             <Home />
           </Route>*/}
 
-          {/* <Route path="/farming">
+          <Route path="/farming">
             <Page availableNetworks={[137, 1337]}>
               <Farming />
             </Page>
           </Route>
+          {/* 
           <Route path="/mint/:paramType">
             <Page availableNetworks={[137, 1337]}>
               <Mint />

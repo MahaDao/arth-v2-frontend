@@ -27,8 +27,8 @@
     "address": "0x0000000000000000000000000000000000000000",
     "abi": "BasicStaking"
   },
-  "StakeARTHX": {
-    "address": "0x0000000000000000000000000000000000000000",
+  "StakeARTHXRMAHAGenesis": {
+    "address": "0x710b89933e82360b93bc4c4e6e2c4fa82fd2c7f0",
     "abi": "BasicStaking"
   },
   "Oracle_USDC": {
@@ -108,7 +108,7 @@
     "abi": "ARTHShares"
   },
   "MahaToken": {
-    "address": "0x988DA2d34a40Ec084962E1De31F6e20f40a76215",
+    "address": "0xedd6ca8a4202d4a36611e2fff109648c4863ae19",
     "abi": "MahaToken"
   },
   "UniswapV2Factory": {

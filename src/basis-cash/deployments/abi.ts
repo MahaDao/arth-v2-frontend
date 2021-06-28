@@ -18,6 +18,7 @@ export const UniswapV2Factory = require('./abi/UniswapV2Factory.json');
 export const UniswapV2Pair = require('./abi/UniswapV2Pair.json');
 export const UniswapV2Router02 = require('./abi/UniswapV2Router02.json');
 export const UniversalGMUOracle = require('./abi/UniversalGMUOracle.json');
+export const BasicStakingSpecificReward = require('./abi/BasicStakingSpecificReward');
 
 type IABIS = {
   [key: string]: any[];
@@ -44,6 +45,7 @@ const ret: IABIS = {
   UniswapV2Pair,
   UniswapV2Router02,
   UniversalGMUOracle,
+  BasicStakingSpecificReward
 };
 
 export default ret;

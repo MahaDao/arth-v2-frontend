@@ -19,6 +19,10 @@
     "address": "0xAd7CD904568E5a23fdbE57d6C32fB5D1f91eBd0d",
     "abi": "BasicStaking"
   },
+  "StakeARTHXRMAHA": {
+    "address": "0xDC495CF2bd10cd6B179e045A9Db51aF5E707f336",
+    "abi": "BasicStakingSpecificReward"
+  },
   "StakeARTH": {
     "address": "0x653887B8A074DAb771Dd116473c046e7b210c68c",
     "abi": "BasicStaking"
