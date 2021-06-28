@@ -220,13 +220,9 @@ const RemovePool = (props: props) => {
           </EachElement>
           <EachElement>
             {' '}
-            {/*<Detailed onClick={() => setType(!simpleType)}>
-              {simpleType ? 'Detailed' : 'Simple'}
-            </Detailed>*/}
           </EachElement>
         </CustomCardHeader>
         <CustomCardContainer className={'custom-mahadao-container-content'}>
-          {/*{simpleType ? simple() : detailed()}*/}
           {detailed()}
           <ButtonContainer>
             <div style={{ marginRight: 5}}>
@@ -243,7 +239,6 @@ const RemovePool = (props: props) => {
               <Button text={'Remove Liquidity'} size={'lg'} disabled />
             </div>
           </ButtonContainer>
-          {/* </div> */}
         </CustomCardContainer>
       </CustomCard>
       <CustomInfoCard className={'custom-mahadao-box'}>
