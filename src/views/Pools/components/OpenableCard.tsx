@@ -1,10 +1,7 @@
 import styled from 'styled-components';
-import React, { useState } from 'react';
-import Grid from '@material-ui/core/Grid';
+import { BigNumber } from 'ethers/lib/ethers';
 import { useMediaQuery } from 'react-responsive';
-
-import useCore from '../../../hooks/useCore';
-import Container from '../../../components/Container';
+import React, { useState, useMemo } from 'react';
 
 import TransparentInfoDiv from './InfoDiv';
 import Button from '../../../components/Button';
@@ -12,6 +9,11 @@ import TokenSymbol from '../../../components/TokenSymbol';
 
 import arrowUp from '../../../assets/svg/arrowUp.svg';
 import arrowDown from '../../../assets/svg/arrowDown2.svg';
+
+import useCore from '../../../hooks/useCore';
+import useTotalSupply from '../../../hooks/useTotalSupply';
+import useTokenBalance from '../../../hooks/state/useTokenBalance';
+import { getDisplayBalanceToken } from '../../../utils/formatBalance';
 
 export interface ICards {
   id: number;
@@ -31,10 +33,19 @@ export default (props: IProps) => {
   const { liquidityPair, setSelected, setChangeAction } = props;
   const [cardOpen, setCardOpen] = useState<boolean>(false);
 
-  const onClick = () => {
-    setCardOpen(!cardOpen);
-  };
+  const onClick = () => { setCardOpen(!cardOpen); };
   const isMobile = useMediaQuery({ query: '(max-device-width: 1284px)' });
+
+  const core = useCore();
+  const { isLoading: isLPBalanceLoading, value: lpBalance } = useTokenBalance(core.tokens[liquidityPair.pairToken]);
+  const { isLoading: isToken1BalanceLoading, value: token1Balance } = useTokenBalance(core.tokens[liquidityPair.symbol1]);
+  const { isLoading: isToken2BalanceLoading, value: token2Balance } = useTokenBalance(core.tokens[liquidityPair.symbol2]);
+  const { isLoading: isLPTotalSupplyLoading, value: lpTotalSupply } = useTotalSupply(liquidityPair.pairToken);
+
+  const [isPercentOfPoolLoading, percentOfPool] = useMemo(() => {
+    if (isLPBalanceLoading || isLPTotalSupplyLoading) return [true, BigNumber.from(0)];
+    return [false, lpBalance.mul(100).div(lpTotalSupply)];
+  }, [lpBalance, isLPBalanceLoading, isLPTotalSupplyLoading, lpTotalSupply]);
 
   return (
     <MainOpenableCard>
@@ -65,25 +76,41 @@ export default (props: IProps) => {
           <div style={{ height: '20px' }} />
           <TransparentInfoDiv
             labelData={'Your total pool tokens'}
-            rightLabelValue={'100'}
-            rightLabelUnit={'ARTH/ARTHX'}
+            rightLabelValue={
+              isLPBalanceLoading
+                ? ' Loading...'
+                : Number(getDisplayBalanceToken(lpBalance, core.tokens[liquidityPair.pairToken])).toLocaleString('en-US', { maximumFractionDigits: 3 })
+            }
+            rightLabelUnit={`${liquidityPair.symbol1.toUpperCase()}/${liquidityPair.symbol2.toUpperCase()}`}
           />
 
           <TransparentInfoDiv
             labelData={'Pooled ARTH'}
-            rightLabelValue={'100'}
-            rightLabelUnit={'ARTH'}
+            rightLabelValue={
+              isToken1BalanceLoading
+                ? ' Loading...'
+                : Number(getDisplayBalanceToken(token1Balance, core.tokens[liquidityPair.symbol1])).toLocaleString('en-US', { maximumFractionDigits: 3 })
+            }
+            rightLabelUnit={`${liquidityPair.symbol1.toUpperCase()}`}
           />
 
           <TransparentInfoDiv
-            labelData={'Pooled ETH'}
-            rightLabelValue={'100'}
-            rightLabelUnit={'ETH'}
+            labelData={'Pooled ARTH'}
+            rightLabelValue={
+              isToken2BalanceLoading
+                ? ' Loading...'
+                : Number(getDisplayBalanceToken(token2Balance, core.tokens[liquidityPair.symbol2])).toLocaleString('en-US', { maximumFractionDigits: 3 })
+            }
+            rightLabelUnit={`${liquidityPair.symbol2.toUpperCase()}`}
           />
 
           <TransparentInfoDiv
             labelData={'Your pool share'}
-            rightLabelValue={`${90}%`}
+            rightLabelValue={
+              isPercentOfPoolLoading
+                ? ' Loading...'
+                : Number(percentOfPool.toString()).toLocaleString('en-US', { maximumFractionDigits: 3 }) + '%'
+            }
           />
 
           <div
@@ -192,3 +219,7 @@ const Manage = styled.div`
   align-items: center;
   cursor: pointer;
 `;
+function useTokenSupply(arg0: ERC20): { isLoading: any; value: any; } {
+  throw new Error('Function not implemented.');
+}
+
