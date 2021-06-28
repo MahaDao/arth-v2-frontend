@@ -219,7 +219,3 @@ const Manage = styled.div`
   align-items: center;
   cursor: pointer;
 `;
-function useTokenSupply(arg0: ERC20): { isLoading: any; value: any; } {
-  throw new Error('Function not implemented.');
-}
-

@@ -1,4 +1,4 @@
-import { Fetcher, Route, Token } from '@uniswap/sdk';
+import { Fetcher, Route, Token } from '@dfyn/sdk';
 import { useCallback, useEffect, useState } from 'react';
 
 import useCore from './useCore';

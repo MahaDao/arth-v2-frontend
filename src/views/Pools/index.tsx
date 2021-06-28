@@ -2,8 +2,6 @@ import styled from 'styled-components';
 import Grid from '@material-ui/core/Grid';
 import React, { useEffect, useState } from 'react';
 
-import Button from '../../components/Button';
-import ImportPool from './components/ImportPool';
 import RemovePool from './components/RemovePool';
 import Container from '../../components/Container';
 import OpenableCard from './components/OpenableCard';
@@ -11,16 +9,17 @@ import AddLiquidity from './components/AddLiquidity';
 
 import useCore from '../../hooks/useCore';
 
-import dfyn from '../../assets/img/dfyn.svg';
-import uniswapLogo from '../../assets/svg/uniswapLogo.svg';
-import shushiswap from '../../assets/svg/sushiswapLogo.svg';
+// import dfyn from '../../assets/img/dfyn.svg';
+// import uniswapLogo from '../../assets/svg/uniswapLogo.svg';
+// import shushiswap from '../../assets/svg/sushiswapLogo.svg';
 
 const Boardrooms = () => {
   useEffect(() => window.scrollTo(0, 0), []);
 
-  const [deposit, setDeposit] = useState<boolean>(false);
-  const [noLiquidity, setNoLiquidity] = useState<boolean>(false);
-  const [selectedSwap, setSelectedSwap] = useState<'Uniswap' | 'Sushiswap' | 'DFYN'>('Uniswap');
+  // NOTE: to be used later with multiple pools.
+  // const [deposit, setDeposit] = useState<boolean>(false);
+  // const [noLiquidity, setNoLiquidity] = useState<boolean>(false);
+  // const [selectedSwap, setSelectedSwap] = useState<'Uniswap' | 'Sushiswap' | 'DFYN'>('Uniswap');
   const [action, setAction] = useState<'Details' | 'Add' | 'Remove'>('Details');
 
   const core = useCore();
@@ -52,6 +51,7 @@ const Boardrooms = () => {
       symbol1: 'ARTH',
       symbol2: 'ARTHX',
       pairName: 'ARTH-ARTHX',
+      pairToken: 'ArthArthxLP',
     }
   });
 
@@ -70,23 +70,23 @@ const Boardrooms = () => {
       <>
         <YourLiquidityHeader>
           <HeaderLabel>Your Liquidity</HeaderLabel>
-          {/* <div style={{ flex: 0.5 }}>
-            <Button text={'Add Liquidity'} onClick={() => setAction('Add')} />
-          </div> */}
         </YourLiquidityHeader>
-        {noLiquidity
-          ? NoLiquidityFound()
-          : liquidityPairs.map((pair) => (
-            <OpenableCard
-              liquidityPair={pair.liquidity}
-              setSelected={(val: any) => {
-                setSelectedPair(val);
-              }}
-              setChangeAction={(val) => {
-                setAction(val);
-              }}
-            />
-          ))}
+        {
+          false // noLiquidity
+            ? NoLiquidityFound()
+            : liquidityPairs.map((pair) => (
+              <OpenableCard
+                key={pair.liquidity.id}
+                liquidityPair={pair.liquidity}
+                setSelected={(val: any) => {
+                  setSelectedPair(val);
+                }}
+                setChangeAction={(val) => {
+                  setAction(val);
+                }}
+              />
+            ))
+        }
       </>
     );
   };
@@ -154,6 +154,7 @@ const Boardrooms = () => {
             )}
             {action === 'Add' && (
               <AddLiquidity
+                selectedPair={selectedPair.liquidity}
                 onBack={() => {
                   setAction('Details');
                 }}
