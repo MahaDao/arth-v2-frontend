@@ -157,7 +157,7 @@ const CustomInputContainer: React.FC<props> = (props) => {
             {ILabelInfoValue !== '' && Redirection()}
           </ILabelLeft>
           <ILabelRight>
-            {isBalanceLoading
+            {isBalanceLoading && showBalance
               ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
               : showBalance && <ILabelBalance>{`Balance  ${Number(IBalanceValue).toLocaleString()}`}</ILabelBalance>
             }

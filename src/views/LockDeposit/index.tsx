@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import styled from 'styled-components';
+import { useWallet } from 'use-wallet';
 
 import Button from '../../components/Button';
 import DepositModal from './components/DepositModal';
 
 const LockDeposit = () => {
+  const { account, connect } = useWallet();
+
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [symbolSelected, setSymbolSelected] = useState<'ARTH' | 'ARTHX' | ''>('')
 
@@ -19,6 +22,9 @@ const LockDeposit = () => {
             <CustomInfoCardDetails>
               <Grid container>
                 <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                  <CardTitle>
+                    Deposit ARTHX
+                  </CardTitle>
                   <TextWithIcon>
                     Lorem Ipsum is simply dummy text of the printing and typesetting industry.
                     Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
@@ -29,10 +35,22 @@ const LockDeposit = () => {
                 </Grid>
                 <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
                   <ButtonConatiner>
-                    <Button text={'Deposit ARTH'} size={'sm'} onClick={() => {
+                    {!!!account ? (
+                      <Button
+                        text={'Connect Wallet'}
+                        size={'lg'}
+                        onClick={() =>
+                          connect('injected').then(() => {
+                            localStorage.removeItem('disconnectWallet');
+                          })
+                        }
+                      />
+                    ) : (
+                      <Button text={'Deposit ARTH'} size={'sm'} onClick={() => {
                       setSymbolSelected('ARTH');
                       setOpenModal(true);
-                    }}/>
+                      }} />
+                    )}
                   </ButtonConatiner>
                 </Grid>
               </Grid>
@@ -42,6 +60,9 @@ const LockDeposit = () => {
             <CustomInfoCardDetails>
               <Grid container>
                 <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                  <CardTitle>
+                    Deposit ARTHX
+                  </CardTitle>
                   <TextWithIcon>
                     Lorem Ipsum is simply dummy text of the printing and typesetting industry.
                     Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
@@ -52,10 +73,23 @@ const LockDeposit = () => {
                 </Grid>
                 <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
                   <ButtonConatiner>
-                    <Button text={'Deposit ARTHX'} size={'sm'} onClick={() => {
-                      setSymbolSelected('ARTHX');
-                      setOpenModal(true);
-                    }}/>
+                    {!!!account ? (
+                      <Button
+                        text={'Connect Wallet'}
+                        size={'lg'}
+                        onClick={() =>
+                          connect('injected').then(() => {
+                            localStorage.removeItem('disconnectWallet');
+                          })
+                        }
+                      />
+                    ) : (
+                      <Button text={'Deposit ARTHX'} size={'sm'} onClick={() => {
+                        setSymbolSelected('ARTHX');
+                        setOpenModal(true);
+                      }}/>
+                    )}
+
                   </ButtonConatiner>
                 </Grid>
               </Grid>
@@ -108,4 +142,15 @@ const TextWithIcon = styled.div`
   color: rgba(255, 255, 255, 0.88);
   opacity: 0.64;
   vertical-align: center;
+`;
+
+const CardTitle = styled.div`
+  padding: 0;
+  margin: 0;
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  color: rgba(255, 255, 255, 0.88);
 `;
