@@ -224,8 +224,8 @@ const RemovePool = (props: props) => {
         </CustomCardHeader>
         <CustomCardContainer className={'custom-mahadao-container-content'}>
           {detailed()}
-          <ButtonContainer>
-            <div style={{ marginRight: 5}}>
+          <Grid container spacing={2} style={{ marginTop: '32px' }}>
+            <Grid item lg={6} md={6} sm={12} xs={12}>
               <Button
                 text={'Approve'}
                 size={'lg'}
@@ -234,11 +234,11 @@ const RemovePool = (props: props) => {
                 }}
                 disabled={isInputFieldError}
               />
-            </div>
-            <div style={{ marginTop: 5 }}>
+            </Grid>
+            <Grid item lg={6} md={6} sm={12} xs={12}>
               <Button text={'Remove Liquidity'} size={'lg'} disabled />
-            </div>
-          </ButtonContainer>
+            </Grid>
+          </Grid>
         </CustomCardContainer>
       </CustomCard>
       <CustomInfoCard className={'custom-mahadao-box'}>
