@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import Grid from '@material-ui/core/Grid';
 import Button from '../../../components/Button';
@@ -10,31 +10,49 @@ import CustomModal from '../../../components/CustomModal';
 import { CustomSnack } from '../../../components/SnackBar';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
 import CustomToolTip from '../../../components/CustomTooltip';
+import useCore from '../../../hooks/useCore';
+import { useWallet } from 'use-wallet';
+import useTokenBalance from '../../../hooks/state/useTokenBalance';
+import { getDisplayBalanceToken } from '../../../utils/formatBalance';
 
 const SellContent = (props: WithSnackbarProps) => {
   useEffect(() => window.scrollTo(0, 0), []);
 
-  const [sellAmount, setSellAmount] = useState<string>('0.00');
-  const [sellReceive, setSellReceive] = useState<string>('0.00');
+  const core = useCore();
+  const { account, connect } = useWallet();
+  const collateralTypes = useMemo(() => core.getCollateralTypes(), [core]);
+  const [isInputFieldError, setIsInputFieldError] = useState<boolean>(false);
+
+  const [sellAmount, setSellAmount] = useState<string>('0');
+  const [receiveAmount, setReceiveAmount] = useState<string>('0');
 
   const [openModal, setOpenModal] = useState<boolean>(false);
 
-  const [selectedAmountCoin, setSelectedAmountCoin] = useState<string>('ETH');
-  const [dropDownValues] = useState<string[]>([]);
+  const [selectedAmountCoin, setSelectedAmountCoin] = useState(core.getDefaultCollateral());
 
-  // const isLaunched = Date.now() >= config.boardroomLaunchesAt.getTime();
+  const selectedAmountToken = core.tokens[selectedAmountCoin];
+  const sellToken = core.tokens['ARTH'];
+
+  //Balance
+  const { isLoading: isSellAmountBalanceLoading, value: sellAmountBalance } = useTokenBalance(
+    core.tokens[selectedAmountCoin],
+  );
+
+  const { isLoading: isReceiveAmountBalanceLoading, value: receiveAmountBalance } = useTokenBalance(
+    core.tokens['ARTH'],
+  );
 
   const ratio = 100;
 
   const onSellAmountChange = (val: string) => {
     if (val === ''){
-      setSellReceive('0');
+      setSellAmount('0');
     }
     setSellAmount(val);
     const valInNumber = Number(val);
     if (valInNumber){
       const temp = String(valInNumber * ratio);
-      setSellReceive(temp);
+      setSellAmount(temp);
     }
   }
 
@@ -42,7 +60,7 @@ const SellContent = (props: WithSnackbarProps) => {
     if (val === ''){
       setSellAmount('0');
     }
-    setSellReceive(val);
+    setSellAmount(val);
     const valInNumber = Number(val);
     if (valInNumber){
       const temp = String(valInNumber * (1 / ratio));
@@ -81,7 +99,7 @@ const SellContent = (props: WithSnackbarProps) => {
             labelData={`You will receive`}
             // labelToolTipData={'testing'}
             rightLabelUnit={selectedAmountCoin}
-            rightLabelValue={sellReceive.toString()}
+            rightLabelValue={sellAmount.toString()}
           />
 
           <Grid container spacing={2} style={{ marginTop: '32px' }}>
@@ -129,41 +147,51 @@ const SellContent = (props: WithSnackbarProps) => {
       </CustomModal>
     )
   }
+
   return (
     <div>
       <LeftTopCardContainer className={'custom-mahadao-container-content'}>
         <CustomInputContainer
-          ILabelValue={'Enter Amount'}
-          IBalanceValue={'Balance 500.00'}
+          ILabelValue={'You receive'}
+          IBalanceValue={getDisplayBalanceToken(sellAmountBalance, sellToken)}
+          isBalanceLoading={isSellAmountBalanceLoading}
           ILabelInfoValue={''}
           DefaultValue={sellAmount.toString()}
           LogoSymbol={'ARTH'}
           hasDropDown={false}
           SymbolText={'ARTH'}
-          inputMode={'decimal'}
-          tagText={'MAX'}
+          inputMode={'numeric'}
           setText={(val: string) => {
-            onSellAmountChange(val)
+            onSellAmountChange(val);
+          }}
+          disabled={isSellAmountBalanceLoading}
+          errorCallback={(flag: boolean) => {
+            setIsInputFieldError(flag);
           }}
         />
         <PlusMinusArrow>
           <img src={arrowDown} />
         </PlusMinusArrow>
         <CustomInputContainer
-          ILabelValue={'You receive'}
-          IBalanceValue={'Balance 500.00'}
-          // ILabelInfoValue={'How can i get it?'}
-          DefaultValue={sellReceive.toString()}
+          ILabelValue={'Enter Amount'}
+          IBalanceValue={getDisplayBalanceToken(receiveAmountBalance, selectedAmountToken)}
+          isBalanceLoading={isReceiveAmountBalanceLoading}
+          DefaultValue={receiveAmount.toString()}
           LogoSymbol={selectedAmountCoin}
-          dropDownValues={dropDownValues}
+          hasDropDown={true}
+          dropDownValues={collateralTypes}
           ondropDownValueChange={(data) => {
             setSelectedAmountCoin(data);
           }}
-          hasDropDown={true}
           SymbolText={selectedAmountCoin}
-          inputMode={'decimal'}
+          inputMode={'numeric'}
           setText={(val: string) => {
-            onReceiveAmountChange(val)
+            onReceiveAmountChange(val);
+          }}
+          tagText={'MAX'}
+          disabled={isReceiveAmountBalanceLoading}
+          errorCallback={(flag: boolean) => {
+            setIsInputFieldError(flag);
           }}
         />
         <div>
