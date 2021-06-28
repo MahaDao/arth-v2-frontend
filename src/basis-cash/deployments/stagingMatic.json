@@ -131,6 +131,10 @@
     "address": "0xA102072A4C07F06EC3B4900FDC4C7B80b6c57429",
     "abi": "UniswapV2Router02"
   },
+  "Router": {
+    "address": "0xb569ddDcF86c9f64dD5DddBe7961b98814123442",
+    "abi": "Router"
+  },
   "USDT": {
     "address": "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
     "abi": "IERC20"
