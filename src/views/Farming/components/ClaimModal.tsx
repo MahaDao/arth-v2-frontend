@@ -30,7 +30,7 @@ interface IProps {
 export default (props: IProps) => {
   const claim = useStakingClaim(
     props.pool.contract,
-    props.pool.rewardTokenKind === 'multiple' ? 'multiple' : 'single'
+    props.pool.rewardTokenKind
   );
 
   const handleClaim = () => {
