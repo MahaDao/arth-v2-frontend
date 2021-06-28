@@ -21,13 +21,14 @@ const Boardrooms = () => {
   const [selectedSwap, setSelectedSwap] = useState<'Uniswap' | 'Sushiswap'>('Uniswap');
   const [noLiquidity, setNoLiquidity] = useState<boolean>(false);
   const [deposit, setDeposit] = useState<boolean>(false);
+
   const liquidityPairs = [
     {
       liquidity: {
         id: 1,
         symbol1: 'ARTH',
-        symbol2: 'ETH',
-        pairName: 'ARTH-ETH',
+        symbol2: 'ARTHX',
+        pairName: 'ARTH-ETHX',
       },
       pool: {
         total: '1500.00',
@@ -51,6 +52,7 @@ const Boardrooms = () => {
       },
     },
   ];
+
   const [selectedPair, setSelectedPair] = useState({
     liquidity: {
       id: 1,
