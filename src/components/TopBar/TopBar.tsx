@@ -74,6 +74,7 @@ const TopBar: React.FC = () => {
                 alignItems: 'center',
               }}
             >
+              <TxButton />
               <div style={{ marginRight: '12px' }}>
                 <Button
                   text={'Get MAHA'}
@@ -86,7 +87,6 @@ const TopBar: React.FC = () => {
                   tracking_id={'get_MAHA'}
                 />
               </div>
-              <TxButton />
               <AccountButton showWarning={showWarning} />
             </div>
           </HideonPhone>

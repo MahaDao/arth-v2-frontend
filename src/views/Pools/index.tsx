@@ -1,33 +1,37 @@
-import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import Container from '../../components/Container';
-import useCore from '../../hooks/useCore';
 import Grid from '@material-ui/core/Grid';
-import uniswapLogo from '../../assets/svg/uniswapLogo.svg';
-import shushiswap from '../../assets/svg/sushiswapLogo.svg';
-import Button from '../../components/Button';
+import React, { useEffect, useState } from 'react';
 
-import OpenableCard from './components/OpenableCard';
+import Button from '../../components/Button';
 import ImportPool from './components/ImportPool';
 import RemovePool from './components/RemovePool';
+import Container from '../../components/Container';
+import OpenableCard from './components/OpenableCard';
 import AddLiquidity from './components/AddLiquidity';
-import { WalletAutoConnect } from '../../components/WalletAutoConnect';
+
+import useCore from '../../hooks/useCore';
+
+import dfyn from '../../assets/img/dfyn.svg';
+import uniswapLogo from '../../assets/svg/uniswapLogo.svg';
+import shushiswap from '../../assets/svg/sushiswapLogo.svg';
 
 const Boardrooms = () => {
   useEffect(() => window.scrollTo(0, 0), []);
-  const core = useCore();
-  WalletAutoConnect();
-  const [action, setAction] = useState<'Details' | 'Import' | 'Add' | 'Remove'>('Remove');
-  const [selectedSwap, setSelectedSwap] = useState<'Uniswap' | 'Sushiswap'>('Uniswap');
-  const [noLiquidity, setNoLiquidity] = useState<boolean>(false);
+
   const [deposit, setDeposit] = useState<boolean>(false);
+  const [noLiquidity, setNoLiquidity] = useState<boolean>(false);
+  const [selectedSwap, setSelectedSwap] = useState<'Uniswap' | 'Sushiswap' | 'DFYN'>('Uniswap');
+  const [action, setAction] = useState<'Details' | 'Add' | 'Remove'>('Add');
+
+  const core = useCore();
+
   const liquidityPairs = [
     {
       liquidity: {
         id: 1,
         symbol1: 'ARTH',
-        symbol2: 'ETH',
-        pairName: 'ARTH-ETH',
+        symbol2: 'ARTHX',
+        pairName: 'ARTH-ARTHX',
       },
       pool: {
         total: '1500.00',
@@ -51,12 +55,13 @@ const Boardrooms = () => {
       },
     },
   ];
+
   const [selectedPair, setSelectedPair] = useState({
     liquidity: {
       id: 1,
       symbol1: 'ARTH',
-      symbol2: 'ETH',
-      pairName: 'ARTH-ETH',
+      symbol2: 'ARTHX',
+      pairName: 'ARTH-ARTHX',
     },
     pool: {
       total: '1500.00',
@@ -66,7 +71,6 @@ const Boardrooms = () => {
     },
   });
 
-  // const isLaunched = Date.now() >= config.boardroomLaunchesAt.getTime();
   if (!core) return <div />;
 
   const NoLiquidityFound = () => {
@@ -82,9 +86,9 @@ const Boardrooms = () => {
       <>
         <YourLiquidityHeader>
           <HeaderLabel>Your Liquidity</HeaderLabel>
-          <div style={{ flex: 0.5 }}>
+          {/* <div style={{ flex: 0.5 }}>
             <Button text={'Add Liquidity'} onClick={() => setAction('Add')} />
-          </div>
+          </div> */}
         </YourLiquidityHeader>
         {noLiquidity
           ? NoLiquidityFound()
@@ -103,14 +107,6 @@ const Boardrooms = () => {
               }}
             />
           ))}
-        <FeesSpan>Account Analytics and Accured Fees</FeesSpan>
-        <ImportIt
-          onClick={() => {
-            setAction('Import');
-          }}
-        >
-          Don't see a pool you joined? <span style={{ color: '#F7653B' }}>Import it.</span>
-        </ImportIt>
       </>
     );
   };
@@ -125,7 +121,8 @@ const Boardrooms = () => {
             Lorem ipsum dolor sit amet, consectetur adipiscing elit.
           </PageSubHeading>
         </div>
-        <Grid container>
+        {/* NOTE: do not remove this, required for later. */}
+        {/* <Grid container>
           <Grid item lg={3}></Grid>
           <Grid item lg={6} md={12} sm={12} xs={12}>
             <RadioSelectionConatiner>
@@ -162,7 +159,7 @@ const Boardrooms = () => {
             </RadioSelectionConatiner>
           </Grid>
           <Grid item lg={3}></Grid>
-        </Grid>
+        </Grid> */}
         <Grid container>
           <Grid item lg={3}></Grid>
           <Grid item lg={6} md={12} sm={12} xs={12}>
@@ -182,13 +179,14 @@ const Boardrooms = () => {
                 }}
               />
             )}
-            {action === 'Import' && (
+            {/* NOTE: do not remove this, required for later. */}
+            {/* {action === 'Import' && (
               <ImportPool
                 onBack={() => {
                   setAction('Details');
                 }}
               />
-            )}
+            )} */}
           </Grid>
           <Grid item lg={3}></Grid>
         </Grid>
@@ -201,7 +199,6 @@ const GradientDiv = styled.div`
   background: linear-gradient(180deg, #2a2827 0%, rgba(42, 40, 39, 0) 100%);
   height: 270px;
   position: absolute;
-  // border: 1px solid;
   width: 100%;
   z-index: -5;
 `;
@@ -238,6 +235,7 @@ const RadioSelectionConatiner = styled.div`
   display: flex;
   flex-direction: row;
 `;
+
 const RadioSubConatiner = styled.div`
   display: flex;
   justify-content: center;
@@ -279,7 +277,6 @@ const YourLiquidityHeader = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  // background: lightgreen;
   padding: 0px 5px;
   align-items: center;
   margin: 25px 0px;
@@ -297,12 +294,10 @@ const HeaderLabel = styled.span`
 
 const RightTopCard = styled.div`
   background: rgba(255, 255, 255, 0.02);
-  // backdrop-filter: blur(21px);
   border-radius: 12px;
   padding: 32px;
   align-items: center;
   justify-content: center;
-  // text-align: center;
 `;
 
 const NlfSpan = styled.div`
