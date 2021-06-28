@@ -9,6 +9,7 @@ import { ValidateNumber } from '../../../components/CustomInputContainer/RegexVa
 import Button from '../../../components/Button';
 import useTokenBalance from '../../../hooks/state/useTokenBalance';
 import { getDisplayBalanceToken } from '../../../utils/formatBalance';
+import Loader from 'react-spinners/BeatLoader';
 
 interface IProps {
   onCancel: () => void;
@@ -44,7 +45,6 @@ export default (props: IProps) => {
         <CustomInputContainer
           ILabelValue={`How much ${symbol} would you like to supply?`}
           IBalanceValue={getDisplayBalanceToken(balance, token)}
-          isBalanceLoading={isBalanceLoading}
           showBalance={false}
           ILabelInfoValue={''}
           DefaultValue={String(val)}
@@ -66,7 +66,13 @@ export default (props: IProps) => {
         <OneLine>
           <div style={{ flex: 1 }}></div>
           <OneLine>
-            <BeforeChip>Balance: {'0'}</BeforeChip>
+            <BeforeChip>
+              {'Balance: '}
+              {isBalanceLoading
+                ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
+                : `${Number(balance).toLocaleString()}`
+              }
+            </BeforeChip>
             <TagChips>{symbol}</TagChips>
           </OneLine>
         </OneLine>
