@@ -124,7 +124,7 @@ const CustomInputContainer: React.FC<props> = (props) => {
     if (!checkForAfterDecimalDigits(val)) {
       const temp: ICStatesInterface = {
         IWarningState: 'warning',
-        IMsg: 'Only 7 digits before decimal and 6 digits after decimal is allowed.',
+        IMsg: 'Only 18 digits before decimal and 6 digits after decimal is allowed.',
       };
       setICWarningStates(temp);
       DigitsStatus = false
@@ -157,9 +157,9 @@ const CustomInputContainer: React.FC<props> = (props) => {
             {ILabelInfoValue !== '' && Redirection()}
           </ILabelLeft>
           <ILabelRight>
-            { isBalanceLoading
-                ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
-                : showBalance && <ILabelBalance>{`Balance  ${Number(IBalanceValue).toLocaleString()}`}</ILabelBalance>
+            {isBalanceLoading
+              ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
+              : showBalance && <ILabelBalance>{`Balance  ${Number(IBalanceValue).toLocaleString()}`}</ILabelBalance>
             }
           </ILabelRight>
         </ILabelContainer>

@@ -1,6 +1,6 @@
 export const NumberInputRegex = /^\d+(\.\d*)?$/;
 export const mediatoryRegex = /^[0]+\d+(\.\d+)?$/;
-export const RestrictDecimalsDigitsInputRegex = /^[0-9]{0,7}(\.[0-9]{0,6})?$/;
+export const RestrictDecimalsDigitsInputRegex = /^[0-9]{0,18}(\.[0-9]{0,6})?$/;
 export const RestrictDecimalsDigitsInputRegexSlippage = /^[0-9]{0,3}(\.[0-9]{0,3})?$/;
 
 export const ValidateNumber = (val: string) => {

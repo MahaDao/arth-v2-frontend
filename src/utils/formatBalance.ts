@@ -21,7 +21,11 @@ export const getDisplayBalanceToken = (
 };
 
 export function getBalance(balance: BigNumber, decimals = 18): string {
-  return formatUnits(balance, decimals);
+  try {
+    return formatUnits(balance, decimals)
+  } catch (err) {
+    return '0'
+  };
 }
 
 export const truncateMiddle = function (
