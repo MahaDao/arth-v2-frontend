@@ -70,7 +70,7 @@ export default (props: IProps) => {
               {'Balance: '}
               {isBalanceLoading
                 ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
-                : `${Number(balance).toLocaleString()}`
+                : `${Number(getDisplayBalanceToken(balance, token)).toLocaleString()}`
               }
             </BeforeChip>
             <TagChips>{symbol}</TagChips>
