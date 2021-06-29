@@ -1,9 +1,10 @@
+import { BigNumber } from 'ethers';
 import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
-import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { IconButton } from '@material-ui/core';
 import Loader from 'react-spinners/BeatLoader';
+import React, { useState, useMemo } from 'react';
 
 import TokenSymbol from '../../TokenSymbol';
 import HtmlTooltip from '../../HtmlTooltip';
@@ -12,6 +13,8 @@ import useCore from '../../../hooks/useCore';
 import { truncateMiddle } from '../../../utils/formatBalance';
 import { getDisplayBalance } from '../../../utils/formatBalance';
 import useTokenBalanceOf from '../../../hooks/state/useTokenBalanceOf';
+import useMAHAOraclePrice from '../../../hooks/state/controller/useMAHAPrice';
+import useARTHXOraclePrice from '../../../hooks/state/controller/useARTHXPrice';
 
 import copy from '../../../assets/svg/copy.svg';
 import metamask from '../../../assets/svg/metamask.svg';
@@ -29,9 +32,24 @@ const AccountModal: React.FC<props> = (props) => {
 
   const core = useCore();
   const { account, reset } = useWallet();
+
+  const { isLoading: isMAHAPriceLoading, value: mahaPrice } = useMAHAOraclePrice();
+  const { isLoading: isARTHXPriceLoading, value: arthxPrice } = useARTHXOraclePrice();
   const { isLoading: isARTHBalanceLoading, value: arthBalance } = useTokenBalanceOf(core.ARTH, account);
   const { isLoading: isMAHABalanceLoading, value: mahaBalance } = useTokenBalanceOf(core.MAHA, account);
   const { isLoading: isARTHXBalanceLoading, value: arthxBalance } = useTokenBalanceOf(core.ARTHX, account);
+
+  const [isMahaValueLoading, mahaValue] = useMemo(() => {
+    if (isMAHABalanceLoading || isMAHAPriceLoading) return [true, BigNumber.from(0)];
+
+    return [false, mahaPrice.mul(mahaBalance).div(1e6)];
+  }, [isMAHABalanceLoading, isMAHAPriceLoading, mahaBalance, mahaPrice]);
+
+  const [isARTHXValueLoading, arthxValue] = useMemo(() => {
+    if (isARTHXPriceLoading || isARTHXBalanceLoading) return [true, BigNumber.from(0)];
+
+    return [false, arthxPrice.mul(arthxBalance).div(1e6)];
+  }, [isARTHXPriceLoading, isARTHXBalanceLoading, arthxPrice, arthxBalance]);
 
   return (
     <MainDiv>
@@ -111,7 +129,13 @@ const AccountModal: React.FC<props> = (props) => {
                   : Number(getDisplayBalance(mahaBalance)).toLocaleString()
               } MAHA
             </RowName>
-            {/* <DollarValue>${props?.walletData?.mahaDollars}</DollarValue> */}
+            <DollarValue>
+              {
+                isMahaValueLoading
+                  ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
+                  : Number(getDisplayBalance(mahaValue)).toLocaleString()
+              } $GMU
+            </DollarValue>
           </StyledRows>
 
           <StyledRows>
@@ -143,7 +167,13 @@ const AccountModal: React.FC<props> = (props) => {
                 } ARTHX
               </span>
             </RowName>
-            {/* <DollarValue>${props?.walletData?.arthxDollars}</DollarValue> */}
+            <DollarValue>
+              {
+                isARTHXValueLoading
+                  ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
+                  : Number(getDisplayBalance(arthxValue)).toLocaleString()
+              } $GMU
+            </DollarValue>
           </StyledRows>
 
           <StyledRows style={{ margin: '20px 0' }}>
@@ -223,15 +253,6 @@ const WalletDiv = styled.div`
 const StyledLink = styled.div`
   padding: 24px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  //&:hover {
-  //  border-radius: 12px;
-  //  color: rgba(255, 255, 255, 0.64);
-  //  background: rgba(255, 255, 255, 0.04);
-  //  backdrop-filter: blur(70px);
-  //}
-  //&.active {
-  //  color: rgba(255, 255, 255, 0.88);
-  //}
   display: flex;
   align-items: center;
   justify-content: space-between;
