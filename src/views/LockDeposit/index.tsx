@@ -20,12 +20,14 @@ const LockDeposit = () => {
         </Grid>
         <Grid item lg={6} md={6} sm={12} xs={12}>
           <BoardroomSection
+            price={1}
             title={"Convert ARTH into Debt"}
             text1={"This debt pool allows users to convert their ARTH token into debt to the protocol. The protocol promises to pay all holders of this pool their ARTH (polygon) tokens at a price of 1$."}
             text2={"Once your deposit your tokens; You will not be able to withdraw them from this pool. You will earn rewards in USDC until the debt is paid off."}
             symbol="ARTH"
           />
           <BoardroomSection
+            price={0.012}
             title={"Convert ARTHX into Debt"}
             text1={"This debt pool allows users to convert their ARTHX token into debt to the protocol. The protocol promises to pay all holders of this pool their ARTHX (polygon) tokens at a price of 0.012$."}
             text2={"Once your deposit your tokens; You will not be able to withdraw them from this pool. You will earn rewards in USDC until the debt is paid off."}

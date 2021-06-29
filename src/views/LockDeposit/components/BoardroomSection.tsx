@@ -9,10 +9,13 @@ import useCore from '../../../hooks/useCore';
 import useApprove, { ApprovalState } from '../../../hooks/callbacks/useApprove';
 import useBoardroomBalance from '../../../hooks/state/debtBoardroom/useBoardroomBalance';
 import { getDisplayBalanceToken } from '../../../utils/formatBalance';
+import useBoardroomSupply from '../../../hooks/state/debtBoardroom/useBoardroomSupply';
+import prettyNumber from '../../../components/PrettyNumber';
 
 interface IProps {
   title: string
   text1: string
+  price: number
   text2: string
   symbol: 'ARTH' | 'ARTHX'
 }
@@ -27,6 +30,7 @@ const BoardroomSection = (props: IProps) => {
   const [approveStatus, approve] = useApprove(currentToken, pool.address);
 
   const balance = useBoardroomBalance(props.symbol)
+  const supply = useBoardroomSupply(props.symbol)
 
   const isApproved = approveStatus === ApprovalState.APPROVED;
   const isApproving = approveStatus === ApprovalState.PENDING;
@@ -50,7 +54,13 @@ const BoardroomSection = (props: IProps) => {
               </TextWithIcon>
               <br />
               <TextWithIcon>
-                You have deposited {getDisplayBalanceToken(balance.value, currentToken)} {props.symbol}
+                You have deposited {prettyNumber(getDisplayBalanceToken(balance.value, currentToken))} {props.symbol} worth a
+                debt of {prettyNumber(getDisplayBalanceToken(balance.value.mul(Math.floor(props.price * 100000)).div(100000), currentToken))}$ to you from the
+                protocol.
+              </TextWithIcon>
+              <br />
+              <TextWithIcon>
+                Over {prettyNumber(getDisplayBalanceToken(supply.value, currentToken))} {props.symbol} have been deposited in this pool
               </TextWithIcon>
             </Grid>
             <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
