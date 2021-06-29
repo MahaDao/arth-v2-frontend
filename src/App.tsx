@@ -75,8 +75,13 @@ const App: React.FC = () => {
         <TopBar />
         <Disclaimer />
         <Switch>
-          <Route path="/" exact>
+          {/* <Route path="/" exact>
             <Home />
+          </Route> */}
+          <Route path="/genesis" exact>
+            <Page availableNetworks={[137, 1337]}>
+              <Genesis />
+            </Page>
           </Route>
           <Route path="/stats">
             <Page availableNetworks={[137, 1337]}>
@@ -128,7 +133,7 @@ const App: React.FC = () => {
               <LockDeposit />
             </Page>
           </Route>
-          <Redirect to="/"></Redirect>
+          <Redirect to="/genesis"></Redirect>
         </Switch>
       </Router>
     </Providers>

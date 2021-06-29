@@ -158,5 +158,13 @@
   "WETH_WRAPPER": {
     "address": "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
     "abi": "IWETH"
+  },
+  "ARTHDebtBoardroom": {
+    "address": "0xfcC7088A1667efFf9c4D2D333a16bdC60E346D88",
+    "abi": "Boardroom"
+  },
+  "ARTHXDebtBoardroom": {
+    "address": "0x0988b61F76298FE2670F98E653E72bc459dF7fa2",
+    "abi": "Boardroom"
   }
 }

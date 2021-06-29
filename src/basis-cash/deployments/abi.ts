@@ -9,6 +9,7 @@ export const Faucet = require('./abi/Faucet.json');
 export const Genesis = require('./abi/Genesis.json');
 export const GMUOracle = require('./abi/GMUOracle.json');
 export const IERC20 = require('./abi/IERC20.json');
+export const Boardroom = require('./abi/Boardroom.json');
 export const IWETH = require('./abi/IWETH.json');
 export const LotteryRaffle = require('./abi/LotteryRaffle.json');
 export const MahaToken = require('./abi/MahaToken.json');
@@ -31,6 +32,7 @@ const ret: IABIS = {
   ArthPoolLibrary,
   ArthPoolRouter,
   ARTHShares,
+  Boardroom,
   ARTHStablecoin,
   BasicStaking,
   Faucet,
@@ -47,7 +49,7 @@ const ret: IABIS = {
   UniswapV2Router02,
   UniversalGMUOracle,
   BasicStakingSpecificReward,
-  Router
+  Router,
 };
 
 export default ret;
