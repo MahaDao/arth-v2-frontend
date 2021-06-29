@@ -147,8 +147,8 @@ const AddLiquidity = (props: props) => {
     setFirstCoinValue(`${value}`);
   }
 
-  return (
-    <div>
+  const ConfirmModal = () => {
+    return (
       <CustomModal
         closeButton
         handleClose={() => setConfirmModal(false)}
@@ -201,6 +201,12 @@ const AddLiquidity = (props: props) => {
           </Grid>
         </>
       </CustomModal>
+    )
+  }
+
+  return (
+    <div>
+      {ConfirmModal()}
       <CustomCard className={'custom-mahadao-container'}>
         <CustomCardHeader className={'custom-mahadao-container-header'}>
           <EachElementBack> <ArrowBackIos onClick={() => onBack()} fontSize="default" color={'inherit'} htmlColor={'#ffffff'} /> </EachElementBack>
