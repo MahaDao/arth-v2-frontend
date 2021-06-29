@@ -106,7 +106,7 @@ const Boardrooms = (props: WithSnackbarProps) => {
               </CustomInfoCardDetails>
               <CustomInfoCardButton to={'/pools'}>
                 <img alt='Logo' src={dfyn} style={{ marginRight: '10px' }} height={30} />
-                <span>Add liquidity on Uniswap</span>
+                <span>Add liquidity on DFYN</span>
                 <CallMadeIcon style={{ fontSize: 15, marginLeft: '10px' }} />
               </CustomInfoCardButton>
             </CustomInfoCard>
