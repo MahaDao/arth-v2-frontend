@@ -5,7 +5,9 @@ import ERC20 from '../basis-cash/ERC20';
 
 export const getDisplayBalance = (balance: BigNumber, decimals = 18, fractionDigits = 3) => {
   const formattedBalance: string = getBalance(balance, decimals);
-  return formattedBalance
+  const decimalsPointIndex = formattedBalance.indexOf('.');
+  if (decimalsPointIndex === -1) return formattedBalance;
+  return formattedBalance.slice(0, decimalsPointIndex) + '.' + formattedBalance.slice(decimalsPointIndex + 1, decimalsPointIndex + 1 + fractionDigits);
 };
 
 export const getFullDisplayBalance = (balance: BigNumber, decimals = 18) => {

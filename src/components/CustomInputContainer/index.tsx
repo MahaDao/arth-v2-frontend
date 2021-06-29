@@ -38,6 +38,7 @@ type props = {
   DisableMsg?: string;
   errorCallback?: (flag: boolean) => void;
   isBalanceLoading?: boolean;
+  tokenDecimals?:number;
 };
 
 interface ICStatesInterface {
@@ -67,6 +68,7 @@ const CustomInputContainer: React.FC<props> = (props) => {
     IWarningstate = 'default',
     warningMsg = '',
     isBalanceLoading = false,
+    tokenDecimals = 6,
   } = props;
 
   const [ICStates, setICStates] = useState<ICStatesInterface>({ IState: Istate, IMsg: msg });
@@ -121,10 +123,10 @@ const CustomInputContainer: React.FC<props> = (props) => {
     }
 
     let DigitsStatus = true
-    if (!checkForAfterDecimalDigits(val)) {
+    if (!checkForAfterDecimalDigits(val, tokenDecimals)) {
       const temp: ICStatesInterface = {
         IWarningState: 'warning',
-        IMsg: 'Only 18 digits before decimal and 6 digits after decimal is allowed.',
+        IMsg: `Only 18 digits before decimal and ${tokenDecimals} digits after decimal is allowed.`,
       };
       setICWarningStates(temp);
       DigitsStatus = false
@@ -145,6 +147,18 @@ const CustomInputContainer: React.FC<props> = (props) => {
       returnObj['opacity'] = "0.32";
     }
     return returnObj;
+  }
+
+  const onValueChange = (value: string) => {
+    if (value === '') {
+    } else {
+      if (!ValidateNumber(value)) return
+    }
+
+    if (Number(value) && Number(value) <= 0) return;
+    checkForErrorAndWarning(value).then((data) => {
+      if (data) props?.setText(value.length > 1 ? correctString(value) : value);
+    })
   }
 
   return (
@@ -177,18 +191,7 @@ const CustomInputContainer: React.FC<props> = (props) => {
             }}
             disabled={disabled}
             type={'string'}
-            onChange={(event) => {
-              const value = event.target.value;
-              if (value === '') {
-              } else {
-                if (!ValidateNumber(value)) return
-              }
-
-              if (Number(value) && Number(value) <= 0) return;
-              checkForErrorAndWarning(value).then((data) => {
-                if (data) props?.setText(value.length > 1 ? correctString(value) : value);
-              })
-            }}
+            onChange={(event) => onValueChange(event.target.value)}
           />
           {tagText !== '' && (
             <MaxTagConatiner
@@ -244,7 +247,10 @@ const CustomInputContainer: React.FC<props> = (props) => {
             {modalOpen && hasDropDown && ondropDownValueChange && (
               <CustomDropDown
                 dropDownValues={dropDownValues}
-                ondropDownValueChange={ondropDownValueChange}
+                ondropDownValueChange={(data) => {
+                  onValueChange('')
+                  ondropDownValueChange(data)
+                }}
               />
             )}
           </IFieldRightContainer>

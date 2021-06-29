@@ -401,6 +401,7 @@ const RedeemTabContent = (props: WithSnackbarProps & IProps) => {
                     ? 'Currently Redeem Collateral ratio is not 100%'
                     : ''
                 }
+                tokenDecimals={18}
               />
               <PlusMinusArrow>
                 <img src={plusSign} alt="plus" />
@@ -424,6 +425,7 @@ const RedeemTabContent = (props: WithSnackbarProps & IProps) => {
                     ? 'Currently Redeem Collateral ratio is not 100%'
                     : ''
                 }
+                tokenDecimals={18}
               />
               <PlusMinusArrow>
                 <img src={arrowDown} alt="arrow" />
@@ -439,9 +441,9 @@ const RedeemTabContent = (props: WithSnackbarProps & IProps) => {
                 dropDownValues={collateralTypes}
                 ondropDownValueChange={(data) => {
                   setSelectedReceiveRedeemCoin(data);
-                  setTimeout(() => {
-                    onCollateralValueChange(collateralValue.toString());
-                  }, 1000);
+                  // setTimeout(() => {
+                  //   onCollateralValueChange(collateralValue.toString());
+                  // }, 1000);
                 }}
                 disabled={redeemCR.lte(1e6) || isCollateralBalanceLoading || isCollateralPriceLoading}
                 SymbolText={selectedCollateral}
@@ -450,6 +452,7 @@ const RedeemTabContent = (props: WithSnackbarProps & IProps) => {
                     ? 'Currently Redeem Collateral ratio is not 100%'
                     : ''
                 }
+                tokenDecimals={tokenDecimals}
               />
               <div>
                 <OneLineInputwomargin>

@@ -7,7 +7,9 @@ export const ValidateNumber = (val: string) => {
   return NumberInputRegex.test(val)
 }
 
-export const checkForAfterDecimalDigits = (val: string) => {
+export const checkForAfterDecimalDigits = (val: string, decimals = 6) => {
+  const RestrictDecimalsDigitsInputRegex = new RegExp('^[0-9]{0,18}(\.[0-9]{0,'+ decimals +'})?$');
+  console.log('/^[0-9]{0,18}(\.[0-9]{0,${decimals})?$/', /^[0-9]{0,18}(\.[0-9]{0,${decimals})?$/)
   return RestrictDecimalsDigitsInputRegex.test(val)
 }
 

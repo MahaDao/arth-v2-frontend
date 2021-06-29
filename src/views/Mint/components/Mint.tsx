@@ -239,9 +239,9 @@ const MintTabContent = (props: WithSnackbarProps & IProps) => {
                 dropDownValues={collateralTypes}
                 ondropDownValueChange={(data: string) => {
                   setSelectedCollateralCoin(data);
-                  setTimeout(() => {
-                    onCollateralValueChange(collateralValue.toString());
-                  }, 1000);
+                  // setTimeout(() => {
+                  //   onCollateralValueChange(collateralValue.toString());
+                  // }, 1000);
                 }}
                 DisableMsg={
                   mintCR.lte(1e6)
@@ -255,6 +255,7 @@ const MintTabContent = (props: WithSnackbarProps & IProps) => {
                 }}
                 tagText={'MAX'}
                 errorCallback={(flag: boolean) => { setIsInputFieldError(flag) }}
+                tokenDecimals={tokenDecimals}
               />
               <PlusMinusArrow>
                 <img src={arrowDown} alt="arrow" />
@@ -277,6 +278,7 @@ const MintTabContent = (props: WithSnackbarProps & IProps) => {
                     ? 'Currently Mint Collateral ratio is not 100%'
                     : ''
                 }
+                tokenDecimals={18}
               />
               <PlusMinusArrow>
                 <img src={plusSign} alt="plus" />
@@ -299,6 +301,7 @@ const MintTabContent = (props: WithSnackbarProps & IProps) => {
                     ? 'Currently Mint Collateral ratio is not 100%'
                     : ''
                 }
+                tokenDecimals={18}
               />
               <div>
                 <TcContainer>
