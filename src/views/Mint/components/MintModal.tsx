@@ -127,6 +127,7 @@ interface IProps {
   mintCR: BigNumber;
   tradingFee: BigNumber;
   arthxValue: string;
+  onSuccess: () => void;
 }
 
 const MintModal = (props: WithSnackbarProps & IProps) => {
@@ -139,7 +140,8 @@ const MintModal = (props: WithSnackbarProps & IProps) => {
     selectedCollateralCoin,
     mintCR,
     tradingFee,
-    arthxValue
+    arthxValue,
+    onSuccess,
   } = props;
 
   const [calcDuration, setDuration] = useState<number>(DEFAULT_CALC);
@@ -171,7 +173,7 @@ const MintModal = (props: WithSnackbarProps & IProps) => {
 
   const handleMint = () => {
     mintARTH(() => {
-      onClose();
+      onSuccess();
       setSuccessModal(true);
     });
   };

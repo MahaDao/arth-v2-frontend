@@ -189,7 +189,6 @@ const OneLineInput = styled.div`
   flex-direction: row;
   align-items: baseline;
   justify-content: flex-start;
-  margin: 5px 0 10px 0;
 `;
 
 const TextForInfoTitle = styled.div`

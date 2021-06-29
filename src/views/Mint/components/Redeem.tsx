@@ -579,7 +579,10 @@ const RedeemTabContent = (props: WithSnackbarProps & IProps) => {
                       text={'Redeem'}
                       size={'lg'}
                       variant={'default'}
-                        onClick={() => collectRedeemption(() => setSuccessCollectModal(true))}
+                        onClick={() => collectRedeemption(() => {
+                          onARTHXValueChange('');
+                          setSuccessCollectModal(true)
+                        })}
                     />
                   </>
                 )}

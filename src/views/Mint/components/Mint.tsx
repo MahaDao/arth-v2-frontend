@@ -209,6 +209,10 @@ const MintTabContent = (props: WithSnackbarProps & IProps) => {
         openModal={openModal}
         tradingFee={tradingFee}
         onClose={() => setOpenModal(0)}
+        onSuccess={() => {
+          onCollateralValueChange('')
+          setOpenModal(0)
+        }}
       />
       <Grid container style={{ marginTop: '24px' }} spacing={2}>
         <Grid item lg={1} />
