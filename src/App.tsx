@@ -113,7 +113,7 @@ const App: React.FC = () => {
               <Faucet />
             </Page>
           </Route> */}
-          {/* <Route path="/rebase">
+          <Route path="/rebase">
             <Page>
               <Rebase />
             </Page>
@@ -122,7 +122,7 @@ const App: React.FC = () => {
             <Page>
               <Lottery />
             </Page>
-          </Route> */}
+          </Route>
           <Route path="/lock-deposit">
             <Page availableNetworks={[137, 1337]}>
               <LockDeposit />
