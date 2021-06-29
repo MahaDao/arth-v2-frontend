@@ -1,66 +1,78 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useWallet } from 'use-wallet';
 import styled from 'styled-components';
 import Grid from '@material-ui/core/Grid';
 import { Divider } from '@material-ui/core';
-import { useWallet } from 'use-wallet';
+import React, { useEffect, useMemo, useState } from 'react';
 
-import Button from '../../../components/Button';
 import arrowDown from '../../../assets/svg/arrowDown.svg';
+
 import TransparentInfoDiv from './InfoDiv';
-import CustomInputContainer from '../../../components/CustomInputContainer';
+import Button from '../../../components/Button';
 import CustomModal from '../../../components/CustomModal';
+import CustomInputContainer from '../../../components/CustomInputContainer';
+import { ValidateNumber } from '../../../components/CustomInputContainer/RegexValidation';
+
 import useCore from '../../../hooks/useCore';
+import useDFYNPrice from '../../../hooks/useDFYNPrice';
 import useTokenBalance from '../../../hooks/state/useTokenBalance';
 import { getDisplayBalanceToken } from '../../../utils/formatBalance';
 
 const BuyContent = () => {
   useEffect(() => window.scrollTo(0, 0), []);
 
-  const core = useCore();
-  const { account, connect } = useWallet();
   const [isInputFieldError, setIsInputFieldError] = useState<boolean>(false);
-
   const [buyAmount, setBuyAmount] = useState<string>('0');
   const [receiveAmount, setReceiveAmount] = useState<string>('0');
-
   const [openModal, setOpenModal] = useState<boolean>(false);
 
+  const core = useCore();
+  const { account, connect } = useWallet();
   const tradetoken = core.tokens['ARTH'];
   const receivetoken = core.tokens['ARTHX'];
 
-  //Balance
   const { isLoading: isBuyAmountBalanceLoading, value: buyAmountBalance } = useTokenBalance(
-    core.tokens['ARTH'],
+    core.tokens['ARTH']
   );
-
   const { isLoading: isReceiveAmountBalanceLoading, value: receiveAmountBalance } = useTokenBalance(
-    core.tokens['ARTHX'],
+    core.tokens['ARTHX']
+  );
+  const price = useDFYNPrice(
+    core.tokens['ARTH'],
+    core.tokens['ARTHX']
   );
 
-  const ratio = 100;
-
-  const onBuyAmountChange = (val: string) => {
-    if (val === ''){
+  const onBuyAmountChange = async (val: string) => {
+    if (val === '' || price === '-') {
+      setBuyAmount('0');
       setReceiveAmount('0');
+      return;
     }
-    setBuyAmount(val);
-    const valInNumber = Number(val);
-    if (valInNumber){
-      const temp = String(valInNumber * ratio);
-      setReceiveAmount(temp);
-    }
+
+    const check: boolean = ValidateNumber(val);
+    setBuyAmount(check ? val : String(Number(val)));
+    if (!check) return;
+    const valueInNumber: number = Number(val);
+    if (!valueInNumber) return;
+
+    const value = Number(val) / Number(price);
+    setReceiveAmount(`${value}`);
   }
 
-  const onReceiveAmountChange = (val: string) => {
-    if (val === ''){
+  const onReceiveAmountChange = async (val: string) => {
+    if (val === '' || price === '-') {
+      setReceiveAmount('0');
       setBuyAmount('0');
+      return;
     }
-    setReceiveAmount(val);
-    const valInNumber = Number(val);
-    if (valInNumber){
-      const temp = String(valInNumber * (1 / ratio));
-      setBuyAmount(temp);
-    }
+
+    const check: boolean = ValidateNumber(val);
+    setReceiveAmount(check ? val : String(Number(val)));
+    if (!check) return;
+    const valueInNumber: number = Number(val);
+    if (!valueInNumber) return;
+
+    const value = Number(val) * Number(price);
+    setBuyAmount(`${value}`);
   }
 
   const BuyConfirmModal = () => {
@@ -79,21 +91,17 @@ const BuyContent = () => {
             rightLabelUnit={'ARTH'}
             rightLabelValue={buyAmount.toString()}
           />
-
           <Divider
             style={{
               background: 'rgba(255, 255, 255, 0.08)',
               margin: '15px 0px',
             }}
           />
-
           <TransparentInfoDiv
             labelData={`You will receive`}
-            // labelToolTipData={'testing'}
             rightLabelUnit={'ARTHX'}
             rightLabelValue={receiveAmount.toString()}
           />
-
           <Grid container spacing={2} style={{ marginTop: '32px' }}>
             <Grid item lg={6} md={6} sm={12} xs={12}>
               <Button
@@ -109,6 +117,10 @@ const BuyContent = () => {
               <Button
                 text={'Confirm Buy'}
                 size={'lg'}
+                disabled={isInputFieldError ||
+                  !Number(buyAmount) ||
+                  !Number(receiveAmount)
+                }
                 onClick={() => {
                   setOpenModal(false);
                 }}
@@ -142,7 +154,7 @@ const BuyContent = () => {
           }}
         />
         <PlusMinusArrow>
-          <img src={arrowDown} />
+          <img alt='Arrow' src={arrowDown} />
         </PlusMinusArrow>
         <CustomInputContainer
           ILabelValue={'You receive'}
@@ -164,23 +176,23 @@ const BuyContent = () => {
         />
         <div>
           <TcContainer>
-            <OneLineInputwomargin>
+            {/* <OneLineInputwomargin>
               <div style={{ flex: 1 }}>
                 <TextWithIcon>Liquidity on Uniswap</TextWithIcon>
               </div>
               <OneLineInputwomargin>
                 <BeforeChip>$ 9,760,068</BeforeChip>
               </OneLineInputwomargin>
-            </OneLineInputwomargin>
+            </OneLineInputwomargin> */}
             <OneLineInputwomargin style={{ marginTop: '10px' }}>
               <div style={{ flex: 1 }}>
                 <TextWithIcon>Price</TextWithIcon>
               </div>
               <OneLineInputwomargin>
-                <BeforeChip>0.05</BeforeChip>
+                <BeforeChip>{price}</BeforeChip>
                 <TagChips style={{ marginRight: '4px' }}>ARTH</TagChips>
                 <BeforeChip>per</BeforeChip>
-                <TagChips>ETH</TagChips>
+                <TagChips>ARTHX</TagChips>
               </OneLineInputwomargin>
             </OneLineInputwomargin>
           </TcContainer>
@@ -199,7 +211,10 @@ const BuyContent = () => {
               text={'Buy'}
               size={'lg'}
               variant={'default'}
-              disabled={false}
+              disabled={isInputFieldError ||
+                !Number(buyAmount) ||
+                !Number(receiveAmount)
+              }
               onClick={() => setOpenModal(true)}
             />)
           }

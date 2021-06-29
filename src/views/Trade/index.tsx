@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import React, { useEffect, useState } from 'react';
 import CallMadeIcon from '@material-ui/icons/CallMade';
@@ -9,7 +10,7 @@ import dfyn from '../../assets/img/DFYN.png';
 import BuyContent from './components/BuyContent';
 import SellContent from './components/SellContent';
 import Container from '../../components/Container';
-import { Link } from 'react-router-dom';
+
 
 const Boardrooms = (props: WithSnackbarProps) => {
   useEffect(() => window.scrollTo(0, 0), []);
@@ -201,6 +202,7 @@ const RadioSelectionConatiner = styled.div`
   display: flex;
   flex-direction: row;
 `;
+
 const RadioSubConatiner = styled.div`
   display: flex;
   justify-content: center;
@@ -243,6 +245,7 @@ const LeftTopCardHeader = styled.div`
   display: flex;
   flex-direction: row;
 `;
+
 const TabContainer = styled.div`
   display: flex;
   justify-content: center;

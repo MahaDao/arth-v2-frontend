@@ -1,69 +1,79 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useWallet } from 'use-wallet';
 import styled from 'styled-components';
 import Grid from '@material-ui/core/Grid';
 import { Divider } from '@material-ui/core';
-import { useWallet } from 'use-wallet';
+import React, { useEffect, useMemo, useState } from 'react';
 
-import Button from '../../../components/Button';
 import arrowDown from '../../../assets/svg/arrowDown.svg';
+
 import TransparentInfoDiv from './InfoDiv';
-import CustomInputContainer from '../../../components/CustomInputContainer';
+import Button from '../../../components/Button';
+
 import CustomModal from '../../../components/CustomModal';
-import CustomToolTip from '../../../components/CustomTooltip';
+import CustomInputContainer from '../../../components/CustomInputContainer';
+import { ValidateNumber } from '../../../components/CustomInputContainer/RegexValidation';
+
 import useCore from '../../../hooks/useCore';
+import useDFYNPrice from '../../../hooks/useDFYNPrice';
 import useTokenBalance from '../../../hooks/state/useTokenBalance';
 import { getDisplayBalanceToken } from '../../../utils/formatBalance';
 
 const SellContent = () => {
   useEffect(() => window.scrollTo(0, 0), []);
 
-  const core = useCore();
-  const { account, connect } = useWallet();
-  const [isInputFieldError, setIsInputFieldError] = useState<boolean>(false);
-
   const [sellAmount, setSellAmount] = useState<string>('0');
   const [receiveAmount, setReceiveAmount] = useState<string>('0');
-
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [isInputFieldError, setIsInputFieldError] = useState<boolean>(false);
 
+  const core = useCore();
+  const { account, connect } = useWallet();
   const sellToken = core.tokens['ARTHX'];
   const receiveToken = core.tokens['ARTH'];
 
-  //Balance
   const { isLoading: isSellAmountBalanceLoading, value: sellAmountBalance } = useTokenBalance(
-    core.tokens['ARTHX'],
+    core.tokens['ARTHX']
   );
-
   const { isLoading: isReceiveAmountBalanceLoading, value: receiveAmountBalance } = useTokenBalance(
-    core.tokens['ARTH'],
+    core.tokens['ARTH']
   );
-
-  const ratio = 100;
+  const price = useDFYNPrice(
+    core.tokens['ARTH'],
+    core.tokens['ARTHX']
+  );
 
   const onSellAmountChange = (val: string) => {
-    // Dumpy code
-    if (val === ''){
+    if (val === '' || price === '-') {
       setSellAmount('0');
+      setReceiveAmount('0');
+      return;
     }
-    setSellAmount(val);
-    const valInNumber = Number(val);
-    if (valInNumber){
-      const temp = String(valInNumber * ratio);
-      setSellAmount(temp);
-    }
+
+    const check: boolean = ValidateNumber(val);
+    setSellAmount(check ? val : String(Number(val)));
+    if (!check) return;
+    const valueInNumber: number = Number(val);
+    if (!valueInNumber) return;
+
+    const value = Number(val) * Number(price);
+    setReceiveAmount(`${value}`);
   }
 
   const onReceiveAmountChange = (val: string) => {
-    // Dumpy code
-    if (val === ''){
+    if (val === '' || price === '-') {
+      setReceiveAmount('0');
       setSellAmount('0');
+      return;
     }
-    setSellAmount(val);
-    const valInNumber = Number(val);
-    if (valInNumber){
-      const temp = String(valInNumber * (1 / ratio));
-      setSellAmount(temp);
-    }
+
+    const check: boolean = ValidateNumber(val);
+    setReceiveAmount(check ? val : String(Number(val)));
+    if (!check) return;
+    const valueInNumber: number = Number(val);
+    if (!valueInNumber) return;
+
+    const value = Number(val) / Number(price);
+    setSellAmount(`${value}`);
   }
 
   const sellConfirmModal = () => {
@@ -82,11 +92,6 @@ const SellContent = () => {
             rightLabelUnit={'ARTHX'}
             rightLabelValue={sellAmount.toString()}
           />
-          <TransparentInfoDiv
-            labelData={`Trading Fee`}
-            rightLabelUnit={'5.87'}
-            rightLabelValue={'ARTH'}
-          />
           <Divider
             style={{
               background: 'rgba(255, 255, 255, 0.08)',
@@ -96,9 +101,8 @@ const SellContent = () => {
           <TransparentInfoDiv
             labelData={`You will receive`}
             rightLabelUnit={'ARTH'}
-            rightLabelValue={sellAmount.toString()}
+            rightLabelValue={receiveAmount.toString()}
           />
-
           <Grid container spacing={2} style={{ marginTop: '32px' }}>
             <Grid item lg={6} md={6} sm={12} xs={12}>
               <Button
@@ -147,7 +151,7 @@ const SellContent = () => {
           }}
         />
         <PlusMinusArrow>
-          <img src={arrowDown} />
+          <img alt='Arrow' src={arrowDown} />
         </PlusMinusArrow>
         <CustomInputContainer
           ILabelValue={'Enter Amount'}
@@ -169,26 +173,26 @@ const SellContent = () => {
         />
         <div>
           <TcContainer>
-            <OneLineInputwomargin>
+            {/* <OneLineInputwomargin>
               <div style={{ flex: 1 }}>
                 <TextWithIcon>Liquidity on Uniswap</TextWithIcon>
               </div>
               <OneLineInputwomargin>
                 <BeforeChip>$ 9,760,068</BeforeChip>
               </OneLineInputwomargin>
-            </OneLineInputwomargin>
+            </OneLineInputwomargin> */}
             <OneLineInputwomargin style={{ marginTop: '10px' }}>
               <div style={{ flex: 1 }}>
                 <TextWithIcon>Price</TextWithIcon>
               </div>
               <OneLineInputwomargin>
-                <BeforeChip>0.05</BeforeChip>
+                <BeforeChip>{price}</BeforeChip>
                 <TagChips>ARTH</TagChips>
                 <BeforeChip>per</BeforeChip>
-                <TagChips>ETH</TagChips>
+                <TagChips>ARTHX</TagChips>
               </OneLineInputwomargin>
             </OneLineInputwomargin>
-            <OneLineInputwomargin style={{ marginTop: '10px' }}>
+            {/* <OneLineInputwomargin style={{ marginTop: '10px' }}>
               <div style={{ flex: 1 }}>
                 <TextWithIcon>
                   Trading fee
@@ -199,28 +203,32 @@ const SellContent = () => {
                 <BeforeChip>0.05</BeforeChip>
                 <TagChips>ARTH</TagChips>
               </OneLineInputwomargin>
-            </OneLineInputwomargin>
+            </OneLineInputwomargin> */}
           </TcContainer>
-          {!!!account ? (
-            <Button
-              text={'Connect Wallet'}
-              size={'lg'}
-              onClick={() =>
-                connect('injected').then(() => {
-                  localStorage.removeItem('disconnectWallet');
-                })
-              }
-            />
-          ) : (
-            <Button
-              text={'Sell'}
-              size={'lg'}
-              onClick={() => setOpenModal(true)}
-            />)
+          {
+            !!!account ? (
+              <Button
+                text={'Connect Wallet'}
+                size={'lg'}
+                onClick={() =>
+                  connect('injected').then(() => {
+                    localStorage.removeItem('disconnectWallet');
+                  })
+                }
+              />
+            ) : (
+              <Button
+                text={'Sell'}
+                size={'lg'}
+                onClick={() => setOpenModal(true)}
+              />
+            )
           }
         </div>
       </LeftTopCardContainer>
-      {sellConfirmModal()}
+      {
+        sellConfirmModal()
+      }
     </div>
   );
 };
@@ -236,7 +244,9 @@ const OneLineInputwomargin = styled.div`
   align-items: baseline;
   justify-content: flex-start;
 `;
+
 const LeftTopCardContainer = styled.div``;
+
 const PlusMinusArrow = styled.div`
   width: 100%;
   height: 32px;
