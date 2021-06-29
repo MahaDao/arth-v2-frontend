@@ -1,7 +1,10 @@
+import { BigNumber } from 'ethers';
 import { useWallet } from 'use-wallet';
 import styled from 'styled-components';
 import Grid from '@material-ui/core/Grid';
 import { Divider } from '@material-ui/core';
+import { parseUnits } from 'ethers/lib/utils';
+import Loader from 'react-spinners/BeatLoader';
 import React, { useEffect, useMemo, useState } from 'react';
 
 import arrowDown from '../../../assets/svg/arrowDown.svg';
@@ -15,6 +18,7 @@ import { ValidateNumber } from '../../../components/CustomInputContainer/RegexVa
 
 import useCore from '../../../hooks/useCore';
 import useDFYNPrice from '../../../hooks/useDFYNPrice';
+import useARTHXTaxFee from '../../../hooks/state/useARTHXTaxFee';
 import useTokenBalance from '../../../hooks/state/useTokenBalance';
 import { getDisplayBalanceToken } from '../../../utils/formatBalance';
 
@@ -41,6 +45,19 @@ const SellContent = () => {
     core.tokens['ARTH'],
     core.tokens['ARTHX']
   );
+  const { isLoading: isTaxPercentLoading, value: taxPercent } = useARTHXTaxFee();
+
+  const [isTradingFeeLoading, tradingFee] = useMemo(() => {
+    if (isTaxPercentLoading) return [true, BigNumber.from(0)];
+    if (taxPercent.lte(0)) return [false, BigNumber.from(0)];
+
+    return [
+      false,
+      BigNumber.from(parseUnits(`${sellAmount}`, 18))
+        .mul(BigNumber.from(1e6).sub(taxPercent))
+        .div(1e6)
+    ];
+  }, [isTaxPercentLoading, taxPercent, sellAmount]);
 
   const onSellAmountChange = (val: string) => {
     if (val === '' || price === '-') {
@@ -91,6 +108,11 @@ const SellContent = () => {
             labelData={`Your amount`}
             rightLabelUnit={'ARTHX'}
             rightLabelValue={sellAmount.toString()}
+          />
+          <TransparentInfoDiv
+            labelData={`Fee`}
+            rightLabelUnit={'ARTHX'}
+            rightLabelValue={Number(getDisplayBalanceToken(tradingFee, core.tokens['ARTHX'])).toLocaleString()}
           />
           <Divider
             style={{
@@ -192,18 +214,23 @@ const SellContent = () => {
                 <TagChips>ARTHX</TagChips>
               </OneLineInputwomargin>
             </OneLineInputwomargin>
-            {/* <OneLineInputwomargin style={{ marginTop: '10px' }}>
+            <OneLineInputwomargin style={{ marginTop: '10px' }}>
               <div style={{ flex: 1 }}>
                 <TextWithIcon>
-                  Trading fee
-                  <CustomToolTip/>
+                  Fee
                 </TextWithIcon>
               </div>
               <OneLineInputwomargin>
-                <BeforeChip>0.05</BeforeChip>
-                <TagChips>ARTH</TagChips>
+                <BeforeChip>
+                  {
+                    isTradingFeeLoading
+                      ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
+                      : Number(getDisplayBalanceToken(tradingFee, core.tokens['ARTHX'])).toLocaleString()
+                  }
+                </BeforeChip>
+                <TagChips>ARTHX</TagChips>
               </OneLineInputwomargin>
-            </OneLineInputwomargin> */}
+            </OneLineInputwomargin>
           </TcContainer>
           {
             !!!account ? (
@@ -220,6 +247,11 @@ const SellContent = () => {
               <Button
                 text={'Sell'}
                 size={'lg'}
+                disabled={
+                  isInputFieldError ||
+                  !Number(sellAmount) ||
+                  !Number(receiveAmount)
+                }
                 onClick={() => setOpenModal(true)}
               />
             )
