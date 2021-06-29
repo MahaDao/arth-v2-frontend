@@ -201,7 +201,23 @@ const SellContent = () => {
               </OneLineInputwomargin>
             </OneLineInputwomargin>
           </TcContainer>
-          <Button text={'Sell'} size={'lg'} onClick={() => setOpenModal(true)} />
+          {!!!account ? (
+            <Button
+              text={'Connect Wallet'}
+              size={'lg'}
+              onClick={() =>
+                connect('injected').then(() => {
+                  localStorage.removeItem('disconnectWallet');
+                })
+              }
+            />
+          ) : (
+            <Button
+              text={'Sell'}
+              size={'lg'}
+              onClick={() => setOpenModal(true)}
+            />)
+          }
         </div>
       </LeftTopCardContainer>
       {sellConfirmModal()}

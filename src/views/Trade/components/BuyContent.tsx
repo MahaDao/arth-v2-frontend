@@ -184,13 +184,25 @@ const BuyContent = () => {
               </OneLineInputwomargin>
             </OneLineInputwomargin>
           </TcContainer>
-          <Button
-            text={'Buy'}
-            size={'lg'}
-            variant={'default'}
-            disabled={false}
-            onClick={() => setOpenModal(true)}
-          />
+          {!!!account ? (
+            <Button
+              text={'Connect Wallet'}
+              size={'lg'}
+              onClick={() =>
+                connect('injected').then(() => {
+                  localStorage.removeItem('disconnectWallet');
+                })
+              }
+            />
+          ) : (
+            <Button
+              text={'Buy'}
+              size={'lg'}
+              variant={'default'}
+              disabled={false}
+              onClick={() => setOpenModal(true)}
+            />)
+          }
         </div>
       </LeftTopCardContainer>
       {BuyConfirmModal()}
