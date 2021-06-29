@@ -17,11 +17,10 @@ import useCore from '../../../../hooks/useCore';
 import useDFYNPrice from '../../../../hooks/useDFYNPrice';
 import useTotalSupply from '../../../../hooks/useTotalSupply';
 import useTokenBalance from '../../../../hooks/state/useTokenBalance';
-import usePairReserves from '../../../../hooks/state/usePairReserves';
+import { getDisplayBalanceToken } from '../../../../utils/formatBalance';
 import useAddLiquidity from '../../../../hooks/callbacks/pairs/useAddLiquidity';
 import useApprove, { ApprovalState } from '../../../../hooks/callbacks/useApprove';
 import usePairLiquidityMinted from '../../../../hooks/state/usePairLiquidityMinted';
-import { getDisplayBalance, getDisplayBalanceToken } from '../../../../utils/formatBalance';
 
 interface SelectedPair {
   id: number;
@@ -49,10 +48,6 @@ const AddLiquidity = (props: props) => {
   const { isLoading: isLPTotalSupplyLoading, value: lpTotalSupply } = useTotalSupply(selectedPair.pairToken);
   const { isLoading: isLpBalanceLoading, value: lpBalance } = useTokenBalance(core.tokens[selectedPair.pairToken]);
 
-  const { isLoading: isReservesLoading, value: reserves } = usePairReserves(
-    core.tokens[selectedPair.symbol1],
-    core.tokens[selectedPair.symbol2]
-  );
   const uniswapPrice = useDFYNPrice(
     core.tokens[selectedPair.symbol1],
     core.tokens[selectedPair.symbol2]
@@ -81,7 +76,7 @@ const AddLiquidity = (props: props) => {
   );
 
   const [isYourShareLoading, yourShare] = useMemo(() => {
-    if (isLiquidityMintedLoading || isLpBalanceLoading) return [true, BigNumber.from(0)];
+    if (isLiquidityMintedLoading || isLPTotalSupplyLoading || isLpBalanceLoading) return [true, BigNumber.from(0)];
 
     const newLPMintBN = BigNumber.from(parseUnits(`${Number(liquidityMinted)}`, 18));
     return [
@@ -91,7 +86,14 @@ const AddLiquidity = (props: props) => {
         .mul(100)
         .div(lpTotalSupply.add(newLPMintBN))
     ];
-  }, [liquidityMinted, isLpBalanceLoading, isLiquidityMintedLoading, lpTotalSupply, lpBalance]);
+  }, [
+    liquidityMinted,
+    isLpBalanceLoading,
+    isLPTotalSupplyLoading,
+    isLiquidityMintedLoading,
+    lpTotalSupply,
+    lpBalance
+  ]);
 
   const addLiquidity = useAddLiquidity(
     core.tokens[selectedPair.symbol1].address,

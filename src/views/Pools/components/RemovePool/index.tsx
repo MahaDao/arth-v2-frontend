@@ -1,4 +1,5 @@
 import { BigNumber } from 'ethers';
+import { useWallet } from 'use-wallet';
 import styled from 'styled-components';
 import { parseUnits } from 'ethers/lib/utils';
 import React, { useMemo, useState } from 'react';
@@ -20,6 +21,7 @@ import useTokenBalance from '../../../../hooks/state/useTokenBalance';
 import { getDisplayBalanceToken } from '../../../../utils/formatBalance';
 import useTokenBalanceOf from '../../../../hooks/state/useTokenBalanceOf';
 import useApprove, { ApprovalState } from '../../../../hooks/callbacks/useApprove';
+import useRemoveLiquidity from '../../../../hooks/callbacks/pairs/useRemoveLiquidity';
 import { ValidateNumber } from '../../../../components/CustomInputContainer/RegexValidation';
 
 interface SelectedPair {
@@ -43,6 +45,7 @@ const RemovePool = (props: props) => {
   const [isInputFieldError, setIsInputFieldError] = useState<boolean>(false);
 
   const core = useCore();
+  const { account } = useWallet();
 
   const lpToken = core.tokens[selectedPair.pairToken];
   const firstToken = core.tokens[selectedPair.symbol1];
@@ -52,6 +55,7 @@ const RemovePool = (props: props) => {
     core.tokens[selectedPair.symbol1],
     core.tokens[selectedPair.symbol2]
   );
+
   const [lpTokenApproveStatus, approveLpToken] = useApprove(
     core.tokens[selectedPair.pairToken],
     core.contracts.Router.address
@@ -60,6 +64,7 @@ const RemovePool = (props: props) => {
   const { isLoading: isLPBalanceLoading, value: lpBalance } = useTokenBalance(lpToken);
   const { isLoading: isFirstCoinLoading, value: firstCoinBalance } = useTokenBalance(firstToken);
   const { isLoading: isSecondCoinLoading, value: secondCoinBalance } = useTokenBalance(secondToken);
+  const { isLoading: isTotalSupplyLoading, value: totalSupply } = useTotalSupply(selectedPair.pairToken);
 
   const { isLoading: isPairFirstCoinBalanceLoading, value: firstCoinPairBalance } = useTokenBalanceOf(
     firstToken,
@@ -69,8 +74,6 @@ const RemovePool = (props: props) => {
     secondToken,
     lpToken.address
   );
-
-  const { isLoading: isTotalSupplyLoading, value: totalSupply } = useTotalSupply(selectedPair.pairToken);
 
   const [isFirstCoinValueLoading, firstCoinValue] = useMemo(() => {
     if (isTotalSupplyLoading || isPairFirstCoinBalanceLoading)
@@ -109,6 +112,21 @@ const RemovePool = (props: props) => {
     isPairSecondCoinBalanceLoading,
     totalSupply
   ]);
+
+  const removeLiquidity = useRemoveLiquidity(
+    core.tokens[selectedPair.symbol1].address,
+    core.tokens[selectedPair.symbol2].address,
+    BigNumber.from(parseUnits(`${pairValue}`, 18)),
+    firstCoinValue,
+    secondCoinValue,
+    account
+  );
+
+  const handleRemoveLiquidity = () => {
+    removeLiquidity(() => {
+      setConfirmModal(false);
+    });
+  }
 
   const isLpTokenApproving = lpTokenApproveStatus === ApprovalState.PENDING;
   const isLpTokenApproved = lpTokenApproveStatus === ApprovalState.APPROVED;
@@ -198,21 +216,22 @@ const RemovePool = (props: props) => {
       >
         <>
           <TransparentInfoDiv
-            labelData={`You will receive ARTH`}
+            labelData={`You will receive ${selectedPair.symbol1.toUpperCase()}`}
             rightLabelUnit={selectedPair.symbol1.toUpperCase()}
-            rightLabelValue={firstCoinValue.toString()}
+            rightLabelValue={getDisplayBalanceToken(firstCoinValue, firstToken)}
           />
           <TransparentInfoDiv
-            labelData={`You will receive ETH`}
+            labelData={`You will receive  ${selectedPair.symbol2.toUpperCase()}`}
             rightLabelUnit={selectedPair.symbol2.toUpperCase()}
-            rightLabelValue={secondCoinValue.toString()}
+            rightLabelValue={getDisplayBalanceToken(secondCoinValue, secondToken)}
           />
+
           <Divider style={{ background: 'rgba(255, 255, 255, 0.08)', margin: '15px 0px' }} />
 
           <TransparentInfoDiv
-            labelData={`UNI ARTH/ETH Burned`}
+            labelData={`${selectedPair.symbol1.toUpperCase()}/${selectedPair.symbol2.toUpperCase()} LP Token Burned`}
             rightLabelUnit={`${selectedPair.symbol1.toUpperCase()}/${selectedPair.symbol2.toUpperCase()}`}
-            rightLabelValue={'1000.00'}
+            rightLabelValue={Number(pairValue).toLocaleString()}
           />
           <Grid container spacing={2} style={{ marginTop: '32px' }}>
             <Grid item lg={6} md={6} sm={12} xs={12}>
@@ -229,9 +248,7 @@ const RemovePool = (props: props) => {
               <Button
                 text={'Remove Liquidity'}
                 size={'lg'}
-                onClick={() => {
-                  setConfirmModal(false);
-                }}
+                onClick={handleRemoveLiquidity}
               />
             </Grid>
           </Grid>
@@ -378,14 +395,13 @@ const InputLabel = styled.p`
   margin: 0;
 `;
 
-
-
 const CustomCardContainer = styled.div`
   padding: 32px 32px;
   @media (max-width: 600px) {
     padding: 16px 16px;
   }
 `;
+
 const ButtonContainer = styled.div`
   margin: 15px 0 0 0;
   display: flex;
@@ -395,6 +411,7 @@ const ButtonContainer = styled.div`
   }
   justify-content: space-between;
 `;
+
 const CardTitle = styled.p`
   font-family: Inter;
   font-style: normal;
@@ -405,14 +422,6 @@ const CardTitle = styled.p`
   color: rgba(255, 255, 255);
   margin: 0;
 `;
-
-
-
-
-
-
-
-
 
 const PlusMinusArrow = styled.div`
   width: 100%;
@@ -435,6 +444,7 @@ const CustomInfoCard = styled.div`
     padding: 16px;
   }
 `;
+
 const CustomInfoCardHeader = styled.p`
   font-family: Inter;
   font-style: normal;
@@ -471,6 +481,7 @@ const TextWithIcon = styled.div`
   line-height: 20px;
   color: rgba(255, 255, 255, 0.64);
 `;
+
 const BeforeChip = styled.span`
   font-family: Inter;
   font-style: normal;
