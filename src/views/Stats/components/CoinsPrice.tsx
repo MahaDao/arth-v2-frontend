@@ -3,12 +3,10 @@ import styled from 'styled-components';
 import Loader from 'react-spinners/BeatLoader';
 
 import { getDisplayBalance } from '../../../utils/formatBalance';
-import useARTHOraclePrice from '../../../hooks/state/controller/useARTHPrice';
 import useMAHAOraclePrice from '../../../hooks/state/controller/useMAHAPrice';
 import useARTHXOraclePrice from '../../../hooks/state/controller/useARTHXPrice';
 
 const CoinsPrice: React.FC = () => {
-  const { isLoading: isARTHPriceLoading, value: arthPrice } = useARTHOraclePrice();
   const { isLoading: isMAHAPriceLoading, value: mahaPrice } = useMAHAOraclePrice();
   const { isLoading: isARTHXPriceLoading, value: arthxPrice } = useARTHXOraclePrice();
 
@@ -18,17 +16,10 @@ const CoinsPrice: React.FC = () => {
         <OneLine style={{ marginTop: '0px' }}>
           <div>
             <TextWithIcon>ARTH Current Price</TextWithIcon>
+          </div>
+          <div>
             <TargetPriceTag>Target Price: $1.00</TargetPriceTag>
           </div>
-          {/* <div>
-            <BeforeChip>
-              {isARTHPriceLoading
-                ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
-                : Number(getDisplayBalance(arthPrice, 6, 6))
-                  .toLocaleString('en-US', { maximumFractionDigits: 6 })
-              }
-            </BeforeChip>
-          </div> */}
         </OneLine>
         <OneLine>
           <div>
