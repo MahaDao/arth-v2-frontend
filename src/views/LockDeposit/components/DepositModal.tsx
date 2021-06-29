@@ -33,7 +33,7 @@ export default (props: IProps) => {
   );
 
   const decimals = BigNumber.from(10).pow(18)
-  const deposit = useDeposit(props.symbol, BigNumber.from(val).mul(decimals))
+  const deposit = useDeposit(props.symbol, BigNumber.from(Math.floor(Number(val))).mul(decimals))
 
   return (
     <CustomModal
