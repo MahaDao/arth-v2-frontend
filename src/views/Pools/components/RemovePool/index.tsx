@@ -1,68 +1,52 @@
-import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
-import ArrowBackIos from '@material-ui/icons/ArrowBackIos';
+import React, { useMemo, useState } from 'react';
 import { Divider, Grid } from '@material-ui/core';
+import ArrowBackIos from '@material-ui/icons/ArrowBackIos';
 
-import arrowDown from '../../../../assets/svg/arrowDown.svg';
 import plus from '../../../../assets/svg/plus.svg';
-import Button from '../../../../components/Button';
-import CustomInputContainer from '../../../../components/CustomInputContainer';
-import CustomModal from '../../../../components/CustomModal';
+import arrowDown from '../../../../assets/svg/arrowDown.svg';
+
 import TransparentInfoDiv from '../InfoDiv';
+import Button from '../../../../components/Button';
+import CustomModal from '../../../../components/CustomModal';
+import CustomInputContainer from '../../../../components/CustomInputContainer';
+
 import useCore from '../../../../hooks/useCore';
-import { ValidateNumber } from '../../../../components/CustomInputContainer/RegexValidation';
 import useTokenBalance from '../../../../hooks/state/useTokenBalance';
 import { getDisplayBalanceToken } from '../../../../utils/formatBalance';
+import { ValidateNumber } from '../../../../components/CustomInputContainer/RegexValidation';
+
+interface SelectedPair {
+  id: number;
+  symbol1: string;
+  symbol2: string;
+  pairName: string;
+  pairToken: string;
+}
 
 type props = {
-  selectedPair: {
-    liquidity: object;
-  };
+  selectedPair: SelectedPair;
   onBack: () => void;
 };
 
 const RemovePool = (props: props) => {
-  const { onBack } = props;
+  const { selectedPair, onBack } = props;
+
+  const [pairValue, setPairValue] = useState<string>('0');
+  const [confirmModal, setConfirmModal] = useState<boolean>(false);
+  const [firstCoinValue, setFirstCoinValue] = useState<string>('0');
+  const [secondCoinValue, setSecondCoinValue] = useState<string>('0');
+  const [isInputFieldError, setIsInputFieldError] = useState<boolean>(false);
 
   const core = useCore();
 
-  const collateralTypes = useMemo(() => core.getCollateralTypes(), [core]);
+  const lpToken = core.tokens[selectedPair.pairToken];
+  const firstToken = core.tokens[selectedPair.symbol1];
+  const secondToken = core.tokens[selectedPair.symbol2];
 
-  const [isInputFieldError, setIsInputFieldError] = useState<boolean>(false);
-
-  const [pairValue, setPairValue] = useState<string>('0');
-
-  const [firstCoin, setFirstCoin] = useState(core.getDefaultCollateral());
-  const [secondCoin, setSecondCoin] = useState(core.getDefaultCollateral());
-
-  const firstToken = core.tokens[firstCoin];
-  const secondToken = core.tokens[secondCoin];
-
-  const [firstCoinValue, setFirstCoinValue] = useState<string>('0');
-  const [secondCoinValue, setSecondCoinValue] = useState<string>('0');
-
-  const firstCoinDropDown = useMemo(() => {
-    let arr: string[];
-    arr = collateralTypes.filter(e => e !== firstCoin && e !== secondCoin);
-    return arr;
-  }, [core, firstCoin, secondCoin]);
-
-  const secondCoinDropDown = useMemo(() => {
-    let arr: string[];
-    arr = collateralTypes.filter(e => e !== firstCoin && e !== secondCoin);
-    return arr;
-  }, [core, firstCoin, secondCoin]);
-
-  //Balance
-  const { isLoading: isFirstCoinLoading, value: firstCoinBalance } = useTokenBalance(
-    core.tokens[firstCoin],
-  );
-
-  const { isLoading: isSecondCoinLoading, value: secondCoinBalance } = useTokenBalance(
-    core.tokens[secondCoin],
-  );
-
-  const [confirmModal, setConfirmModal] = useState<boolean>(false);
+  const { isLoading: isLPBalanceLoading, value: lpBalance } = useTokenBalance(lpToken);
+  const { isLoading: isFirstCoinLoading, value: firstCoinBalance } = useTokenBalance(firstToken);
+  const { isLoading: isSecondCoinLoading, value: secondCoinBalance } = useTokenBalance(secondToken);
 
   const detailed = () => {
     return (
@@ -82,8 +66,8 @@ const RemovePool = (props: props) => {
           LogoSymbol={''}
           hasDropDown={false}
           multiIcons
-          symbols={['ARTH', 'ARTHX']}
-          SymbolText={'ARTH-ARTHX'}
+          symbols={[selectedPair.symbol1, selectedPair.symbol2]}
+          SymbolText={`${selectedPair.symbol1}-${selectedPair.symbol2}`}
           inputMode={'numeric'}
           setText={(val: string) => {
             setPairValue(ValidateNumber(val) ? val : '0');
@@ -98,11 +82,9 @@ const RemovePool = (props: props) => {
           IBalanceValue={getDisplayBalanceToken(firstCoinBalance, firstToken)}
           isBalanceLoading={isFirstCoinLoading}
           DefaultValue={firstCoinValue.toString()}
-          LogoSymbol={firstCoin}
-          hasDropDown={true}
-          dropDownValues={firstCoinDropDown}
-          ondropDownValueChange={setFirstCoin}
-          SymbolText={firstCoin}
+          LogoSymbol={selectedPair.symbol1}
+          hasDropDown={false}
+          SymbolText={selectedPair.symbol1.toUpperCase()}
           inputMode={'numeric'}
           setText={(val: string) => {
             setFirstCoinValue(ValidateNumber(val) ? val : '0');
@@ -121,11 +103,9 @@ const RemovePool = (props: props) => {
           IBalanceValue={getDisplayBalanceToken(secondCoinBalance, secondToken)}
           isBalanceLoading={isSecondCoinLoading}
           DefaultValue={secondCoinValue.toString()}
-          LogoSymbol={secondCoin}
-          hasDropDown={true}
-          dropDownValues={secondCoinDropDown}
-          ondropDownValueChange={setSecondCoin}
-          SymbolText={secondCoin}
+          LogoSymbol={selectedPair.symbol2}
+          hasDropDown={false}
+          SymbolText={selectedPair.symbol1.toUpperCase()}
           inputMode={'numeric'}
           setText={(val: string) => {
             setSecondCoinValue(ValidateNumber(val) ? val : '0');
@@ -142,9 +122,9 @@ const RemovePool = (props: props) => {
           </div>
           <OneLine>
             <BeforeChip>0.05</BeforeChip>
-            <TagChips style={{ marginRight: '5px' }}>{firstCoin}</TagChips>
+            <TagChips style={{ marginRight: '5px' }}>{selectedPair.symbol1.toUpperCase()}</TagChips>
             <BeforeChip>per</BeforeChip>
-            <TagChips>{secondCoin}</TagChips>
+            <TagChips>{selectedPair.symbol2.toUpperCase()}</TagChips>
           </OneLine>
         </OneLine>
       </div>
@@ -165,19 +145,19 @@ const RemovePool = (props: props) => {
         <>
           <TransparentInfoDiv
             labelData={`You will receive ARTH`}
-            rightLabelUnit={firstCoin}
+            rightLabelUnit={selectedPair.symbol1.toUpperCase()}
             rightLabelValue={firstCoinValue.toString()}
           />
           <TransparentInfoDiv
             labelData={`You will receive ETH`}
-            rightLabelUnit={secondCoin}
+            rightLabelUnit={selectedPair.symbol2.toUpperCase()}
             rightLabelValue={secondCoinValue.toString()}
           />
           <Divider style={{ background: 'rgba(255, 255, 255, 0.08)', margin: '15px 0px' }} />
 
           <TransparentInfoDiv
             labelData={`UNI ARTH/ETH Burned`}
-            rightLabelUnit={`${firstCoin}/${secondCoin}`}
+            rightLabelUnit={`${selectedPair.symbol1.toUpperCase()}/${selectedPair.symbol2.toUpperCase()}`}
             rightLabelValue={'1000.00'}
           />
           <Grid container spacing={2} style={{ marginTop: '32px' }}>

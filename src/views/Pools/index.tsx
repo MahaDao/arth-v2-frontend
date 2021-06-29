@@ -146,7 +146,7 @@ const Boardrooms = () => {
             {action === 'Details' && <MainGrid />}
             {action === 'Remove' && (
               <RemovePool
-                selectedPair={selectedPair}
+                selectedPair={selectedPair.liquidity}
                 onBack={() => {
                   setAction('Details');
                 }}
