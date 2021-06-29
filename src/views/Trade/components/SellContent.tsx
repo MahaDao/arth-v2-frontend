@@ -1,26 +1,24 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import Grid from '@material-ui/core/Grid';
+import { Divider } from '@material-ui/core';
+import { useWallet } from 'use-wallet';
+
 import Button from '../../../components/Button';
 import arrowDown from '../../../assets/svg/arrowDown.svg';
-import { Divider } from '@material-ui/core';
 import TransparentInfoDiv from './InfoDiv';
 import CustomInputContainer from '../../../components/CustomInputContainer';
 import CustomModal from '../../../components/CustomModal';
-import { CustomSnack } from '../../../components/SnackBar';
-import { withSnackbar, WithSnackbarProps } from 'notistack';
 import CustomToolTip from '../../../components/CustomTooltip';
 import useCore from '../../../hooks/useCore';
-import { useWallet } from 'use-wallet';
 import useTokenBalance from '../../../hooks/state/useTokenBalance';
 import { getDisplayBalanceToken } from '../../../utils/formatBalance';
 
-const SellContent = (props: WithSnackbarProps) => {
+const SellContent = () => {
   useEffect(() => window.scrollTo(0, 0), []);
 
   const core = useCore();
   const { account, connect } = useWallet();
-  const collateralTypes = useMemo(() => core.getCollateralTypes(), [core]);
   const [isInputFieldError, setIsInputFieldError] = useState<boolean>(false);
 
   const [sellAmount, setSellAmount] = useState<string>('0');
@@ -28,14 +26,12 @@ const SellContent = (props: WithSnackbarProps) => {
 
   const [openModal, setOpenModal] = useState<boolean>(false);
 
-  const [selectedAmountCoin, setSelectedAmountCoin] = useState(core.getDefaultCollateral());
-
-  const selectedAmountToken = core.tokens[selectedAmountCoin];
-  const sellToken = core.tokens['ARTH'];
+  const sellToken = core.tokens['ARTHX'];
+  const receiveToken = core.tokens['ARTH'];
 
   //Balance
   const { isLoading: isSellAmountBalanceLoading, value: sellAmountBalance } = useTokenBalance(
-    core.tokens[selectedAmountCoin],
+    core.tokens['ARTHX'],
   );
 
   const { isLoading: isReceiveAmountBalanceLoading, value: receiveAmountBalance } = useTokenBalance(
@@ -45,6 +41,7 @@ const SellContent = (props: WithSnackbarProps) => {
   const ratio = 100;
 
   const onSellAmountChange = (val: string) => {
+    // Dumpy code
     if (val === ''){
       setSellAmount('0');
     }
@@ -57,6 +54,7 @@ const SellContent = (props: WithSnackbarProps) => {
   }
 
   const onReceiveAmountChange = (val: string) => {
+    // Dumpy code
     if (val === ''){
       setSellAmount('0');
     }
@@ -81,7 +79,7 @@ const SellContent = (props: WithSnackbarProps) => {
         <div>
           <TransparentInfoDiv
             labelData={`Your amount`}
-            rightLabelUnit={'ARTH'}
+            rightLabelUnit={'ARTHX'}
             rightLabelValue={sellAmount.toString()}
           />
           <TransparentInfoDiv
@@ -97,8 +95,7 @@ const SellContent = (props: WithSnackbarProps) => {
           />
           <TransparentInfoDiv
             labelData={`You will receive`}
-            // labelToolTipData={'testing'}
-            rightLabelUnit={selectedAmountCoin}
+            rightLabelUnit={'ARTH'}
             rightLabelValue={sellAmount.toString()}
           />
 
@@ -110,35 +107,15 @@ const SellContent = (props: WithSnackbarProps) => {
                 size={'lg'}
                 onClick={() => {
                   setOpenModal(false);
-                  let options = {
-                    content: () =>
-                      CustomSnack({
-                        onClose: props.closeSnackbar,
-                        type: 'red',
-                        data1: `Sell order for ${123} ARTH cancelled`,
-                      }),
-                  };
-                  props.enqueueSnackbar('timepass', options);
                 }}
-                // onClick={handleClose}
               />
             </Grid>
             <Grid item lg={6} md={6} sm={12} xs={12}>
               <Button
                 text={'Confirm Sell'}
-                // textStyles={{ color: '#F5F5F5' }}
                 size={'lg'}
                 onClick={() => {
                   setOpenModal(false);
-                  let options = {
-                    content: () =>
-                      CustomSnack({
-                        onClose: props.closeSnackbar,
-                        type: 'green',
-                        data1: `Selling ${sellAmount} ARTH`,
-                      }),
-                  };
-                  props.enqueueSnackbar('timepass', options);
                 }}
               />
             </Grid>
@@ -157,9 +134,9 @@ const SellContent = (props: WithSnackbarProps) => {
           isBalanceLoading={isSellAmountBalanceLoading}
           ILabelInfoValue={''}
           DefaultValue={sellAmount.toString()}
-          LogoSymbol={'ARTH'}
+          LogoSymbol={'ARTHX'}
           hasDropDown={false}
-          SymbolText={'ARTH'}
+          SymbolText={'ARTHX'}
           inputMode={'numeric'}
           setText={(val: string) => {
             onSellAmountChange(val);
@@ -174,16 +151,12 @@ const SellContent = (props: WithSnackbarProps) => {
         </PlusMinusArrow>
         <CustomInputContainer
           ILabelValue={'Enter Amount'}
-          IBalanceValue={getDisplayBalanceToken(receiveAmountBalance, selectedAmountToken)}
+          IBalanceValue={getDisplayBalanceToken(receiveAmountBalance, receiveToken)}
           isBalanceLoading={isReceiveAmountBalanceLoading}
           DefaultValue={receiveAmount.toString()}
-          LogoSymbol={selectedAmountCoin}
-          hasDropDown={true}
-          dropDownValues={collateralTypes}
-          ondropDownValueChange={(data) => {
-            setSelectedAmountCoin(data);
-          }}
-          SymbolText={selectedAmountCoin}
+          LogoSymbol={'ARTH'}
+          hasDropDown={false}
+          SymbolText={'ARTH'}
           inputMode={'numeric'}
           setText={(val: string) => {
             onReceiveAmountChange(val);
@@ -228,7 +201,23 @@ const SellContent = (props: WithSnackbarProps) => {
               </OneLineInputwomargin>
             </OneLineInputwomargin>
           </TcContainer>
-          <Button text={'Sell'} size={'lg'} onClick={() => setOpenModal(true)} />
+          {!!!account ? (
+            <Button
+              text={'Connect Wallet'}
+              size={'lg'}
+              onClick={() =>
+                connect('injected').then(() => {
+                  localStorage.removeItem('disconnectWallet');
+                })
+              }
+            />
+          ) : (
+            <Button
+              text={'Sell'}
+              size={'lg'}
+              onClick={() => setOpenModal(true)}
+            />)
+          }
         </div>
       </LeftTopCardContainer>
       {sellConfirmModal()}
@@ -289,4 +278,4 @@ const TagChips = styled.div`
   color: rgba(255, 255, 255, 0.64);
 `;
 
-export default withSnackbar(SellContent);
+export default SellContent;
