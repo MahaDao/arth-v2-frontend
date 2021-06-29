@@ -2,22 +2,24 @@ import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
 import Grid from '@material-ui/core/Grid';
 import { parseUnits } from 'ethers/lib/utils';
+import Loader from 'react-spinners/BeatLoader';
 import { BigNumber } from '@ethersproject/bignumber';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
 import React, { useEffect, useMemo, useState } from 'react';
-import Loader from 'react-spinners/BeatLoader';
 
-import arrowDown from '../../../assets/svg/arrowDown.svg';
 import plusSign from '../../../assets/svg/plus.svg';
+import arrowDown from '../../../assets/svg/arrowDown.svg';
 
 import PoolInfo from './PoolInfo';
 import MintModal from './MintModal';
+import DepositModal from './DepositModal';
 import Button from '../../../components/Button';
 import SlippageContainer from '../../../components/SlippageContainer';
 import CustomSuccessModal from '../../../components/CustomSuccesModal';
 import CustomInputContainer from '../../../components/CustomInputContainer';
 import { ValidateNumber } from '../../../components/CustomInputContainer/RegexValidation';
 
+import config from '../../../config';
 import useCore from '../../../hooks/useCore';
 import useTokenDecimals from '../../../hooks/useTokenDecimals';
 import { getDisplayBalance } from '../../../utils/formatBalance';
@@ -32,6 +34,7 @@ interface IProps {
 }
 
 const MintTabContent = (props: WithSnackbarProps & IProps) => {
+  const [depositModal, setdepositModal] = useState<boolean>(false);
   const [collateralValue, setCollateralValue] = useState<string>('0');
   const [arthValue, setArthValue] = useState<string>('0');
   const [arthxValue, setArthxValue] = useState<string>('0');
@@ -55,7 +58,7 @@ const MintTabContent = (props: WithSnackbarProps & IProps) => {
   const { isLoading: ismintingFeeLoading, value: mintingFee } = usePoolMintingFees(selectedCollateralCoin);
   const { isLoading: iscollateralToGMUPriceLoading, value: collateralToGMUPrice } = useCollateralPoolPrice(selectedCollateralCoin);
   const { isLoading: isarthxPriceLoading, value: arthxPrice } = useARTHXPrice();
-  const tokenDecimals  = useTokenDecimals(selectedCollateralCoin);
+  const tokenDecimals = useTokenDecimals(selectedCollateralCoin);
 
   const collateralPool = core.getCollatearalPool(selectedCollateralCoin);
 
@@ -85,9 +88,9 @@ const MintTabContent = (props: WithSnackbarProps & IProps) => {
     return [
       false,
       BigNumber
-      .from(parseUnits(`${arthValue}`, 18))
-      .mul(mintingFee)
-      .div(1e6)
+        .from(parseUnits(`${arthValue}`, 18))
+        .mul(mintingFee)
+        .div(1e6)
     ];
   }, [arthValue, mintingFee, ismintingFeeLoading]);
 
@@ -123,7 +126,7 @@ const MintTabContent = (props: WithSnackbarProps & IProps) => {
       .mul(arthxRatio)
       .mul(1e6)
       .div(1e6)
-      .div(arthxPrice); 
+      .div(arthxPrice);
 
     setArthValue(getDisplayBalance(finalArthValue, 18, tokenDecimals));
     setArthxValue(getDisplayBalance(finalArthxValue, 18, tokenDecimals));
@@ -145,7 +148,7 @@ const MintTabContent = (props: WithSnackbarProps & IProps) => {
 
     const bnArthValue = BigNumber.from(parseUnits(`${valueInNumber}`, 18));
     const bnMissingDecimals = BigNumber.from(10).pow(18 - tokenDecimals);
-    
+
     const finalCollateralValueD18 = bnArthValue
       .mul(1e6)
       .div(arthRatio);
@@ -181,7 +184,7 @@ const MintTabContent = (props: WithSnackbarProps & IProps) => {
     const bnArthxValue = BigNumber.from(parseUnits(`${valueInNumber}`, 18));
     const bnMissingDecimals = BigNumber.from(10).pow(18 - tokenDecimals);
     const bnARTHXGMUValue = bnArthxValue.mul(arthxPrice).div(1e6);
-    
+
     const finalCollateralValueD18 = bnARTHXGMUValue
       .mul(1e6)
       .div(arthxRatio);
@@ -196,6 +199,8 @@ const MintTabContent = (props: WithSnackbarProps & IProps) => {
     setArthValue(getDisplayBalance(finalArthValue, 18, tokenDecimals));
     setCollateralValue(getDisplayBalance(finalCollateralValue, tokenDecimals, tokenDecimals));
   };
+
+  const showDepositWETH = config.blockchainToken === selectedCollateralCoin.replace('W', '');
 
   return (
     <>
@@ -321,7 +326,7 @@ const MintTabContent = (props: WithSnackbarProps & IProps) => {
                           isTradingFeeLoading
                             ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
                             : Number(getDisplayBalance(tradingFee, 18, 6))
-                              .toLocaleString('en-US', {maximumFractionDigits: 6})
+                              .toLocaleString('en-US', { maximumFractionDigits: 6 })
                         }
                       </BeforeChip>
                       <TagChips>ARTH</TagChips>
@@ -342,15 +347,28 @@ const MintTabContent = (props: WithSnackbarProps & IProps) => {
                       !isCollatApproved ? (
                         <>
                           <ApproveButtonContainer>
+                            {
+                              showDepositWETH && (
+                                <>
+                                  <Button
+                                    text={`Convert your ${config.blockchainToken} into ${selectedCollateralCoin}`}
+                                    size={'sm'}
+                                    onClick={() => setdepositModal(true)}
+                                    tracking_id={'deposit_weth'}
+                                  />
+                                  <div style={{ padding: 5 }} />
+                                </>
+                              )
+                            }
                             <Button
                               text={
                                 isCollatApproved
                                   ? `Approved ${selectedCollateralCoin}`
                                   : !isCollatApproving
-                                  ? `Approve ${selectedCollateralCoin}`
-                                  : 'Approving...'
+                                    ? `Approve ${selectedCollateralCoin}`
+                                    : 'Approving...'
                               }
-                              size={'lg'}
+                              size={'sm'}
                               disabled={
                                 mintCR.lte(1e6) ||
                                 isInputFieldError ||
@@ -364,19 +382,34 @@ const MintTabContent = (props: WithSnackbarProps & IProps) => {
                           <br />
                         </>
                       ) : (
-                        <Button
-                          text={'Mint'}
-                          size={'lg'}
-                          variant={'default'}
-                          disabled={
-                            mintCR.lte(1e6) ||
-                            isInputFieldError ||
-                            !isCollatApproved ||
-                            !Number(arthValue) ||
-                            !(Number(collateralValue))
+                        <ApproveButtonContainer>
+                          {
+                            showDepositWETH && (
+                              <>
+                                <Button
+                                  text={`Convert your ${config.blockchainToken} into ${selectedCollateralCoin}`}
+                                  size={'lg'}
+                                  onClick={() => setdepositModal(true)}
+                                  tracking_id={'deposit_weth'}
+                                />
+                                <div style={{ padding: 5 }} />
+                              </>
+                            )
                           }
-                          onClick={() => setOpenModal(1)}
-                        />
+                          <Button
+                            text={'Mint'}
+                            size={'lg'}
+                            variant={'default'}
+                            disabled={
+                              mintCR.lte(1e6) ||
+                              isInputFieldError ||
+                              !isCollatApproved ||
+                              !Number(arthValue) ||
+                              !(Number(collateralValue))
+                            }
+                            onClick={() => setOpenModal(1)}
+                          />
+                        </ApproveButtonContainer>
                       )
                     )
                   }
@@ -390,6 +423,12 @@ const MintTabContent = (props: WithSnackbarProps & IProps) => {
         </Grid>
         <Grid item lg={1} />
       </Grid>
+
+      {
+        depositModal && (
+          <DepositModal onCancel={() => setdepositModal(false)} onDeposit={() => { }} />
+        )
+      }
 
       <CustomSuccessModal
         modalOpen={successModal}
@@ -426,7 +465,9 @@ const LeftTopCardHeader = styled.div`
   align-items: center;
   justify-content: space-between;
 `;
+
 const LeftTopCardContainer = styled.div``;
+
 const TabContainer = styled.div`
   display: flex;
   justify-content: center;
