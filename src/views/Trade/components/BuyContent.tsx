@@ -1,8 +1,10 @@
+import { BigNumber } from 'ethers';
 import { useWallet } from 'use-wallet';
 import styled from 'styled-components';
 import Grid from '@material-ui/core/Grid';
 import { Divider } from '@material-ui/core';
-import React, { useEffect, useMemo, useState } from 'react';
+import { parseUnits } from 'ethers/lib/utils';
+import React, { useEffect, useState } from 'react';
 
 import arrowDown from '../../../assets/svg/arrowDown.svg';
 
@@ -14,15 +16,17 @@ import { ValidateNumber } from '../../../components/CustomInputContainer/RegexVa
 
 import useCore from '../../../hooks/useCore';
 import useDFYNPrice from '../../../hooks/useDFYNPrice';
+import useARTHXBuyAmount from '../../../hooks/state/useARTHXBuyAmount';
 import useTokenBalance from '../../../hooks/state/useTokenBalance';
+import useBuyARTHX from '../../../hooks/callbacks/pairs/useBuyARTHX';
 import { getDisplayBalanceToken } from '../../../utils/formatBalance';
+import useApprove, { ApprovalState } from '../../../hooks/callbacks/useApprove';
 
 const BuyContent = () => {
   useEffect(() => window.scrollTo(0, 0), []);
 
   const [isInputFieldError, setIsInputFieldError] = useState<boolean>(false);
   const [buyAmount, setBuyAmount] = useState<string>('0');
-  const [receiveAmount, setReceiveAmount] = useState<string>('0');
   const [openModal, setOpenModal] = useState<boolean>(false);
 
   const core = useCore();
@@ -41,38 +45,42 @@ const BuyContent = () => {
     core.tokens['ARTHX']
   );
 
+  const { isLoading: isOutAmountLoading, value: outputAmount } = useARTHXBuyAmount(
+    core.tokens['ARTH'],
+    core.tokens['ARTHX'],
+    BigNumber.from(parseUnits(`${buyAmount}`, 18))
+  );
+
+  const buyARTHX = useBuyARTHX(
+    core.tokens['ARTHX'].address,
+    core.tokens['ARTH'].address,
+    BigNumber.from(parseUnits(`${buyAmount}`, 18)),
+    BigNumber.from(parseUnits(`${outputAmount}`, 18)),
+    account
+  );
+
+  const handleBuyARTHX = () => {
+    buyARTHX(() => {
+      setOpenModal(false);
+    })
+  }
+
+  const [approveARTHStatus, approveARTH] = useApprove(
+    core.tokens['ARTH'],
+    core.contracts.Router.address
+  );
+
+  const isARTHApproving = approveARTHStatus === ApprovalState.PENDING;
+  const isARTHApproved = approveARTHStatus === ApprovalState.APPROVED;
+
   const onBuyAmountChange = async (val: string) => {
     if (val === '' || price === '-') {
       setBuyAmount('0');
-      setReceiveAmount('0');
       return;
     }
 
     const check: boolean = ValidateNumber(val);
     setBuyAmount(check ? val : String(Number(val)));
-    if (!check) return;
-    const valueInNumber: number = Number(val);
-    if (!valueInNumber) return;
-
-    const value = Number(val) / Number(price);
-    setReceiveAmount(`${value}`);
-  }
-
-  const onReceiveAmountChange = async (val: string) => {
-    if (val === '' || price === '-') {
-      setReceiveAmount('0');
-      setBuyAmount('0');
-      return;
-    }
-
-    const check: boolean = ValidateNumber(val);
-    setReceiveAmount(check ? val : String(Number(val)));
-    if (!check) return;
-    const valueInNumber: number = Number(val);
-    if (!valueInNumber) return;
-
-    const value = Number(val) * Number(price);
-    setBuyAmount(`${value}`);
   }
 
   const BuyConfirmModal = () => {
@@ -100,7 +108,7 @@ const BuyContent = () => {
           <TransparentInfoDiv
             labelData={`You will receive`}
             rightLabelUnit={'ARTHX'}
-            rightLabelValue={receiveAmount.toString()}
+            rightLabelValue={outputAmount.toString()}
           />
           <Grid container spacing={2} style={{ marginTop: '32px' }}>
             <Grid item lg={6} md={6} sm={12} xs={12}>
@@ -119,11 +127,9 @@ const BuyContent = () => {
                 size={'lg'}
                 disabled={isInputFieldError ||
                   !Number(buyAmount) ||
-                  !Number(receiveAmount)
+                  !Number(outputAmount)
                 }
-                onClick={() => {
-                  setOpenModal(false);
-                }}
+                onClick={handleBuyARTHX}
               />
             </Grid>
           </Grid>
@@ -161,15 +167,13 @@ const BuyContent = () => {
           IBalanceValue={getDisplayBalanceToken(receiveAmountBalance, receivetoken)}
           isBalanceLoading={isReceiveAmountBalanceLoading}
           ILabelInfoValue={''}
-          DefaultValue={receiveAmount.toString()}
+          DefaultValue={outputAmount.toString()}
           LogoSymbol={'ARTHX'}
           hasDropDown={false}
           SymbolText={'ARTHX'}
           inputMode={'decimal'}
-          setText={(val: string) => {
-            onReceiveAmountChange(val);
-          }}
-          disabled={isReceiveAmountBalanceLoading}
+          setText={(val: string) => { }}
+          disabled={true}
           errorCallback={(flag: boolean) => {
             setIsInputFieldError(flag);
           }}
@@ -196,27 +200,49 @@ const BuyContent = () => {
               </OneLineInputwomargin>
             </OneLineInputwomargin>
           </TcContainer>
-          {!!!account ? (
-            <Button
-              text={'Connect Wallet'}
-              size={'lg'}
-              onClick={() =>
-                connect('injected').then(() => {
-                  localStorage.removeItem('disconnectWallet');
-                })
-              }
-            />
-          ) : (
-            <Button
-              text={'Buy'}
-              size={'lg'}
-              variant={'default'}
-              disabled={isInputFieldError ||
-                !Number(buyAmount) ||
-                !Number(receiveAmount)
-              }
-              onClick={() => setOpenModal(true)}
-            />)
+          {
+            !!!account ? (
+              <Button
+                text={'Connect Wallet'}
+                size={'lg'}
+                onClick={() =>
+                  connect('injected').then(() => {
+                    localStorage.removeItem('disconnectWallet');
+                  })
+                }
+              />
+            ) : (
+              isARTHApproved
+                ? (
+                  <Button
+                    text={'Buy'}
+                    size={'lg'}
+                    variant={'default'}
+                    disabled={isInputFieldError ||
+                      isOutAmountLoading ||
+                      !Number(buyAmount) ||
+                      !Number(outputAmount)
+                    }
+                    onClick={() => setOpenModal(true)}
+                  />
+                ) : (
+                  <Button
+                    text={
+                      isARTHApproving
+                        ? 'Approving ARTH'
+                        : 'Approve ARTH'
+                    }
+                    size={'lg'}
+                    variant={'default'}
+                    disabled={isInputFieldError ||
+                      !Number(buyAmount) ||
+                      !Number(outputAmount)
+                    }
+                    onClick={approveARTH}
+                    loading={isARTHApproving}
+                  />
+                )
+            )
           }
         </div>
       </LeftTopCardContainer>
