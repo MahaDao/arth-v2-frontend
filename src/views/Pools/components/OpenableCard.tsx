@@ -3,7 +3,6 @@ import { BigNumber } from 'ethers/lib/ethers';
 import { useMediaQuery } from 'react-responsive';
 import React, { useState, useMemo } from 'react';
 
-import TransparentInfoDiv from './InfoDiv';
 import Button from '../../../components/Button';
 import TokenSymbol from '../../../components/TokenSymbol';
 
@@ -14,6 +13,7 @@ import useCore from '../../../hooks/useCore';
 import useTotalSupply from '../../../hooks/useTotalSupply';
 import useTokenBalance from '../../../hooks/state/useTokenBalance';
 import { getDisplayBalanceToken } from '../../../utils/formatBalance';
+import TransparentInfoDiv from '../../Stablize/components/InfoDiv';
 
 export interface ICards {
   id: number;
@@ -76,41 +76,29 @@ export default (props: IProps) => {
           <div style={{ height: '20px' }} />
           <TransparentInfoDiv
             labelData={'Your total pool tokens'}
-            rightLabelValue={
-              isLPBalanceLoading
-                ? ' Loading...'
-                : Number(getDisplayBalanceToken(lpBalance, core.tokens[liquidityPair.pairToken])).toLocaleString('en-US', { maximumFractionDigits: 3 })
-            }
+            rightLabelValue={Number(getDisplayBalanceToken(lpBalance, core.tokens[liquidityPair.pairToken])).toLocaleString('en-US', { maximumFractionDigits: 3 })}
             rightLabelUnit={`${liquidityPair.symbol1.toUpperCase()}/${liquidityPair.symbol2.toUpperCase()}`}
+            isLoadingData={isLPBalanceLoading}
           />
 
           <TransparentInfoDiv
             labelData={'Pooled ARTH'}
-            rightLabelValue={
-              isToken1BalanceLoading
-                ? ' Loading...'
-                : Number(getDisplayBalanceToken(token1Balance, core.tokens[liquidityPair.symbol1])).toLocaleString('en-US', { maximumFractionDigits: 3 })
-            }
+            rightLabelValue={Number(getDisplayBalanceToken(token1Balance, core.tokens[liquidityPair.symbol1])).toLocaleString('en-US', { maximumFractionDigits: 3 })}
             rightLabelUnit={`${liquidityPair.symbol1.toUpperCase()}`}
+            isLoadingData={isToken1BalanceLoading}
           />
 
           <TransparentInfoDiv
             labelData={'Pooled ARTH'}
-            rightLabelValue={
-              isToken2BalanceLoading
-                ? ' Loading...'
-                : Number(getDisplayBalanceToken(token2Balance, core.tokens[liquidityPair.symbol2])).toLocaleString('en-US', { maximumFractionDigits: 3 })
-            }
+            rightLabelValue={Number(getDisplayBalanceToken(token2Balance, core.tokens[liquidityPair.symbol2])).toLocaleString('en-US', { maximumFractionDigits: 3 })}
             rightLabelUnit={`${liquidityPair.symbol2.toUpperCase()}`}
+            isLoadingData={isToken2BalanceLoading}
           />
 
           <TransparentInfoDiv
             labelData={'Your pool share'}
-            rightLabelValue={
-              isPercentOfPoolLoading
-                ? ' Loading...'
-                : Number(percentOfPool.toString()).toLocaleString('en-US', { maximumFractionDigits: 3 }) + '%'
-            }
+            rightLabelValue={Number(percentOfPool.toString()).toLocaleString('en-US', { maximumFractionDigits: 3 }) + '%'}
+            isLoadingData={isPercentOfPoolLoading}
           />
 
           <div

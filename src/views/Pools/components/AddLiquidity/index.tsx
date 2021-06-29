@@ -170,21 +170,15 @@ const AddLiquidity = (props: props) => {
           />
           <TransparentInfoDiv
             labelData={`Your share of pool`}
-            rightLabelValue={
-              isYourShareLoading
-                ? ' Loading...'
-                : Number(yourShare.toString()).toLocaleString() + '%'
-            }
+            rightLabelValue={Number(yourShare.toString()).toLocaleString() + '%'}
+            isLoadingData={isYourShareLoading}
           />
           <Divider style={{ background: 'rgba(255, 255, 255, 0.08)', margin: '15px 0px' }} />
           <TransparentInfoDiv
             labelData={`You receiving pool token`}
             rightLabelUnit={`${selectedPair.symbol1}/${selectedPair.symbol2}`}
-            rightLabelValue={
-              isLiquidityMintedLoading
-                ? ' Loading...'
-                : liquidityMinted
-            }
+            rightLabelValue={liquidityMinted}
+            isLoadingData={isLiquidityMintedLoading}
           />
           <Grid container spacing={2} style={{ marginTop: '32px' }}>
             <Grid item lg={6} md={6} sm={6} xs={6}>
@@ -276,7 +270,7 @@ const AddLiquidity = (props: props) => {
                 <BeforeChip>
                   {
                     isYourShareLoading
-                      ? ' Loading...'
+                      ? ' - %'
                       : Number(yourShare.toString()).toLocaleString() + '%'
                   }
                 </BeforeChip>
