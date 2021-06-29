@@ -1,25 +1,23 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import Grid from '@material-ui/core/Grid';
+import { Divider } from '@material-ui/core';
+import { useWallet } from 'use-wallet';
+
 import Button from '../../../components/Button';
 import arrowDown from '../../../assets/svg/arrowDown.svg';
-import { Divider } from '@material-ui/core';
 import TransparentInfoDiv from './InfoDiv';
 import CustomInputContainer from '../../../components/CustomInputContainer';
 import CustomModal from '../../../components/CustomModal';
-import { CustomSnack } from '../../../components/SnackBar';
-import { withSnackbar, WithSnackbarProps } from 'notistack';
 import useCore from '../../../hooks/useCore';
-import { useWallet } from 'use-wallet';
 import useTokenBalance from '../../../hooks/state/useTokenBalance';
 import { getDisplayBalanceToken } from '../../../utils/formatBalance';
 
-const BuyContent = (props: WithSnackbarProps) => {
+const BuyContent = () => {
   useEffect(() => window.scrollTo(0, 0), []);
 
   const core = useCore();
   const { account, connect } = useWallet();
-  const collateralTypes = useMemo(() => core.getCollateralTypes(), [core]);
   const [isInputFieldError, setIsInputFieldError] = useState<boolean>(false);
 
   const [buyAmount, setBuyAmount] = useState<string>('0');
@@ -27,18 +25,16 @@ const BuyContent = (props: WithSnackbarProps) => {
 
   const [openModal, setOpenModal] = useState<boolean>(false);
 
-  const [selectedAmountCoin, setSelectedAmountCoin] = useState(core.getDefaultCollateral());
-
-  const selectedAmountToken = core.tokens[selectedAmountCoin];
-  const receivetoken = core.tokens['ARTH'];
+  const tradetoken = core.tokens['ARTH'];
+  const receivetoken = core.tokens['ARTHX'];
 
   //Balance
   const { isLoading: isBuyAmountBalanceLoading, value: buyAmountBalance } = useTokenBalance(
-    core.tokens[selectedAmountCoin],
+    core.tokens['ARTH'],
   );
 
   const { isLoading: isReceiveAmountBalanceLoading, value: receiveAmountBalance } = useTokenBalance(
-    core.tokens['ARTH'],
+    core.tokens['ARTHX'],
   );
 
   const ratio = 100;
@@ -80,7 +76,7 @@ const BuyContent = (props: WithSnackbarProps) => {
         <div>
           <TransparentInfoDiv
             labelData={`Your amount`}
-            rightLabelUnit={selectedAmountCoin}
+            rightLabelUnit={'ARTH'}
             rightLabelValue={buyAmount.toString()}
           />
 
@@ -94,7 +90,7 @@ const BuyContent = (props: WithSnackbarProps) => {
           <TransparentInfoDiv
             labelData={`You will receive`}
             // labelToolTipData={'testing'}
-            rightLabelUnit={'ARTH'}
+            rightLabelUnit={'ARTHX'}
             rightLabelValue={receiveAmount.toString()}
           />
 
@@ -106,35 +102,15 @@ const BuyContent = (props: WithSnackbarProps) => {
                 size={'lg'}
                 onClick={() => {
                   setOpenModal(false);
-                  let options = {
-                    content: () =>
-                      CustomSnack({
-                        onClose: props.closeSnackbar,
-                        type: 'red',
-                        data1: `Buy order for ${123} ARTH cancelled`,
-                      }),
-                  };
-                  props.enqueueSnackbar('timepass', options);
                 }}
-                // onClick={handleClose}
               />
             </Grid>
             <Grid item lg={6} md={6} sm={12} xs={12}>
               <Button
                 text={'Confirm Buy'}
-                // textStyles={{ color: '#F5F5F5' }}
                 size={'lg'}
                 onClick={() => {
                   setOpenModal(false);
-                  let options = {
-                    content: () =>
-                      CustomSnack({
-                        onClose: props.closeSnackbar,
-                        type: 'green',
-                        data1: `Buying ${buyAmount} ${selectedAmountCoin}`,
-                      }),
-                  };
-                  props.enqueueSnackbar('timepass', options);
                 }}
               />
             </Grid>
@@ -149,16 +125,12 @@ const BuyContent = (props: WithSnackbarProps) => {
       <LeftTopCardContainer className={'custom-mahadao-container-content'}>
         <CustomInputContainer
           ILabelValue={'Enter Amount'}
-          IBalanceValue={getDisplayBalanceToken(buyAmountBalance, selectedAmountToken)}
+          IBalanceValue={getDisplayBalanceToken(buyAmountBalance, tradetoken)}
           isBalanceLoading={isBuyAmountBalanceLoading}
           DefaultValue={buyAmount.toString()}
-          LogoSymbol={selectedAmountCoin}
-          hasDropDown={true}
-          dropDownValues={collateralTypes}
-          ondropDownValueChange={(data) => {
-            setSelectedAmountCoin(data);
-          }}
-          SymbolText={selectedAmountCoin}
+          LogoSymbol={'ARTH'}
+          hasDropDown={false}
+          SymbolText={'ARTH'}
           inputMode={'numeric'}
           setText={(val: string) => {
             onBuyAmountChange(val);
@@ -178,9 +150,9 @@ const BuyContent = (props: WithSnackbarProps) => {
           isBalanceLoading={isReceiveAmountBalanceLoading}
           ILabelInfoValue={''}
           DefaultValue={receiveAmount.toString()}
-          LogoSymbol={'ARTH'}
+          LogoSymbol={'ARTHX'}
           hasDropDown={false}
-          SymbolText={'ARTH'}
+          SymbolText={'ARTHX'}
           inputMode={'decimal'}
           setText={(val: string) => {
             onReceiveAmountChange(val);
@@ -281,4 +253,4 @@ const TagChips = styled.div`
   color: rgba(255, 255, 255, 0.64);
 `;
 
-export default withSnackbar(BuyContent);
+export default BuyContent;
