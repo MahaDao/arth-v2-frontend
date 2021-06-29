@@ -10,7 +10,7 @@ import dfyn from '../../assets/img/DFYN.png';
 import BuyContent from './components/BuyContent';
 import SellContent from './components/SellContent';
 import Container from '../../components/Container';
-
+import SlippageContainer from '../../components/SlippageContainer';
 
 const Boardrooms = (props: WithSnackbarProps) => {
   useEffect(() => window.scrollTo(0, 0), []);
@@ -26,14 +26,17 @@ const Boardrooms = (props: WithSnackbarProps) => {
         <Grid item lg={6} md={12} sm={12} xs={12}>
           <LeftTopCard className={'custom-mahadao-container'}>
             <LeftTopCardHeader className={'custom-mahadao-container-header'}>
-              <TabContainer onClick={() => setType('Buy')}>
-                {type === 'Buy' && <ActiveTab />}
-                <TabText>Buy</TabText>
-              </TabContainer>
-              <TabContainer onClick={() => setType('Sell')}>
-                {type === 'Sell' && <ActiveTab />}
-                <TabText>Sell</TabText>
-              </TabContainer>
+              <div style={{ display: 'flex', flex: '1' }}>
+                <TabContainer onClick={() => setType('Buy')}>
+                  {type === 'Buy' && <ActiveTab />}
+                  <TabText>Buy</TabText>
+                </TabContainer>
+                <TabContainer onClick={() => setType('Sell')}>
+                  {type === 'Sell' && <ActiveTab />}
+                  <TabText>Sell</TabText>
+                </TabContainer>
+                <SlippageContainer />
+              </div>
             </LeftTopCardHeader>
             {type === 'Buy' && <BuyContent />}
             {type === 'Sell' && <SellContent />}
