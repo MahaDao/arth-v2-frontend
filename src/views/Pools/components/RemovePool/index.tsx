@@ -159,6 +159,7 @@ const RemovePool = (props: props) => {
           errorCallback={(flag: boolean) => {
             setIsInputFieldError(flag);
           }}
+          tokenDecimals={18}
         />
         <PlusMinusArrow>
           <img src={arrowDown} alt="arrow-down" />
@@ -173,6 +174,7 @@ const RemovePool = (props: props) => {
           SymbolText={selectedPair.symbol1.toUpperCase()}
           inputMode={'numeric'}
           disabled={true}
+          tokenDecimals={18}
         />
         <PlusMinusArrow>
           <img src={plus} alt="plus" />
@@ -187,6 +189,7 @@ const RemovePool = (props: props) => {
           SymbolText={selectedPair.symbol2.toUpperCase()}
           inputMode={'numeric'}
           disabled={true}
+          tokenDecimals={18}
         />
         <OneLine style={{ marginTop: '15px' }}>
           <div style={{ flex: 1 }}>

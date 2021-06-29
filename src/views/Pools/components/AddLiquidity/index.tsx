@@ -232,6 +232,7 @@ const AddLiquidity = (props: props) => {
             errorCallback={(flag: boolean) => {
               setIsInputFieldError(flag);
             }}
+            tokenDecimals={18}
           />
           <PlusMinusArrow>
             +
@@ -253,6 +254,7 @@ const AddLiquidity = (props: props) => {
             errorCallback={(flag: boolean) => {
               setIsInputFieldError(flag);
             }}
+            tokenDecimals={18}
           />
           <TcContainer>
             <OneLine style={{ marginTop: "10px" }}>

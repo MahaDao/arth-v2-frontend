@@ -78,6 +78,7 @@ export default (props: IProps) => {
         multiIcons={true}
         symbols={props.pool.depositTokenSymbols}
         errorCallback={(flag: boolean) => { setIsInputFieldError(flag) }}
+        tokenDecimals={18}
       />
       <OneLine>
         <div style={{ flex: 1 }}></div>

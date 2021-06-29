@@ -172,6 +172,7 @@ const SellContent = () => {
           errorCallback={(flag: boolean) => {
             setIsInputFieldError(flag);
           }}
+          tokenDecimals={18}
         />
         <PlusMinusArrow>
           <img alt='Arrow' src={arrowDown} />
