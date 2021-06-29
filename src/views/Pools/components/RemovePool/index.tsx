@@ -1,4 +1,6 @@
+import { BigNumber } from 'ethers';
 import styled from 'styled-components';
+import { parseUnits } from 'ethers/lib/utils';
 import React, { useMemo, useState } from 'react';
 import { Divider, Grid } from '@material-ui/core';
 import ArrowBackIos from '@material-ui/icons/ArrowBackIos';
@@ -12,8 +14,12 @@ import CustomModal from '../../../../components/CustomModal';
 import CustomInputContainer from '../../../../components/CustomInputContainer';
 
 import useCore from '../../../../hooks/useCore';
+import useDFYNPrice from '../../../../hooks/useDFYNPrice';
+import useTotalSupply from '../../../../hooks/useTotalSupply';
 import useTokenBalance from '../../../../hooks/state/useTokenBalance';
 import { getDisplayBalanceToken } from '../../../../utils/formatBalance';
+import useTokenBalanceOf from '../../../../hooks/state/useTokenBalanceOf';
+import useApprove, { ApprovalState } from '../../../../hooks/callbacks/useApprove';
 import { ValidateNumber } from '../../../../components/CustomInputContainer/RegexValidation';
 
 interface SelectedPair {
@@ -34,8 +40,6 @@ const RemovePool = (props: props) => {
 
   const [pairValue, setPairValue] = useState<string>('0');
   const [confirmModal, setConfirmModal] = useState<boolean>(false);
-  const [firstCoinValue, setFirstCoinValue] = useState<string>('0');
-  const [secondCoinValue, setSecondCoinValue] = useState<string>('0');
   const [isInputFieldError, setIsInputFieldError] = useState<boolean>(false);
 
   const core = useCore();
@@ -44,9 +48,70 @@ const RemovePool = (props: props) => {
   const firstToken = core.tokens[selectedPair.symbol1];
   const secondToken = core.tokens[selectedPair.symbol2];
 
+  const uniswapPrice = useDFYNPrice(
+    core.tokens[selectedPair.symbol1],
+    core.tokens[selectedPair.symbol2]
+  );
+  const [lpTokenApproveStatus, approveLpToken] = useApprove(
+    core.tokens[selectedPair.pairToken],
+    core.contracts.Router.address
+  );
+
   const { isLoading: isLPBalanceLoading, value: lpBalance } = useTokenBalance(lpToken);
   const { isLoading: isFirstCoinLoading, value: firstCoinBalance } = useTokenBalance(firstToken);
   const { isLoading: isSecondCoinLoading, value: secondCoinBalance } = useTokenBalance(secondToken);
+
+  const { isLoading: isPairFirstCoinBalanceLoading, value: firstCoinPairBalance } = useTokenBalanceOf(
+    firstToken,
+    lpToken.address
+  );
+  const { isLoading: isPairSecondCoinBalanceLoading, value: secondCoinPairBalance } = useTokenBalanceOf(
+    secondToken,
+    lpToken.address
+  );
+
+  const { isLoading: isTotalSupplyLoading, value: totalSupply } = useTotalSupply(selectedPair.pairToken);
+
+  const [isFirstCoinValueLoading, firstCoinValue] = useMemo(() => {
+    if (isTotalSupplyLoading || isPairFirstCoinBalanceLoading)
+      return [true, BigNumber.from(0)];
+
+    if (pairValue === '' || !Number(pairValue)) return [false, BigNumber.from(0)];
+
+    const bnPairValue = BigNumber.from(parseUnits(`${pairValue}`, 18));
+    return [
+      false,
+      bnPairValue.mul(firstCoinPairBalance).div(totalSupply)
+    ];
+  }, [
+    isTotalSupplyLoading,
+    pairValue,
+    firstCoinPairBalance,
+    isPairFirstCoinBalanceLoading,
+    totalSupply
+  ]);
+
+  const [isSecondCoinValueLoading, secondCoinValue] = useMemo(() => {
+    if (isTotalSupplyLoading || isPairSecondCoinBalanceLoading)
+      return [true, BigNumber.from(0)];
+
+    if (pairValue === '' || !Number(pairValue)) return [false, BigNumber.from(0)];
+
+    const bnPairValue = BigNumber.from(parseUnits(`${pairValue}`, 18));
+    return [
+      false,
+      bnPairValue.mul(secondCoinPairBalance).div(totalSupply)
+    ];
+  }, [
+    isTotalSupplyLoading,
+    pairValue,
+    secondCoinPairBalance,
+    isPairSecondCoinBalanceLoading,
+    totalSupply
+  ]);
+
+  const isLpTokenApproving = lpTokenApproveStatus === ApprovalState.PENDING;
+  const isLpTokenApproved = lpTokenApproveStatus === ApprovalState.APPROVED;
 
   const detailed = () => {
     return (
@@ -72,8 +137,10 @@ const RemovePool = (props: props) => {
           setText={(val: string) => {
             setPairValue(ValidateNumber(val) ? val : '0');
           }}
-          tagText={'MAX'}
           disabled={isLPBalanceLoading}
+          errorCallback={(flag: boolean) => {
+            setIsInputFieldError(flag);
+          }}
         />
         <PlusMinusArrow>
           <img src={arrowDown} alt="arrow-down" />
@@ -82,19 +149,12 @@ const RemovePool = (props: props) => {
           ILabelValue={'You Receive'}
           IBalanceValue={getDisplayBalanceToken(firstCoinBalance, firstToken)}
           isBalanceLoading={isFirstCoinLoading}
-          DefaultValue={firstCoinValue.toString()}
+          DefaultValue={getDisplayBalanceToken(firstCoinValue, firstToken)}
           LogoSymbol={selectedPair.symbol1}
           hasDropDown={false}
           SymbolText={selectedPair.symbol1.toUpperCase()}
           inputMode={'numeric'}
-          setText={(val: string) => {
-            setFirstCoinValue(ValidateNumber(val) ? val : '0');
-          }}
-          tagText={'MAX'}
-          disabled={isFirstCoinLoading}
-          errorCallback={(flag: boolean) => {
-            setIsInputFieldError(flag);
-          }}
+          disabled={true}
         />
         <PlusMinusArrow>
           <img src={plus} alt="plus" />
@@ -103,29 +163,22 @@ const RemovePool = (props: props) => {
           ILabelValue={'Enter Amount'}
           IBalanceValue={getDisplayBalanceToken(secondCoinBalance, secondToken)}
           isBalanceLoading={isSecondCoinLoading}
-          DefaultValue={secondCoinValue.toString()}
+          DefaultValue={getDisplayBalanceToken(secondCoinValue, secondToken)}
           LogoSymbol={selectedPair.symbol2}
           hasDropDown={false}
           SymbolText={selectedPair.symbol2.toUpperCase()}
           inputMode={'numeric'}
-          setText={(val: string) => {
-            setSecondCoinValue(ValidateNumber(val) ? val : '0');
-          }}
-          tagText={'MAX'}
-          disabled={isSecondCoinLoading}
-          errorCallback={(flag: boolean) => {
-            setIsInputFieldError(flag);
-          }}
+          disabled={true}
         />
         <OneLine style={{ marginTop: '15px' }}>
           <div style={{ flex: 1 }}>
             <TextWithIcon>Price</TextWithIcon>
           </div>
           <OneLine>
-            <BeforeChip>0.05</BeforeChip>
-            <TagChips style={{ marginRight: '5px' }}>{selectedPair.symbol1.toUpperCase()}</TagChips>
+            <BeforeChip>{uniswapPrice}</BeforeChip>
+            <TagChips style={{ marginRight: '5px' }}>{selectedPair.symbol1}</TagChips>
             <BeforeChip>per</BeforeChip>
-            <TagChips>{selectedPair.symbol2.toUpperCase()}</TagChips>
+            <TagChips>{selectedPair.symbol2}</TagChips>
           </OneLine>
         </OneLine>
       </div>
@@ -208,21 +261,39 @@ const RemovePool = (props: props) => {
           <Grid container spacing={2} style={{ marginTop: '32px' }}>
             <Grid item lg={6} md={6} sm={12} xs={12}>
               <Button
-                text={'Approve'}
+                text={
+                  isLpTokenApproved
+                    ? `Approved`
+                    : !isLpTokenApproving
+                      ? `Approve`
+                      : 'Approving...'
+                }
                 size={'lg'}
-                onClick={() => {
-                  setConfirmModal(true);
-                }}
-                disabled={isInputFieldError}
+                disabled={
+                  isInputFieldError ||
+                  isLpTokenApproved ||
+                  !Number(pairValue)
+                }
+                onClick={approveLpToken}
+                loading={isLpTokenApproving}
               />
             </Grid>
             <Grid item lg={6} md={6} sm={12} xs={12}>
-              <Button text={'Remove Liquidity'} size={'lg'} disabled />
+              <Button
+                onClick={() => setConfirmModal(true)}
+                text={'Remove Liquidity'}
+                size={'lg'}
+                disabled={
+                  isInputFieldError ||
+                  !isLpTokenApproved ||
+                  !Number(pairValue)
+                }
+              />
             </Grid>
           </Grid>
         </CustomCardContainer>
       </CustomCard>
-      <CustomInfoCard className={'custom-mahadao-box'}>
+      {/* <CustomInfoCard className={'custom-mahadao-box'}>
         <CustomInfoCardHeader>Your Position</CustomInfoCardHeader>
         <CustomInfoCardDetails>
           <OneLine>
@@ -258,11 +329,11 @@ const RemovePool = (props: props) => {
             </div>
             <OneLine>
               <BeforeChip>{''}%</BeforeChip>
-              {/* <TagChips>0.06%</TagChips> */}
+              <TagChips>0.06%</TagChips>
             </OneLine>
           </OneLine>
         </CustomInfoCardDetails>
-      </CustomInfoCard>
+      </CustomInfoCard> */}
     </div>
   );
 };
