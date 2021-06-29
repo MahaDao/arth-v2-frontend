@@ -11,6 +11,7 @@ import arrowDown from '../../../assets/svg/arrowDown.svg';
 import TransparentInfoDiv from './InfoDiv';
 import Button from '../../../components/Button';
 import CustomModal from '../../../components/CustomModal';
+import CustomToolTip from '../../../components/CustomTooltip';
 import CustomInputContainer from '../../../components/CustomInputContainer';
 import { ValidateNumber } from '../../../components/CustomInputContainer/RegexValidation';
 
@@ -32,13 +33,9 @@ const BuyContent = () => {
   const core = useCore();
   const { account, connect } = useWallet();
   const tradetoken = core.tokens['ARTH'];
-  const receivetoken = core.tokens['ARTHX'];
 
   const { isLoading: isBuyAmountBalanceLoading, value: buyAmountBalance } = useTokenBalance(
     core.tokens['ARTH']
-  );
-  const { isLoading: isReceiveAmountBalanceLoading, value: receiveAmountBalance } = useTokenBalance(
-    core.tokens['ARTHX']
   );
   const price = useDFYNPrice(
     core.tokens['ARTH'],
@@ -162,24 +159,30 @@ const BuyContent = () => {
         <PlusMinusArrow>
           <img alt='Arrow' src={arrowDown} />
         </PlusMinusArrow>
-        <CustomInputContainer
-          ILabelValue={'You receive'}
-          IBalanceValue={getDisplayBalanceToken(receiveAmountBalance, receivetoken)}
-          isBalanceLoading={isReceiveAmountBalanceLoading}
-          ILabelInfoValue={''}
-          DefaultValue={outputAmount.toString()}
-          LogoSymbol={'ARTHX'}
-          hasDropDown={false}
-          SymbolText={'ARTHX'}
-          inputMode={'decimal'}
-          setText={(val: string) => { }}
-          disabled={true}
-          errorCallback={(flag: boolean) => {
-            setIsInputFieldError(flag);
-          }}
-        />
-        <div>
-          <TcContainer>
+        <div style={{ marginBottom: '32px' }}>
+          <TextWithIcon style={{ marginBottom: '12px' }}>You Receive</TextWithIcon>
+          <ReceiveContainer>
+            <OneLineInputwomargin>
+              <div style={{ flex: 1 }}>
+                <TextWithIcon>
+                  ARTHX
+                  <CustomToolTip
+                    toolTipText={'Amount of ARTHX bought'}
+                  />
+                </TextWithIcon>
+              </div>
+              <OneLineInputwomargin>
+                <BeforeChip className={'custom-mahadao-chip'}>
+                  {
+                    Number(buyAmount)
+                      ? Number(outputAmount).toLocaleString()
+                      : '0'
+                  }
+                </BeforeChip>
+                <TagChips>ARTHX</TagChips>
+              </OneLineInputwomargin>
+            </OneLineInputwomargin>
+            <br />
             {/* <OneLineInputwomargin>
               <div style={{ flex: 1 }}>
                 <TextWithIcon>Liquidity on Uniswap</TextWithIcon>
@@ -187,7 +190,8 @@ const BuyContent = () => {
               <OneLineInputwomargin>
                 <BeforeChip>$ 9,760,068</BeforeChip>
               </OneLineInputwomargin>
-            </OneLineInputwomargin> */}
+            </OneLineInputwomargin>
+             <br /> */}
             <OneLineInputwomargin style={{ marginTop: '10px' }}>
               <div style={{ flex: 1 }}>
                 <TextWithIcon>Price</TextWithIcon>
@@ -199,7 +203,7 @@ const BuyContent = () => {
                 <TagChips>ARTHX</TagChips>
               </OneLineInputwomargin>
             </OneLineInputwomargin>
-          </TcContainer>
+          </ReceiveContainer>
           {
             !!!account ? (
               <Button
@@ -251,12 +255,6 @@ const BuyContent = () => {
   );
 };
 
-
-const TcContainer = styled.div`
-  margin-top: 18px;
-  margin-bottom: 18px;
-`;
-
 const OneLineInputwomargin = styled.div`
   display: flex;
   flex-direction: row;
@@ -265,6 +263,14 @@ const OneLineInputwomargin = styled.div`
 `;
 
 const LeftTopCardContainer = styled.div``;
+
+const ReceiveContainer = styled.div`
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 12px;
+`;
+
 const PlusMinusArrow = styled.div`
   width: 100%;
   height: 32px;
