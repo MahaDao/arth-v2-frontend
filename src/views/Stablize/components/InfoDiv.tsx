@@ -2,15 +2,18 @@ import React from 'react';
 import styled from 'styled-components';
 
 import CustomToolTip from '../../../components/CustomTooltip';
+import Loader from 'react-spinners/BeatLoader';
 
 interface IProps {
   labelData: string;
   labelToolTipData?: string;
   rightLabelValue?: string;
   rightLabelUnit?: string;
+  isLoadingData?:boolean;
 }
 
 const TransparentInfoDiv = (props: IProps) => {
+  const {isLoadingData = false} = props
   return (
     <TransInfoDiv>
       <InfoSpan>
@@ -20,7 +23,10 @@ const TransparentInfoDiv = (props: IProps) => {
         )}
       </InfoSpan>
       <LabelInfoData>
-        {props.rightLabelValue && <LabelInfoText>{props.rightLabelValue}</LabelInfoText>}
+        {props.rightLabelValue &&
+          isLoadingData
+          ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
+          : <LabelInfoText>{props.rightLabelValue}</LabelInfoText>}
         {props.rightLabelUnit && (
           <LabelInfoDataChip>
             <LabelInfoDataChipText>{props.rightLabelUnit}</LabelInfoDataChipText>
@@ -98,6 +104,7 @@ const TransInfoDiv = styled.div`
   justify-content: space-between;
   display: flex;
   align-items: center;
+  width: 100%;
 `;
 
 export default TransparentInfoDiv;

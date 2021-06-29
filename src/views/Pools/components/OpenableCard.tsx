@@ -3,7 +3,6 @@ import { BigNumber } from 'ethers/lib/ethers';
 import { useMediaQuery } from 'react-responsive';
 import React, { useState, useMemo } from 'react';
 
-import TransparentInfoDiv from './InfoDiv';
 import Button from '../../../components/Button';
 import TokenSymbol from '../../../components/TokenSymbol';
 
@@ -14,6 +13,8 @@ import useCore from '../../../hooks/useCore';
 import useTotalSupply from '../../../hooks/useTotalSupply';
 import useTokenBalance from '../../../hooks/state/useTokenBalance';
 import { getDisplayBalanceToken } from '../../../utils/formatBalance';
+import TransparentInfoDiv from '../../Stablize/components/InfoDiv';
+import Grid from '@material-ui/core/Grid';
 
 export interface ICards {
   id: number;
@@ -49,20 +50,13 @@ export default (props: IProps) => {
 
   return (
     <MainOpenableCard>
-      <div
-        style={{
-          flexDirection: 'row',
-          display: 'flex',
-          justifyContent: 'space-between',
-          width: '100%',
-        }}
-      >
+      <CardWO>
         <LLabel>
           <TokenSymbol symbol={liquidityPair.symbol1} size={50} style={{ zIndex: 2 }} />
           <TokenSymbol
             symbol={liquidityPair.symbol2}
             size={50}
-            style={{ zIndex: 1, marginLeft: -5 }}
+            style={{ zIndex: 1, marginLeft: -15 }}
           />
           <LPairLabel>{liquidityPair.pairName}</LPairLabel>
         </LLabel>
@@ -70,65 +64,34 @@ export default (props: IProps) => {
           Manage
           <img alt='Arrow' src={cardOpen ? arrowUp : arrowDown} height={8} style={{ marginLeft: 6 }} />
         </Manage>
-      </div>
+      </CardWO>
       {cardOpen && (
-        <>
-          <div style={{ height: '20px' }} />
+        <div style={{ marginTop: '20px', width: '100%' }}>
           <TransparentInfoDiv
             labelData={'Your total pool tokens'}
-            rightLabelValue={
-              isLPBalanceLoading
-                ? ' Loading...'
-                : Number(getDisplayBalanceToken(lpBalance, core.tokens[liquidityPair.pairToken])).toLocaleString('en-US', { maximumFractionDigits: 3 })
-            }
+            rightLabelValue={Number(getDisplayBalanceToken(lpBalance, core.tokens[liquidityPair.pairToken])).toLocaleString('en-US', { maximumFractionDigits: 3 })}
             rightLabelUnit={`${liquidityPair.symbol1.toUpperCase()}/${liquidityPair.symbol2.toUpperCase()}`}
+            isLoadingData={isLPBalanceLoading}
           />
-
           <TransparentInfoDiv
             labelData={'Pooled ARTH'}
-            rightLabelValue={
-              isToken1BalanceLoading
-                ? ' Loading...'
-                : Number(getDisplayBalanceToken(token1Balance, core.tokens[liquidityPair.symbol1])).toLocaleString('en-US', { maximumFractionDigits: 3 })
-            }
+            rightLabelValue={Number(getDisplayBalanceToken(token1Balance, core.tokens[liquidityPair.symbol1])).toLocaleString('en-US', { maximumFractionDigits: 3 })}
             rightLabelUnit={`${liquidityPair.symbol1.toUpperCase()}`}
+            isLoadingData={isToken1BalanceLoading}
           />
-
           <TransparentInfoDiv
             labelData={'Pooled ARTH'}
-            rightLabelValue={
-              isToken2BalanceLoading
-                ? ' Loading...'
-                : Number(getDisplayBalanceToken(token2Balance, core.tokens[liquidityPair.symbol2])).toLocaleString('en-US', { maximumFractionDigits: 3 })
-            }
+            rightLabelValue={Number(getDisplayBalanceToken(token2Balance, core.tokens[liquidityPair.symbol2])).toLocaleString('en-US', { maximumFractionDigits: 3 })}
             rightLabelUnit={`${liquidityPair.symbol2.toUpperCase()}`}
+            isLoadingData={isToken2BalanceLoading}
           />
-
           <TransparentInfoDiv
             labelData={'Your pool share'}
-            rightLabelValue={
-              isPercentOfPoolLoading
-                ? ' Loading...'
-                : Number(percentOfPool.toString()).toLocaleString('en-US', { maximumFractionDigits: 3 }) + '%'
-            }
+            rightLabelValue={Number(percentOfPool.toString()).toLocaleString('en-US', { maximumFractionDigits: 3 }) + '%'}
+            isLoadingData={isPercentOfPoolLoading}
           />
-
-          <div
-            style={{
-              marginTop: 32,
-              width: '100%',
-              display: 'flex',
-              flexDirection: isMobile ? 'column-reverse' : 'row',
-              justifyContent: 'space-evenly',
-            }}
-          >
-            <div
-              style={{
-                marginRight: !isMobile ? 5 : undefined,
-                width: '100%',
-                marginTop: isMobile ? 5 : undefined,
-              }}
-            >
+          <Grid container spacing={2} style={{ marginTop: '32px' }}>
+            <Grid item lg={6} md={6} sm={12} xs={12}>
               <Button
                 text={'Remove'}
                 variant={'transparent'}
@@ -137,8 +100,8 @@ export default (props: IProps) => {
                   setChangeAction('Remove')
                 }}
               />
-            </div>
-            <div style={{ marginLeft: !isMobile ? 5 : undefined, width: '100%' }}>
+            </Grid>
+            <Grid item lg={6} md={6} sm={12} xs={12}>
               <Button
                 text={'Add Liquidity'}
                 onClick={() => {
@@ -146,13 +109,13 @@ export default (props: IProps) => {
                   setChangeAction('Add');
                 }}
               />
-            </div>
-          </div>
-        </>
+            </Grid>
+          </Grid>
+        </div>
       )}
     </MainOpenableCard>
   );
-};
+}
 
 const FeesSpan = styled.div`
   font-family: Inter;
@@ -189,6 +152,13 @@ const MainOpenableCard = styled.div`
     padding: 20px 24px;
   }
 `;
+
+const CardWO = styled.div`
+  flex-direction: row;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+`
 
 const LLabel = styled.div`
   display: flex;
