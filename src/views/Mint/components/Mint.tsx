@@ -345,56 +345,49 @@ const MintTabContent = (props: WithSnackbarProps & IProps) => {
                       />
                     ) : (
                       !isCollatApproved ? (
-                        <>
-                          <ApproveButtonContainer>
-                            {
-                              showDepositWETH && (
-                                <>
-                                  <Button
-                                    text={`Convert your ${config.blockchainToken} into ${selectedCollateralCoin}`}
-                                    size={'sm'}
-                                    onClick={() => setdepositModal(true)}
-                                    tracking_id={'deposit_weth'}
-                                  />
-                                  <div style={{ padding: 5 }} />
-                                </>
-                              )
-                            }
-                            <Button
-                              text={
-                                isCollatApproved
-                                  ? `Approved ${selectedCollateralCoin}`
-                                  : !isCollatApproving
-                                    ? `Approve ${selectedCollateralCoin}`
-                                    : 'Approving...'
-                              }
-                              size={'sm'}
-                              disabled={
-                                mintCR.lte(1e6) ||
-                                isInputFieldError ||
-                                isCollatApproved ||
-                                !Number(collateralValue)
-                              }
-                              onClick={approveCollat}
-                              loading={isCollatApproving}
-                            />
-                          </ApproveButtonContainer>
-                          <br />
-                        </>
-                      ) : (
-                        <ApproveButtonContainer>
-                          {
-                            showDepositWETH && (
-                              <>
+                        <Grid container spacing={2}>
+                          {showDepositWETH &&
+                            (
+                              <div style={{marginBottom: '12px', width: '100%'}}>
                                 <Button
                                   text={`Convert your ${config.blockchainToken} into ${selectedCollateralCoin}`}
                                   size={'lg'}
                                   onClick={() => setdepositModal(true)}
                                   tracking_id={'deposit_weth'}
                                 />
-                                <div style={{ padding: 5 }} />
-                              </>
-                            )
+                              </div>)
+                          }
+                          <Button
+                            text={
+                              isCollatApproved
+                                ? `Approved ${selectedCollateralCoin}`
+                                : !isCollatApproving
+                                  ? `Approve ${selectedCollateralCoin}`
+                                  : 'Approving...'
+                            }
+                            size={'lg'}
+                            disabled={
+                              mintCR.lte(1e6) ||
+                              isInputFieldError ||
+                              isCollatApproved ||
+                              !Number(collateralValue)
+                            }
+                            onClick={approveCollat}
+                            loading={isCollatApproving}
+                          />
+                        </Grid>
+                      ) : (
+                        <Grid container spacing={2}>
+                          {showDepositWETH &&
+                          (
+                            <div style={{marginBottom: '12px', width: '100%'}}>
+                              <Button
+                                text={`Convert your ${config.blockchainToken} into ${selectedCollateralCoin}`}
+                                size={'lg'}
+                                onClick={() => setdepositModal(true)}
+                                tracking_id={'deposit_weth'}
+                              />
+                            </div>)
                           }
                           <Button
                             text={'Mint'}
@@ -409,7 +402,7 @@ const MintTabContent = (props: WithSnackbarProps & IProps) => {
                             }
                             onClick={() => setOpenModal(1)}
                           />
-                        </ApproveButtonContainer>
+                        </Grid>
                       )
                     )
                   }
