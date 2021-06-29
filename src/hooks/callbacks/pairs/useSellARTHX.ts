@@ -8,34 +8,30 @@ import formatErrorMessage from '../../../utils/formatErrorMessage';
 import { useTransactionAdder } from '../../../state/transactions/hooks';
 
 export default function (
-  tokenA: string,
-  tokenB: string,
-  amountADesired: BigNumber,
-  amountBDesired: BigNumber,
+  buyToken: string,
+  sellToken: string,
+  amountIn: BigNumber,
+  amountOutMin: BigNumber,
   to: string
 ) {
   const core = useCore();
   const addPopup = useAddPopup();
   const addTransaction = useTransactionAdder();
 
-  const amountAMinAfterSlippage = useApplySlippage(amountADesired);
-  const amountBMinAfterSlippage = useApplySlippage(amountBDesired);
+  const amountOutAfterSlippage = useApplySlippage(amountOutMin);
 
   const action = useCallback(async (callback?: () => void): Promise<void> => {
     try {
-      const response = await core.contracts.Router.addLiquidity(
-        tokenA,
-        tokenB,
-        amountADesired,
-        amountBDesired,
-        amountAMinAfterSlippage,
-        amountBMinAfterSlippage,
+      const response = await core.contracts.UniswapV2Router02.swapExactTokensForTokens(
+        amountIn,
+        amountOutAfterSlippage,
+        [sellToken, buyToken],
         to,
         Math.ceil(Date.now() / 1000) + 5 * 60 * 1000,
       );
 
       addTransaction(response, {
-        summary: `Add Liquidity`
+        summary: `Buy ARTHX`
       });
 
       if (callback) callback();
@@ -51,13 +47,11 @@ export default function (
     core,
     addPopup,
     addTransaction,
-    tokenA,
-    tokenB,
-    amountADesired,
-    amountBDesired,
-    amountAMinAfterSlippage,
-    amountBMinAfterSlippage,
-    to
+    buyToken,
+    sellToken,
+    amountIn,
+    amountOutAfterSlippage,
+    to,
   ]);
 
   return action;

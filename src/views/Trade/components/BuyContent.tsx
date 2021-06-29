@@ -17,10 +17,10 @@ import { ValidateNumber } from '../../../components/CustomInputContainer/RegexVa
 
 import useCore from '../../../hooks/useCore';
 import useDFYNPrice from '../../../hooks/useDFYNPrice';
-import useARTHXBuyAmount from '../../../hooks/state/useARTHXBuyAmount';
 import useTokenBalance from '../../../hooks/state/useTokenBalance';
 import useBuyARTHX from '../../../hooks/callbacks/pairs/useBuyARTHX';
 import { getDisplayBalanceToken } from '../../../utils/formatBalance';
+import useARTHXBuyAmount from '../../../hooks/state/useARTHXBuyAmount';
 import useApprove, { ApprovalState } from '../../../hooks/callbacks/useApprove';
 
 const BuyContent = () => {
@@ -240,7 +240,8 @@ const BuyContent = () => {
                     variant={'default'}
                     disabled={isInputFieldError ||
                       !Number(buyAmount) ||
-                      !Number(outputAmount)
+                      !Number(outputAmount) ||
+                      isOutAmountLoading
                     }
                     onClick={approveARTH}
                     loading={isARTHApproving}
