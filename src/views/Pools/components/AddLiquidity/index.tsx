@@ -20,6 +20,7 @@ import useTokenBalance from '../../../../hooks/state/useTokenBalance';
 import usePairReserves from '../../../../hooks/state/usePairReserves';
 import useAddLiquidity from '../../../../hooks/callbacks/pairs/useAddLiquidity';
 import useApprove, { ApprovalState } from '../../../../hooks/callbacks/useApprove';
+import usePairLiquidityMinted from '../../../../hooks/state/usePairLiquidityMinted';
 import { getDisplayBalance, getDisplayBalanceToken } from '../../../../utils/formatBalance';
 
 interface SelectedPair {
@@ -52,40 +53,37 @@ const AddLiquidity = (props: props) => {
     core.tokens[selectedPair.symbol1],
     core.tokens[selectedPair.symbol2]
   );
+  const uniswapPrice = useDFYNPrice(
+    core.tokens[selectedPair.symbol1],
+    core.tokens[selectedPair.symbol2]
+  );
   const { isLoading: isFirstCoinLoading, value: firstCoinBalance } = useTokenBalance(
     core.tokens[selectedPair.symbol1]
   );
   const { isLoading: isSecondCoinLoading, value: secondCoinBalance } = useTokenBalance(
     core.tokens[selectedPair.symbol2]
   );
-  const uniswapPrice = useDFYNPrice(
-    core.tokens[selectedPair.symbol1],
-    core.tokens[selectedPair.symbol2]
-  );
+
   const [firstCoinApproveStatus, approveFirstCoin] = useApprove(
-    core.tokens[selectedPair.symbol1], core.contracts.Router.address
+    core.tokens[selectedPair.symbol1],
+    core.contracts.Router.address
   );
   const [secondCoinApproveStatus, approveSecondCoin] = useApprove(
     core.tokens[selectedPair.symbol2],
     core.contracts.Router.address
   );
-
-  const [isYouWIllRecieveLoading, youWillReceive] = useMemo(() => {
-    if (isLPTotalSupplyLoading || isReservesLoading) return [true, 0];
-    if (lpTotalSupply.lte(0)) return [false, Math.sqrt(Number(firstCoinValue) * Number(secondCoinValue)) - (1e3 / 1e18)];
-    return [
-      false,
-      Math.min(
-        Number(firstCoinValue) * Number(getDisplayBalance(lpTotalSupply, 18)) / Number(reserves.firstCoin),
-        Number(secondCoinValue) * Number(getDisplayBalance(lpTotalSupply, 18)) / Number(reserves.secondCoin)
-      )
-    ];
-  }, [lpTotalSupply, isReservesLoading, reserves, firstCoinValue, secondCoinValue, isLPTotalSupplyLoading]);
+  const { isLoading: isLiquidityMintedLoading, value: liquidityMinted } = usePairLiquidityMinted(
+    core.tokens[selectedPair.symbol1],
+    core.tokens[selectedPair.symbol2],
+    BigNumber.from(parseUnits(`${firstCoinValue}`, 18)),
+    BigNumber.from(parseUnits(`${secondCoinValue}`, 18)),
+    selectedPair.pairToken
+  );
 
   const [isYourShareLoading, yourShare] = useMemo(() => {
-    if (isYouWIllRecieveLoading || isLpBalanceLoading) return [true, BigNumber.from(0)];
+    if (isLiquidityMintedLoading || isLpBalanceLoading) return [true, BigNumber.from(0)];
 
-    const newLPMintBN = BigNumber.from(parseUnits(`${Number(youWillReceive)}`, 18));
+    const newLPMintBN = BigNumber.from(parseUnits(`${Number(liquidityMinted)}`, 18));
     return [
       false,
       newLPMintBN
@@ -93,7 +91,7 @@ const AddLiquidity = (props: props) => {
         .mul(100)
         .div(lpTotalSupply.add(newLPMintBN))
     ];
-  }, [youWillReceive, isLpBalanceLoading, isYouWIllRecieveLoading, lpTotalSupply, lpBalance]);
+  }, [liquidityMinted, isLpBalanceLoading, isLiquidityMintedLoading, lpTotalSupply, lpBalance]);
 
   const addLiquidity = useAddLiquidity(
     core.tokens[selectedPair.symbol1].address,
@@ -183,9 +181,9 @@ const AddLiquidity = (props: props) => {
             labelData={`You receiving pool token`}
             rightLabelUnit={`${selectedPair.symbol1}/${selectedPair.symbol2}`}
             rightLabelValue={
-              isYouWIllRecieveLoading
+              isLiquidityMintedLoading
                 ? ' Loading...'
-                : Number(youWillReceive).toLocaleString()
+                : liquidityMinted
             }
           />
           <Grid container spacing={2} style={{ marginTop: '32px' }}>

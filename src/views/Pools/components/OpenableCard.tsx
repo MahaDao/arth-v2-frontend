@@ -37,10 +37,10 @@ export default (props: IProps) => {
   const isMobile = useMediaQuery({ query: '(max-device-width: 1284px)' });
 
   const core = useCore();
+  const { isLoading: isLPTotalSupplyLoading, value: lpTotalSupply } = useTotalSupply(liquidityPair.pairToken);
   const { isLoading: isLPBalanceLoading, value: lpBalance } = useTokenBalance(core.tokens[liquidityPair.pairToken]);
   const { isLoading: isToken1BalanceLoading, value: token1Balance } = useTokenBalance(core.tokens[liquidityPair.symbol1]);
   const { isLoading: isToken2BalanceLoading, value: token2Balance } = useTokenBalance(core.tokens[liquidityPair.symbol2]);
-  const { isLoading: isLPTotalSupplyLoading, value: lpTotalSupply } = useTotalSupply(liquidityPair.pairToken);
 
   const [isPercentOfPoolLoading, percentOfPool] = useMemo(() => {
     if (isLPBalanceLoading || isLPTotalSupplyLoading) return [true, BigNumber.from(0)];
