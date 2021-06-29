@@ -12,7 +12,7 @@ const LockDeposit = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [symbolSelected, setSymbolSelected] = useState<'ARTH' | 'ARTHX' | ''>('')
 
-  return(
+  return (
     <div>
       <Grid container spacing={2} style={{ marginTop: '32px' }}>
         <Grid item lg={3} md={3} sm={12} xs={12}>
@@ -23,14 +23,16 @@ const LockDeposit = () => {
               <Grid container>
                 <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                   <CardTitle>
-                    Deposit ARTHX
+                    Convert ARTH into Debt
                   </CardTitle>
                   <TextWithIcon>
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                    when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-                    It has survived not only five centuries, but also the leap into electronic typesetting,
-                    remaining essentially unchanged.
+                    This debt pool allows users to convert their ARTH token into debt to the protocol. The protocol promises
+                    to pay all holders of this pool their ARTH (polygon) tokens at a price of 1$.
+                  </TextWithIcon>
+                  <br />
+                  <TextWithIcon>
+                    Once your deposit your tokens; You will not be able to withdraw them from this pool. You will earn
+                    rewards in USDC until the debt is paid off.
                   </TextWithIcon>
                 </Grid>
                 <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
@@ -46,9 +48,9 @@ const LockDeposit = () => {
                         }
                       />
                     ) : (
-                      <Button text={'Deposit ARTH'} size={'sm'} onClick={() => {
-                      setSymbolSelected('ARTH');
-                      setOpenModal(true);
+                      <Button disabled text={'Deposit ARTH (Opening Soon)'} size={'sm'} onClick={() => {
+                        setSymbolSelected('ARTH');
+                        setOpenModal(true);
                       }} />
                     )}
                   </ButtonConatiner>
@@ -56,19 +58,21 @@ const LockDeposit = () => {
               </Grid>
             </CustomInfoCardDetails>
           </CustomInfoCard>
-          <CustomInfoCard className={'custom-mahadao-box'} style={{marginTop: '24px'}}>
+          <CustomInfoCard className={'custom-mahadao-box'} style={{ marginTop: '24px' }}>
             <CustomInfoCardDetails>
               <Grid container>
                 <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                   <CardTitle>
-                    Deposit ARTHX
+                    Convert ARTHX into Debt
                   </CardTitle>
                   <TextWithIcon>
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                    when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-                    It has survived not only five centuries, but also the leap into electronic typesetting,
-                    remaining essentially unchanged.
+                    This debt pool allows users to convert their ARTHX token into debt to the protocol. The protocol promises
+                    to pay all holders of this pool their ARTHX (polygon) tokens at a price of 0.012$.
+                  </TextWithIcon>
+                  <br />
+                  <TextWithIcon>
+                    Once your deposit your tokens; You will not be able to withdraw them from this pool. You will earn
+                    rewards in USDC until the debt is paid off.
                   </TextWithIcon>
                 </Grid>
                 <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
@@ -84,10 +88,10 @@ const LockDeposit = () => {
                         }
                       />
                     ) : (
-                      <Button text={'Deposit ARTHX'} size={'sm'} onClick={() => {
+                      <Button text={'Deposit ARTHX (Opening soon)'} disabled size={'sm'} onClick={() => {
                         setSymbolSelected('ARTHX');
                         setOpenModal(true);
-                      }}/>
+                      }} />
                     )}
 
                   </ButtonConatiner>
@@ -105,7 +109,7 @@ const LockDeposit = () => {
             setOpenModal(false);
             setSymbolSelected('');
           }}
-          onDeposit={() => {}}
+          onDeposit={() => { }}
           symbol={symbolSelected}
         />)
       }
