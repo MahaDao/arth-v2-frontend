@@ -34,7 +34,7 @@ const useARTHXBuyAmount = (
     const [outputAmount,] = pair.getOutputAmount(new TokenAmount(assetAT, assetAAmount.toString()));
     setReserves({
       isLoading: false,
-      value: outputAmount.toSignificant(3)
+      value: outputAmount.toSignificant(18)
     });
   }, [
     assetA,
