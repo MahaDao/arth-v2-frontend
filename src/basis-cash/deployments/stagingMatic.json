@@ -132,7 +132,7 @@
     "abi": "UniswapV2Router02"
   },
   "Router": {
-    "address": "0xb569ddDcF86c9f64dD5DddBe7961b98814123442",
+    "address": "0x50181C9675439813AB058Ca67307Bb01776D1dF5",
     "abi": "Router"
   },
   "USDT": {

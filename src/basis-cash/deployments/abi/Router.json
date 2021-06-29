@@ -3,16 +3,6 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "arthAddr_",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "mahaAddr_",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
         "name": "arthxAddr_",
         "type": "address"
       },
@@ -176,19 +166,6 @@
   },
   {
     "inputs": [],
-    "name": "arthAddr",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "arthxAddr",
     "outputs": [
       {
@@ -276,19 +253,6 @@
       }
     ],
     "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "mahaAddr",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
