@@ -41,8 +41,8 @@ const SellContent = () => {
     core.tokens['ARTHX']
   );
   const price = useDFYNPrice(
-    core.tokens['ARTHX'],
-    core.tokens['ARTH']
+    core.tokens['ARTH'],
+    core.tokens['ARTHX']
   );
   const { isLoading: isTaxPercentLoading, value: taxPercent } = useARTHXTaxFee();
 
@@ -80,8 +80,8 @@ const SellContent = () => {
   );
 
   const sellARTHX = useSellARTHX(
-    core.tokens['ARTHX'].address,
     core.tokens['ARTH'].address,
+    core.tokens['ARTHX'].address,
     BigNumber.from(parseUnits(`${sellAmount}`, 18)),
     BigNumber.from(parseUnits(`${outputAmount}`, 18)),
     account
@@ -156,7 +156,7 @@ const SellContent = () => {
     <div>
       <LeftTopCardContainer className={'custom-mahadao-container-content'}>
         <CustomInputContainer
-          ILabelValue={'You receive'}
+          ILabelValue={'Enter amount'}
           IBalanceValue={getDisplayBalanceToken(sellAmountBalance, sellToken)}
           isBalanceLoading={isSellAmountBalanceLoading}
           ILabelInfoValue={''}
@@ -195,7 +195,7 @@ const SellContent = () => {
                     : '0'
                 }
               </BeforeChip>
-              <TagChips>ARTHX</TagChips>
+              <TagChips>ARTH</TagChips>
             </OneLineInputwomargin>
           </OneLineInputwomargin>
           <OneLineInputwomargin style={{ marginTop: '10px' }}>
@@ -221,9 +221,9 @@ const SellContent = () => {
             </div>
             <OneLineInputwomargin>
               <BeforeChip>{price}</BeforeChip>
-              <TagChips style={{ marginRight: '4px' }}>ARTHX</TagChips>
+              <TagChips style={{ marginRight: '4px' }}>ARTH</TagChips>
               <BeforeChip>per</BeforeChip>
-              <TagChips>ARTH</TagChips>
+              <TagChips>ARTHX</TagChips>
             </OneLineInputwomargin>
           </OneLineInputwomargin>
         </ReceiveContainer>
