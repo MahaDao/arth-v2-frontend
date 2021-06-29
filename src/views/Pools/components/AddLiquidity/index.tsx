@@ -145,8 +145,10 @@ const AddLiquidity = (props: props) => {
     const valueInNumber: number = Number(val);
     if (!valueInNumber) return;
 
-    const value = Number(val) * Number(uniswapPrice);
-    setFirstCoinValue(`${value}`);
+    const value = BigNumber.from(parseUnits(`${val}`, 18))
+      .mul(BigNumber.from(parseUnits(`${val}`, 3)))
+      .div(1e3);
+    setFirstCoinValue(getDisplayBalance(value, 18));
   }
 
   const ConfirmModal = () => {
