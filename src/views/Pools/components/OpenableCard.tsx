@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Grid from '@material-ui/core/Grid';
 import { BigNumber } from 'ethers/lib/ethers';
 import { useMediaQuery } from 'react-responsive';
 import React, { useState, useMemo } from 'react';
@@ -12,9 +13,8 @@ import arrowDown from '../../../assets/svg/arrowDown2.svg';
 import useCore from '../../../hooks/useCore';
 import useTotalSupply from '../../../hooks/useTotalSupply';
 import useTokenBalance from '../../../hooks/state/useTokenBalance';
-import { getDisplayBalanceToken } from '../../../utils/formatBalance';
 import TransparentInfoDiv from '../../Stablize/components/InfoDiv';
-import Grid from '@material-ui/core/Grid';
+import { getDisplayBalance, getDisplayBalanceToken } from '../../../utils/formatBalance';
 
 export interface ICards {
   id: number;
@@ -45,7 +45,7 @@ export default (props: IProps) => {
 
   const [isPercentOfPoolLoading, percentOfPool] = useMemo(() => {
     if (isLPBalanceLoading || isLPTotalSupplyLoading) return [true, BigNumber.from(0)];
-    return [false, lpBalance.mul(100).div(lpTotalSupply)];
+    return [false, lpBalance.mul(1e6).div(lpTotalSupply)];
   }, [lpBalance, isLPBalanceLoading, isLPTotalSupplyLoading, lpTotalSupply]);
 
   return (
@@ -87,7 +87,7 @@ export default (props: IProps) => {
           />
           <TransparentInfoDiv
             labelData={'Your pool share'}
-            rightLabelValue={Number(percentOfPool.toString()).toLocaleString('en-US', { maximumFractionDigits: 3 }) + '%'}
+            rightLabelValue={Number(getDisplayBalance(percentOfPool, 4)).toLocaleString('en-US', { maximumFractionDigits: 3 }) + '%'}
             isLoadingData={isPercentOfPoolLoading}
           />
           <Grid container spacing={2} style={{ marginTop: '32px' }}>

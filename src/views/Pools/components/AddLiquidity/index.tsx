@@ -17,10 +17,10 @@ import useCore from '../../../../hooks/useCore';
 import useDFYNPrice from '../../../../hooks/useDFYNPrice';
 import useTotalSupply from '../../../../hooks/useTotalSupply';
 import useTokenBalance from '../../../../hooks/state/useTokenBalance';
-import { getDisplayBalanceToken } from '../../../../utils/formatBalance';
 import useAddLiquidity from '../../../../hooks/callbacks/pairs/useAddLiquidity';
 import useApprove, { ApprovalState } from '../../../../hooks/callbacks/useApprove';
 import usePairLiquidityMinted from '../../../../hooks/state/usePairLiquidityMinted';
+import { getDisplayBalance, getDisplayBalanceToken } from '../../../../utils/formatBalance';
 
 interface SelectedPair {
   id: number;
@@ -83,7 +83,7 @@ const AddLiquidity = (props: props) => {
       false,
       newLPMintBN
         .add(lpBalance)
-        .mul(100)
+        .mul(1e6)
         .div(lpTotalSupply.add(newLPMintBN))
     ];
   }, [
@@ -172,7 +172,7 @@ const AddLiquidity = (props: props) => {
           />
           <TransparentInfoDiv
             labelData={`Your share of pool`}
-            rightLabelValue={Number(yourShare.toString()).toLocaleString() + '%'}
+            rightLabelValue={Number(getDisplayBalance(yourShare, 4)).toLocaleString() + '%'}
             isLoadingData={isYourShareLoading}
           />
           <Divider style={{ background: 'rgba(255, 255, 255, 0.08)', margin: '15px 0px' }} />
@@ -279,7 +279,7 @@ const AddLiquidity = (props: props) => {
                   {
                     isYourShareLoading
                       ? ' - %'
-                      : Number(yourShare.toString()).toLocaleString() + '%'
+                      : Number(getDisplayBalance(yourShare, 4)).toLocaleString() + '%'
                   }
                 </BeforeChip>
               </OneLine>
