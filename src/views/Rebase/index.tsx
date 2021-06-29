@@ -227,7 +227,7 @@ const Genesis = (props: WithSnackbarProps) => {
           <PageSubHeading>
             <StartsIn>Starts in</StartsIn>
             <Countdown
-              date={new Date('30 Jun 2021 15:00:00 GMT')}
+              date={new Date('2 Jul 2021 15:00:00 GMT')}
               renderer={({ days, hours, minutes, seconds, completed }) => {
                 return (
                   <HeaderSpan>
