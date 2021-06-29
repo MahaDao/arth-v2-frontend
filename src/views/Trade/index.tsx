@@ -9,6 +9,7 @@ import dfyn from '../../assets/img/DFYN.png';
 import BuyContent from './components/BuyContent';
 import SellContent from './components/SellContent';
 import Container from '../../components/Container';
+import { Link } from 'react-router-dom';
 
 const Boardrooms = (props: WithSnackbarProps) => {
   useEffect(() => window.scrollTo(0, 0), []);
@@ -103,8 +104,8 @@ const Boardrooms = (props: WithSnackbarProps) => {
                   </Grid>
                 </Grid>
               </CustomInfoCardDetails>
-              <CustomInfoCardButton>
-                <img alt='Logo' src={dfyn} style={{ marginTop: '-6px', marginRight: '10px' }} />
+              <CustomInfoCardButton to={'/pools'}>
+                <img alt='Logo' src={dfyn} style={{ marginRight: '10px' }} height={30}/>
                 <span>Add liquidity on Uniswap</span>
                 <CallMadeIcon style={{ fontSize: 15, marginLeft: '10px' }} />
               </CustomInfoCardButton>
@@ -125,7 +126,7 @@ const GradientDiv = styled.div`
   z-index: -5;
 `;
 
-const CustomInfoCardButton = styled.div`
+const CustomInfoCardButton = styled(Link)`
   width: 100%;
   border: 1px solid rgba(255, 255, 255, 0.32);
   box-sizing: border-box;
@@ -133,7 +134,7 @@ const CustomInfoCardButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 12px;
+  padding: 6px;
   font-family: Inter;
   font-style: normal;
   font-weight: 600;
@@ -141,7 +142,8 @@ const CustomInfoCardButton = styled.div`
   line-height: 20px;
   cursor: pointer;
   &:hover {
-    background: #423b38;
+    background: transparent;
+    color: #ffffff;
   }
   text-align: center;
   color: #ffffff;
