@@ -60,8 +60,8 @@ const RemovePool = (props: props) => {
         </div>
         <CustomInputContainer
           ILabelValue={'Enter Token Amount'}
-          IBalanceValue={'0'}
-          isBalanceLoading={true}
+          IBalanceValue={getDisplayBalanceToken(lpBalance, lpToken)}
+          isBalanceLoading={isLPBalanceLoading}
           DefaultValue={pairValue.toString()}
           LogoSymbol={''}
           hasDropDown={false}
@@ -73,6 +73,7 @@ const RemovePool = (props: props) => {
             setPairValue(ValidateNumber(val) ? val : '0');
           }}
           tagText={'MAX'}
+          disabled={isLPBalanceLoading}
         />
         <PlusMinusArrow>
           <img src={arrowDown} alt="arrow-down" />
@@ -105,7 +106,7 @@ const RemovePool = (props: props) => {
           DefaultValue={secondCoinValue.toString()}
           LogoSymbol={selectedPair.symbol2}
           hasDropDown={false}
-          SymbolText={selectedPair.symbol1.toUpperCase()}
+          SymbolText={selectedPair.symbol2.toUpperCase()}
           inputMode={'numeric'}
           setText={(val: string) => {
             setSecondCoinValue(ValidateNumber(val) ? val : '0');
