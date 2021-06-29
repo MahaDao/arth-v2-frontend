@@ -82,7 +82,7 @@ const SellContent = () => {
   const sellARTHX = useSellARTHX(
     core.tokens['ARTH'].address,
     core.tokens['ARTHX'].address,
-    BigNumber.from(parseUnits(`${sellAmount}`, 18)).sub(tradingFee),
+    BigNumber.from(parseUnits(`${sellAmount}`, 18)),
     BigNumber.from(parseUnits(`${outputAmount}`, 18)),
     account
   );
