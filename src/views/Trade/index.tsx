@@ -1,23 +1,21 @@
-import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import Container from '../../components/Container';
 import Grid from '@material-ui/core/Grid';
-import uniswapLogo from '../../assets/svg/uniswapLogo.svg';
-import shushiswap from '../../assets/svg/sushiswapLogo.svg';
-import { withSnackbar, WithSnackbarProps } from 'notistack';
+import React, { useEffect, useState } from 'react';
 import CallMadeIcon from '@material-ui/icons/CallMade';
-import SellContent from './components/SellContent';
+import { withSnackbar, WithSnackbarProps } from 'notistack';
+
+import dfyn from '../../assets/img/DFYN.png';
+
 import BuyContent from './components/BuyContent';
+import SellContent from './components/SellContent';
+import Container from '../../components/Container';
 
 const Boardrooms = (props: WithSnackbarProps) => {
   useEffect(() => window.scrollTo(0, 0), []);
 
   const [type, setType] = useState<'Buy' | 'Sell'>('Buy');
 
-  const [selectedSwap, setSelectedSwap] = useState<'Uniswap' | 'Sushiswap'>('Uniswap');
-
-  // const isLaunched = Date.now() >= config.boardroomLaunchesAt.getTime();
-  // if (!basisCash) return <div />;
+  // const [selectedSwap, setSelectedSwap] = useState<'Uniswap' | 'Sushiswap'>('Uniswap');
 
   const TabContent = () => {
     return (
@@ -54,7 +52,7 @@ const Boardrooms = (props: WithSnackbarProps) => {
             Lorem ipsum dolor sit amet, consectetur adipiscing elit.
           </PageSubHeading>
         </div>
-        <Grid container>
+        {/* <Grid container>
           <Grid item lg={3}></Grid>
           <Grid item lg={6} md={12} sm={12} xs={12}>
             <RadioSelectionConatiner>
@@ -91,7 +89,7 @@ const Boardrooms = (props: WithSnackbarProps) => {
             </RadioSelectionConatiner>
           </Grid>
           <Grid item lg={3}></Grid>
-        </Grid>
+        </Grid> */}
         {TabContent()}
         <Grid container style={{ marginTop: '16px' }}>
           <Grid item lg={3} sm={'auto'}></Grid>
@@ -100,13 +98,13 @@ const Boardrooms = (props: WithSnackbarProps) => {
               <CustomInfoCardDetails>
                 <Grid container>
                   <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                    <InfoBoxTitle>ETH-ARTH Uniswap pool</InfoBoxTitle>
-                    <InfoBoxSubTitle>Provide liquidity to ETH-ARTH on uniswap</InfoBoxSubTitle>
+                    <InfoBoxTitle>ARTH-ARTHX DFYN pool</InfoBoxTitle>
+                    <InfoBoxSubTitle>Provide liquidity to ARTH-ARTHX on DFYN</InfoBoxSubTitle>
                   </Grid>
                 </Grid>
               </CustomInfoCardDetails>
               <CustomInfoCardButton>
-                <img src={uniswapLogo} style={{ marginTop: '-6px', marginRight: '10px' }} />
+                <img alt='Logo' src={dfyn} style={{ marginTop: '-6px', marginRight: '10px' }} />
                 <span>Add liquidity on Uniswap</span>
                 <CallMadeIcon style={{ fontSize: 15, marginLeft: '10px' }} />
               </CustomInfoCardButton>
@@ -123,7 +121,6 @@ const GradientDiv = styled.div`
   background: linear-gradient(180deg, #2a2827 0%, rgba(42, 40, 39, 0) 100%);
   height: 270px;
   position: absolute;
-  // border: 1px solid;
   width: 100%;
   z-index: -5;
 `;
@@ -146,12 +143,8 @@ const CustomInfoCardButton = styled.div`
   &:hover {
     background: #423b38;
   }
-  /* identical to box height, or 143% */
-
   text-align: center;
-
   color: #ffffff;
-
   opacity: 0.88;
 `;
 
