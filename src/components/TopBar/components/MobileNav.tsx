@@ -77,13 +77,21 @@ const MobileNav = (props: props) => {
       {
         !walletInfo ? (
           <div style={{ width: '100%', background: '#1e1d1d', marginTop: -2 }}>
-            <StyledLink
+            {/* <StyledLink
               exact
               activeClassName="active"
               to="/stats"
               onClick={() => props.onClick()}
             >
               Analytics
+            </StyledLink> */}
+            <StyledLink
+              exact
+              activeClassName="active"
+              to="/genesis"
+              onClick={() => props.onClick()}
+            >
+              Genesis
             </StyledLink>
             <StyledLink
               exact

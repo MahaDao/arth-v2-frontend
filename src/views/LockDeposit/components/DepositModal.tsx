@@ -10,6 +10,8 @@ import Button from '../../../components/Button';
 import useTokenBalance from '../../../hooks/state/useTokenBalance';
 import { getDisplayBalanceToken } from '../../../utils/formatBalance';
 import Loader from 'react-spinners/BeatLoader';
+import useDeposit from '../../../hooks/callbacks/debtBoardroom/useDeposit';
+import { BigNumber } from 'ethers';
 
 interface IProps {
   onCancel: () => void;
@@ -18,7 +20,7 @@ interface IProps {
 }
 
 export default (props: IProps) => {
-  const {symbol} = props;
+  const { symbol } = props;
   const [val, setValue] = useState<string>('0');
   const [isInputFieldError, setIsInputFieldError] = useState<boolean>(false);
 
@@ -30,6 +32,8 @@ export default (props: IProps) => {
     core.tokens[symbol],
   );
 
+  const decimals = BigNumber.from(10).pow(18)
+  const deposit = useDeposit(props.symbol, BigNumber.from(val).mul(decimals))
 
   return (
     <CustomModal
@@ -89,9 +93,9 @@ export default (props: IProps) => {
           <Grid item lg={6} md={6} sm={12} xs={12}>
             <Button
               disabled={false}
-              text={'Lock Deposit'}
+              text={'Convert to Debt'}
               size={'lg'}
-              onClick={() => props.onDeposit()}
+              onClick={deposit}
             />
           </Grid>
         </Grid>

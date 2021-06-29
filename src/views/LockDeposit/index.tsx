@@ -5,6 +5,7 @@ import { useWallet } from 'use-wallet';
 
 import Button from '../../components/Button';
 import DepositModal from './components/DepositModal';
+import BoardroomSection from './components/BoardroomSection';
 
 const LockDeposit = () => {
   const { account, connect } = useWallet();
@@ -18,87 +19,18 @@ const LockDeposit = () => {
         <Grid item lg={3} md={3} sm={12} xs={12}>
         </Grid>
         <Grid item lg={6} md={6} sm={12} xs={12}>
-          <CustomInfoCard className={'custom-mahadao-box'}>
-            <CustomInfoCardDetails>
-              <Grid container>
-                <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                  <CardTitle>
-                    Convert ARTH into Debt
-                  </CardTitle>
-                  <TextWithIcon>
-                    This debt pool allows users to convert their ARTH token into debt to the protocol. The protocol promises
-                    to pay all holders of this pool their ARTH (polygon) tokens at a price of 1$.
-                  </TextWithIcon>
-                  <br />
-                  <TextWithIcon>
-                    Once your deposit your tokens; You will not be able to withdraw them from this pool. You will earn
-                    rewards in USDC until the debt is paid off.
-                  </TextWithIcon>
-                </Grid>
-                <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
-                  <ButtonConatiner>
-                    {!!!account ? (
-                      <Button
-                        text={'Connect Wallet'}
-                        size={'lg'}
-                        onClick={() =>
-                          connect('injected').then(() => {
-                            localStorage.removeItem('disconnectWallet');
-                          })
-                        }
-                      />
-                    ) : (
-                      <Button disabled text={'Deposit ARTH (Opening Soon)'} size={'sm'} onClick={() => {
-                        setSymbolSelected('ARTH');
-                        setOpenModal(true);
-                      }} />
-                    )}
-                  </ButtonConatiner>
-                </Grid>
-              </Grid>
-            </CustomInfoCardDetails>
-          </CustomInfoCard>
-          <CustomInfoCard className={'custom-mahadao-box'} style={{ marginTop: '24px' }}>
-            <CustomInfoCardDetails>
-              <Grid container>
-                <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                  <CardTitle>
-                    Convert ARTHX into Debt
-                  </CardTitle>
-                  <TextWithIcon>
-                    This debt pool allows users to convert their ARTHX token into debt to the protocol. The protocol promises
-                    to pay all holders of this pool their ARTHX (polygon) tokens at a price of 0.012$.
-                  </TextWithIcon>
-                  <br />
-                  <TextWithIcon>
-                    Once your deposit your tokens; You will not be able to withdraw them from this pool. You will earn
-                    rewards in USDC until the debt is paid off.
-                  </TextWithIcon>
-                </Grid>
-                <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
-                  <ButtonConatiner>
-                    {!!!account ? (
-                      <Button
-                        text={'Connect Wallet'}
-                        size={'lg'}
-                        onClick={() =>
-                          connect('injected').then(() => {
-                            localStorage.removeItem('disconnectWallet');
-                          })
-                        }
-                      />
-                    ) : (
-                      <Button text={'Deposit ARTHX (Opening soon)'} disabled size={'sm'} onClick={() => {
-                        setSymbolSelected('ARTHX');
-                        setOpenModal(true);
-                      }} />
-                    )}
-
-                  </ButtonConatiner>
-                </Grid>
-              </Grid>
-            </CustomInfoCardDetails>
-          </CustomInfoCard>
+          <BoardroomSection
+            title={"Convert ARTH into Debt"}
+            text1={"This debt pool allows users to convert their ARTH token into debt to the protocol. The protocol promises to pay all holders of this pool their ARTH (polygon) tokens at a price of 1$."}
+            text2={"Once your deposit your tokens; You will not be able to withdraw them from this pool. You will earn rewards in USDC until the debt is paid off."}
+            symbol="ARTH"
+          />
+          <BoardroomSection
+            title={"Convert ARTHX into Debt"}
+            text1={"This debt pool allows users to convert their ARTHX token into debt to the protocol. The protocol promises to pay all holders of this pool their ARTHX (polygon) tokens at a price of 0.012$."}
+            text2={"Once your deposit your tokens; You will not be able to withdraw them from this pool. You will earn rewards in USDC until the debt is paid off."}
+            symbol="ARTHX"
+          />
         </Grid>
         <Grid item lg={3} md={3} sm={12} xs={12}>
         </Grid>
