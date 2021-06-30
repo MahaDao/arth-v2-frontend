@@ -4,12 +4,12 @@ import { BigNumber } from '@ethersproject/bignumber';
 
 import Button from '../../../components/Button';
 import CustomModal from '../../../components/CustomModal';
-import TransparentInfoDiv from '../../../components/CustomTransparentInfoDiv';
 
 import useCore from '../../../hooks/useCore';
 import { StakingContract } from '../../../basis-cash';
 import { getDisplayBalanceToken } from '../../../utils/formatBalance';
 import useStakingClaim from '../../../hooks/callbacks/staking/useStakingClaim';
+import TransparentInfoDiv from '../../../components/CustomTransparentInfoDiv/InfoDiv';
 
 
 interface IProps {
