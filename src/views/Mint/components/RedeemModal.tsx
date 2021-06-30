@@ -3,7 +3,6 @@ import { parseUnits } from 'ethers/lib/utils';
 import { BigNumber } from '@ethersproject/bignumber';
 import React, { useEffect, useState } from 'react';
 
-import TransparentInfoDiv from './InfoDiv';
 import Button from '../../../components/Button';
 import CustomModal from '../../../components/CustomModal';
 import useTokenDecimals from '../../../hooks/useTokenDecimals';
@@ -11,6 +10,7 @@ import { getDisplayBalance } from '../../../utils/formatBalance';
 import CustomSuccessModal from '../../../components/CustomSuccesModal';
 import useRedeemARTH from '../../../hooks/callbacks/pools/useRedeemARTH';
 import Grid from '@material-ui/core/Grid';
+import TransparentInfoDiv from '../../../components/CustomTransparentInfoDiv/InfoDiv';
 
 interface IProps {
   openModal: boolean;

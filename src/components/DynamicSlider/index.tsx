@@ -1,7 +1,7 @@
 import { createStyles, makeStyles, Slider, Theme, withStyles } from '@material-ui/core';
 import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
-import TransparentInfoDiv from '../../views/Mint/components/InfoDiv';
+import TransparentInfoDiv from '../CustomTransparentInfoDiv/InfoDiv';
 
 const useSliderStyles = makeStyles((theme: Theme) =>
   createStyles({
