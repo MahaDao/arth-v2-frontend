@@ -4,13 +4,13 @@ import { BigNumber } from '@ethersproject/bignumber';
 
 import Button from '../../../components/Button';
 import CustomModal from '../../../components/CustomModal';
-import TransparentInfoDiv from '../../Genesis/components/InfoDiv';
 
 import { StakingContract } from '../../../basis-cash';
 import useTokenDecimals from '../../../hooks/useTokenDecimals';
 import { getDisplayBalance, getDisplayBalanceToken } from '../../../utils/formatBalance';
 import useStakingQuit from '../../../hooks/callbacks/staking/useStakingQuit';
 import useCore from '../../../hooks/useCore';
+import TransparentInfoDiv from '../../../components/CustomTransparentInfoDiv/InfoDiv';
 
 interface IProps {
   toggleSuccessModal?: () => void;

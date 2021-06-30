@@ -28,7 +28,6 @@ import TicketGreen from '../../assets/svg/TicketGreen.svg';
 
 import Button from '../../components/Button';
 import Container from '../../components/Container';
-import TransparentInfoDiv from './components/InfoDiv';
 import CustomModal from '../../components/CustomModal';
 import { CustomSnack } from '../../components/SnackBar';
 import prettyNumber from '../../components/PrettyNumber';
@@ -56,6 +55,7 @@ import useRecollateralizationDiscount from '../../hooks/state/controller/useReco
 import config from '../../config';
 import DepositModal from './components/DepositModal';
 import { Mixpanel } from '../../analytics/Mixpanel';
+import TransparentInfoDiv from '../../components/CustomTransparentInfoDiv/InfoDiv';
 
 withStyles({
   root: {

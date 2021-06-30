@@ -5,12 +5,12 @@ import Grid from '@material-ui/core/Grid';
 import Button from '../../../components/Button';
 import arrowDown from '../../../assets/svg/arrowDown.svg';
 import { Divider } from '@material-ui/core';
-import TransparentInfoDiv from './InfoDiv';
 import CustomInputContainer from '../../../components/CustomInputContainer';
 import CustomModal from '../../../components/CustomModal';
 import { CustomSnack } from '../../../components/SnackBar';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
 import CustomToolTip from '../../../components/CustomTooltip';
+import TransparentInfoDiv from '../../../components/CustomTransparentInfoDiv/InfoDiv';
 
 const SellContent = (props: WithSnackbarProps) => {
   useEffect(() => window.scrollTo(0, 0), []);

@@ -9,7 +9,6 @@ import ArrowBackIos from '@material-ui/icons/ArrowBackIos';
 import plus from '../../../../assets/svg/plus.svg';
 import arrowDown from '../../../../assets/svg/arrowDown.svg';
 
-import TransparentInfoDiv from '../InfoDiv';
 import Button from '../../../../components/Button';
 import CustomModal from '../../../../components/CustomModal';
 import CustomInputContainer from '../../../../components/CustomInputContainer';
@@ -24,6 +23,7 @@ import useApprove, { ApprovalState } from '../../../../hooks/callbacks/useApprov
 import useRemoveLiquidity from '../../../../hooks/callbacks/pairs/useRemoveLiquidity';
 import { ValidateNumber } from '../../../../components/CustomInputContainer/RegexValidation';
 import SlippageContainer from '../../../../components/SlippageContainer';
+import TransparentInfoDiv from '../../../../components/CustomTransparentInfoDiv/InfoDiv';
 
 interface SelectedPair {
   id: number;

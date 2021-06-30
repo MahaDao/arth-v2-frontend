@@ -3,7 +3,6 @@ import { parseUnits } from 'ethers/lib/utils';
 import { BigNumber } from '@ethersproject/bignumber';
 import React, { useEffect, useMemo, useState } from 'react';
 
-import TransparentInfoDiv from './InfoDiv';
 import useCore from '../../../hooks/useCore';
 import Button from '../../../components/Button';
 import CustomModal from '../../../components/CustomModal';
@@ -12,6 +11,7 @@ import { getDisplayBalance } from '../../../utils/formatBalance';
 import useMintARTH from '../../../hooks/callbacks/pools/useMintARTH';
 import CustomSuccessModal from '../../../components/CustomSuccesModal';
 import useApprove, { ApprovalState } from '../../../hooks/callbacks/useApprove';
+import TransparentInfoDiv from '../../../components/CustomTransparentInfoDiv/InfoDiv';
 
 interface IProps {
   isInputFieldError: boolean;
