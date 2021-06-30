@@ -39,8 +39,7 @@ const MintTabContent = (props: WithSnackbarProps & IProps) => {
   const [arthValue, setArthValue] = useState<string>('0');
   const [arthxValue, setArthxValue] = useState<string>('0');
 
-  const [openModal, setOpenModal] = useState<0 | 1 | 2>(0);
-  const [successModal, setSuccessModal] = useState<boolean>(false);
+  const [openModal, setOpenModal] = useState<boolean>(false);
 
   const [isInputFieldError, setIsInputFieldError] = useState<boolean>(false);
 
@@ -213,10 +212,10 @@ const MintTabContent = (props: WithSnackbarProps & IProps) => {
         arthxValue={arthxValue}
         openModal={openModal}
         tradingFee={tradingFee}
-        onClose={() => setOpenModal(0)}
+        onClose={() => setOpenModal(false)}
         onSuccess={() => {
           onCollateralValueChange('')
-          setOpenModal(0)
+          setOpenModal(false)
         }}
       />
       <Grid container style={{ marginTop: '24px' }} spacing={2}>
@@ -248,9 +247,6 @@ const MintTabContent = (props: WithSnackbarProps & IProps) => {
                 dropDownValues={collateralTypes}
                 ondropDownValueChange={(data: string) => {
                   setSelectedCollateralCoin(data);
-                  // setTimeout(() => {
-                  //   onCollateralValueChange(collateralValue.toString());
-                  // }, 1000);
                 }}
                 DisableMsg={
                   mintCR.lte(1e6)
@@ -400,7 +396,7 @@ const MintTabContent = (props: WithSnackbarProps & IProps) => {
                               !Number(arthValue) ||
                               !(Number(collateralValue))
                             }
-                            onClick={() => setOpenModal(1)}
+                            onClick={() => setOpenModal(true)}
                           />
                         </Grid>
                       )
@@ -422,19 +418,6 @@ const MintTabContent = (props: WithSnackbarProps & IProps) => {
           <DepositModal onCancel={() => setdepositModal(false)} onDeposit={() => { }} />
         )
       }
-
-      <CustomSuccessModal
-        modalOpen={successModal}
-        setModalOpen={() => setSuccessModal(false)}
-        title={'Minting ARTH successful!'}
-        subTitle={''}
-        subsubTitle={
-          'Your transaction is now being mined on the blockchain. You should consider staking your tokens to earn extra rewards!'
-        }
-        buttonText={'Stake your ARTH'}
-        buttonType={'default'}
-        buttonTo={'/#/farming'}
-      />
     </>
   );
 };

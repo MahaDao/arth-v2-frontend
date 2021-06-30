@@ -120,7 +120,7 @@ const DEFAULT_CALC = 1440;
 interface IProps {
   isInputFieldError: boolean;
   collateralValue: string;
-  openModal: 0 | 1 | 2;
+  openModal: boolean;
   onClose: () => void;
   selectedCollateralCoin: string;
   arthValue: string;
@@ -162,10 +162,6 @@ const MintModal = (props: WithSnackbarProps & IProps) => {
 
   useEffect(() => window.scrollTo(0, 0), []);
 
-  const handleCheck = (event: any) => {
-    setChecked(event.target.checked);
-  };
-
   const handleSliderChange = (event: any, value: any) => {
     setSliderValue(value);
     setDuration(DEFAULT_CALC - value * value);
@@ -196,7 +192,7 @@ const MintModal = (props: WithSnackbarProps & IProps) => {
       <CustomModal
         closeButton
         handleClose={onClose}
-        open={openModal === 1}
+        open={openModal}
         modalTitleStyle={{}}
         modalContainerStyle={{}}
         modalBodyStyle={{}}
