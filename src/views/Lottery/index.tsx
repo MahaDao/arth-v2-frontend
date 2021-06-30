@@ -1,7 +1,7 @@
-import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
+import React, { useMemo, useState } from 'react';
 import { BigNumber } from '@ethersproject/bignumber';
 
 import TicketBgLogo from '../../assets/svg/bgLogo.svg';
@@ -90,9 +90,8 @@ const Lottery = () => {
                       key={prize?.nftAddress || prize?.tokenId?.toString() || i}
                       cardtitle={prize?.description?.toUpperCase() || 'MAHADAO NFT PRIZE'}
                       isDataLoading={isLotteryBalanceLoading}
-                      moreInfoMsg={`Requires ${
-                        Number(prize.criteria.toString()) - Number(lotteryBalance.toString())
-                      } more ticket to participate in winning this prize! `}
+                      moreInfoMsg={`Requires ${Number(prize.criteria.toString()) - Number(lotteryBalance.toString())
+                        } more ticket to participate in winning this prize! `}
                       buttonText={'Get More Tickets'}
                     />
                   </Grid>
