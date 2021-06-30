@@ -5,7 +5,7 @@ import { parseUnits } from '@ethersproject/units';
 import { BigNumber } from '@ethersproject/bignumber';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
 
-import TransparentInfoDiv from './InfoDiv';
+import TransparentInfoDiv from '../../../components/CustomTransparentInfoDiv/InfoDiv';
 import Button from '../../../components/Button';
 import CustomModal from '../../../components/CustomModal';
 import { CustomSnack } from '../../../components/SnackBar';

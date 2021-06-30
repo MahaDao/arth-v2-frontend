@@ -9,7 +9,7 @@ import ArrowBackIos from '@material-ui/icons/ArrowBackIos'
 
 import Button from '../../../../components/Button';
 import CustomModal from '../../../../components/CustomModal';
-import TransparentInfoDiv from '../../../Stablize/components/InfoDiv';
+import TransparentInfoDiv from '../../../../components/CustomTransparentInfoDiv/InfoDiv';
 import CustomInputContainer from '../../../../components/CustomInputContainer';
 import { ValidateNumber } from '../../../../components/CustomInputContainer/RegexValidation';
 

@@ -9,7 +9,7 @@ import { withSnackbar, WithSnackbarProps } from 'notistack';
 
 import arrowDown from '../../../assets/svg/arrowDown.svg';
 
-import TransparentInfoDiv from './InfoDiv';
+import TransparentInfoDiv from '../../../components/CustomTransparentInfoDiv/InfoDiv';
 import Button from '../../../components/Button';
 import CollaterallizeCheckmark from './Collaterallize';
 import MinorInputContainer from './MinorInputContainer';

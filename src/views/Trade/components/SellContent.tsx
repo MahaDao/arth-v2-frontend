@@ -9,7 +9,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 
 import arrowDown from '../../../assets/svg/arrowDown.svg';
 
-import TransparentInfoDiv from './InfoDiv';
+import TransparentInfoDiv from '../../../components/CustomTransparentInfoDiv/InfoDiv';
 import Button from '../../../components/Button';
 
 import CustomModal from '../../../components/CustomModal';

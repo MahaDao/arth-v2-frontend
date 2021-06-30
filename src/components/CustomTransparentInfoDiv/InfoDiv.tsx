@@ -1,52 +1,32 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import InfoIcon from '@material-ui/icons/Info';
-
-import CountUp from 'react-countup';
+import CustomToolTip from '../CustomTooltip/index';
+import Loader from 'react-spinners/BeatLoader';
 
 interface IProps {
   labelData: string;
   labelToolTipData?: string;
   rightLabelValue?: string;
   rightLabelUnit?: string;
-  countUp?: boolean;
-  cStart?: number;
-  cEnd?: number;
-  cDuration?: number;
-  cDelay?: number;
+  isLoadingData?:boolean;
 }
 
 const TransparentInfoDiv = (props: IProps) => {
+  const {isLoadingData = false} = props
   return (
     <TransInfoDiv>
       <InfoSpan>
         {props.labelData}
         {props.labelToolTipData && (
-          <InfoIcon
-            fontSize="small"
-            style={{ marginLeft: 2, marginTop: -2, transform: 'scale(0.8)' }}
-          />
+          <CustomToolTip toolTipText={props.labelToolTipData} />
         )}
       </InfoSpan>
-
       <LabelInfoData>
-        {props.rightLabelValue && (
-          <LabelInfoText>
-            {props.countUp ? (
-              <CountUp
-                start={props?.cStart}
-                end={props.cEnd}
-                delay={0}
-                duration={props.cDuration}
-                preserveValue={true}
-                onUpdate={() => {}}
-              />
-            ) : (
-              props.rightLabelValue
-            )}
-          </LabelInfoText>
-        )}
+        {props.rightLabelValue &&
+          isLoadingData
+          ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
+          : <LabelInfoText>{props.rightLabelValue}</LabelInfoText>}
         {props.rightLabelUnit && (
           <LabelInfoDataChip>
             <LabelInfoDataChipText>{props.rightLabelUnit}</LabelInfoDataChipText>
@@ -64,7 +44,6 @@ const InfoSpan = styled.span`
   font-size: 14px;
   line-height: 20px;
   color: rgba(255, 255, 255, 0.64);
-  // margin: 10px 30px;
   text-align: center;
 `;
 
@@ -79,9 +58,7 @@ const LabelInfoText = styled.div`
 `;
 
 const LabelInfoData = styled.div`
-  // background: yellow;
   padding: 3px 4px;
-  // height: fit-content;
   width: fit-content;
   justify-content: space-between;
   display: flex;
@@ -100,7 +77,6 @@ const LabelInfoDataChip = styled.div`
   border-radius: 4px;
   padding: 3px 4px;
   height: fit-content;
-  // justify-content: space-between;
   display: flex;
   align-items: center;
   font-family: Inter;
@@ -124,12 +100,11 @@ const LabelInfoDataChipText = styled.div`
 `;
 
 const TransInfoDiv = styled.div`
-  // background: rgba(255, 255, 255, 0.08);
-  // border-radius: 6px;
-  // padding: 6px 4px;
   height: fit-content;
   justify-content: space-between;
   display: flex;
   align-items: center;
+  width: 100%;
 `;
+
 export default TransparentInfoDiv;

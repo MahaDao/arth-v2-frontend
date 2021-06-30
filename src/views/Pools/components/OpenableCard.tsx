@@ -14,7 +14,7 @@ import arrowDown from '../../../assets/svg/arrowDown2.svg';
 import useCore from '../../../hooks/useCore';
 import useTotalSupply from '../../../hooks/useTotalSupply';
 import useTokenBalance from '../../../hooks/state/useTokenBalance';
-import TransparentInfoDiv from '../../Stablize/components/InfoDiv';
+import TransparentInfoDiv from '../../../components/CustomTransparentInfoDiv/InfoDiv';
 import useTokenBalanceOf from '../../../hooks/state/useTokenBalanceOf';
 import { getDisplayBalance, getDisplayBalanceToken } from '../../../utils/formatBalance';
 
