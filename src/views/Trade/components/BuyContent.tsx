@@ -37,6 +37,7 @@ const BuyContent = () => {
   const { isLoading: isBuyAmountBalanceLoading, value: buyAmountBalance } = useTokenBalance(
     core.tokens['ARTH']
   );
+
   const price = useDFYNPrice(
     core.tokens['ARTH'],
     core.tokens['ARTHX']
