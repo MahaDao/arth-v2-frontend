@@ -2,9 +2,9 @@ import { BigNumber } from 'ethers';
 import { Fetcher, Token, TokenAmount } from '@dfyn/sdk';
 import { useCallback, useEffect, useState } from 'react';
 
-import useCore from '../useCore';
-import ERC20 from '../../basis-cash/ERC20';
-import useTotalSupply from '../useTotalSupply';
+import useCore from '../../useCore';
+import ERC20 from '../../../basis-cash/ERC20';
+import useTotalSupply from '../../useTotalSupply';
 
 type State = {
   isLoading: boolean,

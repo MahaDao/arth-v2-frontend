@@ -18,11 +18,11 @@ import CustomInputContainer from '../../../components/CustomInputContainer';
 import { ValidateNumber } from '../../../components/CustomInputContainer/RegexValidation';
 
 import useCore from '../../../hooks/useCore';
-import useDFYNPrice from '../../../hooks/useDFYNPrice';
+import useDFYNPrice from '../../../hooks/state/pairs/useDFYNPrice';
 import useARTHXTaxFee from '../../../hooks/state/useARTHXTaxFee';
 import useTokenBalance from '../../../hooks/state/useTokenBalance';
 import { getDisplayBalanceToken } from '../../../utils/formatBalance';
-import useARTHXBuyAmount from '../../../hooks/state/useARTHXBuyAmount';
+import useARTHXBuyAmount from '../../../hooks/state/pairs/useARTHXBuyAmount';
 import useSellARTHX from '../../../hooks/callbacks/pairs/useSellARTHX';
 import useApprove, { ApprovalState } from '../../../hooks/callbacks/useApprove';
 
@@ -41,8 +41,8 @@ const SellContent = () => {
     core.tokens['ARTHX']
   );
   const price = useDFYNPrice(
-    core.tokens['ARTH'],
-    core.tokens['ARTHX']
+    core.tokens['ARTHX'],
+    core.tokens['ARTH']
   );
   const { isLoading: isTaxPercentLoading, value: taxPercent } = useARTHXTaxFee();
 
@@ -126,7 +126,7 @@ const SellContent = () => {
           <TransparentInfoDiv
             labelData={`You will receive`}
             rightLabelUnit={'ARTH'}
-            rightLabelValue={Number(outputAmount).toLocaleString()}
+            rightLabelValue={Number(outputAmount).toLocaleString('en-US', { maximumFractionDigits: 4 })}
           />
           <Grid container spacing={2} style={{ marginTop: '32px' }}>
             <Grid item lg={6} md={6} sm={12} xs={12}>
@@ -192,7 +192,7 @@ const SellContent = () => {
               <BeforeChip className={'custom-mahadao-chip'}>
                 {
                   Number(sellAmount)
-                    ? Number(outputAmount).toLocaleString()
+                    ? Number(outputAmount).toLocaleString('en-US', { maximumFractionDigits: 4 })
                     : '0'
                 }
               </BeforeChip>
@@ -222,9 +222,9 @@ const SellContent = () => {
             </div>
             <OneLineInputwomargin>
               <BeforeChip>{price}</BeforeChip>
-              <TagChips style={{ marginRight: '4px' }}>ARTH</TagChips>
+              <TagChips style={{ marginRight: '4px' }}>ARTHX</TagChips>
               <BeforeChip>per</BeforeChip>
-              <TagChips>ARTHX</TagChips>
+              <TagChips>ARTH</TagChips>
             </OneLineInputwomargin>
           </OneLineInputwomargin>
         </ReceiveContainer>

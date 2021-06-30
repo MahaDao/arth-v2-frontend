@@ -14,12 +14,12 @@ import CustomInputContainer from '../../../../components/CustomInputContainer';
 import { ValidateNumber } from '../../../../components/CustomInputContainer/RegexValidation';
 
 import useCore from '../../../../hooks/useCore';
-import useDFYNPrice from '../../../../hooks/useDFYNPrice';
+import useDFYNPrice from '../../../../hooks/state/pairs/useDFYNPrice';
 import useTotalSupply from '../../../../hooks/useTotalSupply';
 import useTokenBalance from '../../../../hooks/state/useTokenBalance';
 import useAddLiquidity from '../../../../hooks/callbacks/pairs/useAddLiquidity';
 import useApprove, { ApprovalState } from '../../../../hooks/callbacks/useApprove';
-import usePairLiquidityMinted from '../../../../hooks/state/usePairLiquidityMinted';
+import usePairLiquidityMinted from '../../../../hooks/state/pairs/usePairLiquidityMinted';
 import { getDisplayBalance, getDisplayBalanceToken } from '../../../../utils/formatBalance';
 import SlippageContainer from '../../../../components/SlippageContainer';
 
@@ -292,7 +292,7 @@ const AddLiquidity = (props: props) => {
               </OneLine>
             </OneLine>
           </TcContainer>
-          <div style={{marginTop: '32px'}}>
+          <div style={{ marginTop: '32px' }}>
             <Grid container spacing={2} style={{ marginBottom: '8px' }}>
               <Grid item lg={6} md={6} sm={12} xs={12}>
                 <Button
@@ -300,8 +300,8 @@ const AddLiquidity = (props: props) => {
                     isFirstCoinApproved
                       ? `Approved ${selectedPair.symbol1}`
                       : !isFirstCoinApproving
-                      ? `Approve ${selectedPair.symbol1}`
-                      : 'Approving...'
+                        ? `Approve ${selectedPair.symbol1}`
+                        : 'Approving...'
                   }
                   size={'lg'}
                   disabled={
@@ -319,8 +319,8 @@ const AddLiquidity = (props: props) => {
                     isSecondCoinApproved
                       ? `Approved ${selectedPair.symbol2}`
                       : !isSecondCoinApproving
-                      ? `Approve ${selectedPair.symbol2}`
-                      : 'Approving...'
+                        ? `Approve ${selectedPair.symbol2}`
+                        : 'Approving...'
                   }
                   size={'lg'}
                   disabled={

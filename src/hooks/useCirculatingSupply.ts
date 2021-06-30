@@ -10,10 +10,10 @@ type State = {
 }
 
 const useCirculatingSupply = (asset: string) => {
-  const [circulatingSupply, setCirculatingSupply] = useState<State>({isLoading: true, value: BigNumber.from(0)});
-  
-  const {isLoading: isTotalSupplyLoading, value: totalSupply }= useTotalSupply(asset);
-  const {isLoading: isLiquidityLoading, value: uniswapLiquidity }= useUniswapLiquidity(asset);
+  const [circulatingSupply, setCirculatingSupply] = useState<State>({ isLoading: true, value: BigNumber.from(0) });
+
+  const { isLoading: isTotalSupplyLoading, value: totalSupply } = useTotalSupply(asset);
+  const { isLoading: isLiquidityLoading, value: uniswapLiquidity } = useUniswapLiquidity(asset);
 
   const fetchCashPrice = useCallback(async () => {
     if (isTotalSupplyLoading || isLiquidityLoading) return;

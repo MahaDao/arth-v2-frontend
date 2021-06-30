@@ -13,7 +13,7 @@ import DesktopRowCard from './DesktopRowCard';
 import useCore from '../../../hooks/useCore';
 import useModal from '../../../hooks/useModal';
 import { StakingContract } from '../../../basis-cash';
-import usePoolTokenRates from '../../../hooks/usePoolTokenRates';
+import usePoolTokenRates from '../../../hooks/state/staking/usePoolTokenRates';
 import useTokenBalance from '../../../hooks/state/useTokenBalance';
 import CustomSuccessModal from '../../../components/CustomSuccesModal';
 import useStakingBalance from '../../../hooks/state/staking/useStakingBalance';

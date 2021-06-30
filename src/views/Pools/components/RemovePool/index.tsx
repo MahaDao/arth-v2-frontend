@@ -15,7 +15,7 @@ import CustomModal from '../../../../components/CustomModal';
 import CustomInputContainer from '../../../../components/CustomInputContainer';
 
 import useCore from '../../../../hooks/useCore';
-import useDFYNPrice from '../../../../hooks/useDFYNPrice';
+import useDFYNPrice from '../../../../hooks/state/pairs/useDFYNPrice';
 import useTotalSupply from '../../../../hooks/useTotalSupply';
 import useTokenBalance from '../../../../hooks/state/useTokenBalance';
 import { getDisplayBalanceToken } from '../../../../utils/formatBalance';
