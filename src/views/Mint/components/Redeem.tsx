@@ -40,8 +40,7 @@ const RedeemTabContent = (props: WithSnackbarProps & IProps) => {
   const [arthxValue, setArthxValue] = useState<string>('0');
   const [collateralValue, setCollateralValue] = useState<string>('0');
 
-  const [openModal, setOpenModal] = useState<boolean>(true);
-  const [successModal, setSuccessModal] = useState<boolean>(false);
+  const [openModal, setOpenModal] = useState<boolean>(false);
   const [isInputFieldError, setIsInputFieldError] = useState<boolean>(false);
   const [successCollectModal, setSuccessCollectModal] = useState<boolean>(false);
 
@@ -496,7 +495,7 @@ const RedeemTabContent = (props: WithSnackbarProps & IProps) => {
         </Grid>
         <Grid item lg={1} />
       </Grid>
-s      <CustomSuccessModal
+      <CustomSuccessModal
         modalOpen={successCollectModal}
         setModalOpen={() => setSuccessCollectModal(false)}
         title={'Collecting redeemed collateral successful!'}
