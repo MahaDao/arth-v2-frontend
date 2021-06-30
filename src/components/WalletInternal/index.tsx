@@ -1,7 +1,8 @@
+import { BigNumber } from 'ethers';
 import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
-import React, { useState } from 'react';
 import Loader from 'react-spinners/BeatLoader';
+import React, { useState, useMemo } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { Container, Grid, IconButton } from '@material-ui/core';
 
@@ -15,6 +16,8 @@ import HtmlTooltip from '../HtmlTooltip';
 
 import useCore from '../../hooks/useCore';
 import useTokenBalanceOf from '../../hooks/state/useTokenBalanceOf';
+import useMAHAOraclePrice from '../../hooks/state/controller/useMAHAPrice';
+import useARTHXOraclePrice from '../../hooks/state/controller/useARTHXPrice';
 import { getDisplayBalance, truncateMiddle } from '../../utils/formatBalance';
 
 interface IProps {
@@ -31,6 +34,9 @@ export const WalletInternal = (props: IProps) => {
 
   const core = useCore();
   const { account, reset } = useWallet();
+
+  const { isLoading: isMAHAPriceLoading, value: mahaPrice } = useMAHAOraclePrice();
+  const { isLoading: isARTHXPriceLoading, value: arthxPrice } = useARTHXOraclePrice();
   const { isLoading: isARTHBalanceLoading, value: arthBalance } = useTokenBalanceOf(
     core.ARTH,
     account,
@@ -43,6 +49,18 @@ export const WalletInternal = (props: IProps) => {
     core.ARTHX,
     account,
   );
+
+  const [isMahaValueLoading, mahaValue] = useMemo(() => {
+    if (isMAHABalanceLoading || isMAHAPriceLoading) return [true, BigNumber.from(0)];
+
+    return [false, mahaPrice.mul(mahaBalance).div(1e6)];
+  }, [isMAHABalanceLoading, isMAHAPriceLoading, mahaBalance, mahaPrice]);
+
+  const [isARTHXValueLoading, arthxValue] = useMemo(() => {
+    if (isARTHXPriceLoading || isARTHXBalanceLoading) return [true, BigNumber.from(0)];
+
+    return [false, arthxPrice.mul(arthxBalance).div(1e6)];
+  }, [isARTHXPriceLoading, isARTHXBalanceLoading, arthxPrice, arthxBalance]);
 
   const onClose = () => {
     setConfirmationModal(false);
@@ -147,7 +165,13 @@ export const WalletInternal = (props: IProps) => {
               MAHA
             </span>
           </RowName>
-          <DollarValue>{/* ${props?.walletData?.mahaDollars} */}</DollarValue>
+          <DollarValue>
+            {
+              isMahaValueLoading
+                ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
+                : Number(getDisplayBalance(mahaValue)).toLocaleString()
+            } $GMU
+          </DollarValue>
         </StyledRows>
         <StyledRows>
           <RowName>
@@ -179,7 +203,13 @@ export const WalletInternal = (props: IProps) => {
               ARTHX
             </span>
           </RowName>
-          <DollarValue>{/* ${props?.walletData?.arthxDollars} */}</DollarValue>
+          <DollarValue>
+            {
+              isARTHXValueLoading
+                ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
+                : Number(getDisplayBalance(arthxValue)).toLocaleString()
+            } $GMU
+          </DollarValue>
         </StyledRows>
         <StyledRows style={{ marginBottom: -5 }}>
           <Button
