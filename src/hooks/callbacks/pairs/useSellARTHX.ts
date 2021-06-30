@@ -27,7 +27,7 @@ export default function (
         amountOutAfterSlippage,
         [sellToken, buyToken],
         to,
-        Math.ceil(Date.now() / 1000) + 5 * 60 * 1000,
+        Math.ceil(Date.now() / 1000) + 5 * 60,
       );
 
       addTransaction(response, {
