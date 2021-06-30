@@ -1,11 +1,9 @@
 import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
 import Grid from '@material-ui/core/Grid';
-import { Divider } from '@material-ui/core';
 import { parseUnits } from 'ethers/lib/utils';
 import { BigNumber } from '@ethersproject/bignumber';
 import React, { useEffect, useMemo, useState } from 'react';
-import { withSnackbar, WithSnackbarProps } from 'notistack';
 import Loader from 'react-spinners/BeatLoader';
 
 import plusSign from '../../../assets/svg/plus.svg';
@@ -35,7 +33,7 @@ interface IProps {
   setType: (type: 'mint' | 'redeem') => void;
 }
 
-const RedeemTabContent = (props: WithSnackbarProps & IProps) => {
+const RedeemTabContent = (props: IProps) => {
   const [arthValue, setArthValue] = useState<string>('0');
   const [arthxValue, setArthxValue] = useState<string>('0');
   const [collateralValue, setCollateralValue] = useState<string>('0');
@@ -593,7 +591,7 @@ const TextWithIcon = styled.div`
   color: rgba(255, 255, 255, 0.88);
 `;
 const BeforeChip = styled.span`
-  ont-family: Inter;
+  font-family: Inter;
   font-style: normal;
   font-weight: 300;
   font-size: 12px;
@@ -616,4 +614,4 @@ const ApproveButtonContainer = styled.div`
   display: flex;
 `;
 
-export default withSnackbar(RedeemTabContent);
+export default RedeemTabContent;

@@ -1,19 +1,15 @@
 import { BigNumber } from '@ethersproject/bignumber';
-import { StakingContract } from '../../../basis-cash';
 import React, { useState } from 'react';
-import useCore from '../../../hooks/useCore';
-import useTokenDecimals from '../../../hooks/useTokenDecimals';
-import useApprove, { ApprovalState } from '../../../hooks/callbacks/useApprove';
-import useStakingDeposit from '../../../hooks/callbacks/staking/useStakingDeposit';
+import Grid from '@material-ui/core/Grid';
+import styled from 'styled-components';
+import { useWallet } from 'use-wallet';
+import { useMediaQuery } from 'react-responsive';
+
 import CustomModal from '../../../components/CustomModal';
 import CustomInputContainer from '../../../components/CustomInputContainer';
 import { getDisplayBalance } from '../../../utils/formatBalance';
 import { ValidateNumber } from '../../../components/CustomInputContainer/RegexValidation';
-import Grid from '@material-ui/core/Grid';
 import Button from '../../../components/Button';
-import styled from 'styled-components';
-import { useMediaQuery } from 'react-responsive';
-import { useWallet } from 'use-wallet';
 import useDepositWETH from '../../../hooks/callbacks/useDepositWETH';
 import config from '../../../config';
 
@@ -70,12 +66,7 @@ export default (props: IProps) => {
           </OneLine>
         </OneLine>
 
-        <Grid
-          container
-          spacing={2}
-          direction={isMobile ? 'column-reverse' : 'row'}
-          style={{ marginTop: '32px' }}
-        >
+        <Grid container spacing={2} style={{ marginTop: '32px' }}>
           <Grid item lg={6} md={6} sm={12} xs={12}>
             <Button
               variant={'transparent'}
@@ -90,7 +81,7 @@ export default (props: IProps) => {
               text={'Deposit'}
               size={'lg'}
               onClick={() => desposit()}
-              disabled={false}
+              disabled={isInputFieldError}
             />
           </Grid>
         </Grid>

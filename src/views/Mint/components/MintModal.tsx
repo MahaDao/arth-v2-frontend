@@ -170,18 +170,4 @@ const MintModal = (props: IProps) => {
   );
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 export default MintModal;

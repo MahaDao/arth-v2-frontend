@@ -1,17 +1,14 @@
 import { Divider, } from '@material-ui/core';
 import { parseUnits } from 'ethers/lib/utils';
 import { BigNumber } from '@ethersproject/bignumber';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import TransparentInfoDiv from './InfoDiv';
-import useCore from '../../../hooks/useCore';
 import Button from '../../../components/Button';
 import CustomModal from '../../../components/CustomModal';
 import useTokenDecimals from '../../../hooks/useTokenDecimals';
 import { getDisplayBalance } from '../../../utils/formatBalance';
-import useMintARTH from '../../../hooks/callbacks/pools/useMintARTH';
 import CustomSuccessModal from '../../../components/CustomSuccesModal';
-import useApprove, { ApprovalState } from '../../../hooks/callbacks/useApprove';
 import useRedeemARTH from '../../../hooks/callbacks/pools/useRedeemARTH';
 import Grid from '@material-ui/core/Grid';
 
@@ -50,13 +47,7 @@ const RedeemModal = (props: IProps) => {
 
   const [successModal, setSuccessModal] = useState<boolean>(false);
 
-  const core = useCore();
   const tokenDecimals = useTokenDecimals(selectedCollateralCoin);
-  const collateralPool = core.getCollatearalPool(selectedCollateralCoin);
-  const [collatApproveStatus, ] = useApprove(
-    core.tokens[selectedCollateralCoin],
-    collateralPool.address,
-  );
 
   useEffect(() => window.scrollTo(0, 0), []);
 

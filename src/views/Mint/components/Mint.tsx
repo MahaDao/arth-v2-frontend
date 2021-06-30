@@ -4,7 +4,6 @@ import Grid from '@material-ui/core/Grid';
 import { parseUnits } from 'ethers/lib/utils';
 import Loader from 'react-spinners/BeatLoader';
 import { BigNumber } from '@ethersproject/bignumber';
-import { withSnackbar, WithSnackbarProps } from 'notistack';
 import React, { useEffect, useMemo, useState } from 'react';
 
 import plusSign from '../../../assets/svg/plus.svg';
@@ -15,7 +14,6 @@ import MintModal from './MintModal';
 import DepositModal from './DepositModal';
 import Button from '../../../components/Button';
 import SlippageContainer from '../../../components/SlippageContainer';
-import CustomSuccessModal from '../../../components/CustomSuccesModal';
 import CustomInputContainer from '../../../components/CustomInputContainer';
 import { ValidateNumber } from '../../../components/CustomInputContainer/RegexValidation';
 
@@ -33,7 +31,7 @@ interface IProps {
   setType: (type: 'mint' | 'redeem') => void;
 }
 
-const MintTabContent = (props: WithSnackbarProps & IProps) => {
+const MintTabContent = (props: IProps) => {
   const [depositModal, setdepositModal] = useState<boolean>(false);
   const [collateralValue, setCollateralValue] = useState<string>('0');
   const [arthValue, setArthValue] = useState<string>('0');
@@ -466,9 +464,7 @@ const TabText = styled.span`
   color: rgba(255, 255, 255, 0.64);
 `;
 
-const ApproveButtonContainer = styled.div`
-  display: flex;
-`;
+
 
 const TabTextActive = styled.span`
   font-family: Inter;
@@ -480,11 +476,7 @@ const TabTextActive = styled.span`
   color: rgba(255, 255, 255, 0.88);
 `;
 
-const StakingDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 5px 0 0 0;
-`;
+
 
 const ActiveTab = styled.div`
   position: absolute;
@@ -508,13 +500,7 @@ const PlusMinusArrow = styled.div`
   margin: 12px 0;
 `;
 
-const OneLineInput = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: baseline;
-  justify-content: flex-start;
-  margin: 5px 0 10px 0;
-`;
+
 
 const TextWithIcon = styled.div`
   font-family: Inter;
@@ -526,7 +512,7 @@ const TextWithIcon = styled.div`
 `;
 
 const BeforeChip = styled.span`
-  ont-family: Inter;
+  font-family: Inter;
   font-style: normal;
   font-weight: 300;
   font-size: 12px;
@@ -545,61 +531,14 @@ const TagChips = styled.div`
   color: rgba(255, 255, 255, 0.64);
 `;
 
-const InputLabel = styled.p`
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.64);
-  margin: 0px;
-`;
 
-const InternalSpan = styled.span`
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 12px;
-  line-height: 150%;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #ffffff;
-`;
 
-const InputNoDisplay = styled.span`
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 4px;
-  padding: 2px 10px;
-  height: 25px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0px 0px 0px 8px;
-`;
 
-const TimeSpan = styled.div`
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 300;
-  font-size: 12px;
-  line-height: 130%;
-  color: rgba(255, 255, 255, 0.88);
-`;
 
-const CheckboxDiv = styled.div`
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 6px;
-  padding: 5px 0px 0px 5px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 20px;
-  text-align: center;
-  color: rgba(255, 255, 255, 0.88);
-  margin: 15px 0px 0px 0px;
-`;
 
-export default withSnackbar(MintTabContent);
+
+
+
+
+
+export default MintTabContent;
