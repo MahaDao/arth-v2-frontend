@@ -2,9 +2,9 @@ import { BigNumber } from 'ethers';
 import { useWallet } from 'use-wallet';
 import { useCallback, useEffect, useState } from 'react';
 
-import useCore from './useCore';
-import { useBlockNumber } from '../state/application/hooks';
-import config from '../config';
+import useCore from '../../useCore';
+import { useBlockNumber } from '../../../state/application/hooks';
+import config from '../../../config';
 
 type State = {
   isLoading: boolean;

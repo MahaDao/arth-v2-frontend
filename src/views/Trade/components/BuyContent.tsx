@@ -16,11 +16,11 @@ import CustomInputContainer from '../../../components/CustomInputContainer';
 import { ValidateNumber } from '../../../components/CustomInputContainer/RegexValidation';
 
 import useCore from '../../../hooks/useCore';
-import useDFYNPrice from '../../../hooks/useDFYNPrice';
+import useDFYNPrice from '../../../hooks/state/pairs/useDFYNPrice';
 import useTokenBalance from '../../../hooks/state/useTokenBalance';
 import useBuyARTHX from '../../../hooks/callbacks/pairs/useBuyARTHX';
 import { getDisplayBalanceToken } from '../../../utils/formatBalance';
-import useARTHXBuyAmount from '../../../hooks/state/useARTHXBuyAmount';
+import useARTHXBuyAmount from '../../../hooks/state/pairs/useARTHXBuyAmount';
 import useApprove, { ApprovalState } from '../../../hooks/callbacks/useApprove';
 
 const BuyContent = () => {
