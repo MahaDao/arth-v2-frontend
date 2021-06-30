@@ -4,7 +4,7 @@ import { BigNumber } from '@ethersproject/bignumber';
 
 import Button from '../../../components/Button';
 import CustomModal from '../../../components/CustomModal';
-import TransparentInfoDiv from '../../Genesis/components/InfoDiv';
+import TransparentInfoDiv from '../../../components/CustomTransparentInfoDiv';
 
 import { StakingContract } from '../../../basis-cash';
 import useTokenDecimals from '../../../hooks/useTokenDecimals';
