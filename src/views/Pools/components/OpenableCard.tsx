@@ -52,7 +52,7 @@ export default (props: IProps) => {
 
   return (
     <MainOpenableCard>
-      <CardWO>
+      <CardWO onClick={onClick}>
         <LLabel>
           <TokenSymbol symbol={liquidityPair.symbol1} size={50} style={{ zIndex: 2 }} />
           <TokenSymbol
@@ -63,7 +63,7 @@ export default (props: IProps) => {
           <LPairLabel>{liquidityPair.pairName}</LPairLabel>
         </LLabel>
         <Manage onClick={onClick}>
-          Manage
+          {!isMobile && 'Manage'}
           <img alt='Arrow' src={cardOpen ? arrowUp : arrowDown} height={8} style={{ marginLeft: 6 }} />
         </Manage>
       </CardWO>
@@ -179,6 +179,7 @@ const CardWO = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
+  cursor: pointer;
 `
 
 const LLabel = styled.div`
