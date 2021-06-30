@@ -15,6 +15,7 @@ import useTotalSupply from '../../../hooks/useTotalSupply';
 import useTokenBalance from '../../../hooks/state/useTokenBalance';
 import TransparentInfoDiv from '../../Stablize/components/InfoDiv';
 import { getDisplayBalance, getDisplayBalanceToken } from '../../../utils/formatBalance';
+import { useWallet } from 'use-wallet';
 
 export interface ICards {
   id: number;
@@ -32,6 +33,7 @@ interface IProps {
 
 export default (props: IProps) => {
   const { liquidityPair, setSelected, setChangeAction } = props;
+  const { account, connect } = useWallet();
   const [cardOpen, setCardOpen] = useState<boolean>(false);
 
   const onClick = () => { setCardOpen(!cardOpen); };
@@ -90,27 +92,46 @@ export default (props: IProps) => {
             rightLabelValue={Number(getDisplayBalance(percentOfPool, 4)).toLocaleString('en-US', { maximumFractionDigits: 3 }) + '%'}
             isLoadingData={isPercentOfPoolLoading}
           />
-          <Grid container spacing={2} style={{ marginTop: '32px' }}>
-            <Grid item lg={6} md={6} sm={12} xs={12}>
-              <Button
-                text={'Remove'}
-                variant={'transparent'}
-                onClick={() => {
-                  setSelected({ liquidity: liquidityPair });
-                  setChangeAction('Remove')
-                }}
-              />
+          <div style={{marginTop: '32px'}}>
+            <Grid container style={{marginBottom: '8px'}}>
+              {!!!account && (
+                <Grid item lg={12} md={12} sm={12} xs={12}>
+                  <Button
+                    text={'Connect Wallet'}
+                    size={'lg'}
+                    onClick={() =>
+                      connect('injected').then(() => {
+                        localStorage.removeItem('disconnectWallet');
+                      })
+                    }
+                  />
+                </Grid>
+              )}
             </Grid>
-            <Grid item lg={6} md={6} sm={12} xs={12}>
-              <Button
-                text={'Add Liquidity'}
-                onClick={() => {
-                  setSelected({ liquidity: liquidityPair });
-                  setChangeAction('Add');
-                }}
-              />
+            <Grid container spacing={2}>
+              <Grid item lg={6} md={6} sm={12} xs={12}>
+                <Button
+                  text={'Remove'}
+                  variant={'transparent'}
+                  onClick={() => {
+                    setSelected({ liquidity: liquidityPair });
+                    setChangeAction('Remove')
+                  }}
+                  disabled={!account}
+                />
+              </Grid>
+              <Grid item lg={6} md={6} sm={12} xs={12}>
+                <Button
+                  text={'Add Liquidity'}
+                  onClick={() => {
+                    setSelected({ liquidity: liquidityPair });
+                    setChangeAction('Add');
+                  }}
+                  disabled={!account}
+                />
+              </Grid>
             </Grid>
-          </Grid>
+          </div>
         </div>
       )}
     </MainOpenableCard>

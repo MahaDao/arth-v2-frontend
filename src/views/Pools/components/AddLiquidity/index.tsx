@@ -44,7 +44,8 @@ const AddLiquidity = (props: props) => {
   const [isInputFieldError, setIsInputFieldError] = useState<boolean>(false);
 
   const core = useCore();
-  const { account } = useWallet();
+  const { account, connect } = useWallet();
+
   const { isLoading: isLPTotalSupplyLoading, value: lpTotalSupply } = useTotalSupply(selectedPair.pairToken);
   const { isLoading: isLpBalanceLoading, value: lpBalance } = useTokenBalance(core.tokens[selectedPair.pairToken]);
 
@@ -289,58 +290,66 @@ const AddLiquidity = (props: props) => {
               </OneLine>
             </OneLine>
           </TcContainer>
-          <ApproveButtonContainer>
-            <Button
-              text={
-                isFirstCoinApproved
-                  ? `Approved ${selectedPair.symbol1}`
-                  : !isFirstCoinApproving
-                    ? `Approve ${selectedPair.symbol1}`
-                    : 'Approving...'
-              }
-              size={'lg'}
-              disabled={
-                isInputFieldError ||
-                isFirstCoinApproved ||
-                !Number(firstCoinValue)
-              }
-              onClick={approveFirstCoin}
-              loading={isFirstCoinApproving}
-            />
-            <div style={{ padding: 5 }} />
-            <Button
-              text={
-                isSecondCoinApproved
-                  ? `Approved ${selectedPair.symbol2}`
-                  : !isSecondCoinApproving
-                    ? `Approve ${selectedPair.symbol2}`
-                    : 'Approving...'
-              }
-              size={'lg'}
-              disabled={
-                isInputFieldError ||
-                isSecondCoinApproved ||
-                !Number(secondCoinValue)
-              }
-              onClick={approveSecondCoin}
-              loading={isSecondCoinApproving}
-            />
-          </ApproveButtonContainer>
-          <br />
-          <Button
-            text={'Supply'}
-            size={'lg'}
-            onClick={() => {
-              setConfirmModal(true)
-            }}
-            disabled={
-              isInputFieldError ||
-              !isSecondCoinApproved ||
-              !isSecondCoinApproved ||
-              !Number(secondCoinValue) ||
-              !Number(firstCoinValue)
-            }
-          />
+          <div style={{marginTop: '32px'}}>
+            <Grid container spacing={2} style={{ marginBottom: '8px' }}>
+              <Grid item lg={6} md={6} sm={12} xs={12}>
+                <Button
+                  text={
+                    isFirstCoinApproved
+                      ? `Approved ${selectedPair.symbol1}`
+                      : !isFirstCoinApproving
+                      ? `Approve ${selectedPair.symbol1}`
+                      : 'Approving...'
+                  }
+                  size={'lg'}
+                  disabled={
+                    isInputFieldError ||
+                    isFirstCoinApproved ||
+                    !Number(firstCoinValue)
+                  }
+                  onClick={approveFirstCoin}
+                  loading={isFirstCoinApproving}
+                />
+              </Grid>
+              <Grid item lg={6} md={6} sm={12} xs={12}>
+                <Button
+                  text={
+                    isSecondCoinApproved
+                      ? `Approved ${selectedPair.symbol2}`
+                      : !isSecondCoinApproving
+                      ? `Approve ${selectedPair.symbol2}`
+                      : 'Approving...'
+                  }
+                  size={'lg'}
+                  disabled={
+                    isInputFieldError ||
+                    isSecondCoinApproved ||
+                    !Number(secondCoinValue)
+                  }
+                  onClick={approveSecondCoin}
+                  loading={isSecondCoinApproving}
+                />
+              </Grid>
+            </Grid>
+            <Grid container spacing={2}>
+              <Grid item lg={12} md={12} sm={12} xs={12}>
+                <Button
+                  text={'Supply'}
+                  size={'lg'}
+                  onClick={() => {
+                    setConfirmModal(true)
+                  }}
+                  disabled={
+                    isInputFieldError ||
+                    !isSecondCoinApproved ||
+                    !isSecondCoinApproved ||
+                    !Number(secondCoinValue) ||
+                    !Number(firstCoinValue)
+                  }
+                />
+              </Grid>
+            </Grid>
+          </div>
         </CustomCardContainer>
       </CustomCard>
     </div>
