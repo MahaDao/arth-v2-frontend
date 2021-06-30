@@ -22,7 +22,7 @@ export default function (
 
   const action = useCallback(async (callback?: () => void): Promise<void> => {
     try {
-      const response = await core.contracts.UniswapV2Router02.swapExactTokensForTokens(
+      const response = await core.contracts.UniswapV2Router02.swapExactTokensForTokensSupportingFeeOnTransferTokens(
         amountIn,
         amountOutAfterSlippage,
         [sellToken, buyToken],
