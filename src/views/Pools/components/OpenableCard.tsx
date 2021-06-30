@@ -1,3 +1,4 @@
+import { useWallet } from 'use-wallet';
 import styled from 'styled-components';
 import Grid from '@material-ui/core/Grid';
 import { BigNumber } from 'ethers/lib/ethers';
@@ -14,8 +15,8 @@ import useCore from '../../../hooks/useCore';
 import useTotalSupply from '../../../hooks/useTotalSupply';
 import useTokenBalance from '../../../hooks/state/useTokenBalance';
 import TransparentInfoDiv from '../../Stablize/components/InfoDiv';
+import useTokenBalanceOf from '../../../hooks/state/useTokenBalanceOf';
 import { getDisplayBalance, getDisplayBalanceToken } from '../../../utils/formatBalance';
-import { useWallet } from 'use-wallet';
 
 export interface ICards {
   id: number;
@@ -40,10 +41,21 @@ export default (props: IProps) => {
   const isMobile = useMediaQuery({ query: '(max-device-width: 1284px)' });
 
   const core = useCore();
-  const { isLoading: isLPTotalSupplyLoading, value: lpTotalSupply } = useTotalSupply(liquidityPair.pairToken);
-  const { isLoading: isLPBalanceLoading, value: lpBalance } = useTokenBalance(core.tokens[liquidityPair.pairToken]);
-  const { isLoading: isToken1BalanceLoading, value: token1Balance } = useTokenBalance(core.tokens[liquidityPair.symbol1]);
-  const { isLoading: isToken2BalanceLoading, value: token2Balance } = useTokenBalance(core.tokens[liquidityPair.symbol2]);
+
+  const { isLoading: isLPTotalSupplyLoading, value: lpTotalSupply } = useTotalSupply(
+    liquidityPair.pairToken
+  );
+  const { isLoading: isLPBalanceLoading, value: lpBalance } = useTokenBalance(
+    core.tokens[liquidityPair.pairToken]
+  );
+  const { isLoading: isToken1BalanceLoading, value: token1Balance } = useTokenBalanceOf(
+    core.tokens[liquidityPair.symbol1],
+    core.tokens[liquidityPair.pairToken].address
+  );
+  const { isLoading: isToken2BalanceLoading, value: token2Balance } = useTokenBalanceOf(
+    core.tokens[liquidityPair.symbol2],
+    core.tokens[liquidityPair.pairToken].address
+  );
 
   const [isPercentOfPoolLoading, percentOfPool] = useMemo(() => {
     if (isLPBalanceLoading || isLPTotalSupplyLoading) return [true, BigNumber.from(0)];
@@ -76,13 +88,13 @@ export default (props: IProps) => {
             isLoadingData={isLPBalanceLoading}
           />
           <TransparentInfoDiv
-            labelData={'Pooled ARTH'}
+            labelData={`Pooled ${liquidityPair.symbol1.toUpperCase()}`}
             rightLabelValue={Number(getDisplayBalanceToken(token1Balance, core.tokens[liquidityPair.symbol1])).toLocaleString('en-US', { maximumFractionDigits: 3 })}
             rightLabelUnit={`${liquidityPair.symbol1.toUpperCase()}`}
             isLoadingData={isToken1BalanceLoading}
           />
           <TransparentInfoDiv
-            labelData={'Pooled ARTH'}
+            labelData={`Pooled ${liquidityPair.symbol2.toUpperCase()}`}
             rightLabelValue={Number(getDisplayBalanceToken(token2Balance, core.tokens[liquidityPair.symbol2])).toLocaleString('en-US', { maximumFractionDigits: 3 })}
             rightLabelUnit={`${liquidityPair.symbol2.toUpperCase()}`}
             isLoadingData={isToken2BalanceLoading}
@@ -92,8 +104,8 @@ export default (props: IProps) => {
             rightLabelValue={Number(getDisplayBalance(percentOfPool, 4)).toLocaleString('en-US', { maximumFractionDigits: 3 }) + '%'}
             isLoadingData={isPercentOfPoolLoading}
           />
-          <div style={{marginTop: '32px'}}>
-            <Grid container style={{marginBottom: '8px'}}>
+          <div style={{ marginTop: '32px' }}>
+            <Grid container style={{ marginBottom: '8px' }}>
               {!!!account && (
                 <Grid item lg={12} md={12} sm={12} xs={12}>
                   <Button
