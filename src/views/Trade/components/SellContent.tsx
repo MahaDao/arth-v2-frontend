@@ -292,7 +292,6 @@ const LeftTopCardContainer = styled.div``;
 
 const PlusMinusArrow = styled.div`
   width: 100%;
-  height: 32px;
   border-radius: 1.33px;
   color: #ffffff;
   align-items: center;
@@ -300,6 +299,7 @@ const PlusMinusArrow = styled.div`
   display: flex;
   flex-direction: row;
   font-size: 20px;
+  margin: 12px 0;
 `;
 
 const ReceiveContainer = styled.div`

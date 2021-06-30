@@ -161,7 +161,7 @@ const BuyContent = () => {
         <PlusMinusArrow>
           <img alt='Arrow' src={arrowDown} />
         </PlusMinusArrow>
-        <div style={{ marginBottom: '32px' }}>
+        <div>
           <TextWithIcon style={{ marginBottom: '12px' }}>You Receive</TextWithIcon>
           <ReceiveContainer>
             <OneLineInputwomargin>
@@ -184,7 +184,6 @@ const BuyContent = () => {
                 <TagChips>ARTHX</TagChips>
               </OneLineInputwomargin>
             </OneLineInputwomargin>
-            <br />
             {/* <OneLineInputwomargin>
               <div style={{ flex: 1 }}>
                 <TextWithIcon>Liquidity on Uniswap</TextWithIcon>
@@ -276,7 +275,6 @@ const ReceiveContainer = styled.div`
 
 const PlusMinusArrow = styled.div`
   width: 100%;
-  height: 32px;
   border-radius: 1.33px;
   color: #ffffff;
   align-items: center;
@@ -284,6 +282,7 @@ const PlusMinusArrow = styled.div`
   display: flex;
   flex-direction: row;
   font-size: 20px;
+  margin: 12px 0;
 `;
 
 const TextWithIcon = styled.div`
