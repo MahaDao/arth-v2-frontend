@@ -9,10 +9,6 @@ import AddLiquidity from './components/AddLiquidity';
 
 import useCore from '../../hooks/useCore';
 
-// import dfyn from '../../assets/img/dfyn.svg';
-// import uniswapLogo from '../../assets/svg/uniswapLogo.svg';
-// import shushiswap from '../../assets/svg/sushiswapLogo.svg';
-
 const Boardrooms = () => {
   useEffect(() => window.scrollTo(0, 0), []);
 
@@ -72,7 +68,7 @@ const Boardrooms = () => {
           <HeaderLabel>Your Liquidity</HeaderLabel>
         </YourLiquidityHeader>
         {
-          false // noLiquidity
+          liquidityPairs.length === 0 // noLiquidity
             ? NoLiquidityFound()
             : liquidityPairs.map((pair) => (
               <OpenableCard
