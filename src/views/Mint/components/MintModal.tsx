@@ -29,94 +29,6 @@ import useMintARTH from '../../../hooks/callbacks/pools/useMintARTH';
 import CustomSuccessModal from '../../../components/CustomSuccesModal';
 import useApprove, { ApprovalState } from '../../../hooks/callbacks/useApprove';
 
-const OrangeCheckBox = withStyles({
-  root: {
-    color: 'rgba(255, 255, 255, 0.32)',
-    '&$checked': {
-      color: '#FF7F57',
-    },
-  },
-  checked: {
-    color: 'white',
-  },
-})((props: CheckboxProps) => <Checkbox {...props} />);
-
-const useSliderStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      width: '100%',
-      // color: 'white'
-    },
-    margin: {
-      height: theme.spacing(3),
-    },
-  }),
-);
-
-function valuetext(value: number) {
-  return `${value}`;
-}
-
-const PrettoRestrictSlider = withStyles({
-  root: {
-    // color: 'white',
-    height: 15,
-    width: '95%',
-  },
-  thumb: {
-    height: 10,
-    width: 10,
-    // backgroundColor: '#fff',
-    border: '2px solid currentColor',
-    color: '#FFA981',
-    marginTop: -3.5,
-    marginLeft: -3,
-    '&:focus, &:hover, &$active': {
-      boxShadow: 'inherit',
-    },
-  },
-  active: {},
-  valueLabel: {
-    left: 'calc(-100% - 5px)',
-    // color: '#FF7F57',
-  },
-  marked: {
-    color: 'red',
-  },
-  markLabel: {
-    // color: 'green'
-  },
-  track: {
-    height: 3,
-    borderRadius: 3,
-    color: '#FFA981',
-    // top: '2%'
-  },
-  rail: {
-    height: 3,
-    borderRadius: 3,
-    color: '#D74D26',
-    // background:'red'
-    // border: '1px solid'
-  },
-  markLabelActive: {
-    fontStyle: 'normal',
-    fontWeight: 300,
-    fontSize: '12px',
-    lineHeight: '130%',
-    textAlign: 'center',
-    color: 'rgba(255, 255, 255, 0.88)',
-  },
-  mark: {
-    // height: '3px',
-    // width: '3px',
-    // borderRadius: '50%',
-    color: 'transparent',
-  },
-})(Slider);
-
-const DEFAULT_CALC = 1440;
-
 interface IProps {
   isInputFieldError: boolean;
   collateralValue: string;
@@ -144,13 +56,9 @@ const MintModal = (props: WithSnackbarProps & IProps) => {
     onSuccess,
   } = props;
 
-  const [calcDuration, setDuration] = useState<number>(DEFAULT_CALC);
-  const [checked, setChecked] = React.useState(false);
-  const [sliderValue, setSliderValue] = React.useState(1);
   const [successModal, setSuccessModal] = useState<boolean>(false);
 
   const core = useCore();
-  const sliderClasses = useSliderStyles();
   const tokenDecimals = useTokenDecimals(selectedCollateralCoin);
   const collateralPool = core.getCollatearalPool(selectedCollateralCoin);
   const [collatApproveStatus, ] = useApprove(
@@ -161,11 +69,6 @@ const MintModal = (props: WithSnackbarProps & IProps) => {
   const isCollatApproved = collatApproveStatus === ApprovalState.APPROVED;
 
   useEffect(() => window.scrollTo(0, 0), []);
-
-  const handleSliderChange = (event: any, value: any) => {
-    setSliderValue(value);
-    setDuration(DEFAULT_CALC - value * value);
-  };
 
   const handleMint = () => {
     mintARTH(() => {
@@ -228,124 +131,6 @@ const MintModal = (props: WithSnackbarProps & IProps) => {
             rightLabelUnit={'ARTHX'}
             rightLabelValue={Number(arthxValue).toLocaleString()}
           />
-          {
-            /* <CheckboxDiv>
-              <FormControlLabel
-                value=""
-                checked={checked}
-                control={
-                  <OrangeCheckBox
-                    icon={<CheckBoxOutlineBlankIcon fontSize={'inherit'} />}
-                    checkedIcon={
-                      <CheckIcon
-                        style={{
-                          background: '#FF7F57',
-                          color: 'white',
-                          borderRadius: '6px',
-                        }}
-                        fontSize={'inherit'}
-                      />
-                    }
-                    size={'medium'}
-                  />
-                }
-                label="Stake $ARTH and earn more rewards"
-                labelPlacement="end"
-                onChange={handleCheck}
-              />
-            </CheckboxDiv> */
-          }
-          {
-            checked && (
-              <StakingDiv>
-                <div>
-                  <OneLineInput style={{ margin: '0px' }}>
-                    <div>
-                      <InputLabel style={{ marginTop: '12px' }}>
-                        Select how long would you like to stake
-                      </InputLabel>
-                    </div>
-                    <InputNoDisplay>
-                      <InternalSpan>{sliderValue} months</InternalSpan>
-                    </InputNoDisplay>
-                  </OneLineInput>
-                </div>
-                <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    color: 'white',
-                    flexDirection: 'row',
-                    width: '100%',
-                    paddingLeft: '16px',
-                    marginTop: '5px',
-                  }}
-                >
-                  <div className={sliderClasses.root}>
-                    <PrettoRestrictSlider
-                      // defaultValue={sliderValue ?? 1}
-                      // onChange={handleSliderChange}
-                      // // valueLabelFormat={valueLabelFormat}
-                      // getAriaValueText={valuetext}
-                      // aria-labelledby="discrete-slider-small-steps"
-                      // step={1}
-                      // min={1}
-                      // max={36}
-                      // valueLabelDisplay="on"
-                      // // marks={marks}
-                      // ValueLabelComponent={"strong"}
-                      defaultValue={1}
-                      getAriaValueText={valuetext}
-                      valueLabelFormat={valuetext}
-                      // ValueLabelComponent={'span'}
-                      // value={sliderValue}
-                      onChange={handleSliderChange}
-                      aria-label="pretto slider"
-                      step={1}
-                      marks
-                      min={1}
-                      max={36}
-                      valueLabelDisplay="off"
-                    />
-                    <div
-                      style={{
-                        marginTop: -15,
-                        marginLeft: -15,
-                        marginBottom: 15,
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                      }}
-                    >
-                      <TimeSpan>1 month</TimeSpan>
-                      <TimeSpan>3 Years</TimeSpan>
-                    </div>
-                  </div>
-                </div>
-                <TransparentInfoDiv
-                  labelData={`Realtime earning`}
-                  // labelToolTipData={'testing'}
-                  rightLabelUnit={'MAHA'}
-                  rightLabelValue={'~100.0'}
-                  countUp
-                  cEnd={10}
-                  cDuration={calcDuration}
-                  cStart={0}
-                />
-                <TransparentInfoDiv
-                  labelData={`ROR`}
-                  // labelToolTipData={'testing'}
-                  // rightLabelUnit={''}
-                  rightLabelValue={String(10 * sliderValue) + '%'}
-                />
-                <TransparentInfoDiv
-                  labelData={`APY`}
-                  // labelToolTipData={'testing'}
-                  // rightLabelUnit={'MAHA'}
-                  rightLabelValue={String(10 * sliderValue) + '%'}
-                />
-              </StakingDiv>
-            )
-          }
           <div
             style={{
               flexDirection: 'column-reverse',
@@ -385,7 +170,7 @@ const MintModal = (props: WithSnackbarProps & IProps) => {
                   !isCollatApproved ||
                   !(Number(collateralValue))
                 }
-                text={checked ? 'Confirm Mint and Stake' : 'Confirm Mint'}
+                text={'Confirm Mint'}
                 size={'lg'}
                 onClick={handleMint}
               />
