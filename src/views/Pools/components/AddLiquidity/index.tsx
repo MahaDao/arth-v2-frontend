@@ -21,6 +21,7 @@ import useAddLiquidity from '../../../../hooks/callbacks/pairs/useAddLiquidity';
 import useApprove, { ApprovalState } from '../../../../hooks/callbacks/useApprove';
 import usePairLiquidityMinted from '../../../../hooks/state/usePairLiquidityMinted';
 import { getDisplayBalance, getDisplayBalanceToken } from '../../../../utils/formatBalance';
+import SlippageContainer from '../../../../components/SlippageContainer';
 
 interface SelectedPair {
   id: number;
@@ -216,6 +217,7 @@ const AddLiquidity = (props: props) => {
         <CustomCardHeader className={'custom-mahadao-container-header'}>
           <EachElementBack> <ArrowBackIos onClick={() => onBack()} fontSize="default" color={'inherit'} htmlColor={'#ffffff'} /> </EachElementBack>
           <EachElementTitle> <CardTitle> Add Liquidity </CardTitle></EachElementTitle>
+          <EachElementBack> <SlippageContainer /> </EachElementBack>
         </CustomCardHeader>
         <CustomCardContainer className={'custom-mahadao-container-content'}>
           <CustomInputContainer
@@ -377,12 +379,11 @@ const CustomCardHeader = styled.div`
 `;
 
 const EachElementBack = styled.div`
-  flex: 0.25;
   cursor: pointer;
 `;
 
 const EachElementTitle = styled.div`
-  flex: 0.5;
+  flex: 1;
 `;
 
 const CustomCardContainer = styled.div`

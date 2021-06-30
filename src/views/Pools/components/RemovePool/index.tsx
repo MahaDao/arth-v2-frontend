@@ -23,6 +23,7 @@ import useTokenBalanceOf from '../../../../hooks/state/useTokenBalanceOf';
 import useApprove, { ApprovalState } from '../../../../hooks/callbacks/useApprove';
 import useRemoveLiquidity from '../../../../hooks/callbacks/pairs/useRemoveLiquidity';
 import { ValidateNumber } from '../../../../components/CustomInputContainer/RegexValidation';
+import SlippageContainer from '../../../../components/SlippageContainer';
 
 interface SelectedPair {
   id: number;
@@ -259,22 +260,9 @@ const RemovePool = (props: props) => {
       </CustomModal>
       <CustomCard className={'custom-mahadao-container'}>
         <CustomCardHeader className={'custom-mahadao-container-header'}>
-          <EachElement>
-            {' '}
-            <ArrowBackIos
-              onClick={() => onBack()}
-              fontSize="default"
-              color={'inherit'}
-              htmlColor={'#ffffff'}
-            />{' '}
-          </EachElement>
-          <EachElement>
-            {' '}
-            <CardTitle>Remove Liquidity</CardTitle>
-          </EachElement>
-          <EachElement>
-            {' '}
-          </EachElement>
+          <EachElementBack> <ArrowBackIos onClick={() => onBack()} fontSize="default" color={'inherit'} htmlColor={'#ffffff'} /> </EachElementBack>
+          <EachElementTitle> <CardTitle>Remove Liquidity</CardTitle> </EachElementTitle>
+          <EachElementBack> <SlippageContainer /> </EachElementBack>
         </CustomCardHeader>
         <CustomCardContainer className={'custom-mahadao-container-content'}>
           {detailed()}
@@ -369,19 +357,25 @@ const CustomCard = styled.div`
 const CustomCardHeader = styled.div`
   display: flex;
   flex-direction: row;
-  padding: 24px 32px;
+  padding-top: 28px;
+  padding-bottom: 28px;
   align-items: center;
   align-content: center;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   @media (max-width: 600px) {
-    padding: 12px 16px;
+    padding-top: 24px;
+    padding-bottom: 24px;
   }
 `;
 
-const EachElement = styled.div`
-  flex: 0.3333;
+const EachElementBack = styled.div`
   cursor: pointer;
 `;
+
+const EachElementTitle = styled.div`
+  flex: 1;
+`;
+
 const OneLineInput = styled.div`
   display: flex;
   flex-direction: row;
