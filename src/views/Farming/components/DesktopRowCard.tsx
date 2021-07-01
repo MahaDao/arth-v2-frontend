@@ -179,7 +179,7 @@ export default (props: IProps) => {
         props.stakedBalance.gt(0) && (
           <DepositInfoContainer>
             <div style={{ display: 'flex' }}>
-              Your Locked state:
+              Your Locked stake:
               <TableMainTextStyle style={{ marginLeft: '10px' }}>
                 {Number(getDisplayBalance(props.stakedBalance, tokenDecimals, 3)).toLocaleString()}
               </TableMainTextStyle>
