@@ -151,7 +151,7 @@ const RemovePool = (props: props) => {
           hasDropDown={false}
           multiIcons
           symbols={[selectedPair.symbol1, selectedPair.symbol2]}
-          SymbolText={`${selectedPair.symbol1}-${selectedPair.symbol2}`}
+          SymbolText={`${selectedPair.symbol1}+${selectedPair.symbol2}`}
           inputMode={'numeric'}
           setText={(val: string) => {
             setPairValue(ValidateNumber(val) ? val : '0');

@@ -97,32 +97,11 @@ const BeforeChip = styled.span`
   color: #ffffff;
 `;
 
-const TagChips = styled.div`
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 4px;
-  padding: 2px 8px;
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 300;
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.64);
-`;
 
-const ToolTipFont = styled.p`
-  padding: 0px;
-  margin: 0px;
-`;
 
-const PercentChange = styled.p`
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 300;
-  font-size: 12px;
-  line-height: 130%;
-  text-align: right;
-  color: #178a50;
-  margin: 0;
-`;
+
+
+
 
 const TargetPriceTag = styled.p`
   background: #423b38;

@@ -72,7 +72,7 @@ export default (props: IProps) => {
             size={50}
             style={{ zIndex: 1, marginLeft: -15 }}
           />
-          <LPairLabel>{liquidityPair.pairName}</LPairLabel>
+          <LPairLabel>{`${liquidityPair.symbol1}+${liquidityPair.symbol2}`} </LPairLabel>
         </LLabel>
         <Manage onClick={onClick}>
           {!isMobile && 'Manage'}
