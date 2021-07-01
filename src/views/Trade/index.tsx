@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import React, { useEffect, useState } from 'react';
 import CallMadeIcon from '@material-ui/icons/CallMade';
-import { withSnackbar, WithSnackbarProps } from 'notistack';
 
 import dfyn from '../../assets/img/DFYN.png';
 
@@ -12,7 +11,7 @@ import SellContent from './components/SellContent';
 import Container from '../../components/Container';
 import SlippageContainer from '../../components/SlippageContainer';
 
-const Boardrooms = (props: WithSnackbarProps) => {
+const Boardrooms = () => {
   useEffect(() => window.scrollTo(0, 0), []);
 
   const [type, setType] = useState<'Buy' | 'Sell'>('Buy');
@@ -22,7 +21,7 @@ const Boardrooms = (props: WithSnackbarProps) => {
   const TabContent = () => {
     return (
       <Grid container style={{ marginTop: '24px' }}>
-        <Grid item lg={3} sm={'auto'}></Grid>
+        <Grid item lg={3} sm={'auto'}/>
         <Grid item lg={6} md={12} sm={12} xs={12}>
           <LeftTopCard className={'custom-mahadao-container'}>
             <LeftTopCardHeader className={'custom-mahadao-container-header'}>
@@ -42,7 +41,7 @@ const Boardrooms = (props: WithSnackbarProps) => {
             {type === 'Sell' && <SellContent />}
           </LeftTopCard>
         </Grid>
-        <Grid item lg={3} sm={'auto'}></Grid>
+        <Grid item lg={3} sm={'auto'}/>
       </Grid>
     );
   };
@@ -97,7 +96,7 @@ const Boardrooms = (props: WithSnackbarProps) => {
         </Grid> */}
         {TabContent()}
         <Grid container style={{ marginTop: '16px' }}>
-          <Grid item lg={3} sm={'auto'}></Grid>
+          <Grid item lg={3} sm={'auto'}/>
           <Grid item lg={6} md={12} sm={12} xs={12}>
             <CustomInfoCard className={'custom-mahadao-box'}>
               <CustomInfoCardDetails>
@@ -115,7 +114,7 @@ const Boardrooms = (props: WithSnackbarProps) => {
               </CustomInfoCardButton>
             </CustomInfoCard>
           </Grid>
-          <Grid item lg={3} sm={'auto'}></Grid>
+          <Grid item lg={3} sm={'auto'}/>
         </Grid>
       </Container>
     </>
@@ -198,50 +197,6 @@ const PageSubHeading = styled.p`
   margin-bottom: 40px;
 `;
 
-const RadioSelectionConatiner = styled.div`
-  background: #2a2827;
-  border-radius: 8px;
-  padding: 6px;
-  display: flex;
-  flex-direction: row;
-`;
-
-const RadioSubConatiner = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 40px;
-  z-index: 1;
-  cursor: pointer;
-  flex: 0.5;
-  position: relative;
-`;
-
-const RadioText = styled.span`
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 20px;
-  text-align: center;
-  color: rgba(255, 255, 255, 0.88);
-  z-index: 1;
-`;
-
-const RadioLogo = styled.span`
-  margin-left: 5px;
-  margin-right: 5px;
-`;
-
-const ActiveRadio = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 40px;
-  background: #423b38;
-  border-radius: 4px;
-  z-index: 0;
-`;
-
 const LeftTopCard = styled.div``;
 
 const LeftTopCardHeader = styled.div`
@@ -288,4 +243,4 @@ const CustomInfoCardDetails = styled.div`
   margin: 10px 0;
 `;
 
-export default withSnackbar(Boardrooms);
+export default Boardrooms;

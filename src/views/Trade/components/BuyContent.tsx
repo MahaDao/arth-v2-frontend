@@ -295,7 +295,7 @@ const TextWithIcon = styled.div`
 `;
 
 const BeforeChip = styled.span`
-  ont-family: Inter;
+  font-family: Inter;
   font-style: normal;
   font-weight: 300;
   font-size: 12px;
