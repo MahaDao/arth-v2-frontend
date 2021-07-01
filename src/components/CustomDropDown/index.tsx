@@ -31,7 +31,7 @@ const CustomDropDown: React.FC<InputProps> = (props) => {
 const CustomDropDownContainer = styled.div`
   position: absolute;
   top: 50px;
-  right: 0px;
+  right: 0;
   z-index: 13;
   background: #1f1e1e;
   border-radius: 6px;
@@ -42,8 +42,9 @@ const CustomDropDownLi = styled.div`
   display: flex;
   flex-direction: row;
   height: 48px;
-  padding: 0px 12px;
+  padding: 0 12px;
   align-items: center;
+
   &:hover {
     background: rgba(62, 62, 62, 0.31);
   }

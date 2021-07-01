@@ -77,8 +77,8 @@ const StyledPageContent = styled.div`
   //padding: 0 15px;
   @media (max-width: 768px) {
     flex-direction: column-reverse;
-    padding: 0px;
-  } ;
+    padding: 0;
+  };
 `;
 
 const StyledNav = styled.div`
@@ -123,9 +123,9 @@ const StyledPageHeader = styled.div`
   //padding-right: 15px;
   @media (max-width: 768px) {
     width: auto;
-    padding-left: 0px;
-    padding-right: 0px;
-  } ;
+    padding-left: 0;
+    padding-right: 0;
+  };
 `;
 
 const SecondParaTitle = styled.h3`
@@ -140,7 +140,6 @@ const SecondParaTitle = styled.h3`
 const StyledSubtitle = styled.h3`
   color: ${(props) => props.theme.color.grey[400]};
   font-size: 16px;
-  padding-top: 10px;
   font-weight: 300;
   margin: 0;
   max-width: 500px;

@@ -500,8 +500,6 @@ const PlusMinusArrow = styled.div`
   margin: 12px 0;
 `;
 
-
-
 const TextWithIcon = styled.div`
   font-family: Inter;
   font-style: normal;

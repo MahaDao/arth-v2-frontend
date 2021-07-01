@@ -372,7 +372,7 @@ const IFieldConatiner = styled.div`
 const IFieldRightContainer = styled.div`
   padding: 10px 12px;
   background: #1f1e1e;
-  border-radius: 0px 6px 6px 0px;
+  border-radius: 0 6px 6px 0;
   display: flex;
   align-items: center;
   position: relative;
@@ -386,7 +386,7 @@ const MaxTagConatiner = styled.div`
   color: #f7653b;
   padding: 10px 12px;
   background: transparent;
-  border-radius: 0px 6px 6px 0px;
+  border-radius: 0 6px 6px 0;
   display: flex;
   align-items: center;
   position: relative;

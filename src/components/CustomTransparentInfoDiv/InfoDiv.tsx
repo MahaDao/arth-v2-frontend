@@ -84,7 +84,7 @@ const LabelInfoDataChip = styled.div`
   font-weight: 300;
   font-size: 12px;
   line-height: 130%;
-  margin: 0px 2px;
+  margin: 0 2px;
   color: rgba(255, 255, 255, 0.64);
 `;
 
