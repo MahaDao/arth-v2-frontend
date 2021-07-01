@@ -169,28 +169,10 @@ const Home: React.FC = () => {
   );
 };
 
-const ToLink = styled(Link)`
+styled(Link)`
   z-index: 1;
 `;
 
-const GradientDiv = styled.div`
-  background: linear-gradient(180deg, #2a2827 0%, rgba(42, 40, 39, 0) 100%);
-  height: 270px;
-  position: absolute;
-  width: 100%;
-  z-index: -50;
-`;
-
-const FaqTitle = styled.div`
-  font-style: normal;
-  font-weight: bold;
-  font-size: 36px;
-  line-height: 44px;
-  color: #ffffff;
-  opacity: 0.88;
-  margin-top: 40px;
-  margin-bottom: 20px;
-`;
 
 const Card = styled.div``;
 const PercentCard = styled.div`
@@ -208,16 +190,7 @@ const PercentCardInfo = styled.div`
   margin: 6px;
 `;
 
-const InfoDiv = styled.div`
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 18px;
-  line-height: 24px;
-  color: rgba(255, 255, 255, 0.64);
-  margin: 12px 0px 0px 0px;
-  text-align: center;
-`;
+
 
 const PercentCardLabel = styled.div`
   display: flex;
@@ -248,82 +221,19 @@ const PercentCardValue = styled.div`
   color: #ffffff;
 `;
 
-const TextForInfoTitle = styled.div`
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 300;
-  font-size: 16px;
-  line-height: 150%;
-  color: rgba(255, 255, 255, 0.88);
-  opacity: 0.64;
-  text-align: center;
-`;
 
-const PercentNumber = styled.span`
-  font-family: Inter;
-  font-style: normal;
-  font-weight: bold;
-  font-size: 24px;
-  line-height: 32px;
-  text-align: right;
-  display: flex;
-  align-items: center;
-  flex: 1;
-  color: rgba(255, 255, 255, 0.88);
-`;
 
-const HeaderSubtitle = styled.div`
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 20px;
-  color: rgba(255, 255, 255, 0.88);
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  align-content: center;
-  margin: 12px 0px 22px 0px;
-`;
 
-const HardChip = styled.div`
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 4px;
-  padding: 2px 8px;
-  font-family: Inter;
-  font-style: normal;
-  color: rgba(255, 255, 255, 0.64);
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 20px;
-  margin-left: 10px;
-  margin-right: 10px;
-`;
 
-const ButtonDiv = styled.div`
-  display: flex;
-  justify-content: space-evenly;
-  flex-direction: row;
-  align-items: center;
-`;
 
-const IconButtons = styled.div`
-  width: fit-content;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  cursor: pointer;
-`;
 
-const ButtonText = styled.div`
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 20px;
-  text-align: center;
-`;
+
+
+
+
+
+
+
 
 const TitleString = styled.div`
   font-family: Inter;

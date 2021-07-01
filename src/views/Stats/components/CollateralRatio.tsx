@@ -10,7 +10,7 @@ import CustomToolTip from '../../../components/CustomTooltip';
 import { getDisplayBalance } from '../../../utils/formatBalance';
 import useGlobalCollateralRatio from '../../../hooks/state/controller/useGlobalCollateralRatio';
 
-const BorderLinearProgress = withStyles((theme: Theme) =>
+const BorderLinearProgress = withStyles(() =>
   createStyles({
     root: {
       height: 25,
@@ -131,7 +131,7 @@ const CollateralRatio: React.FC = () => {
 const PercentCard = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content space-between;
+  justify-content: space-between;
   width: 100%;
   align-items: center;
   height: fit-content;
@@ -140,7 +140,7 @@ const PercentCard = styled.div`
 const PercentCardInfo = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content space-between;
+  justify-content: space-between;
   width: 100%;
   margin: 6px;
 `;

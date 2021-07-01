@@ -45,7 +45,7 @@ const AddLiquidity = (props: props) => {
   const [isInputFieldError, setIsInputFieldError] = useState<boolean>(false);
 
   const core = useCore();
-  const { account, connect } = useWallet();
+  const { account } = useWallet();
 
   const { isLoading: isLPTotalSupplyLoading, value: lpTotalSupply } = useTotalSupply(selectedPair.pairToken);
   const { isLoading: isLpBalanceLoading, value: lpBalance } = useTokenBalance(core.tokens[selectedPair.pairToken]);
@@ -397,7 +397,7 @@ const CardTitle = styled.p`
   line-height: 24px;
   text-align: center;
   color: rgba(255, 255, 255);
-  margin: 0px;
+  margin: 0;
 `;
 
 const PlusMinusArrow = styled.div`
@@ -412,9 +412,7 @@ const PlusMinusArrow = styled.div`
   font-size: 20px;
 `;
 
-const ApproveButtonContainer = styled.div`
-  display: flex;
-`;
+
 
 const TcContainer = styled.div`
   margin-top: 18px;
@@ -438,7 +436,7 @@ const TextWithIcon = styled.div`
 `;
 
 const BeforeChip = styled.span`
-  ont-family: Inter;
+  font-family: Inter;
   font-style: normal;
   font-weight: 300;
   font-size: 12px;
