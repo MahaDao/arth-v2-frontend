@@ -16,7 +16,6 @@ const Boardrooms = () => {
 
   const [type, setType] = useState<'Buy' | 'Sell'>('Buy');
 
-  // const [selectedSwap, setSelectedSwap] = useState<'Uniswap' | 'Sushiswap'>('Uniswap');
 
   const TabContent = () => {
     return (
@@ -56,44 +55,6 @@ const Boardrooms = () => {
             Lorem ipsum dolor sit amet, consectetur adipiscing elit.
           </PageSubHeading>
         </div>
-        {/* <Grid container>
-          <Grid item lg={3}></Grid>
-          <Grid item lg={6} md={12} sm={12} xs={12}>
-            <RadioSelectionConatiner>
-              <RadioSubConatiner
-                onClick={() => {
-                  if (selectedSwap === 'Sushiswap') {
-                    setSelectedSwap('Uniswap');
-                  }
-                }}
-              >
-                {selectedSwap === 'Uniswap' && <ActiveRadio />}
-                <RadioText>
-                  <RadioLogo>
-                    <img src={uniswapLogo} style={{ marginTop: '-6px' }} />
-                  </RadioLogo>
-                  Uniswap
-                </RadioText>
-              </RadioSubConatiner>
-              <RadioSubConatiner
-                onClick={() => {
-                  if (selectedSwap === 'Uniswap') {
-                    setSelectedSwap('Sushiswap');
-                  }
-                }}
-              >
-                {selectedSwap === 'Sushiswap' && <ActiveRadio />}
-                <RadioText>
-                  <RadioLogo>
-                    <img src={shushiswap} />
-                  </RadioLogo>
-                  Sushiswap
-                </RadioText>
-              </RadioSubConatiner>
-            </RadioSelectionConatiner>
-          </Grid>
-          <Grid item lg={3}></Grid>
-        </Grid> */}
         {TabContent()}
         <Grid container style={{ marginTop: '16px' }}>
           <Grid item lg={3} sm={'auto'}/>
