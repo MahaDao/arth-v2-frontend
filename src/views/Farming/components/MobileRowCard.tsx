@@ -329,19 +329,19 @@ const OpenableDiv = styled.div`
   background: #423b38;
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-sizing: border-box;
-  border-radius: 0px 0px 12px 12px;
+  border-radius: 0 0 12px 12px;
   display: flex;
   width: 100%;
   flex-direction: column;
   text-align: center;
   justify-content: center;
-  padding: 20px 0px;
+  padding: 20px 0;
 `;
 
 const InfoDiv = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 10px 0px 0px 0px;
+  margin: 10px 0 0 0;
   text-align: center;
   align-items: center;
 `;
@@ -353,7 +353,7 @@ const Withdraw = styled.div`
   font-size: 14px;
   line-height: 20px;
   color: #ff7f57;
-  margin: 8px 0px 0px 0px;
+  margin: 8px 0 0 0;
 `;
 
 const InfoDivLeftSpan = styled.div`
@@ -392,54 +392,6 @@ const StyledContent = styled.div`
   justify-content: space-between;
 `;
 
-const StyledInfoSlots = styled.div`
-  display: flex;
-  text-align: center;
-  padding-top: 5px;
-  padding-bottom: 5px;
-`;
-
-const LockinDiv = styled.div`
-  display: flex;
-  text-align: center;
-  padding-bottom: 3px;
-  padding-top: 35px;
-`;
-
-const StyledInfoSlot = styled.div`
-  padding-left: 5px;
-  padding-right: 5px;
-`;
-
-const SlotTitle = styled.div`
-  color: #fff;
-  font-weight: 300;
-  font-size: 16px;
-`;
-
-const PercentageTilte = styled.span`
-  text-align: center;
-  font-weight: 300;
-  font-size: 16px;
-  color: #ffffff;
-`;
-
-const BoldText = styled.span`
-  font-weight: 600;
-  font-size: 18px;
-  margin-right: 5px;
-`;
-
-const PercentageContainer = styled.div`
-  background: rgba(255, 255, 255, 0.16);
-  border-radius: 60px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 13px 15px;
-`;
-
 const StyledTitle = styled.span`
   font-family: Inter;
   font-style: normal;
@@ -458,46 +410,8 @@ const CardHeaderDiv = styled.div`
 
 const CardIcon = styled.div`
   position: absolute;
-  margin: -16px 0px 0px 0px;
+  margin: -16px 0 0 0;
   left: 45%;
-`;
-
-const DiscountDivContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  border-radius: 8px;
-  width: 100%;
-  padding: 0px 5px 10px 5px;
-`;
-
-const DiscountDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.16);
-  border-radius: 8px;
-  text-align: center;
-  font-size: 12px;
-  flex: 0.9;
-  font-weight: 300;
-  color: #ffffff;
-  padding: 10px 15px 10px 15px;
-  margin: 0px 3px 0px 3px;
-  min-width: 30%;
-  height: 45px;
-  justify-content: center;
-`;
-
-const TitleText = styled.div`
-  font-size: 12px;
-  font-weight: bold;
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 600;
-  text-align: center;
-  align-items: center;
-  color: #ffffff;
 `;
 
 const StyledSubTitle = styled.div`

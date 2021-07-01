@@ -81,7 +81,7 @@ export default (props: IProps) => {
         tokenDecimals={18}
       />
       <OneLine>
-        <div style={{ flex: 1 }}></div>
+        <div style={{ flex: 1 }}/>
         <OneLine>
           <BeforeChip>Staked Amount: {Number(getDisplayBalance(props.stakedBalance, tokenDecimals)).toLocaleString()}</BeforeChip>
           <TagChips>{symbol}</TagChips>

@@ -233,7 +233,7 @@ const CustomCardGrid = styled.div`
   border: 1px solid rgba(255, 255, 255, 0.16);
   box-sizing: border-box;
   border-radius: 12px;
-  margin: 8px 0px;
+  margin: 8px 0;
   position: relative;
 `;
 
@@ -257,17 +257,6 @@ const AddLiquidityButton = styled.p`
   color: #ff7f57;
   margin: 0;
   cursor: pointer;
-`;
-
-const DayText = styled.p`
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 300;
-  font-size: 14px;
-  line-height: 140%;
-  color: rgba(255, 255, 255, 0.64);
-  opacity: 0.88;
-  margin: 0;
 `;
 
 const DepositInfoContainer = styled.div`
@@ -302,6 +291,6 @@ const CardIcon = styled.img`
   transform: translate(-50%, -50%);
   position: absolute;
   top: 50%;
-  left: 0px;
+  left: 0;
   z-index: 10;
 `;

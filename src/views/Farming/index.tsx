@@ -111,9 +111,10 @@ const TextDiv = styled.div`
   justify-content: center;
   flex-direction: row;
   border-radius: 4px;
-  margin: 0px 6px;
-  padding: 0px 12px;
+  margin: 0 6px;
+  padding: 0 12px;
   cursor: pointer;
+
   &:hover {
     background: #423b3860;
   }
@@ -121,7 +122,7 @@ const TextDiv = styled.div`
 
 const ScrollDiv = styled.div`
   ::-webkit-scrollbar {
-    height: 0px;
+    height: 0;
     background: transparent; /* make scrollbar transparent */
   }
 `;
@@ -146,7 +147,7 @@ const Text2 = styled.p`
   font-size: 12px;
   line-height: 130%;
   color: #ffffff;
-  margin: 0px 5px;
+  margin: 0 5px;
 `;
 
 export default Banks;

@@ -37,7 +37,7 @@ const BankCardsV2 = (props: WithSnackbarProps & IProps) => {
           <Grid item lg={2}>
             <CustomTableHeading>Reward</CustomTableHeading>
           </Grid>
-          <Grid item lg={2}></Grid>
+          <Grid item lg={2}/>
         </Grid>
       )}
 

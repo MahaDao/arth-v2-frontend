@@ -62,10 +62,10 @@ const FarmingCard = (props: WithSnackbarProps & IProps) => {
     return () => clearInterval(interval);
   }, [core.config.refreshInterval]);
 
-  const { isLoading: isRatesLoading, value: rates } = usePoolTokenRates();
-  const { isLoading: isStakedBalanceLoading, value: stakedBalance } = useStakingBalance(pool.contract);
-  const { isLoading: isTokenBalanceLoading, value: tokenBalance } = useTokenBalance(depositTokenContract);
-  const { isLoading: isClaimableBlanceLoading, value: claimableBalance } = useStakingRewards(pool.contract);
+  const { value: rates } = usePoolTokenRates();
+  const { value: stakedBalance } = useStakingBalance(pool.contract);
+  const { value: tokenBalance } = useTokenBalance(depositTokenContract);
+  const { value: claimableBalance } = useStakingRewards(pool.contract);
 
   const [onPresentExitModal, onDismissExitModal] = useModal(
     <ExitModal

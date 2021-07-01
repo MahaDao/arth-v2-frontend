@@ -89,7 +89,7 @@ export default (props: IProps) => {
           tokenDecimals={18}
         />
         <OneLine>
-          <div style={{ flex: 1 }}></div>
+          <div style={{ flex: 1 }}/>
           <OneLine>
             <BeforeChip>Balance: {Number(getDisplayBalance(props.tokenBalance, tokenDecimals, 3)).toLocaleString()}</BeforeChip>
             <TagChips>{symbol}</TagChips>

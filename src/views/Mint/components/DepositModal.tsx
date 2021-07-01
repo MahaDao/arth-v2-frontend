@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
-import { useMediaQuery } from 'react-responsive';
 
 import CustomModal from '../../../components/CustomModal';
 import CustomInputContainer from '../../../components/CustomInputContainer';
@@ -21,7 +20,6 @@ interface IProps {
 export default (props: IProps) => {
   const [val, setValue] = useState<string>('0');
   const [isInputFieldError, setIsInputFieldError] = useState<boolean>(false);
-  const isMobile = useMediaQuery({ maxWidth: '600px' });
   const { balance } = useWallet()
 
   const symbol = config.blockchainToken // change this for the collateral
@@ -59,7 +57,7 @@ export default (props: IProps) => {
           errorCallback={(flag: boolean) => { setIsInputFieldError(flag) }}
         />
         <OneLine>
-          <div style={{ flex: 1 }}></div>
+          <div style={{ flex: 1 }}/>
           <OneLine>
             <BeforeChip>Balance: {getDisplayBalance(BigNumber.from(balance), 18)}</BeforeChip>
             <TagChips>{symbol}</TagChips>
