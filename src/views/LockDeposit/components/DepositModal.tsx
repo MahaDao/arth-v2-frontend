@@ -68,7 +68,7 @@ export default (props: IProps) => {
           }}
         />
         <OneLine>
-          <div style={{ flex: 1 }}></div>
+          <div style={{ flex: 1 }}/>
           <OneLine>
             <BeforeChip>
               {'Balance: '}
@@ -92,7 +92,7 @@ export default (props: IProps) => {
           </Grid>
           <Grid item lg={6} md={6} sm={12} xs={12}>
             <Button
-              disabled={false}
+              disabled={isInputFieldError}
               text={'Convert to Debt'}
               size={'lg'}
               onClick={deposit}
