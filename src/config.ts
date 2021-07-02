@@ -159,22 +159,6 @@ export const platformURL: { [platform: string]: Platform } = {
 
 export const stakingContracts: StakingContract[] = [
   {
-    name: 'ARTH/ARTHX LP',
-    platform: 'dfyn',
-    contract: 'StakeARTHXARTH',
-    kind: 'unlocked',
-    depositToken: 'ArthArthxLP',
-    depositTokenSymbols: ['ARTH', 'ARTHX'],
-    depositTokenKind: 'single',
-    earnTokenName: 'ARTHX_MAHA_POOL',
-    rewardTokenKind: 'pool-token',
-    finished: false,
-    rewardTokenSymbols: ['ARTHX', 'MAHA'],
-    networks: [ChainId.MAINNET, ChainId.RINKEBY, 1337, 137],
-    sort: 0,
-    categories: ['all', 'arth'],
-  },
-  {
     name: 'ARTH/USDC LP',
     platform: 'dfyn',
     contract: 'StakeARTHUSDC',
@@ -207,6 +191,22 @@ export const stakingContracts: StakingContract[] = [
     categories: ['all', 'maha', 'arth'],
   },
   {
+    name: 'ARTH/ARTHX LP',
+    platform: 'dfyn',
+    contract: 'StakeARTHXARTH',
+    kind: 'unlocked',
+    depositToken: 'ArthArthxLP',
+    depositTokenSymbols: ['ARTH', 'ARTHX'],
+    depositTokenKind: 'single',
+    earnTokenName: 'ARTHX_MAHA_POOL',
+    rewardTokenKind: 'pool-token',
+    finished: false,
+    rewardTokenSymbols: ['ARTHX', 'MAHA'],
+    networks: [ChainId.MAINNET, ChainId.RINKEBY, 1337, 137],
+    sort: 0,
+    categories: ['all', 'arth', 'arthx'],
+  },
+  {
     name: 'ARTHX',
     platform: '',
     contract: 'StakeARTHX',
@@ -223,7 +223,7 @@ export const stakingContracts: StakingContract[] = [
     categories: ['all', 'arthx'],
   },
   {
-    name: 'MAHA',
+    name: 'ARTH',
     platform: '',
     contract: 'StakeARTH',
     kind: 'unlocked',
@@ -241,7 +241,7 @@ export const stakingContracts: StakingContract[] = [
   {
     name: 'MAHA',
     platform: '',
-    contract: 'StakeARTH',
+    contract: 'StakeMAHA',
     kind: 'unlocked',
     depositToken: 'MAHA',
     depositTokenSymbols: ['MAHA'],
@@ -252,7 +252,7 @@ export const stakingContracts: StakingContract[] = [
     rewardTokenSymbols: ['ARTHX', 'MAHA'],
     networks: [ChainId.MAINNET, ChainId.RINKEBY, 1337, 137],
     sort: 0,
-    categories: ['all', 'arth', 'maha'],
+    categories: ['all', 'maha'],
   },
   {
     name: 'ARTHX Genesis',
