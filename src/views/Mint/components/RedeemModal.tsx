@@ -130,6 +130,7 @@ const RedeemModal = (props: IProps) => {
                 onClick={() => {
                   onClose()
                 }}
+                tracking_id={'cancel_redeem'}
               />
             </Grid>
             <Grid item lg={6} md={6} sm={12} xs={12}>
@@ -144,6 +145,7 @@ const RedeemModal = (props: IProps) => {
                 text={'Redeem ARTH'}
                 size={'lg'}
                 onClick={handleRedeem}
+                tracking_id={'confirm_redeem'}
               />
             </Grid>
           </Grid>

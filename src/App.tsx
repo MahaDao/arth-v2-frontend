@@ -78,16 +78,16 @@ const App: React.FC = () => {
           <Route path="/" exact>
             <Home />
           </Route>
-          <Route path="/genesis" exact>
+          {/* <Route path="/genesis" exact>
             <Page availableNetworks={[137, 1337]}>
               <Genesis />
             </Page>
           </Route>
-          {/* <Route path="/stats">
+          <Route path="/stats">
             <Page availableNetworks={[137, 1337]}>
               <Stats />
             </Page>
-          </Route> */}
+          </Route>  */}
           <Route path="/farming">
             <Page availableNetworks={[137, 1337]}>
               <Farming />
@@ -127,7 +127,7 @@ const App: React.FC = () => {
             <Page>
               <Lottery />
             </Page>
-          </Route>
+          </Route> */}
           <Route path="/lock-deposit">
             <Page availableNetworks={[137, 1337]}>
               <LockDeposit />

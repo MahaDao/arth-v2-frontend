@@ -468,6 +468,7 @@ const RedeemTabContent = (props: IProps) => {
                           !Number(arthValue)
                         }
                         onClick={() => setOpenModal(true)}
+                        tracking_id={'request_redeem'}
                       />
                     </ApproveButtonContainer>
                     <br />
@@ -481,6 +482,7 @@ const RedeemTabContent = (props: IProps) => {
                           onARTHXValueChange('');
                           setSuccessCollectModal(true)
                         })}
+                      tracking_id={'redeem'}
                     />
                   </>
                 )}

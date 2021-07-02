@@ -336,6 +336,7 @@ const MintTabContent = (props: IProps) => {
                         onClick={() => connect('injected').then(() => {
                           localStorage.removeItem('disconnectWallet')
                         })}
+                        tracking_id={'connect_wallet'}
                       />
                     ) : (
                       !isCollatApproved ? (
@@ -395,6 +396,7 @@ const MintTabContent = (props: IProps) => {
                               !(Number(collateralValue))
                             }
                             onClick={() => setOpenModal(true)}
+                            tracking_id={'mint'}
                           />
                         </Grid>
                       )
