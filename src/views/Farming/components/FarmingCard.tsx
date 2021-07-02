@@ -39,7 +39,7 @@ const FarmingCard = (props: WithSnackbarProps & IProps) => {
   const depositTokenContract = core.tokens[pool.depositToken];
 
   const fetchAPY = async () => {
-    const url = 'https://api.arthcoin.com/api/apy/ARTHX';
+    const url = `https://api.arthcoin.com/api/apy/request?key=${pool.apyId}`;
     const headers = {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
@@ -50,7 +50,7 @@ const FarmingCard = (props: WithSnackbarProps & IProps) => {
     fetch(url, { headers })
       .then(res => res.json())
       .then(res => setAPYState({ isLoading: false, apy: Number(res?.APY || 0).toLocaleString() + '%' }))
-      .catch(() => setAPYState({ isLoading: false, apy: '-' }))
+      .catch((err) => setAPYState({ isLoading: false, apy: '-' }));
   }
 
   useEffect(() => {

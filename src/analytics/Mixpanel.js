@@ -19,7 +19,6 @@ let env_check = true;
 let actions = {
   identify: (id) => {
     if (env_check) {
-      console.log('env_check', id);
       mixpanel.identify(id);
     }
   },

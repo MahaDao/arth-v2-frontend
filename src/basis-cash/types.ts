@@ -38,6 +38,8 @@ export interface StakingContract {
   finished: boolean;
   networks: ChainId[];
   categories: string[];
+  endDate: Date;
+  apyId: string;
 }
 
 export interface TradingPairs {

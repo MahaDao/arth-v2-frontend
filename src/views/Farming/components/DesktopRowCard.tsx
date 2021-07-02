@@ -3,6 +3,7 @@ import React, { useMemo } from 'react';
 import { useWallet } from 'use-wallet';
 import Grid from '@material-ui/core/Grid';
 import Loader from 'react-spinners/BeatLoader';
+import Countdown from 'react-countdown';
 import { BigNumber } from '@ethersproject/bignumber';
 
 import Button from '../../../components/Button';
@@ -50,9 +51,8 @@ export default (props: IProps) => {
 
   const tokens = props.pool.depositTokenSymbols.map((p) => core.tokens[p]);
   const tokenAddresses = tokens.map((t) => (t.symbol === 'WMATIC' ? 'ETH' : t.address));
-  const uniswapLink = `${
-    platformURL[props.pool.platform]?.addLiquidityUrl || 'https:app.uniswap.org/swap'
-  }/${tokenAddresses.join('/')}`;
+  const uniswapLink = `${platformURL[props.pool.platform]?.addLiquidityUrl || 'https:app.uniswap.org/swap'
+    }/${tokenAddresses.join('/')}`;
   const etherscan = `${config.etherscanUrl}/address/${tokenAddresses[0]}`;
   const isWalletConnected = !!account;
 
@@ -127,7 +127,7 @@ export default (props: IProps) => {
             )}
           </div>
         </Grid>
-        <Grid item lg={3}>
+        <Grid item lg={2}>
           <TableMainTextStyle>
             {isTokenBalanceLoading ? (
               <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
@@ -136,7 +136,7 @@ export default (props: IProps) => {
             )}
           </TableMainTextStyle>
         </Grid>
-        <Grid item lg={2}>
+        <Grid item lg={1}>
           <TableMainTextStyle>
             {props?.apyState?.isLoading ? (
               <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
@@ -147,7 +147,19 @@ export default (props: IProps) => {
         </Grid>
         <Grid item lg={2}>
           <TableMainTextStyle>
-            {props.pool.rewardTokenKind === 'pool-token' && 'ARTHX +'}
+            <Countdown
+              date={props.pool.endDate}
+              renderer={({ days, hours, minutes, seconds, completed }) => {
+                return (
+                  `${days}d : ${hours}h : ${minutes}m : ${seconds}s`
+                );
+              }}
+            />
+          </TableMainTextStyle>
+        </Grid>
+        <Grid item lg={2}>
+          <TableMainTextStyle>
+            {props.pool.rewardTokenKind === 'pool-token' && 'ARTHX + '}
             MAHA
           </TableMainTextStyle>
         </Grid>

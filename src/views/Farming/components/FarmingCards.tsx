@@ -28,16 +28,19 @@ const BankCardsV2 = (props: WithSnackbarProps & IProps) => {
           <Grid item lg={3}>
             <CustomTableHeading>Pair</CustomTableHeading>
           </Grid>
-          <Grid item lg={3}>
+          <Grid item lg={2}>
             <CustomTableHeading>Wallet</CustomTableHeading>
           </Grid>
-          <Grid item lg={2}>
+          <Grid item lg={1}>
             <CustomTableHeading>APY</CustomTableHeading>
+          </Grid>
+          <Grid item lg={2}>
+            <CustomTableHeading>Ends In</CustomTableHeading>
           </Grid>
           <Grid item lg={2}>
             <CustomTableHeading>Reward</CustomTableHeading>
           </Grid>
-          <Grid item lg={2}/>
+          <Grid item lg={2} />
         </Grid>
       )}
 

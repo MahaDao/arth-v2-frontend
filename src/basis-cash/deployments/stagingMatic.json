@@ -166,5 +166,9 @@
   "ArthArthxLP": {
     "address": "0x90edfEe14635de0574cb2cc210B5196B973aB1ab",
     "abi": "UniswapV2Pair"
+  },
+  "ArthUsdcLP": {
+    "address": "0x90edfEe14635de0574cb2cc210B5196B973aB1ab",
+    "abi": "UniswapV2Pair"
   }
 }

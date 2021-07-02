@@ -3,6 +3,7 @@ import { useWallet } from 'use-wallet';
 import styled from 'styled-components';
 import Loader from 'react-spinners/BeatLoader';
 import { Grid, Divider } from '@material-ui/core';
+import Countdown from 'react-countdown';
 import { BigNumber } from '@ethersproject/bignumber';
 
 import dfyn from '../../../assets/img/DFYN.png';
@@ -52,9 +53,8 @@ export const MobileFarm = (props: IProps) => {
 
   const tokens = props.pool.depositTokenSymbols.map((p) => core.tokens[p]);
   const tokenAddresses = tokens.map((t) => (t.symbol === 'WMATIC' ? 'ETH' : t.address));
-  const uniswapLink = `${
-    platformURL[props.pool.platform]?.addLiquidityUrl || 'https:app.uniswap.org/swap'
-  }/${tokenAddresses.join('/')}`;
+  const uniswapLink = `${platformURL[props.pool.platform]?.addLiquidityUrl || 'https:app.uniswap.org/swap'
+    }/${tokenAddresses.join('/')}`;
   const etherscan = `${config.etherscanUrl}/address/${tokenAddresses[0]}`;
   const pow = BigNumber.from(10).pow(18);
 
@@ -194,6 +194,25 @@ export const MobileFarm = (props: IProps) => {
                       props?.apyState?.apy
                     )}
                   </MainSpan>
+                </div>
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                direction={'row'}
+                justify={'space-between'}
+                style={{ display: 'flex', marginTop: 5 }}
+              >
+                <DescriptionDiv>Ends in</DescriptionDiv>
+                <div style={{ flexDirection: 'column', display: 'flex', color: 'white', fontWeight: 'bold' }}>
+                  <Countdown
+                    date={props.pool.endDate}
+                    renderer={({ days, hours, minutes, seconds, completed }) => {
+                      return (
+                        `${days}d : ${hours}h : ${minutes}m : ${seconds}s`
+                      );
+                    }}
+                  />
                 </div>
               </Grid>
             </Grid>
