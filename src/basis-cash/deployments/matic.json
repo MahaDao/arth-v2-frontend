@@ -1,10 +1,10 @@
 {
   "ArthController": {
-    "address": "0x79d93EA8500226b203180E62eE7666a19C4443bB",
+    "address": "0x8604E0606245184c619830f9E795aea01F7A3d38",
     "abi": "ArthController"
   },
   "ArthPoolRouter": {
-    "address": "0x5889aef473b85B27Dbec12dad9A687F7917403eB",
+    "address": "0x58A4E5e9045cE11066CBaa056F6A139E92aA2BaA",
     "abi": "ArthPoolRouter"
   },
   "PoolToken": {
@@ -16,7 +16,7 @@
     "abi": "BasicStaking"
   },
   "StakeARTHMAHA": {
-    "address": "0x12531272961Bc1781CD789e3a00b4857491eB053",
+    "address": "0x9c5D406623aA49ACbE982E20F995a710Af4e5EC9",
     "abi": "BasicStaking"
   },
   "StakeARTHUSDC": {
@@ -36,39 +36,39 @@
     "abi": "BasicStaking"
   },
   "UniswapPairOracle_ARTH_ARTHX": {
-    "address": "0x69f99Fa4514A4c284A07466cf384515dec90e06C",
+    "address": "0x23b8603CB7d8395754E20e272e0e2fFFA2828654",
     "abi": "UniswapPairOracle"
   },
   "UniswapPairOracle_ARTH_MAHA": {
-    "address": "0x45Fc4e11f28918F09ce45e744E85B85822643d18",
+    "address": "0xFC645E3c39e257d634bBea9637a4c7f326eB4B50",
     "abi": "UniswapPairOracle"
   },
   "UniswapPairOracle_ARTH_USDC": {
-    "address": "0x5f97c9bc6db3E8171B83DB4d142F7411147F2249",
+    "address": "0x7F4f57b81c1134eFC6c0FB7B51FDF50eEb6afdbc",
     "abi": "UniswapPairOracle"
   },
   "ArthPoolLibrary": {
-    "address": "0xf0363CA99944c3340A6C70F2fA4Bd602c48ddC7f",
+    "address": "0xaDd65CA33cCC8dee4214428629e261865829b0FE",
     "abi": "ArthPoolLibrary"
   },
   "Pool_USDC": {
-    "address": "0x7bA2Ecfc30bab403CbAEA01eA6F73Be19Cb9cf38",
+    "address": "0xa25687a15332Dcbc1319521FEc31FCDc5A33c5EC",
     "abi": "ArthPool"
   },
   "Pool_USDT": {
-    "address": "0x029951EdC31bA24E1F9d4Ed474eaA48a08f9B46F",
+    "address": "0xe8dC1c33724fF26B474846C05a69dFd8ca3873C9",
     "abi": "ArthPool"
   },
   "Pool_WBTC": {
-    "address": "0x9d35a4dEB01B2dd16D9B227CAA49898BEC6E90af",
+    "address": "0xb40125F17f9517BC6396A7ED030EE6d6f41f3692",
     "abi": "ArthPool"
   },
   "Pool_WMATIC": {
-    "address": "0x7Abc63c26EaE10BE76345DD2d4e3C8fc435BaB6d",
+    "address": "0xA9F1d7841b059C98C973ec90502Cbf3FC2Db287C",
     "abi": "ArthPool"
   },
   "Pool_WETH": {
-    "address": "0x0C00f90507E3485E78987a834f7aC688D0Ed7873",
+    "address": "0x7b8F513DA3fFB1E37Fc5e44d3BfC3313094AE8Cf",
     "abi": "ArthPool"
   },
   "ARTHShares": {
