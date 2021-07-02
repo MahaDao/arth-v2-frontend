@@ -17,14 +17,14 @@ const LockDeposit = () => {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: '80px 0px',
+        padding: '80px 0px 0',
       }}>
         <PageHeading>{'DEPT POOL'}</PageHeading>
         <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
           <PageSubHeading>
-            <StartsIn>Ends in</StartsIn>
+            <StartsIn>Closes in</StartsIn>
             <Countdown
-              date={new Date('1 oct 2021 20:30:00')}
+              date={new Date('2021-07-04T15:00:00Z')}
               renderer={({ days, hours, minutes, seconds, completed }) => {
                 return (
                   <HeaderSpan>
@@ -36,7 +36,7 @@ const LockDeposit = () => {
           </PageSubHeading>
         </div>
       </div>
-      <Grid container spacing={2} style={{ marginTop: '32px' }}>
+      <Grid container spacing={2}>
         <Grid item lg={3} md={3} sm={12} xs={12}>
         </Grid>
         <Grid item lg={6} md={6} sm={12} xs={12}>
