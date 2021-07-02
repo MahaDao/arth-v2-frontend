@@ -21,7 +21,7 @@ const LockDeposit = () => {
         alignItems: 'center',
         padding: '80px 0px',
       }}>
-        <PageHeading>{'Lock Deposit'}</PageHeading>
+        <PageHeading>{'DEPT POOL'}</PageHeading>
         <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
           <PageSubHeading>
             <StartsIn>Ends in</StartsIn>
