@@ -15,7 +15,8 @@ const CoinsPrice: React.FC = () => {
       <CustomInfoCardDetails>
         <OneLine style={{ marginTop: '0px' }}>
           <div>
-            <TextWithIcon>ARTH Current Price</TextWithIcon>
+            <TextWithIcon>ARTH Price</TextWithIcon>
+            {/* <TargetPriceTag>Target Price: $2.00</TargetPriceTag> */}
           </div>
           <div>
             <TargetPriceTag>Target Price: $2.00</TargetPriceTag>
@@ -23,7 +24,7 @@ const CoinsPrice: React.FC = () => {
         </OneLine>
         <OneLine>
           <div>
-            <TextWithIcon>ARTHX Oracle Price</TextWithIcon>
+            <TextWithIcon>ARTHX Price</TextWithIcon>
           </div>
           <div>
             <BeforeChip>
@@ -33,8 +34,8 @@ const CoinsPrice: React.FC = () => {
                 Number(getDisplayBalance(arthxPrice, 6, 6)).toLocaleString('en-US', {
                   maximumFractionDigits: 6,
                 })
-              )}
-              /ARTH
+              )}{' '}
+              ARTH
             </BeforeChip>
           </div>
         </OneLine>
@@ -50,8 +51,8 @@ const CoinsPrice: React.FC = () => {
                 Number(getDisplayBalance(mahaPrice, 6, 6)).toLocaleString('en-US', {
                   maximumFractionDigits: 6,
                 })
-              )}
-              /ARTH
+              )}{' '}
+              ARTH
             </BeforeChip>
           </div>
         </OneLine>

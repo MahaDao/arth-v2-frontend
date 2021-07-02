@@ -19,7 +19,7 @@ const BondingDiscount: React.FC<props> = () => {
     <CustomInfoCard className={'custom-mahadao-box'}>
       <CustomInfoCardHeader>Bonding Curve Discount on ARTHX</CustomInfoCardHeader>
       <CustomInfoCardDetails>
-        <OneLine>
+        {/* <OneLine>
           <div style={{ flex: 1 }}>
             <TextWithIcon>
               Current Discount
@@ -42,7 +42,7 @@ const BondingDiscount: React.FC<props> = () => {
               }%
             </BeforeChip>
           </OneLine>
-        </OneLine>
+        </OneLine> */}
         <OneLine>
           <div style={{ flex: 1 }}>
             <TextWithIcon>Minimum Discount</TextWithIcon>

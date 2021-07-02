@@ -30,7 +30,10 @@ const Home: React.FC = () => {
 
   const core = useCore();
   const { isLoading: isPoolsValueLoading, value: allPoolsValue } = useAllPoolCollateralValue();
-  const { isLoading: isGlobalCollateralValueLoading, value: globalCollateralValue } = useGlobalCollateralValue();
+  const {
+    isLoading: isGlobalCollateralValueLoading,
+    value: globalCollateralValue,
+  } = useGlobalCollateralValue();
 
   WalletAutoConnect();
 
@@ -44,13 +47,18 @@ const Home: React.FC = () => {
 
     return [
       false,
-      allPoolsValue.map(p => ({
+      allPoolsValue.map((p) => ({
         name: p.poolToken,
         amount: Number(getDisplayBalance(p.value)),
         percentage: Number(getDisplayBalance(p.value.mul(1e8).div(globalCollateralValue), 6)),
-      }))
-    ]
-  }, [allPoolsValue, globalCollateralValue, isGlobalCollateralValueLoading, isPoolsValueLoading]);
+      })),
+    ];
+  }, [
+    allPoolsValue,
+    globalCollateralValue,
+    isGlobalCollateralValueLoading,
+    isPoolsValueLoading,
+  ]);
 
   return (
     <Page>
@@ -66,56 +74,71 @@ const Home: React.FC = () => {
                 <Grid item sm={12} md={12} lg={12} style={{ padding: '0 0 0 0' }}>
                   <TitleString style={{ textAlign: isMobile ? 'center' : 'left' }}>
                     Collateral Breakdown
-                    <CustomToolTip toolTipText={'$GMU worth of collateral currently present in each individual pool of the protocol.'} />
+                    <CustomToolTip
+                      toolTipText={
+                        '$GMU worth of collateral currently present in each individual pool of the protocol.'
+                      }
+                    />
                   </TitleString>
                   <Grid container style={{}} direction={isMobile ? 'column' : 'row'}>
-                    {
-                      isFormattedPoolValuesLoading
-                        ? (
-                          <Grid item sm={12} md={12} lg={12} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '210px' }}>
-                            <FadeLoader color={'#ffffff'} loading={true} margin={2} />
-                          </Grid>
-                        )
-                        : (
-                          <Grid item sm={12} md={12} lg={12} style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            flexDirection: isMobile ? 'column' : 'row',
-                          }}>
-                            <Grid item sm={12} md={6} lg={6}>
-                              <PieChart balances={formattedPoolValues} />
-                            </Grid>
-                            <Grid item style={{ width: '100%' }} sm={12} md={6} lg={6}>
-                              <PercentCard>
-                                {
-                                  formattedPoolValues.map((b, i) => (
-                                    <PercentCardInfo key={b.name}>
-                                      <PercentCardLabel>
-                                        <div
-                                          style={{
-                                            height: 14,
-                                            width: 14,
-                                            background: colors[i],
-                                            borderRadius: 7,
-                                          }}
-                                        />
-                                        <OpacitySpan>{b.name}</OpacitySpan>
-                                      </PercentCardLabel>
-                                      <PercentCardValue>
-                                        ${
-                                          prettyNumber(b.amount)
-                                        } - {
-                                          Number(b.percentage).toLocaleString('en-US', { maximumFractionDigits: 2 })
-                                        }%
-                                      </PercentCardValue>
-                                    </PercentCardInfo>
-                                  ))
-                                }
-                              </PercentCard>
-                            </Grid>
-                          </Grid>
-                        )
-                    }
+                    {isFormattedPoolValuesLoading ? (
+                      <Grid
+                        item
+                        sm={12}
+                        md={12}
+                        lg={12}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          minHeight: '210px',
+                        }}
+                      >
+                        <FadeLoader color={'#ffffff'} loading={true} margin={2} />
+                      </Grid>
+                    ) : (
+                      <Grid
+                        item
+                        sm={12}
+                        md={12}
+                        lg={12}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          flexDirection: isMobile ? 'column' : 'row',
+                        }}
+                      >
+                        <Grid item sm={12} md={6} lg={6}>
+                          <PieChart balances={formattedPoolValues} />
+                        </Grid>
+                        <Grid item style={{ width: '100%' }} sm={12} md={6} lg={6}>
+                          <PercentCard>
+                            {formattedPoolValues.map((b, i) => (
+                              <PercentCardInfo key={b.name}>
+                                <PercentCardLabel>
+                                  <div
+                                    style={{
+                                      height: 14,
+                                      width: 14,
+                                      background: colors[i],
+                                      borderRadius: 7,
+                                    }}
+                                  />
+                                  <OpacitySpan>{b.name}</OpacitySpan>
+                                </PercentCardLabel>
+                                <PercentCardValue>
+                                  ${prettyNumber(b.amount)} -{' '}
+                                  {Number(b.percentage).toLocaleString('en-US', {
+                                    maximumFractionDigits: 2,
+                                  })}
+                                  %
+                                </PercentCardValue>
+                              </PercentCardInfo>
+                            ))}
+                          </PercentCard>
+                        </Grid>
+                      </Grid>
+                    )}
                   </Grid>
                 </Grid>
               </Grid>
@@ -138,7 +161,7 @@ const Home: React.FC = () => {
             <FeeRates />
           </Grid>
         </Grid>
-        <Grid container spacing={2} style={{ marginTop: '8px' }}>
+        {/* <Grid container spacing={2} style={{ marginTop: '8px' }}>
           <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
             <HomeCard
               title="MAHA"
@@ -163,7 +186,7 @@ const Home: React.FC = () => {
               address={arthxAddress}
             />
           </Grid>
-        </Grid>
+        </Grid> */}
       </Container>
     </Page>
   );
@@ -172,7 +195,6 @@ const Home: React.FC = () => {
 styled(Link)`
   z-index: 1;
 `;
-
 
 const Card = styled.div``;
 const PercentCard = styled.div`
@@ -189,8 +211,6 @@ const PercentCardInfo = styled.div`
   width: 100%;
   margin: 6px;
 `;
-
-
 
 const PercentCardLabel = styled.div`
   display: flex;
@@ -220,20 +240,6 @@ const PercentCardValue = styled.div`
   line-height: 24px;
   color: #ffffff;
 `;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 const TitleString = styled.div`
   font-family: Inter;
