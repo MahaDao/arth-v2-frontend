@@ -134,6 +134,7 @@ const MintModal = (props: IProps) => {
                 onClick={() => {
                   onClose();
                 }}
+                tracking_id={'cancel_mint'}
               />
             </div>
             <div style={{ width: '100%' }}>
@@ -148,6 +149,7 @@ const MintModal = (props: IProps) => {
                 text={'Confirm Mint'}
                 size={'lg'}
                 onClick={handleMint}
+                tracking_id={'confirm_mint'}
               />
             </div>
           </div>
