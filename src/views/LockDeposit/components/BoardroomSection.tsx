@@ -80,14 +80,16 @@ const BoardroomSection = (props: IProps) => {
                     <Button
                       text={!isApproving ? `Approve ${props.symbol}` : 'Approving...'}
                       size={'sm'}
-                      disabled={isApproving}
+                      disabled={isApproving || props.symbol === 'ARTH'}
                       onClick={approve}
                       loading={isApproving}
                     />
                   ) : (
-                    <Button text={`Deposit ${props.symbol}`} size={'sm'} onClick={() => {
-                      setOpenModal(true);
-                    }} />
+                    <Button
+                      disabled={props.symbol === 'ARTH'}
+                      text={`Deposit ${props.symbol}`} size={'sm'} onClick={() => {
+                        setOpenModal(true);
+                      }} />
                   )
                 )}
               </ButtonConatiner>
