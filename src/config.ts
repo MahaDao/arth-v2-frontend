@@ -158,24 +158,24 @@ export const platformURL: { [platform: string]: Platform } = {
 };
 
 export const stakingContracts: StakingContract[] = [
-  // {
-  //   name: 'ARTH/USDC LP',
-  //   platform: 'dfyn',
-  //   contract: 'StakeARTHUSDC',
-  //   kind: 'unlocked',
-  //   depositToken: 'ArthUsdcLP',
-  //   depositTokenSymbols: ['ARTH', 'USDC'],
-  //   depositTokenKind: 'single',
-  //   earnTokenName: 'ARTHX_MAHA_POOL',
-  //   finished: false,
-  //   endDate: new Date('2021-09-30T18:56:39.000Z'),
-  //   rewardTokenKind: 'pool-token',
-  //   rewardTokenSymbols: ['ARTHX', 'MAHA'],
-  //   networks: [ChainId.MAINNET, ChainId.RINKEBY, 1337, 137],
-  //   sort: 0,
-  //   categories: ['all', 'arth'],
-  //   apyId: 'arthusdc'
-  // },
+  {
+    name: 'ARTH/USDC LP',
+    platform: 'dfyn',
+    contract: 'StakeARTHUSDC',
+    kind: 'unlocked',
+    depositToken: 'ArthUsdcLP',
+    depositTokenSymbols: ['ARTH', 'USDC'],
+    depositTokenKind: 'single',
+    earnTokenName: 'ARTHX_MAHA_POOL',
+    finished: false,
+    endDate: new Date('2021-09-30T18:56:39.000Z'),
+    rewardTokenKind: 'pool-token',
+    rewardTokenSymbols: ['ARTHX', 'MAHA'],
+    networks: [ChainId.MAINNET, ChainId.RINKEBY, 1337, 137],
+    sort: 0,
+    categories: ['all', 'arth'],
+    apyId: 'arthusdc',
+  },
   {
     name: 'ARTH/MAHA LP',
     platform: 'dfyn',
@@ -192,7 +192,7 @@ export const stakingContracts: StakingContract[] = [
     endDate: new Date('2021-09-30T18:56:39.000Z'),
     rewardTokenSymbols: ['ARTHX', 'MAHA'],
     categories: ['all', 'maha', 'arth'],
-    apyId: 'arthmaha'
+    apyId: 'arthmaha',
   },
   // {
   //   name: 'ARTH/ARTHX LP',
@@ -227,7 +227,7 @@ export const stakingContracts: StakingContract[] = [
     networks: [ChainId.MAINNET, ChainId.RINKEBY, 1337, 137],
     sort: 0,
     categories: ['all', 'arthx'],
-    apyId: 'arthx'
+    apyId: 'arthx',
   },
   {
     name: 'ARTH',
@@ -245,7 +245,7 @@ export const stakingContracts: StakingContract[] = [
     networks: [ChainId.MAINNET, ChainId.RINKEBY, 1337, 137],
     sort: 0,
     categories: ['all', 'arth'],
-    apyId: 'arth'
+    apyId: 'arth',
   },
   {
     name: 'MAHA',
@@ -263,7 +263,7 @@ export const stakingContracts: StakingContract[] = [
     networks: [ChainId.MAINNET, ChainId.RINKEBY, 1337, 137],
     sort: 0,
     categories: ['all', 'maha'],
-    apyId: 'maha'
+    apyId: 'maha',
   },
   {
     name: 'ARTHX Genesis',
@@ -281,7 +281,7 @@ export const stakingContracts: StakingContract[] = [
     networks: [137],
     sort: 0,
     categories: ['all', 'arthx'],
-    apyId: 'arthxrmaha'
+    apyId: 'arthxrmaha',
   },
 ];
 
