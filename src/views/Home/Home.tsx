@@ -94,15 +94,15 @@ const Home: React.FC = () => {
   const [showVideo, setShowVideo] = useState<boolean>(false);
   const sliderClasses = useSliderStyles();
   const [sliderValue, setSliderValue] = React.useState(1990);
-  const [arthValue, setArth] = useState(1.2);
-  const [fiatValue, setFiat] = useState(0.6);
+  const [arthValue, setArth] = useState(2);
+  const [fiatValue, setFiat] = useState(1);
   const handleClose = () => {
     toggleModal(false);
   };
 
   const handleCoffeeValues = (val: number | string) => {
     setFiat(0.6 + (Number(val) - 1990) * 0.2);
-    setArth(1.2 - ((Number(val) - 1990) / 23.3) * 0.1);
+    setArth(2 - ((Number(val) - 1990) / 23.3) * 0.1);
   };
   const handleSliderChange = (ev: any, value?: any) => {
     handleCoffeeValues(value);
@@ -113,11 +113,12 @@ const Home: React.FC = () => {
   const token1 = core.tokens.ARTH;
 
   const tradelink =
-    platformURL[config.platform] && platformURL[config.platform].swapUrl
-      ? `${platformURL[config.platform].swapUrl}?inputCurrency=${'ETH'}&outputCurrency=${token1.address
-      }`
-      : `https://app.uniswap.org/#/swap?inputCurrency=${'ETH'}&outputCurrency=${token1.address
-      }&use=V2`;
+    'https://exchange.dfyn.network/#/swap?inputCurrency=0x2791bca1f2de4661ed88a30c99a7a9449aa84174&outputCurrency=0xe52509181feb30eb4979e29ec70d50fd5c44d590';
+  // platformURL[config.platform] && platformURL[config.platform].swapUrl
+  //   ? `${platformURL[config.platform].swapUrl}?inputCurrency=${'ETH'}&outputCurrency=${token1.address
+  //   }`
+  //   : `https://app.uniswap.org/#/swap?inputCurrency=${'ETH'}&outputCurrency=${token1.address
+  //   }&use=V2`;
 
   return (
     <div>
@@ -165,7 +166,7 @@ const Home: React.FC = () => {
             window.open('https://etherscan.io/token/0x0E3cC2c4FB9252d17d07C67135E48536071735D9')
           }
         >
-          View token contract on Etherscan
+          View token contract on Polygonscan
         </ModalHyperLink>
       </Modal>
 

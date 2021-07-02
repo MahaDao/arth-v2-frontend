@@ -78,7 +78,7 @@ const App: React.FC = () => {
           <Route path="/" exact>
             <Home />
           </Route>
-           <Route path="/genesis" exact>
+          {/* <Route path="/genesis" exact>
             <Page availableNetworks={[137, 1337]}>
               <Genesis />
             </Page>
@@ -87,18 +87,18 @@ const App: React.FC = () => {
             <Page availableNetworks={[137, 1337]}>
               <Stats />
             </Page>
-          </Route>
+          </Route>  */}
           <Route path="/farming">
             <Page availableNetworks={[137, 1337]}>
               <Farming />
             </Page>
           </Route>
-          <Route path="/mint/:paramType">
+          {/* <Route path="/mint/:paramType">
             <Page availableNetworks={[137, 1337]}>
               <Mint />
             </Page>
-          </Route>
-          <Route path="/trade">
+          </Route> */}
+          {/* <Route path="/trade">
             <Page availableNetworks={[137, 1337]}>
               <Trade />
             </Page>
@@ -107,7 +107,7 @@ const App: React.FC = () => {
             <Page availableNetworks={[137, 1337]}>
               <Pools />
             </Page>
-          </Route>
+          </Route> */}
           {/* <Route path="/genesis">
             <Page>
               <Genesis />
@@ -122,12 +122,12 @@ const App: React.FC = () => {
             <Page>
               <Rebase />
             </Page>
-          </Route>
-          <Route path="/lottery">
+          </Route> */}
+          {/* <Route path="/lottery">
             <Page>
               <Lottery />
             </Page>
-          </Route> */}
+          </Route>  */}
           <Route path="/lock-deposit">
             <Page availableNetworks={[137, 1337]}>
               <LockDeposit />

@@ -7,8 +7,6 @@ import BoardroomSection from './components/BoardroomSection';
 import styled from 'styled-components';
 
 const LockDeposit = () => {
-
-
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [symbolSelected, setSymbolSelected] = useState<'ARTH' | 'ARTHX' | ''>('')
 
@@ -19,14 +17,14 @@ const LockDeposit = () => {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: '80px 0px',
+        padding: '80px 0px 0',
       }}>
         <PageHeading>{'DEPT POOL'}</PageHeading>
         <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
           <PageSubHeading>
-            <StartsIn>Ends in</StartsIn>
+            <StartsIn>Closes in</StartsIn>
             <Countdown
-              date={new Date('1 oct 2021 20:30:00')}
+              date={new Date('2021-07-04T15:00:00Z')}
               renderer={({ days, hours, minutes, seconds, completed }) => {
                 return (
                   <HeaderSpan>
@@ -38,23 +36,23 @@ const LockDeposit = () => {
           </PageSubHeading>
         </div>
       </div>
-      <Grid container spacing={2} style={{ marginTop: '32px' }}>
+      <Grid container spacing={2}>
         <Grid item lg={3} md={3} sm={12} xs={12}>
         </Grid>
         <Grid item lg={6} md={6} sm={12} xs={12}>
-          <BoardroomSection
-            price={1}
-            title={"Convert ARTH into Debt"}
-            text1={"This debt pool allows users to convert their ARTH token into debt to the protocol. The protocol promises to pay all holders of this pool their ARTH (polygon) tokens at a price of 1$."}
-            text2={"Once your deposit your tokens; You will not be able to withdraw them from this pool. You will earn rewards in USDC until the debt is paid off."}
-            symbol="ARTH"
-          />
           <BoardroomSection
             price={0.012}
             title={"Convert ARTHX into Debt"}
             text1={"This debt pool allows users to convert their ARTHX token into debt to the protocol. The protocol promises to pay all holders of this pool their ARTHX (polygon) tokens at a price of 0.012$."}
             text2={"Once your deposit your tokens; You will not be able to withdraw them from this pool. You will earn rewards in USDC until the debt is paid off."}
             symbol="ARTHX"
+          />
+          <BoardroomSection
+            price={1}
+            title={"Convert ARTH into Debt"}
+            text1={"This debt pool allows users to convert their ARTH token into debt to the protocol. The protocol promises to pay all holders of this pool their ARTH (polygon) tokens at a price of 1$."}
+            text2={"Once your deposit your tokens; You will not be able to withdraw them from this pool. You will earn rewards in USDC until the debt is paid off."}
+            symbol="ARTH"
           />
         </Grid>
         <Grid item lg={3} md={3} sm={12} xs={12}>
@@ -122,15 +120,3 @@ const HeaderSpan = styled.span`
   margin: 0 0 0 8px;
   color: #ffffff;
 `;
-
-
-
-
-
-
-
-
-
-
-
-
