@@ -78,11 +78,11 @@ const App: React.FC = () => {
           <Route path="/" exact>
             <Home />
           </Route>
-          {/* <Route path="/genesis" exact>
+           <Route path="/genesis" exact>
             <Page availableNetworks={[137, 1337]}>
               <Genesis />
             </Page>
-          </Route> */}
+          </Route>
           <Route path="/stats">
             <Page availableNetworks={[137, 1337]}>
               <Stats />
