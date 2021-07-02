@@ -35,18 +35,15 @@ const BuyContent = () => {
   const tradetoken = core.tokens['ARTH'];
 
   const { isLoading: isBuyAmountBalanceLoading, value: buyAmountBalance } = useTokenBalance(
-    core.tokens['ARTH']
+    core.tokens['ARTH'],
   );
 
-  const price = useDFYNPrice(
-    core.tokens['ARTH'],
-    core.tokens['ARTHX']
-  );
+  const price = useDFYNPrice(core.tokens['ARTH'], core.tokens['ARTHX']);
 
   const { isLoading: isOutAmountLoading, value: outputAmount } = useARTHXBuyAmount(
     core.tokens['ARTH'],
     core.tokens['ARTHX'],
-    BigNumber.from(parseUnits(`${buyAmount}`, 18))
+    BigNumber.from(parseUnits(`${buyAmount}`, 18)),
   );
 
   const buyARTHX = useBuyARTHX(
@@ -54,18 +51,18 @@ const BuyContent = () => {
     core.tokens['ARTH'].address,
     BigNumber.from(parseUnits(`${buyAmount}`, 18)),
     BigNumber.from(parseUnits(`${outputAmount}`, 18)),
-    account
+    account,
   );
 
   const handleBuyARTHX = () => {
     buyARTHX(() => {
       setOpenModal(false);
-    })
-  }
+    });
+  };
 
   const [approveARTHStatus, approveARTH] = useApprove(
     core.tokens['ARTH'],
-    core.contracts.Router.address
+    core.contracts.ArthPoolRouter.address,
   );
 
   const isARTHApproving = approveARTHStatus === ApprovalState.PENDING;
@@ -79,7 +76,7 @@ const BuyContent = () => {
 
     const check: boolean = ValidateNumber(val);
     setBuyAmount(check ? val : String(Number(val)));
-  }
+  };
 
   const BuyConfirmModal = () => {
     return (
@@ -90,7 +87,8 @@ const BuyContent = () => {
         modalTitleStyle={{}}
         modalContainerStyle={{}}
         modalBodyStyle={{}}
-        title={`Confirm Buy`}>
+        title={`Confirm Buy`}
+      >
         <div>
           <TransparentInfoDiv
             labelData={`Your amount`}
@@ -123,18 +121,15 @@ const BuyContent = () => {
               <Button
                 text={'Confirm Buy'}
                 size={'lg'}
-                disabled={isInputFieldError ||
-                  !Number(buyAmount) ||
-                  !Number(outputAmount)
-                }
+                disabled={isInputFieldError || !Number(buyAmount) || !Number(outputAmount)}
                 onClick={handleBuyARTHX}
               />
             </Grid>
           </Grid>
         </div>
       </CustomModal>
-    )
-  }
+    );
+  };
 
   return (
     <div>
@@ -159,7 +154,7 @@ const BuyContent = () => {
           tokenDecimals={18}
         />
         <PlusMinusArrow>
-          <img alt='Arrow' src={arrowDown} />
+          <img alt="Arrow" src={arrowDown} />
         </PlusMinusArrow>
         <div>
           <TextWithIcon style={{ marginBottom: '12px' }}>You Receive</TextWithIcon>
@@ -168,18 +163,12 @@ const BuyContent = () => {
               <div style={{ flex: 1 }}>
                 <TextWithIcon>
                   ARTHX
-                  <CustomToolTip
-                    toolTipText={'Amount of ARTHX bought'}
-                  />
+                  <CustomToolTip toolTipText={'Amount of ARTHX bought'} />
                 </TextWithIcon>
               </div>
               <OneLineInputwomargin>
                 <BeforeChip className={'custom-mahadao-chip'}>
-                  {
-                    Number(buyAmount)
-                      ? Number(outputAmount).toLocaleString()
-                      : '0'
-                  }
+                  {Number(buyAmount) ? Number(outputAmount).toLocaleString() : '0'}
                 </BeforeChip>
                 <TagChips>ARTHX</TagChips>
               </OneLineInputwomargin>
@@ -205,51 +194,44 @@ const BuyContent = () => {
               </OneLineInputwomargin>
             </OneLineInputwomargin>
           </ReceiveContainer>
-          {
-            !!!account ? (
-              <Button
-                text={'Connect Wallet'}
-                size={'lg'}
-                onClick={() =>
-                  connect('injected').then(() => {
-                    localStorage.removeItem('disconnectWallet');
-                  })
-                }
-              />
-            ) : (
-              isARTHApproved
-                ? (
-                  <Button
-                    text={'Buy'}
-                    size={'lg'}
-                    variant={'default'}
-                    disabled={isInputFieldError ||
-                      isOutAmountLoading ||
-                      !Number(buyAmount) ||
-                      !Number(outputAmount)
-                    }
-                    onClick={() => setOpenModal(true)}
-                  />
-                ) : (
-                  <Button
-                    text={
-                      isARTHApproving
-                        ? 'Approving ARTH'
-                        : 'Approve ARTH'
-                    }
-                    size={'lg'}
-                    variant={'default'}
-                    disabled={isInputFieldError ||
-                      !Number(buyAmount) ||
-                      !Number(outputAmount) ||
-                      isOutAmountLoading
-                    }
-                    onClick={approveARTH}
-                    loading={isARTHApproving}
-                  />
-                )
-            )
-          }
+          {!!!account ? (
+            <Button
+              text={'Connect Wallet'}
+              size={'lg'}
+              onClick={() =>
+                connect('injected').then(() => {
+                  localStorage.removeItem('disconnectWallet');
+                })
+              }
+            />
+          ) : isARTHApproved ? (
+            <Button
+              text={'Buy'}
+              size={'lg'}
+              variant={'default'}
+              disabled={
+                isInputFieldError ||
+                isOutAmountLoading ||
+                !Number(buyAmount) ||
+                !Number(outputAmount)
+              }
+              onClick={() => setOpenModal(true)}
+            />
+          ) : (
+            <Button
+              text={isARTHApproving ? 'Approving ARTH' : 'Approve ARTH'}
+              size={'lg'}
+              variant={'default'}
+              disabled={
+                isInputFieldError ||
+                !Number(buyAmount) ||
+                !Number(outputAmount) ||
+                isOutAmountLoading
+              }
+              onClick={approveARTH}
+              loading={isARTHApproving}
+            />
+          )}
         </div>
       </LeftTopCardContainer>
       {BuyConfirmModal()}

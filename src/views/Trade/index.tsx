@@ -16,11 +16,10 @@ const Boardrooms = () => {
 
   const [type, setType] = useState<'Buy' | 'Sell'>('Buy');
 
-
   const TabContent = () => {
     return (
       <Grid container style={{ marginTop: '24px' }}>
-        <Grid item lg={3} sm={'auto'}/>
+        <Grid item lg={3} sm={'auto'} />
         <Grid item lg={6} md={12} sm={12} xs={12}>
           <LeftTopCard className={'custom-mahadao-container'}>
             <LeftTopCardHeader className={'custom-mahadao-container-header'}>
@@ -40,7 +39,7 @@ const Boardrooms = () => {
             {type === 'Sell' && <SellContent />}
           </LeftTopCard>
         </Grid>
-        <Grid item lg={3} sm={'auto'}/>
+        <Grid item lg={3} sm={'auto'} />
       </Grid>
     );
   };
@@ -51,13 +50,11 @@ const Boardrooms = () => {
       <Container size="lg">
         <div>
           <PageHeading>TRADE</PageHeading>
-          <PageSubHeading>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          </PageSubHeading>
+          {/* <PageSubHeading>Trade tokens in one spot</PageSubHeading> */}
         </div>
         {TabContent()}
         <Grid container style={{ marginTop: '16px' }}>
-          <Grid item lg={3} sm={'auto'}/>
+          <Grid item lg={3} sm={'auto'} />
           <Grid item lg={6} md={12} sm={12} xs={12}>
             <CustomInfoCard className={'custom-mahadao-box'}>
               <CustomInfoCardDetails>
@@ -69,18 +66,18 @@ const Boardrooms = () => {
                 </Grid>
               </CustomInfoCardDetails>
               <CustomInfoCardButton to={'/pools'}>
-                <img alt='Logo' src={dfyn} style={{ marginRight: '10px' }} height={30} />
+                <img alt="Logo" src={dfyn} style={{ marginRight: '10px' }} height={30} />
                 <span>Add liquidity on DFYN</span>
                 <CallMadeIcon style={{ fontSize: 15, marginLeft: '10px' }} />
               </CustomInfoCardButton>
             </CustomInfoCard>
           </Grid>
-          <Grid item lg={3} sm={'auto'}/>
+          <Grid item lg={3} sm={'auto'} />
         </Grid>
       </Container>
     </>
   );
-}
+};
 
 const GradientDiv = styled.div`
   background: linear-gradient(180deg, #2a2827 0%, rgba(42, 40, 39, 0) 100%);

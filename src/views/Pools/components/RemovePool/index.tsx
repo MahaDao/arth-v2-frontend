@@ -54,45 +54,47 @@ const RemovePool = (props: props) => {
 
   const uniswapPrice = useDFYNPrice(
     core.tokens[selectedPair.symbol1],
-    core.tokens[selectedPair.symbol2]
+    core.tokens[selectedPair.symbol2],
   );
 
   const [lpTokenApproveStatus, approveLpToken] = useApprove(
     core.tokens[selectedPair.pairToken],
-    core.contracts.Router.address
+    core.contracts.ArthPoolRouter.address,
   );
 
   const { isLoading: isLPBalanceLoading, value: lpBalance } = useTokenBalance(lpToken);
-  const { isLoading: isFirstCoinLoading, value: firstCoinBalance } = useTokenBalance(firstToken);
-  const { isLoading: isSecondCoinLoading, value: secondCoinBalance } = useTokenBalance(secondToken);
-  const { isLoading: isTotalSupplyLoading, value: totalSupply } = useTotalSupply(selectedPair.pairToken);
-
-  const { isLoading: isPairFirstCoinBalanceLoading, value: firstCoinPairBalance } = useTokenBalanceOf(
+  const { isLoading: isFirstCoinLoading, value: firstCoinBalance } = useTokenBalance(
     firstToken,
-    lpToken.address
   );
-  const { isLoading: isPairSecondCoinBalanceLoading, value: secondCoinPairBalance } = useTokenBalanceOf(
+  const { isLoading: isSecondCoinLoading, value: secondCoinBalance } = useTokenBalance(
     secondToken,
-    lpToken.address
   );
+  const { isLoading: isTotalSupplyLoading, value: totalSupply } = useTotalSupply(
+    selectedPair.pairToken,
+  );
+
+  const {
+    isLoading: isPairFirstCoinBalanceLoading,
+    value: firstCoinPairBalance,
+  } = useTokenBalanceOf(firstToken, lpToken.address);
+  const {
+    isLoading: isPairSecondCoinBalanceLoading,
+    value: secondCoinPairBalance,
+  } = useTokenBalanceOf(secondToken, lpToken.address);
 
   const [isFirstCoinValueLoading, firstCoinValue] = useMemo(() => {
-    if (isTotalSupplyLoading || isPairFirstCoinBalanceLoading)
-      return [true, BigNumber.from(0)];
+    if (isTotalSupplyLoading || isPairFirstCoinBalanceLoading) return [true, BigNumber.from(0)];
 
     if (pairValue === '' || !Number(pairValue)) return [false, BigNumber.from(0)];
 
     const bnPairValue = BigNumber.from(parseUnits(`${pairValue}`, 18));
-    return [
-      false,
-      bnPairValue.mul(firstCoinPairBalance).div(totalSupply)
-    ];
+    return [false, bnPairValue.mul(firstCoinPairBalance).div(totalSupply)];
   }, [
     isTotalSupplyLoading,
     pairValue,
     firstCoinPairBalance,
     isPairFirstCoinBalanceLoading,
-    totalSupply
+    totalSupply,
   ]);
 
   const [isSecondCoinValueLoading, secondCoinValue] = useMemo(() => {
@@ -102,16 +104,13 @@ const RemovePool = (props: props) => {
     if (pairValue === '' || !Number(pairValue)) return [false, BigNumber.from(0)];
 
     const bnPairValue = BigNumber.from(parseUnits(`${pairValue}`, 18));
-    return [
-      false,
-      bnPairValue.mul(secondCoinPairBalance).div(totalSupply)
-    ];
+    return [false, bnPairValue.mul(secondCoinPairBalance).div(totalSupply)];
   }, [
     isTotalSupplyLoading,
     pairValue,
     secondCoinPairBalance,
     isPairSecondCoinBalanceLoading,
-    totalSupply
+    totalSupply,
   ]);
 
   const removeLiquidity = useRemoveLiquidity(
@@ -120,14 +119,14 @@ const RemovePool = (props: props) => {
     BigNumber.from(parseUnits(`${pairValue}`, 18)),
     firstCoinValue,
     secondCoinValue,
-    account
+    account,
   );
 
   const handleRemoveLiquidity = () => {
     removeLiquidity(() => {
       setConfirmModal(false);
     });
-  }
+  };
 
   const isLpTokenApproving = lpTokenApproveStatus === ApprovalState.PENDING;
   const isLpTokenApproved = lpTokenApproveStatus === ApprovalState.APPROVED;
@@ -249,20 +248,30 @@ const RemovePool = (props: props) => {
               />
             </Grid>
             <Grid item lg={6} md={6} sm={12} xs={12}>
-              <Button
-                text={'Remove Liquidity'}
-                size={'lg'}
-                onClick={handleRemoveLiquidity}
-              />
+              <Button text={'Remove Liquidity'} size={'lg'} onClick={handleRemoveLiquidity} />
             </Grid>
           </Grid>
         </>
       </CustomModal>
       <CustomCard className={'custom-mahadao-container'}>
         <CustomCardHeader className={'custom-mahadao-container-header'}>
-          <EachElementBack> <ArrowBackIos onClick={() => onBack()} fontSize="default" color={'inherit'} htmlColor={'#ffffff'} /> </EachElementBack>
-          <EachElementTitle> <CardTitle>Remove Liquidity</CardTitle> </EachElementTitle>
-          <EachElementBack> <SlippageContainer /> </EachElementBack>
+          <EachElementBack>
+            {' '}
+            <ArrowBackIos
+              onClick={() => onBack()}
+              fontSize="default"
+              color={'inherit'}
+              htmlColor={'#ffffff'}
+            />{' '}
+          </EachElementBack>
+          <EachElementTitle>
+            {' '}
+            <CardTitle>Remove Liquidity</CardTitle>{' '}
+          </EachElementTitle>
+          <EachElementBack>
+            {' '}
+            <SlippageContainer />{' '}
+          </EachElementBack>
         </CustomCardHeader>
         <CustomCardContainer className={'custom-mahadao-container-content'}>
           {detailed()}
@@ -273,15 +282,11 @@ const RemovePool = (props: props) => {
                   isLpTokenApproved
                     ? `Approved`
                     : !isLpTokenApproving
-                      ? `Approve`
-                      : 'Approving...'
+                    ? `Approve`
+                    : 'Approving...'
                 }
                 size={'lg'}
-                disabled={
-                  isInputFieldError ||
-                  isLpTokenApproved ||
-                  !Number(pairValue)
-                }
+                disabled={isInputFieldError || isLpTokenApproved || !Number(pairValue)}
                 onClick={approveLpToken}
                 loading={isLpTokenApproving}
               />
@@ -291,11 +296,7 @@ const RemovePool = (props: props) => {
                 onClick={() => setConfirmModal(true)}
                 text={'Remove Liquidity'}
                 size={'lg'}
-                disabled={
-                  isInputFieldError ||
-                  !isLpTokenApproved ||
-                  !Number(pairValue)
-                }
+                disabled={isInputFieldError || !isLpTokenApproved || !Number(pairValue)}
               />
             </Grid>
           </Grid>

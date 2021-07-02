@@ -23,7 +23,7 @@ export default function (
 
   const action = useCallback(async (callback?: () => void): Promise<void> => {
     try {
-      const response = await core.contracts.Router.addLiquidity(
+      const response = await core.contracts.ArthPoolRouter.addLiquidity(
         tokenA,
         tokenB,
         amountADesired,

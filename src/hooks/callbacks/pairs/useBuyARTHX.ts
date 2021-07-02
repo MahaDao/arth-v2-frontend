@@ -22,7 +22,7 @@ export default function (
 
   const action = useCallback(async (callback?: () => void): Promise<void> => {
     try {
-      const response = await core.contracts.Router.buyForERC20(
+      const response = await core.contracts.ArthPoolRouter.buyForERC20(
         buyToken,
         sellToken,
         amountIn,

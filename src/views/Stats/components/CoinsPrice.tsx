@@ -18,7 +18,7 @@ const CoinsPrice: React.FC = () => {
             <TextWithIcon>ARTH Current Price</TextWithIcon>
           </div>
           <div>
-            <TargetPriceTag>Target Price: $1.00</TargetPriceTag>
+            <TargetPriceTag>Target Price: $2.00</TargetPriceTag>
           </div>
         </OneLine>
         <OneLine>
@@ -34,6 +34,7 @@ const CoinsPrice: React.FC = () => {
                   maximumFractionDigits: 6,
                 })
               )}
+              /ARTH
             </BeforeChip>
           </div>
         </OneLine>
@@ -50,6 +51,7 @@ const CoinsPrice: React.FC = () => {
                   maximumFractionDigits: 6,
                 })
               )}
+              /ARTH
             </BeforeChip>
           </div>
         </OneLine>
@@ -96,12 +98,6 @@ const BeforeChip = styled.span`
   text-align: right;
   color: #ffffff;
 `;
-
-
-
-
-
-
 
 const TargetPriceTag = styled.p`
   background: #423b38;

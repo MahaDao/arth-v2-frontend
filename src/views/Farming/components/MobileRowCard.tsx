@@ -45,40 +45,48 @@ export const MobileFarm = (props: IProps) => {
   const { account, connect } = useWallet();
 
   const depositTokenContract = core.tokens[props.pool.depositToken];
-  const { isLoading: isTokenBalanceLoading, value: tokenBalance } = useTokenBalance(depositTokenContract);
+  const { isLoading: isTokenBalanceLoading, value: tokenBalance } = useTokenBalance(
+    depositTokenContract,
+  );
   const tokenDecimals = useTokenDecimals(props.pool.depositToken);
 
   const tokens = props.pool.depositTokenSymbols.map((p) => core.tokens[p]);
   const tokenAddresses = tokens.map((t) => (t.symbol === 'WMATIC' ? 'ETH' : t.address));
-  const uniswapLink = `${platformURL[props.pool.platform]?.addLiquidityUrl || 'https:app.uniswap.org/swap'}/${tokenAddresses.join('/')}`;
-  const etherscan = `${config.etherscanUrl}/address/${tokenAddresses[0]}`
+  const uniswapLink = `${
+    platformURL[props.pool.platform]?.addLiquidityUrl || 'https:app.uniswap.org/swap'
+  }/${tokenAddresses.join('/')}`;
+  const etherscan = `${config.etherscanUrl}/address/${tokenAddresses[0]}`;
   const pow = BigNumber.from(10).pow(18);
 
   const initEarnedARTHX = useMemo(() => {
     if (props.pool.rewardTokenKind === 'pool-token') {
-      return Number(getDisplayBalanceToken(
-        props?.claimableBalance?.mul(props?.rates?.arthx).div(pow),
-        core.tokens.ARTHX,
-        6
-      ))
+      return Number(
+        getDisplayBalanceToken(
+          props?.claimableBalance?.mul(props?.rates?.arthx).div(pow),
+          core.tokens.ARTHX,
+          6,
+        ),
+      );
     }
 
     if (props.pool.rewardTokenKind === 'single') {
-      return Number(getDisplayBalanceToken(props?.claimableBalance, core.tokens.ARTHX, 6))
+      return Number(getDisplayBalanceToken(props?.claimableBalance, core.tokens.ARTHX, 6));
     }
   }, [props, pow, core.tokens.ARTHX]);
 
   const initEarnedMAHA = useMemo(() => {
     if (props.pool.rewardTokenKind === 'pool-token') {
-      return Number(getDisplayBalanceToken(
-        props?.claimableBalance?.mul(props?.rates?.maha).div(pow),
-        core.tokens.MAHA,
-        6
-      ))
+      return Number(
+        getDisplayBalanceToken(
+          props?.claimableBalance?.mul(props?.rates?.maha).div(pow),
+          core.tokens.MAHA,
+          6,
+        ),
+      );
     }
 
     if (props.pool.rewardTokenKind === 'single') {
-      return Number(getDisplayBalanceToken(props?.claimableBalance, core.tokens.MAHA, 6))
+      return Number(getDisplayBalanceToken(props?.claimableBalance, core.tokens.MAHA, 6));
     }
   }, [props, pow, core.tokens.MAHA]);
 
@@ -88,19 +96,17 @@ export const MobileFarm = (props: IProps) => {
     if (platform === 'sushiswap') return sushiswap;
     if (platform === 'dfyn') return dfyn;
     return uniswap;
-  }
+  };
 
   return (
     <StyledCardWrapper>
-      {
-        props.pool.platform && (
-          <CardIcon>
-            <div style={{ zIndex: 15, background: '#2A2827', borderRadius: 36 }}>
-              <img src={getImage(props.pool.platform)} alt="Uniswap logo" height={32} />
-            </div>
-          </CardIcon>
-        )
-      }
+      {props.pool.platform && (
+        <CardIcon>
+          <div style={{ zIndex: 15, background: '#2A2827', borderRadius: 36 }}>
+            <img src={getImage(props.pool.platform)} alt="Uniswap logo" height={32} />
+          </div>
+        </CardIcon>
+      )}
       <Card>
         <CardContent>
           <StyledContent>
@@ -138,19 +144,16 @@ export const MobileFarm = (props: IProps) => {
                 </div>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', marginLeft: 40 }}>
-                <StyledTitle>{props.pool.depositTokenSymbols.join('-')}</StyledTitle>
-                {
-                  props.pool.platform
-                    ? (
-                      <StyledSubTitle onClick={() => window.open(uniswapLink, '_blank')}>
-                        Add Liquidity
-                      </StyledSubTitle>
-                    ) : (
-                      <StyledSubTitle onClick={() => window.open(etherscan, '_blank')}>
-                        View on Explorer
-                      </StyledSubTitle>
-                    )
-                }
+                <StyledTitle>{props.pool.name}</StyledTitle>
+                {props.pool.platform ? (
+                  <StyledSubTitle onClick={() => window.open(uniswapLink, '_blank')}>
+                    Add Liquidity
+                  </StyledSubTitle>
+                ) : (
+                  <StyledSubTitle onClick={() => window.open(etherscan, '_blank')}>
+                    View on Explorer
+                  </StyledSubTitle>
+                )}
               </div>
             </CardHeaderDiv>
             <Grid
@@ -164,16 +167,14 @@ export const MobileFarm = (props: IProps) => {
                 justify={'space-between'}
                 style={{ display: 'flex', marginTop: 5 }}
               >
-                <DescriptionDiv>
-                  Wallet
-                </DescriptionDiv>
+                <DescriptionDiv>Wallet</DescriptionDiv>
                 <div style={{ flexDirection: 'column', display: 'flex' }}>
                   <MainSpan>
-                    {
-                      isTokenBalanceLoading
-                        ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
-                        : Number(getDisplayBalance(tokenBalance, tokenDecimals, 3)).toLocaleString()
-                    }
+                    {isTokenBalanceLoading ? (
+                      <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
+                    ) : (
+                      Number(getDisplayBalance(tokenBalance, tokenDecimals, 3)).toLocaleString()
+                    )}
                   </MainSpan>
                 </div>
               </Grid>
@@ -184,16 +185,14 @@ export const MobileFarm = (props: IProps) => {
                 justify={'space-between'}
                 style={{ display: 'flex', marginTop: 5 }}
               >
-                <DescriptionDiv>
-                  APY
-                </DescriptionDiv>
+                <DescriptionDiv>APY</DescriptionDiv>
                 <div style={{ flexDirection: 'column', display: 'flex' }}>
                   <MainSpan>
-                    {
-                      props?.apyState?.isLoading
-                        ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
-                        : props?.apyState?.apy
-                    }
+                    {props?.apyState?.isLoading ? (
+                      <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
+                    ) : (
+                      props?.apyState?.apy
+                    )}
                   </MainSpan>
                 </div>
               </Grid>
@@ -206,8 +205,9 @@ export const MobileFarm = (props: IProps) => {
                     size={'lg'}
                     onClick={() =>
                       connect('injected').then(() => {
-                        localStorage.removeItem('disconnectWallet')
-                      })}
+                        localStorage.removeItem('disconnectWallet');
+                      })
+                    }
                   />
                 ) : (
                   <Button
@@ -221,76 +221,70 @@ export const MobileFarm = (props: IProps) => {
             </ButtonContainer>
           </StyledContent>
         </CardContent>
-        {
-          props.stakedBalance.gt(0)
-            ? (
-              <OpenableDiv>
-                <InfoDiv>
-                  <div>
-                    <InfoDivLeftSpan>Your Locked stake: </InfoDivLeftSpan>
-                    <InfoDivRightSpan>
-                      {Number(getDisplayBalance(props.stakedBalance, tokenDecimals, 3)).toLocaleString()}
-                      {' ' + props.pool.depositTokenSymbols.join('-')}
-                    </InfoDivRightSpan>
-                  </div>
-                  <Withdraw onClick={props.onWithdrawClick}>Withdraw</Withdraw>
-                </InfoDiv>
-                <Divider
-                  style={{
-                    background: 'rgba(255, 255, 255, 0.08)',
-                    margin: '15px 0px',
-                  }}
-                  variant={'middle'}
-                />
-                <InfoDiv>
-                  <div>
-                    <InfoDivLeftSpan>Unclaimed Rewards:</InfoDivLeftSpan>
-                    {
-                      props.pool.rewardTokenKind === 'pool-token' && (
-                        <InfoDivRightSpan>
-                          <span>{Number(initEarnedARTHX).toLocaleString('en-US', { maximumFractionDigits: 6 })}</span> ARTHX
-                        </InfoDivRightSpan>
-                      )
-                    }
-                    {
-                      props.pool.rewardTokenKind === 'pool-token' && (
-                        <InfoDivLeftSpan>+ </InfoDivLeftSpan>
-                      )
-                    }
-                    <InfoDivRightSpan>
-                      <span>{Number(initEarnedMAHA).toLocaleString('en-US', { maximumFractionDigits: 6 })}</span>
-                      {' '}
-                      MAHA
-                    </InfoDivRightSpan>
-                    <Withdraw
-                      onClick={props.onClaimClick}
-                    >
-                      Claim
-                    </Withdraw>
-                  </div>
-                </InfoDiv>
-                <Divider
-                  style={{
-                    background: 'rgba(255, 255, 255, 0.08)',
-                    margin: '15px 0px',
-                  }}
-                  variant={'middle'}
-                />
-                <InfoDiv>
-                  <div>
-                    <Withdraw
-                      onClick={props.onExitClick}
-                    >
-                      Claim and Withdraw
-                    </Withdraw>
-                  </div>
-                </InfoDiv>
-              </OpenableDiv>
-            )
-            : (
-              <></>
-            )
-        }
+        {props.stakedBalance.gt(0) ? (
+          <OpenableDiv>
+            <InfoDiv>
+              <div>
+                <InfoDivLeftSpan>Your Locked stake: </InfoDivLeftSpan>
+                <InfoDivRightSpan>
+                  {Number(
+                    getDisplayBalance(props.stakedBalance, tokenDecimals, 3),
+                  ).toLocaleString()}
+                  {' ' + props.pool.depositTokenSymbols.join('-')}
+                </InfoDivRightSpan>
+              </div>
+              <Withdraw onClick={props.onWithdrawClick}>Withdraw</Withdraw>
+            </InfoDiv>
+            <Divider
+              style={{
+                background: 'rgba(255, 255, 255, 0.08)',
+                margin: '15px 0px',
+              }}
+              variant={'middle'}
+            />
+            <InfoDiv>
+              <div>
+                <InfoDivLeftSpan>Unclaimed Rewards:</InfoDivLeftSpan>
+                {props.pool.rewardTokenKind === 'pool-token' && (
+                  <InfoDivRightSpan>
+                    <span>
+                      {Number(initEarnedARTHX).toLocaleString('en-US', {
+                        maximumFractionDigits: 6,
+                      })}
+                    </span>{' '}
+                    ARTHX
+                  </InfoDivRightSpan>
+                )}
+                {props.pool.rewardTokenKind === 'pool-token' && (
+                  <InfoDivLeftSpan>+ </InfoDivLeftSpan>
+                )}
+                <InfoDivRightSpan>
+                  <span>
+                    {Number(initEarnedMAHA).toLocaleString('en-US', {
+                      maximumFractionDigits: 6,
+                    })}
+                  </span>{' '}
+                  MAHA
+                </InfoDivRightSpan>
+                <Withdraw onClick={props.onClaimClick}>Claim</Withdraw>
+              </div>
+            </InfoDiv>
+            <Divider
+              style={{
+                background: 'rgba(255, 255, 255, 0.08)',
+                margin: '15px 0px',
+              }}
+              variant={'middle'}
+            />
+            <InfoDiv>
+              <div>
+                <Withdraw onClick={props.onExitClick}>Claim and Withdraw</Withdraw>
+              </div>
+            </InfoDiv>
+          </OpenableDiv>
+        ) : (
+          <></>
+        )}
       </Card>
     </StyledCardWrapper>
   );

@@ -48,7 +48,7 @@ const Boardrooms = () => {
       symbol2: 'ARTHX',
       pairName: 'ARTH-ARTHX',
       pairToken: 'ArthArthxLP',
-    }
+    },
   });
 
   if (!core) return <div />;
@@ -67,10 +67,9 @@ const Boardrooms = () => {
         <YourLiquidityHeader>
           <HeaderLabel>Your Liquidity</HeaderLabel>
         </YourLiquidityHeader>
-        {
-          liquidityPairs.length === 0 // noLiquidity
-            ? NoLiquidityFound()
-            : liquidityPairs.map((pair) => (
+        {liquidityPairs.length === 0 // noLiquidity
+          ? NoLiquidityFound()
+          : liquidityPairs.map((pair) => (
               <OpenableCard
                 key={pair.liquidity.id}
                 liquidityPair={pair.liquidity}
@@ -81,8 +80,7 @@ const Boardrooms = () => {
                   setAction(val);
                 }}
               />
-            ))
-        }
+            ))}
       </>
     );
   };
@@ -93,9 +91,7 @@ const Boardrooms = () => {
       <Container size="lg">
         <div>
           <PageHeading>Pool</PageHeading>
-          <PageSubHeading>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          </PageSubHeading>
+          <PageSubHeading>Manage your liquidity positions on various AMMs</PageSubHeading>
         </div>
         {/* NOTE: do not remove this, required for later. */}
         {/* <Grid container>
@@ -137,7 +133,7 @@ const Boardrooms = () => {
           <Grid item lg={3}></Grid>
         </Grid> */}
         <Grid container>
-          <Grid item lg={3}/>
+          <Grid item lg={3} />
           <Grid item lg={6} md={12} sm={12} xs={12}>
             {action === 'Details' && <MainGrid />}
             {action === 'Remove' && (
@@ -165,7 +161,7 @@ const Boardrooms = () => {
               />
             )} */}
           </Grid>
-          <Grid item lg={3}/>
+          <Grid item lg={3} />
         </Grid>
       </Container>
     </>
@@ -205,16 +201,6 @@ const PageSubHeading = styled.p`
   margin-bottom: 40px;
 `;
 
-
-
-
-
-
-
-
-
-
-
 const YourLiquidityHeader = styled.div`
   flex-direction: row;
   display: flex;
@@ -252,9 +238,5 @@ const NlfSpan = styled.div`
   text-align: center;
   color: #ffffff;
 `;
-
-
-
-
 
 export default Boardrooms;
