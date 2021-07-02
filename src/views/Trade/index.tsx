@@ -1,45 +1,45 @@
-import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import Container from '../../components/Container';
+import { Link } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
-import uniswapLogo from '../../assets/svg/uniswapLogo.svg';
-import shushiswap from '../../assets/svg/sushiswapLogo.svg';
-import { withSnackbar, WithSnackbarProps } from 'notistack';
+import React, { useEffect, useState } from 'react';
 import CallMadeIcon from '@material-ui/icons/CallMade';
-import SellContent from './components/SellContent';
-import BuyContent from './components/BuyContent';
 
-const Boardrooms = (props: WithSnackbarProps) => {
+import dfyn from '../../assets/img/DFYN.png';
+
+import BuyContent from './components/BuyContent';
+import SellContent from './components/SellContent';
+import Container from '../../components/Container';
+import SlippageContainer from '../../components/SlippageContainer';
+
+const Boardrooms = () => {
   useEffect(() => window.scrollTo(0, 0), []);
 
   const [type, setType] = useState<'Buy' | 'Sell'>('Buy');
 
-  const [selectedSwap, setSelectedSwap] = useState<'Uniswap' | 'Sushiswap'>('Uniswap');
-
-  // const isLaunched = Date.now() >= config.boardroomLaunchesAt.getTime();
-  // if (!basisCash) return <div />;
-
   const TabContent = () => {
     return (
       <Grid container style={{ marginTop: '24px' }}>
-        <Grid item lg={3} sm={'auto'}></Grid>
+        <Grid item lg={3} sm={'auto'} />
         <Grid item lg={6} md={12} sm={12} xs={12}>
           <LeftTopCard className={'custom-mahadao-container'}>
             <LeftTopCardHeader className={'custom-mahadao-container-header'}>
-              <TabContainer onClick={() => setType('Buy')}>
-                {type === 'Buy' && <ActiveTab />}
-                <TabText>Buy</TabText>
-              </TabContainer>
-              <TabContainer onClick={() => setType('Sell')}>
-                {type === 'Sell' && <ActiveTab />}
-                <TabText>Sell</TabText>
-              </TabContainer>
+              <div style={{ display: 'flex', flex: '1' }}>
+                <TabContainer onClick={() => setType('Buy')}>
+                  {type === 'Buy' && <ActiveTab />}
+                  <TabText>Buy</TabText>
+                </TabContainer>
+                <TabContainer onClick={() => setType('Sell')}>
+                  {type === 'Sell' && <ActiveTab />}
+                  <TabText>Sell</TabText>
+                </TabContainer>
+                <SlippageContainer />
+              </div>
             </LeftTopCardHeader>
             {type === 'Buy' && <BuyContent />}
             {type === 'Sell' && <SellContent />}
           </LeftTopCard>
         </Grid>
-        <Grid item lg={3} sm={'auto'}></Grid>
+        <Grid item lg={3} sm={'auto'} />
       </Grid>
     );
   };
@@ -50,85 +50,44 @@ const Boardrooms = (props: WithSnackbarProps) => {
       <Container size="lg">
         <div>
           <PageHeading>TRADE</PageHeading>
-          <PageSubHeading>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          </PageSubHeading>
+          {/* <PageSubHeading>Trade tokens in one spot</PageSubHeading> */}
         </div>
-        <Grid container>
-          <Grid item lg={3}></Grid>
-          <Grid item lg={6} md={12} sm={12} xs={12}>
-            <RadioSelectionConatiner>
-              <RadioSubConatiner
-                onClick={() => {
-                  if (selectedSwap === 'Sushiswap') {
-                    setSelectedSwap('Uniswap');
-                  }
-                }}
-              >
-                {selectedSwap === 'Uniswap' && <ActiveRadio />}
-                <RadioText>
-                  <RadioLogo>
-                    <img src={uniswapLogo} style={{ marginTop: '-6px' }} />
-                  </RadioLogo>
-                  Uniswap
-                </RadioText>
-              </RadioSubConatiner>
-              <RadioSubConatiner
-                onClick={() => {
-                  if (selectedSwap === 'Uniswap') {
-                    setSelectedSwap('Sushiswap');
-                  }
-                }}
-              >
-                {selectedSwap === 'Sushiswap' && <ActiveRadio />}
-                <RadioText>
-                  <RadioLogo>
-                    <img src={shushiswap} />
-                  </RadioLogo>
-                  Sushiswap
-                </RadioText>
-              </RadioSubConatiner>
-            </RadioSelectionConatiner>
-          </Grid>
-          <Grid item lg={3}></Grid>
-        </Grid>
         {TabContent()}
         <Grid container style={{ marginTop: '16px' }}>
-          <Grid item lg={3} sm={'auto'}></Grid>
+          <Grid item lg={3} sm={'auto'} />
           <Grid item lg={6} md={12} sm={12} xs={12}>
             <CustomInfoCard className={'custom-mahadao-box'}>
               <CustomInfoCardDetails>
                 <Grid container>
                   <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                    <InfoBoxTitle>ETH-ARTH Uniswap pool</InfoBoxTitle>
-                    <InfoBoxSubTitle>Provide liquidity to ETH-ARTH on uniswap</InfoBoxSubTitle>
+                    <InfoBoxTitle>ARTH-ARTHX DFYN pool</InfoBoxTitle>
+                    <InfoBoxSubTitle>Provide liquidity to ARTH-ARTHX on DFYN</InfoBoxSubTitle>
                   </Grid>
                 </Grid>
               </CustomInfoCardDetails>
-              <CustomInfoCardButton>
-                <img src={uniswapLogo} style={{ marginTop: '-6px', marginRight: '10px' }} />
-                <span>Add liquidity on Uniswap</span>
+              <CustomInfoCardButton to={'/pools'}>
+                <img alt="Logo" src={dfyn} style={{ marginRight: '10px' }} height={30} />
+                <span>Add liquidity on DFYN</span>
                 <CallMadeIcon style={{ fontSize: 15, marginLeft: '10px' }} />
               </CustomInfoCardButton>
             </CustomInfoCard>
           </Grid>
-          <Grid item lg={3} sm={'auto'}></Grid>
+          <Grid item lg={3} sm={'auto'} />
         </Grid>
       </Container>
     </>
   );
-}
+};
 
 const GradientDiv = styled.div`
   background: linear-gradient(180deg, #2a2827 0%, rgba(42, 40, 39, 0) 100%);
   height: 270px;
   position: absolute;
-  // border: 1px solid;
   width: 100%;
   z-index: -5;
 `;
 
-const CustomInfoCardButton = styled.div`
+const CustomInfoCardButton = styled(Link)`
   width: 100%;
   border: 1px solid rgba(255, 255, 255, 0.32);
   box-sizing: border-box;
@@ -136,7 +95,7 @@ const CustomInfoCardButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 12px;
+  padding: 6px;
   font-family: Inter;
   font-style: normal;
   font-weight: 600;
@@ -144,14 +103,11 @@ const CustomInfoCardButton = styled.div`
   line-height: 20px;
   cursor: pointer;
   &:hover {
-    background: #423b38;
+    background: transparent;
+    color: #ffffff;
   }
-  /* identical to box height, or 143% */
-
   text-align: center;
-
   color: #ffffff;
-
   opacity: 0.88;
 `;
 
@@ -199,55 +155,13 @@ const PageSubHeading = styled.p`
   margin-bottom: 40px;
 `;
 
-const RadioSelectionConatiner = styled.div`
-  background: #2a2827;
-  border-radius: 8px;
-  padding: 6px;
-  display: flex;
-  flex-direction: row;
-`;
-const RadioSubConatiner = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 40px;
-  z-index: 1;
-  cursor: pointer;
-  flex: 0.5;
-  position: relative;
-`;
-
-const RadioText = styled.span`
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 20px;
-  text-align: center;
-  color: rgba(255, 255, 255, 0.88);
-  z-index: 1;
-`;
-
-const RadioLogo = styled.span`
-  margin-left: 5px;
-  margin-right: 5px;
-`;
-
-const ActiveRadio = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 40px;
-  background: #423b38;
-  border-radius: 4px;
-  z-index: 0;
-`;
-
 const LeftTopCard = styled.div``;
 
 const LeftTopCardHeader = styled.div`
   display: flex;
   flex-direction: row;
 `;
+
 const TabContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -287,4 +201,4 @@ const CustomInfoCardDetails = styled.div`
   margin: 10px 0;
 `;
 
-export default withSnackbar(Boardrooms);
+export default Boardrooms;

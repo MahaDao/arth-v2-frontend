@@ -10,8 +10,6 @@ import theme from '../../theme';
 
 import Container from '../../components/Container';
 
-import useGlobalCollateralRatio from '../../hooks/state/controller/useGlobalCollateralRatio';
-
 interface PageHeaderProps {
   icon?: React.ReactNode;
   subtitle?: string;
@@ -24,7 +22,7 @@ interface PageHeaderProps {
   mobile?: boolean;
 }
 
-const BorderLinearProgress = withStyles((theme: Theme) =>
+withStyles(() =>
   createStyles({
     root: {
       height: 24,
@@ -54,7 +52,7 @@ const StabilizePageHeader: React.FC<PageHeaderProps> = ({
 }) => {
   const isDesktopOrLaptop = useMediaQuery({ query: '(min-device-width: 800px)' });
 
-  const {isLoading: isCRLoading, value: globalCR} = useGlobalCollateralRatio();
+
 
   return (
     <StyledPageHeader>
@@ -138,15 +136,7 @@ const StabilizePageHeader: React.FC<PageHeaderProps> = ({
   );
 };
 
-const TextForInfoTitle = styled.div`
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 300;
-  font-size: 16px;
-  line-height: 150%;
-  color: #ffffff;
-  opacity: 0.64;
-`;
+
 
 const ALignRightOnMobile = styled.div`
   align-self: center;
@@ -162,11 +152,11 @@ const StyledPageContent = styled.div`
   width: 100%;
   margin: 0 auto;
   // min-height: 150px;
-  padding: 40px 0px;
+  padding: 40px 0;
   @media (max-width: 768px) {
     flex-direction: column-reverse;
-    padding: 40px 0px;
-  } ;
+    padding: 40px 0;
+  };
 `;
 
 const StyledNav = styled.div`
@@ -176,15 +166,7 @@ const StyledNav = styled.div`
   margin-bottom: 20px;
 `;
 
-const PercentNumber = styled.span`
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 16px;
-  line-height: 24px;
-  text-align: right;
-  color: rgba(255, 255, 255, 0.88);
-`;
+
 
 const StyledNavLink = styled(Link)`
   color: ${(props) => props.theme.color.grey[400]};
@@ -214,20 +196,18 @@ const StyledPageHeader = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
-  background: linear-gradient(
-    180deg,
-    #${(props) => props.theme.color.dark[200]} 0%,
-    rgba(42, 40, 39, 0) 100%
-  );
+  background: linear-gradient(180deg,
+  #${(props) => props.theme.color.dark[200]} 0%,
+  rgba(42, 40, 39, 0) 100%);
   // padding-bottom: 40px;
   // padding-top: 40px;
   // padding-left: 15px;
   // padding-right: 15px;
   @media (max-width: 768px) {
     width: auto;
-    padding-left: 0px;
-    padding-right: 0px;
-  } ;
+    padding-left: 0;
+    padding-right: 0;
+  };
 `;
 
 const SecondParaTitle = styled.h3`
@@ -242,12 +222,10 @@ const SecondParaTitle = styled.h3`
 const StyledSubtitle = styled.h3`
   color: ${(props) => props.theme.color.grey[400]};
   font-size: 16px;
-  padding-top: 10px;
   font-weight: 300;
-  margin: 0;
   max-width: 500px;
   padding: 0;
-  margin-top: 4px;
+  margin: 4px 0 0;
 `;
 
 const SecondParaDescription = styled.h3`

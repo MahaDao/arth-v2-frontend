@@ -12,14 +12,14 @@ type props = {
   stats?: boolean;
 };
 
-const BondingDiscount: React.FC<props> = (props: props) => {
+const BondingDiscount: React.FC<props> = () => {
   const { isLoading: isDiscountLoading, value: discount } = useRecollateralizationDiscount();
 
   return (
     <CustomInfoCard className={'custom-mahadao-box'}>
       <CustomInfoCardHeader>Bonding Curve Discount on ARTHX</CustomInfoCardHeader>
       <CustomInfoCardDetails>
-        <OneLine>
+        {/* <OneLine>
           <div style={{ flex: 1 }}>
             <TextWithIcon>
               Current Discount
@@ -42,7 +42,7 @@ const BondingDiscount: React.FC<props> = (props: props) => {
               }%
             </BeforeChip>
           </OneLine>
-        </OneLine>
+        </OneLine> */}
         <OneLine>
           <div style={{ flex: 1 }}>
             <TextWithIcon>Minimum Discount</TextWithIcon>
@@ -80,16 +80,6 @@ const CustomInfoCardHeader = styled.p`
   color: #ffffff;
   margin-bottom: 24px;
 `;
-
-const CustomStatsInfoCardHeader = styled.p`
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 300;
-  font-size: 16px;
-  line-height: 150%;
-  color: rgba(255, 255, 255, 0.88);
-`;
-
 const CustomInfoCardDetails = styled.div`
   margin: 10px 0;
 `;
@@ -121,21 +111,9 @@ const BeforeChip = styled.span`
   line-height: 24px;
   color: #ffffff;
 `;
-
-const TagChips = styled.div`
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 4px;
-  padding: 2px 8px;
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 300;
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.64);
-`;
-
 const ToolTipFont = styled.p`
-  padding: 0px;
-  margin: 0px;
+  padding: 0;
+  margin: 0;
 `;
 
 export default BondingDiscount;

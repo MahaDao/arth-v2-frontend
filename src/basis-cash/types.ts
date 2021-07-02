@@ -12,6 +12,7 @@ export interface CollateralPool {
 }
 
 export interface StakingContract {
+  name: string
   platform: string;
   contract: ContractName;
   kind: 'locked' | 'unlocked';

@@ -37,6 +37,7 @@ export class BasisCash {
 
   ArthxArthLP: ERC20;
   ArthMahaLP: ERC20;
+  ArthUsdcLP: ERC20;
 
   tokens: {
     [name: string]: ERC20;
@@ -76,8 +77,9 @@ export class BasisCash {
 
     // this.multicall = new Multicall(cfg.defaultProvider, deployments.Multicall.address);
 
-    this.ArthMahaLP = new ERC20(deployments.ArthMahaLP?.address, provider, 'ARTH-MAHA LP');
-    this.ArthxArthLP = new ERC20(deployments.ArthArthxLP?.address, provider, 'ARTHX-ARTH LP');
+    this.ArthMahaLP = new ERC20(deployments.ArthMahaLP?.address, provider, 'ARTH-MAHA LP', 18);
+    this.ArthxArthLP = new ERC20(deployments.ArthArthxLP?.address, provider, 'ARTH-ARTHX LP', 18);
+    this.ArthUsdcLP = new ERC20(deployments.ArthUsdcLP?.address, provider, 'ARTH-USDC LP', 8);
     this.PoolToken = new ERC20(deployments.PoolToken?.address, provider, 'ARTH-RT');
 
     this.tokens = {
@@ -96,6 +98,7 @@ export class BasisCash {
 
       ArthMahaLP: this.ArthMahaLP,
       ArthArthxLP: this.ArthxArthLP,
+      ArthUsdcLP: this.ArthUsdcLP
     };
 
     this.config = cfg;
@@ -136,6 +139,7 @@ export class BasisCash {
       this.PoolToken,
       this.ArthMahaLP,
       this.ArthxArthLP,
+      this.ArthUsdcLP
     ];
 
     for (const token of tokens) {

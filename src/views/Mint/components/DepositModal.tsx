@@ -1,39 +1,31 @@
+import { BigNumber } from '@ethersproject/bignumber';
 import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import styled from 'styled-components';
+import { useWallet } from 'use-wallet';
 
-import useCore from '../../../hooks/useCore';
 import CustomModal from '../../../components/CustomModal';
 import CustomInputContainer from '../../../components/CustomInputContainer';
+import { getDisplayBalance } from '../../../utils/formatBalance';
 import { ValidateNumber } from '../../../components/CustomInputContainer/RegexValidation';
 import Button from '../../../components/Button';
-import useTokenBalance from '../../../hooks/state/useTokenBalance';
-import { getDisplayBalanceToken } from '../../../utils/formatBalance';
-import Loader from 'react-spinners/BeatLoader';
-import useDeposit from '../../../hooks/callbacks/debtBoardroom/useDeposit';
-import { BigNumber } from 'ethers';
+import useDepositWETH from '../../../hooks/callbacks/useDepositWETH';
+import config from '../../../config';
 
 interface IProps {
   onCancel: () => void;
   onDeposit?: () => void;
-  symbol: 'ARTH' | 'ARTHX' | '';
 }
 
 export default (props: IProps) => {
-  const { symbol } = props;
   const [val, setValue] = useState<string>('0');
   const [isInputFieldError, setIsInputFieldError] = useState<boolean>(false);
+  const { balance } = useWallet()
 
-  const core = useCore();
-
-  const token = core.tokens[symbol];
-
-  const { isLoading: isBalanceLoading, value: balance } = useTokenBalance(
-    core.tokens[symbol],
-  );
+  const symbol = config.blockchainToken // change this for the collateral
 
   const decimals = BigNumber.from(10).pow(18)
-  const deposit = useDeposit(props.symbol, BigNumber.from(Math.floor(Number(val))).mul(decimals))
+  const desposit = useDepositWETH(symbol, BigNumber.from(Number(val) * 1000).mul(decimals).div(1000))
 
   return (
     <CustomModal
@@ -43,12 +35,12 @@ export default (props: IProps) => {
       modalTitleStyle={{}}
       modalContainerStyle={{}}
       modalBodyStyle={{}}
-      title={`Deposit your ${symbol}`}
+      title={`Wrap your tokens`}
     >
       <div>
         <CustomInputContainer
-          ILabelValue={`How much ${symbol} would you like to supply?`}
-          IBalanceValue={getDisplayBalanceToken(balance, token)}
+          ILabelValue={`${symbol} to convert`}
+          IBalanceValue={getDisplayBalance(BigNumber.from(balance), 18)} //pass the balance here for MAX to work
           showBalance={false}
           ILabelInfoValue={''}
           DefaultValue={String(val)}
@@ -62,21 +54,12 @@ export default (props: IProps) => {
           tagText={'MAX'}
           dontShowBackgroundContainer={true}
           multiIcons={false}
-          disabled={isBalanceLoading}
-          errorCallback={(flag: boolean) => {
-            setIsInputFieldError(flag);
-          }}
+          errorCallback={(flag: boolean) => { setIsInputFieldError(flag) }}
         />
         <OneLine>
           <div style={{ flex: 1 }}/>
           <OneLine>
-            <BeforeChip>
-              {'Balance: '}
-              {isBalanceLoading
-                ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
-                : `${Number(getDisplayBalanceToken(balance, token)).toLocaleString()}`
-              }
-            </BeforeChip>
+            <BeforeChip>Balance: {getDisplayBalance(BigNumber.from(balance), 18)}</BeforeChip>
             <TagChips>{symbol}</TagChips>
           </OneLine>
         </OneLine>
@@ -92,10 +75,11 @@ export default (props: IProps) => {
           </Grid>
           <Grid item lg={6} md={6} sm={12} xs={12}>
             <Button
-              disabled={isInputFieldError}
-              text={'Convert to Debt'}
+              loading={false}
+              text={'Deposit'}
               size={'lg'}
-              onClick={deposit}
+              onClick={() => desposit()}
+              disabled={isInputFieldError}
             />
           </Grid>
         </Grid>

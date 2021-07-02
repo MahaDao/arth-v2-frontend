@@ -23,7 +23,7 @@
       },
       {
         "internalType": "address",
-        "name": "_creatorAddress",
+        "name": "__creatorAddress",
         "type": "address"
       },
       {

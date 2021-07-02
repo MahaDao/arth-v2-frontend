@@ -132,7 +132,7 @@
     "abi": "UniswapV2Router02"
   },
   "Router": {
-    "address": "0xb569ddDcF86c9f64dD5DddBe7961b98814123442",
+    "address": "0x2c03632d0dAB07695EE591274dc9D33fF32FFf91",
     "abi": "Router"
   },
   "USDT": {
@@ -151,8 +151,12 @@
     "address": "0x1BFD67037B42Cf73acF2047067bd4F2C47D9BfD6",
     "abi": "IERC20"
   },
+  "WETH_WRAPPER": {
+    "address": "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
+    "abi": "IWETH"
+  },
   "WMATIC": {
-    "address": "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619",
+    "address": "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
     "abi": "IERC20"
   },
   "ArthMahaLP": {

@@ -9,10 +9,6 @@ import AddLiquidity from './components/AddLiquidity';
 
 import useCore from '../../hooks/useCore';
 
-// import dfyn from '../../assets/img/dfyn.svg';
-// import uniswapLogo from '../../assets/svg/uniswapLogo.svg';
-// import shushiswap from '../../assets/svg/sushiswapLogo.svg';
-
 const Boardrooms = () => {
   useEffect(() => window.scrollTo(0, 0), []);
 
@@ -52,7 +48,7 @@ const Boardrooms = () => {
       symbol2: 'ARTHX',
       pairName: 'ARTH-ARTHX',
       pairToken: 'ArthArthxLP',
-    }
+    },
   });
 
   if (!core) return <div />;
@@ -71,10 +67,9 @@ const Boardrooms = () => {
         <YourLiquidityHeader>
           <HeaderLabel>Your Liquidity</HeaderLabel>
         </YourLiquidityHeader>
-        {
-          false // noLiquidity
-            ? NoLiquidityFound()
-            : liquidityPairs.map((pair) => (
+        {liquidityPairs.length === 0 // noLiquidity
+          ? NoLiquidityFound()
+          : liquidityPairs.map((pair) => (
               <OpenableCard
                 key={pair.liquidity.id}
                 liquidityPair={pair.liquidity}
@@ -85,8 +80,7 @@ const Boardrooms = () => {
                   setAction(val);
                 }}
               />
-            ))
-        }
+            ))}
       </>
     );
   };
@@ -97,9 +91,7 @@ const Boardrooms = () => {
       <Container size="lg">
         <div>
           <PageHeading>Pool</PageHeading>
-          <PageSubHeading>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          </PageSubHeading>
+          <PageSubHeading>Manage your liquidity positions on various AMMs</PageSubHeading>
         </div>
         {/* NOTE: do not remove this, required for later. */}
         {/* <Grid container>
@@ -141,7 +133,7 @@ const Boardrooms = () => {
           <Grid item lg={3}></Grid>
         </Grid> */}
         <Grid container>
-          <Grid item lg={3}></Grid>
+          <Grid item lg={3} />
           <Grid item lg={6} md={12} sm={12} xs={12}>
             {action === 'Details' && <MainGrid />}
             {action === 'Remove' && (
@@ -169,7 +161,7 @@ const Boardrooms = () => {
               />
             )} */}
           </Grid>
-          <Grid item lg={3}></Grid>
+          <Grid item lg={3} />
         </Grid>
       </Container>
     </>
@@ -209,58 +201,14 @@ const PageSubHeading = styled.p`
   margin-bottom: 40px;
 `;
 
-const RadioSelectionConatiner = styled.div`
-  background: #2a2827;
-  border-radius: 8px;
-  padding: 6px;
-  display: flex;
-  flex-direction: row;
-`;
-
-const RadioSubConatiner = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 40px;
-  z-index: 1;
-  cursor: pointer;
-  flex: 0.5;
-  position: relative;
-`;
-
-const RadioText = styled.span`
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 20px;
-  text-align: center;
-  color: rgba(255, 255, 255, 0.88);
-  z-index: 1;
-`;
-
-const RadioLogo = styled.span`
-  margin-left: 5px;
-  margin-right: 5px;
-`;
-
-const ActiveRadio = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 40px;
-  background: #423b38;
-  border-radius: 4px;
-  z-index: 0;
-`;
-
 const YourLiquidityHeader = styled.div`
   flex-direction: row;
   display: flex;
   justify-content: space-between;
   width: 100%;
-  padding: 0px 5px;
+  padding: 0 5px;
   align-items: center;
-  margin: 25px 0px;
+  margin: 25px 0;
 `;
 
 const HeaderLabel = styled.span`
@@ -289,29 +237,6 @@ const NlfSpan = styled.div`
   line-height: 135%;
   text-align: center;
   color: #ffffff;
-`;
-
-const FeesSpan = styled.div`
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 20px;
-  color: #f7653b;
-  text-align: center;
-  margin: 20px 0px 0px 0px;
-`;
-
-const ImportIt = styled.div`
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 20px;
-  color: rgba(255, 255, 255, 0.88);
-  text-align: center;
-  margin: 5px 0px 0px 0px;
-  cursor: pointer;
 `;
 
 export default Boardrooms;

@@ -5,22 +5,23 @@ import { Divider } from '@material-ui/core';
 import { BigNumber } from 'ethers/lib/ethers';
 import { parseUnits } from 'ethers/lib/utils';
 import React, { useState, useMemo } from 'react';
-import ArrowBackIos from '@material-ui/icons/ArrowBackIos'
+import ArrowBackIos from '@material-ui/icons/ArrowBackIos';
 
 import Button from '../../../../components/Button';
 import CustomModal from '../../../../components/CustomModal';
-import TransparentInfoDiv from '../../../Stablize/components/InfoDiv';
+import TransparentInfoDiv from '../../../../components/CustomTransparentInfoDiv/InfoDiv';
 import CustomInputContainer from '../../../../components/CustomInputContainer';
 import { ValidateNumber } from '../../../../components/CustomInputContainer/RegexValidation';
 
 import useCore from '../../../../hooks/useCore';
-import useDFYNPrice from '../../../../hooks/useDFYNPrice';
+import useDFYNPrice from '../../../../hooks/state/pairs/useDFYNPrice';
 import useTotalSupply from '../../../../hooks/useTotalSupply';
 import useTokenBalance from '../../../../hooks/state/useTokenBalance';
 import useAddLiquidity from '../../../../hooks/callbacks/pairs/useAddLiquidity';
 import useApprove, { ApprovalState } from '../../../../hooks/callbacks/useApprove';
-import usePairLiquidityMinted from '../../../../hooks/state/usePairLiquidityMinted';
+import usePairLiquidityMinted from '../../../../hooks/state/pairs/usePairLiquidityMinted';
 import { getDisplayBalance, getDisplayBalanceToken } from '../../../../utils/formatBalance';
+import SlippageContainer from '../../../../components/SlippageContainer';
 
 interface SelectedPair {
   id: number;
@@ -45,54 +46,57 @@ const AddLiquidity = (props: props) => {
 
   const core = useCore();
   const { account } = useWallet();
-  const { isLoading: isLPTotalSupplyLoading, value: lpTotalSupply } = useTotalSupply(selectedPair.pairToken);
-  const { isLoading: isLpBalanceLoading, value: lpBalance } = useTokenBalance(core.tokens[selectedPair.pairToken]);
+
+  const { isLoading: isLPTotalSupplyLoading, value: lpTotalSupply } = useTotalSupply(
+    selectedPair.pairToken,
+  );
+  const { isLoading: isLpBalanceLoading, value: lpBalance } = useTokenBalance(
+    core.tokens[selectedPair.pairToken],
+  );
 
   const uniswapPrice = useDFYNPrice(
     core.tokens[selectedPair.symbol1],
-    core.tokens[selectedPair.symbol2]
+    core.tokens[selectedPair.symbol2],
   );
   const { isLoading: isFirstCoinLoading, value: firstCoinBalance } = useTokenBalance(
-    core.tokens[selectedPair.symbol1]
+    core.tokens[selectedPair.symbol1],
   );
   const { isLoading: isSecondCoinLoading, value: secondCoinBalance } = useTokenBalance(
-    core.tokens[selectedPair.symbol2]
+    core.tokens[selectedPair.symbol2],
   );
 
   const [firstCoinApproveStatus, approveFirstCoin] = useApprove(
     core.tokens[selectedPair.symbol1],
-    core.contracts.Router.address
+    core.contracts.ArthPoolRouter.address,
   );
   const [secondCoinApproveStatus, approveSecondCoin] = useApprove(
     core.tokens[selectedPair.symbol2],
-    core.contracts.Router.address
+    core.contracts.ArthPoolRouter.address,
   );
-  const { isLoading: isLiquidityMintedLoading, value: liquidityMinted } = usePairLiquidityMinted(
+  const {
+    isLoading: isLiquidityMintedLoading,
+    value: liquidityMinted,
+  } = usePairLiquidityMinted(
     core.tokens[selectedPair.symbol1],
     core.tokens[selectedPair.symbol2],
     BigNumber.from(parseUnits(`${firstCoinValue}`, 18)),
     BigNumber.from(parseUnits(`${secondCoinValue}`, 18)),
-    selectedPair.pairToken
+    selectedPair.pairToken,
   );
 
   const [isYourShareLoading, yourShare] = useMemo(() => {
-    if (isLiquidityMintedLoading || isLPTotalSupplyLoading || isLpBalanceLoading) return [true, BigNumber.from(0)];
+    if (isLiquidityMintedLoading || isLPTotalSupplyLoading || isLpBalanceLoading)
+      return [true, BigNumber.from(0)];
 
     const newLPMintBN = BigNumber.from(parseUnits(`${Number(liquidityMinted)}`, 18));
-    return [
-      false,
-      newLPMintBN
-        .add(lpBalance)
-        .mul(1e6)
-        .div(lpTotalSupply.add(newLPMintBN))
-    ];
+    return [false, newLPMintBN.add(lpBalance).mul(1e6).div(lpTotalSupply.add(newLPMintBN))];
   }, [
     liquidityMinted,
     isLpBalanceLoading,
     isLPTotalSupplyLoading,
     isLiquidityMintedLoading,
     lpTotalSupply,
-    lpBalance
+    lpBalance,
   ]);
 
   const addLiquidity = useAddLiquidity(
@@ -100,14 +104,14 @@ const AddLiquidity = (props: props) => {
     core.tokens[selectedPair.symbol2].address,
     BigNumber.from(parseUnits(`${firstCoinValue}`, 18)),
     BigNumber.from(parseUnits(`${secondCoinValue}`, 18)),
-    account
+    account,
   );
 
   const handleAddLiquidity = () => {
     addLiquidity(() => {
       setConfirmModal(false);
     });
-  }
+  };
 
   const isFirstCoinApproving = firstCoinApproveStatus === ApprovalState.PENDING;
   const isFirstCoinApproved = firstCoinApproveStatus === ApprovalState.APPROVED;
@@ -130,7 +134,7 @@ const AddLiquidity = (props: props) => {
 
     const value = Number(val) / Number(uniswapPrice);
     setSecondCoinValue(`${value}`);
-  }
+  };
 
   const onSecondCoinValueChange = async (val: string) => {
     if (val === '' || uniswapPrice === '-' || isFirstCoinLoading || isSecondCoinLoading) {
@@ -145,9 +149,11 @@ const AddLiquidity = (props: props) => {
     const valueInNumber: number = Number(val);
     if (!valueInNumber) return;
 
-    const value = Number(val) * Number(uniswapPrice);
-    setFirstCoinValue(`${value}`);
-  }
+    const value = BigNumber.from(parseUnits(`${val}`, 18))
+      .mul(BigNumber.from(parseUnits(`${val}`, 3)))
+      .div(1e3);
+    setFirstCoinValue(getDisplayBalance(value, 18));
+  };
 
   const ConfirmModal = () => {
     return (
@@ -158,7 +164,8 @@ const AddLiquidity = (props: props) => {
         modalTitleStyle={{}}
         modalContainerStyle={{}}
         modalBodyStyle={{}}
-        title={`Confirm Supply`}>
+        title={`Confirm Supply`}
+      >
         <>
           <TransparentInfoDiv
             labelData={`${selectedPair.symbol1} Deposit`}
@@ -189,35 +196,49 @@ const AddLiquidity = (props: props) => {
                 text="Cancel"
                 size={'lg'}
                 onClick={() => {
-                  setConfirmModal(false)
+                  setConfirmModal(false);
                 }}
               />
             </Grid>
             <Grid item lg={6} md={6} sm={6} xs={6}>
-              <Button
-                text={'Confirm Supply'}
-                size={'lg'}
-                onClick={handleAddLiquidity}
-              />
+              <Button text={'Confirm Supply'} size={'lg'} onClick={handleAddLiquidity} />
             </Grid>
           </Grid>
         </>
       </CustomModal>
-    )
-  }
+    );
+  };
 
   return (
     <div>
       {ConfirmModal()}
       <CustomCard className={'custom-mahadao-container'}>
         <CustomCardHeader className={'custom-mahadao-container-header'}>
-          <EachElementBack> <ArrowBackIos onClick={() => onBack()} fontSize="default" color={'inherit'} htmlColor={'#ffffff'} /> </EachElementBack>
-          <EachElementTitle> <CardTitle> Add Liquidity </CardTitle></EachElementTitle>
+          <EachElementBack>
+            {' '}
+            <ArrowBackIos
+              onClick={() => onBack()}
+              fontSize="default"
+              color={'inherit'}
+              htmlColor={'#ffffff'}
+            />{' '}
+          </EachElementBack>
+          <EachElementTitle>
+            {' '}
+            <CardTitle> Add Liquidity </CardTitle>
+          </EachElementTitle>
+          <EachElementBack>
+            {' '}
+            <SlippageContainer />{' '}
+          </EachElementBack>
         </CustomCardHeader>
         <CustomCardContainer className={'custom-mahadao-container-content'}>
           <CustomInputContainer
             ILabelValue={'Enter Amount'}
-            IBalanceValue={getDisplayBalanceToken(firstCoinBalance, core.tokens[selectedPair.symbol1])}
+            IBalanceValue={getDisplayBalanceToken(
+              firstCoinBalance,
+              core.tokens[selectedPair.symbol1],
+            )}
             isBalanceLoading={isFirstCoinLoading}
             DefaultValue={firstCoinValue.toString()}
             LogoSymbol={selectedPair.symbol1}
@@ -225,20 +246,22 @@ const AddLiquidity = (props: props) => {
             SymbolText={selectedPair.symbol1}
             inputMode={'numeric'}
             setText={(val: string) => {
-              onFirstCoinValueChange(val)
+              onFirstCoinValueChange(val);
             }}
             tagText={'MAX'}
             disabled={isFirstCoinLoading}
             errorCallback={(flag: boolean) => {
               setIsInputFieldError(flag);
             }}
+            tokenDecimals={18}
           />
-          <PlusMinusArrow>
-            +
-          </PlusMinusArrow>
+          <PlusMinusArrow>+</PlusMinusArrow>
           <CustomInputContainer
             ILabelValue={'Enter Amount'}
-            IBalanceValue={getDisplayBalanceToken(secondCoinBalance, core.tokens[selectedPair.symbol2])}
+            IBalanceValue={getDisplayBalanceToken(
+              secondCoinBalance,
+              core.tokens[selectedPair.symbol2],
+            )}
             isBalanceLoading={isSecondCoinLoading}
             DefaultValue={secondCoinValue.toString()}
             LogoSymbol={selectedPair.symbol2}
@@ -246,20 +269,19 @@ const AddLiquidity = (props: props) => {
             SymbolText={selectedPair.symbol2}
             inputMode={'numeric'}
             setText={(val: string) => {
-              onSecondCoinValueChange(val)
+              onSecondCoinValueChange(val);
             }}
             tagText={'MAX'}
             disabled={isSecondCoinLoading}
             errorCallback={(flag: boolean) => {
               setIsInputFieldError(flag);
             }}
+            tokenDecimals={18}
           />
           <TcContainer>
-            <OneLine style={{ marginTop: "10px" }}>
+            <OneLine style={{ marginTop: '10px' }}>
               <div style={{ flex: 1 }}>
-                <TextWithIcon>
-                  Price
-                </TextWithIcon>
+                <TextWithIcon>Price</TextWithIcon>
               </div>
               <OneLine>
                 <BeforeChip>{uniswapPrice}</BeforeChip>
@@ -268,80 +290,78 @@ const AddLiquidity = (props: props) => {
                 <TagChips>{selectedPair.symbol2}</TagChips>
               </OneLine>
             </OneLine>
-            <OneLine style={{ marginTop: "10px" }}>
+            <OneLine style={{ marginTop: '10px' }}>
               <div style={{ flex: 1 }}>
-                <TextWithIcon>
-                  Share of Pool
-                </TextWithIcon>
+                <TextWithIcon>Share of Pool</TextWithIcon>
               </div>
               <OneLine>
                 <BeforeChip>
-                  {
-                    isYourShareLoading
-                      ? ' - %'
-                      : Number(getDisplayBalance(yourShare, 4)).toLocaleString() + '%'
-                  }
+                  {isYourShareLoading
+                    ? ' - %'
+                    : Number(getDisplayBalance(yourShare, 4)).toLocaleString() + '%'}
                 </BeforeChip>
               </OneLine>
             </OneLine>
           </TcContainer>
-          <ApproveButtonContainer>
-            <Button
-              text={
-                isFirstCoinApproved
-                  ? `Approved ${selectedPair.symbol1}`
-                  : !isFirstCoinApproving
-                    ? `Approve ${selectedPair.symbol1}`
-                    : 'Approving...'
-              }
-              size={'lg'}
-              disabled={
-                isInputFieldError ||
-                isFirstCoinApproved ||
-                !Number(firstCoinValue)
-              }
-              onClick={approveFirstCoin}
-              loading={isFirstCoinApproving}
-            />
-            <div style={{ padding: 5 }} />
-            <Button
-              text={
-                isSecondCoinApproved
-                  ? `Approved ${selectedPair.symbol2}`
-                  : !isSecondCoinApproving
-                    ? `Approve ${selectedPair.symbol2}`
-                    : 'Approving...'
-              }
-              size={'lg'}
-              disabled={
-                isInputFieldError ||
-                isSecondCoinApproved ||
-                !Number(secondCoinValue)
-              }
-              onClick={approveSecondCoin}
-              loading={isSecondCoinApproving}
-            />
-          </ApproveButtonContainer>
-          <br />
-          <Button
-            text={'Supply'}
-            size={'lg'}
-            onClick={() => {
-              setConfirmModal(true)
-            }}
-            disabled={
-              isInputFieldError ||
-              !isSecondCoinApproved ||
-              !isSecondCoinApproved ||
-              !Number(secondCoinValue) ||
-              !Number(firstCoinValue)
-            }
-          />
+          <div style={{ marginTop: '32px' }}>
+            <Grid container spacing={2} style={{ marginBottom: '8px' }}>
+              <Grid item lg={6} md={6} sm={12} xs={12}>
+                <Button
+                  text={
+                    isFirstCoinApproved
+                      ? `Approved ${selectedPair.symbol1}`
+                      : !isFirstCoinApproving
+                      ? `Approve ${selectedPair.symbol1}`
+                      : 'Approving...'
+                  }
+                  size={'lg'}
+                  disabled={isInputFieldError || isFirstCoinApproved || !Number(firstCoinValue)}
+                  onClick={approveFirstCoin}
+                  loading={isFirstCoinApproving}
+                />
+              </Grid>
+              <Grid item lg={6} md={6} sm={12} xs={12}>
+                <Button
+                  text={
+                    isSecondCoinApproved
+                      ? `Approved ${selectedPair.symbol2}`
+                      : !isSecondCoinApproving
+                      ? `Approve ${selectedPair.symbol2}`
+                      : 'Approving...'
+                  }
+                  size={'lg'}
+                  disabled={
+                    isInputFieldError || isSecondCoinApproved || !Number(secondCoinValue)
+                  }
+                  onClick={approveSecondCoin}
+                  loading={isSecondCoinApproving}
+                />
+              </Grid>
+            </Grid>
+            <Grid container spacing={2}>
+              <Grid item lg={12} md={12} sm={12} xs={12}>
+                <Button
+                  text={'Supply'}
+                  size={'lg'}
+                  onClick={() => {
+                    setConfirmModal(true);
+                  }}
+                  disabled={
+                    isInputFieldError ||
+                    !isSecondCoinApproved ||
+                    !isSecondCoinApproved ||
+                    !Number(secondCoinValue) ||
+                    !Number(firstCoinValue)
+                  }
+                />
+              </Grid>
+            </Grid>
+          </div>
         </CustomCardContainer>
       </CustomCard>
     </div>
-  )
-}
+  );
+};
 
 export default AddLiquidity;
 
@@ -364,16 +384,14 @@ const CustomCardHeader = styled.div`
 `;
 
 const EachElementBack = styled.div`
-  flex: 0.25;
   cursor: pointer;
 `;
 
 const EachElementTitle = styled.div`
-  flex: 0.5;
+  flex: 1;
 `;
 
-const CustomCardContainer = styled.div`
-`;
+const CustomCardContainer = styled.div``;
 
 const CardTitle = styled.p`
   font-family: Inter;
@@ -383,7 +401,7 @@ const CardTitle = styled.p`
   line-height: 24px;
   text-align: center;
   color: rgba(255, 255, 255);
-  margin: 0px;
+  margin: 0;
 `;
 
 const PlusMinusArrow = styled.div`
@@ -396,10 +414,6 @@ const PlusMinusArrow = styled.div`
   display: flex;
   flex-direction: row;
   font-size: 20px;
-`;
-
-const ApproveButtonContainer = styled.div`
-  display: flex;
 `;
 
 const TcContainer = styled.div`
@@ -424,7 +438,7 @@ const TextWithIcon = styled.div`
 `;
 
 const BeforeChip = styled.span`
-  ont-family: Inter;
+  font-family: Inter;
   font-style: normal;
   font-weight: 300;
   font-size: 12px;

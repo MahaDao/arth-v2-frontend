@@ -9,13 +9,12 @@ import ArrowBackIos from '@material-ui/icons/ArrowBackIos';
 import plus from '../../../../assets/svg/plus.svg';
 import arrowDown from '../../../../assets/svg/arrowDown.svg';
 
-import TransparentInfoDiv from '../InfoDiv';
 import Button from '../../../../components/Button';
 import CustomModal from '../../../../components/CustomModal';
 import CustomInputContainer from '../../../../components/CustomInputContainer';
 
 import useCore from '../../../../hooks/useCore';
-import useDFYNPrice from '../../../../hooks/useDFYNPrice';
+import useDFYNPrice from '../../../../hooks/state/pairs/useDFYNPrice';
 import useTotalSupply from '../../../../hooks/useTotalSupply';
 import useTokenBalance from '../../../../hooks/state/useTokenBalance';
 import { getDisplayBalanceToken } from '../../../../utils/formatBalance';
@@ -23,6 +22,8 @@ import useTokenBalanceOf from '../../../../hooks/state/useTokenBalanceOf';
 import useApprove, { ApprovalState } from '../../../../hooks/callbacks/useApprove';
 import useRemoveLiquidity from '../../../../hooks/callbacks/pairs/useRemoveLiquidity';
 import { ValidateNumber } from '../../../../components/CustomInputContainer/RegexValidation';
+import SlippageContainer from '../../../../components/SlippageContainer';
+import TransparentInfoDiv from '../../../../components/CustomTransparentInfoDiv/InfoDiv';
 
 interface SelectedPair {
   id: number;
@@ -53,45 +54,47 @@ const RemovePool = (props: props) => {
 
   const uniswapPrice = useDFYNPrice(
     core.tokens[selectedPair.symbol1],
-    core.tokens[selectedPair.symbol2]
+    core.tokens[selectedPair.symbol2],
   );
 
   const [lpTokenApproveStatus, approveLpToken] = useApprove(
     core.tokens[selectedPair.pairToken],
-    core.contracts.Router.address
+    core.contracts.ArthPoolRouter.address,
   );
 
   const { isLoading: isLPBalanceLoading, value: lpBalance } = useTokenBalance(lpToken);
-  const { isLoading: isFirstCoinLoading, value: firstCoinBalance } = useTokenBalance(firstToken);
-  const { isLoading: isSecondCoinLoading, value: secondCoinBalance } = useTokenBalance(secondToken);
-  const { isLoading: isTotalSupplyLoading, value: totalSupply } = useTotalSupply(selectedPair.pairToken);
-
-  const { isLoading: isPairFirstCoinBalanceLoading, value: firstCoinPairBalance } = useTokenBalanceOf(
+  const { isLoading: isFirstCoinLoading, value: firstCoinBalance } = useTokenBalance(
     firstToken,
-    lpToken.address
   );
-  const { isLoading: isPairSecondCoinBalanceLoading, value: secondCoinPairBalance } = useTokenBalanceOf(
+  const { isLoading: isSecondCoinLoading, value: secondCoinBalance } = useTokenBalance(
     secondToken,
-    lpToken.address
   );
+  const { isLoading: isTotalSupplyLoading, value: totalSupply } = useTotalSupply(
+    selectedPair.pairToken,
+  );
+
+  const {
+    isLoading: isPairFirstCoinBalanceLoading,
+    value: firstCoinPairBalance,
+  } = useTokenBalanceOf(firstToken, lpToken.address);
+  const {
+    isLoading: isPairSecondCoinBalanceLoading,
+    value: secondCoinPairBalance,
+  } = useTokenBalanceOf(secondToken, lpToken.address);
 
   const [isFirstCoinValueLoading, firstCoinValue] = useMemo(() => {
-    if (isTotalSupplyLoading || isPairFirstCoinBalanceLoading)
-      return [true, BigNumber.from(0)];
+    if (isTotalSupplyLoading || isPairFirstCoinBalanceLoading) return [true, BigNumber.from(0)];
 
     if (pairValue === '' || !Number(pairValue)) return [false, BigNumber.from(0)];
 
     const bnPairValue = BigNumber.from(parseUnits(`${pairValue}`, 18));
-    return [
-      false,
-      bnPairValue.mul(firstCoinPairBalance).div(totalSupply)
-    ];
+    return [false, bnPairValue.mul(firstCoinPairBalance).div(totalSupply)];
   }, [
     isTotalSupplyLoading,
     pairValue,
     firstCoinPairBalance,
     isPairFirstCoinBalanceLoading,
-    totalSupply
+    totalSupply,
   ]);
 
   const [isSecondCoinValueLoading, secondCoinValue] = useMemo(() => {
@@ -101,16 +104,13 @@ const RemovePool = (props: props) => {
     if (pairValue === '' || !Number(pairValue)) return [false, BigNumber.from(0)];
 
     const bnPairValue = BigNumber.from(parseUnits(`${pairValue}`, 18));
-    return [
-      false,
-      bnPairValue.mul(secondCoinPairBalance).div(totalSupply)
-    ];
+    return [false, bnPairValue.mul(secondCoinPairBalance).div(totalSupply)];
   }, [
     isTotalSupplyLoading,
     pairValue,
     secondCoinPairBalance,
     isPairSecondCoinBalanceLoading,
-    totalSupply
+    totalSupply,
   ]);
 
   const removeLiquidity = useRemoveLiquidity(
@@ -119,14 +119,14 @@ const RemovePool = (props: props) => {
     BigNumber.from(parseUnits(`${pairValue}`, 18)),
     firstCoinValue,
     secondCoinValue,
-    account
+    account,
   );
 
   const handleRemoveLiquidity = () => {
     removeLiquidity(() => {
       setConfirmModal(false);
     });
-  }
+  };
 
   const isLpTokenApproving = lpTokenApproveStatus === ApprovalState.PENDING;
   const isLpTokenApproved = lpTokenApproveStatus === ApprovalState.APPROVED;
@@ -150,7 +150,7 @@ const RemovePool = (props: props) => {
           hasDropDown={false}
           multiIcons
           symbols={[selectedPair.symbol1, selectedPair.symbol2]}
-          SymbolText={`${selectedPair.symbol1}-${selectedPair.symbol2}`}
+          SymbolText={`${selectedPair.symbol1}+${selectedPair.symbol2}`}
           inputMode={'numeric'}
           setText={(val: string) => {
             setPairValue(ValidateNumber(val) ? val : '0');
@@ -159,6 +159,7 @@ const RemovePool = (props: props) => {
           errorCallback={(flag: boolean) => {
             setIsInputFieldError(flag);
           }}
+          tokenDecimals={18}
         />
         <PlusMinusArrow>
           <img src={arrowDown} alt="arrow-down" />
@@ -173,6 +174,7 @@ const RemovePool = (props: props) => {
           SymbolText={selectedPair.symbol1.toUpperCase()}
           inputMode={'numeric'}
           disabled={true}
+          tokenDecimals={18}
         />
         <PlusMinusArrow>
           <img src={plus} alt="plus" />
@@ -187,6 +189,7 @@ const RemovePool = (props: props) => {
           SymbolText={selectedPair.symbol2.toUpperCase()}
           inputMode={'numeric'}
           disabled={true}
+          tokenDecimals={18}
         />
         <OneLine style={{ marginTop: '15px' }}>
           <div style={{ flex: 1 }}>
@@ -245,18 +248,14 @@ const RemovePool = (props: props) => {
               />
             </Grid>
             <Grid item lg={6} md={6} sm={12} xs={12}>
-              <Button
-                text={'Remove Liquidity'}
-                size={'lg'}
-                onClick={handleRemoveLiquidity}
-              />
+              <Button text={'Remove Liquidity'} size={'lg'} onClick={handleRemoveLiquidity} />
             </Grid>
           </Grid>
         </>
       </CustomModal>
       <CustomCard className={'custom-mahadao-container'}>
         <CustomCardHeader className={'custom-mahadao-container-header'}>
-          <EachElement>
+          <EachElementBack>
             {' '}
             <ArrowBackIos
               onClick={() => onBack()}
@@ -264,14 +263,15 @@ const RemovePool = (props: props) => {
               color={'inherit'}
               htmlColor={'#ffffff'}
             />{' '}
-          </EachElement>
-          <EachElement>
+          </EachElementBack>
+          <EachElementTitle>
             {' '}
-            <CardTitle>Remove Liquidity</CardTitle>
-          </EachElement>
-          <EachElement>
+            <CardTitle>Remove Liquidity</CardTitle>{' '}
+          </EachElementTitle>
+          <EachElementBack>
             {' '}
-          </EachElement>
+            <SlippageContainer />{' '}
+          </EachElementBack>
         </CustomCardHeader>
         <CustomCardContainer className={'custom-mahadao-container-content'}>
           {detailed()}
@@ -282,15 +282,11 @@ const RemovePool = (props: props) => {
                   isLpTokenApproved
                     ? `Approved`
                     : !isLpTokenApproving
-                      ? `Approve`
-                      : 'Approving...'
+                    ? `Approve`
+                    : 'Approving...'
                 }
                 size={'lg'}
-                disabled={
-                  isInputFieldError ||
-                  isLpTokenApproved ||
-                  !Number(pairValue)
-                }
+                disabled={isInputFieldError || isLpTokenApproved || !Number(pairValue)}
                 onClick={approveLpToken}
                 loading={isLpTokenApproving}
               />
@@ -300,11 +296,7 @@ const RemovePool = (props: props) => {
                 onClick={() => setConfirmModal(true)}
                 text={'Remove Liquidity'}
                 size={'lg'}
-                disabled={
-                  isInputFieldError ||
-                  !isLpTokenApproved ||
-                  !Number(pairValue)
-                }
+                disabled={isInputFieldError || !isLpTokenApproved || !Number(pairValue)}
               />
             </Grid>
           </Grid>
@@ -366,19 +358,25 @@ const CustomCard = styled.div`
 const CustomCardHeader = styled.div`
   display: flex;
   flex-direction: row;
-  padding: 24px 32px;
+  padding-top: 28px;
+  padding-bottom: 28px;
   align-items: center;
   align-content: center;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   @media (max-width: 600px) {
-    padding: 12px 16px;
+    padding-top: 24px;
+    padding-bottom: 24px;
   }
 `;
 
-const EachElement = styled.div`
-  flex: 0.3333;
+const EachElementBack = styled.div`
   cursor: pointer;
 `;
+
+const EachElementTitle = styled.div`
+  flex: 1;
+`;
+
 const OneLineInput = styled.div`
   display: flex;
   flex-direction: row;

@@ -77,38 +77,38 @@ const MobileNav = (props: props) => {
       {
         !walletInfo ? (
           <div style={{ width: '100%', background: '#1e1d1d', marginTop: -2 }}>
-            {/* <StyledLink
+            <StyledLink
               exact
               activeClassName="active"
               to="/stats"
               onClick={() => props.onClick()}
             >
               Analytics
-            </StyledLink> */}
-            <StyledLink
+            </StyledLink>
+            {/* <StyledLink
               exact
               activeClassName="active"
               to="/genesis"
               onClick={() => props.onClick()}
             >
               Genesis
-            </StyledLink>
-            <StyledLink
+            </StyledLink> */}
+            {/* <StyledLink
               exact
               activeClassName="active"
               to="/lock-deposit"
               onClick={() => props.onClick()}
             >
               Debt pools
-            </StyledLink>
-            {/* <StyledLink
+            </StyledLink> */}
+            <StyledLink
               exact
               activeClassName="active"
               to="/mint/mint"
               onClick={() => props.onClick()}
             >
               Mint/Redeem
-            </StyledLink> */}
+            </StyledLink>
             {/* <StyledLink
               exact
               activeClassName="active"
@@ -125,20 +125,20 @@ const MobileNav = (props: props) => {
             >
               Farming
             </StyledLink>
-            <StyledLink
+            {/* <StyledLink
               exact
               activeClassName="active"
               to="/rebase"
               onClick={() => props.onClick()}
             >
               Rebase
-            </StyledLink>
-            {/* <StyledLink exact activeClassName="active" to="/trade">
+            </StyledLink> */}
+            <StyledLink exact activeClassName="active" to="/trade">
               Trade
             </StyledLink>
             <StyledLink exact activeClassName="active" to="/pools">
               Pools
-            </StyledLink> */}
+            </StyledLink>
             {/*{
               !props.isMainnet && (
                 <StyledLink exact activeClassName="active" to="/faucet" onClick={() => props.onClick()}>

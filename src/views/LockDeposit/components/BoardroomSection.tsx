@@ -113,40 +113,40 @@ export default BoardroomSection;
 
 const ButtonConatiner = styled.div`
   margin-top: 20px;
-                @media (max-width: 600px) {
-                  margin - top: 24px;
+  @media (max-width: 600px) {
+    margin-top: 24px;
   }
-                `;
+`;
 
 const CustomInfoCard = styled.div`
-                margin-top: 16px;
-                @media (max-width: 600px) {
-                  margin - top: 24px;
-  }
-                `;
+  margin-top: 16px;
+  @media (max-width: 600px) {
+    margin-top: 24px;
+}
+`;
 
 const CustomInfoCardDetails = styled.div`
-                margin: 10px 0;
-                `;
+  margin: 10px 0;
+`;
 
 const TextWithIcon = styled.div`
-                font-family: Inter;
-                font-style: normal;
-                font-weight: 300;
-                font-size: 16px;
-                line-height: 150%;
-                color: rgba(255, 255, 255, 0.88);
-                opacity: 0.64;
-                vertical-align: center;
-                `;
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 150%;
+  color: rgba(255, 255, 255, 0.88);
+  opacity: 0.64;
+  vertical-align: center;
+`;
 
 const CardTitle = styled.div`
-                padding: 0;
-                margin: 0;
-                font-family: Inter;
-                font-style: normal;
-                font-weight: 600;
-                font-size: 16px;
-                line-height: 24px;
-                color: rgba(255, 255, 255, 0.88);
-                `;
+  padding: 0;
+  margin: 0;
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  color: rgba(255, 255, 255, 0.88);
+`;

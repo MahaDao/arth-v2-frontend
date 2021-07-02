@@ -8,34 +8,31 @@ import formatErrorMessage from '../../../utils/formatErrorMessage';
 import { useTransactionAdder } from '../../../state/transactions/hooks';
 
 export default function (
-  tokenA: string,
-  tokenB: string,
-  liquidity: BigNumber,
-  amountAMin: BigNumber,
-  amountBMin: BigNumber,
+  buyToken: string,
+  sellToken: string,
+  amountIn: BigNumber,
+  amountOutMin: BigNumber,
   to: string
 ) {
   const core = useCore();
   const addPopup = useAddPopup();
   const addTransaction = useTransactionAdder();
 
-  const amountAMinAfterSlippage = useApplySlippage(amountAMin);
-  const amountBMinAfterSlippage = useApplySlippage(amountBMin);
+  const amountOutAfterSlippage = useApplySlippage(amountOutMin);
 
   const action = useCallback(async (callback?: () => void): Promise<void> => {
     try {
-      const response = await core.contracts.ArthPoolRouter.removeLiquidity(
-        tokenA,
-        tokenB,
-        liquidity,
-        amountAMinAfterSlippage,
-        amountBMinAfterSlippage,
+      const response = await core.contracts.ArthPoolRouter.buyForERC20(
+        buyToken,
+        sellToken,
+        amountIn,
+        amountOutAfterSlippage,
         to,
         Math.ceil(Date.now() / 1000) + 5 * 60,
       );
 
       addTransaction(response, {
-        summary: `Remove Liquidity`
+        summary: `Buy ARTHX`
       });
 
       if (callback) callback();
@@ -51,12 +48,11 @@ export default function (
     core,
     addPopup,
     addTransaction,
-    tokenA,
-    tokenB,
-    liquidity,
-    amountAMinAfterSlippage,
-    amountBMinAfterSlippage,
-    to
+    buyToken,
+    sellToken,
+    amountIn,
+    amountOutAfterSlippage,
+    to,
   ]);
 
   return action;

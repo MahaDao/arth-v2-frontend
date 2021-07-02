@@ -1,15 +1,13 @@
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
-import { withSnackbar, WithSnackbarProps } from 'notistack';
 
 import MintTabContent from './components/Mint';
 import Container from '../../components/Container';
 import RedeemTabContent from './components/Redeem';
 import { WalletAutoConnect } from '../../components/WalletAutoConnect';
-import LoadingPage from '../../components/LoadingPage';
 
-const Boardrooms = (props: WithSnackbarProps) => {
+const Boardrooms = ( ) => {
   // @ts-ignore
   const { paramType } = useParams();
   const [type, setType] = useState<'mint' | 'redeem'>(paramType || 'mint');
@@ -20,7 +18,6 @@ const Boardrooms = (props: WithSnackbarProps) => {
   return (
     <>
       <GradientDiv />
-      {/*<LoadingPage/>*/}
       <Container size="lg">
         {type === 'mint' && (
           <MintTabContent setType={(type: 'mint' | 'redeem') => setType(type)} />
@@ -41,4 +38,4 @@ const GradientDiv = styled.div`
   z-index: -5;
 `;
 
-export default withSnackbar(Boardrooms);
+export default Boardrooms;

@@ -15,15 +15,16 @@ const CoinsPrice: React.FC = () => {
       <CustomInfoCardDetails>
         <OneLine style={{ marginTop: '0px' }}>
           <div>
-            <TextWithIcon>ARTH Current Price</TextWithIcon>
+            <TextWithIcon>ARTH Price</TextWithIcon>
+            {/* <TargetPriceTag>Target Price: $2.00</TargetPriceTag> */}
           </div>
           <div>
-            <TargetPriceTag>Target Price: $1.00</TargetPriceTag>
+            <TargetPriceTag>Target Price: $2.00</TargetPriceTag>
           </div>
         </OneLine>
         <OneLine>
           <div>
-            <TextWithIcon>ARTHX Oracle Price</TextWithIcon>
+            <TextWithIcon>ARTHX Price</TextWithIcon>
           </div>
           <div>
             <BeforeChip>
@@ -33,7 +34,8 @@ const CoinsPrice: React.FC = () => {
                 Number(getDisplayBalance(arthxPrice, 6, 6)).toLocaleString('en-US', {
                   maximumFractionDigits: 6,
                 })
-              )}
+              )}{' '}
+              ARTH
             </BeforeChip>
           </div>
         </OneLine>
@@ -49,7 +51,8 @@ const CoinsPrice: React.FC = () => {
                 Number(getDisplayBalance(mahaPrice, 6, 6)).toLocaleString('en-US', {
                   maximumFractionDigits: 6,
                 })
-              )}
+              )}{' '}
+              ARTH
             </BeforeChip>
           </div>
         </OneLine>
@@ -95,33 +98,6 @@ const BeforeChip = styled.span`
   line-height: 32px;
   text-align: right;
   color: #ffffff;
-`;
-
-const TagChips = styled.div`
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 4px;
-  padding: 2px 8px;
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 300;
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.64);
-`;
-
-const ToolTipFont = styled.p`
-  padding: 0px;
-  margin: 0px;
-`;
-
-const PercentChange = styled.p`
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 300;
-  font-size: 12px;
-  line-height: 130%;
-  text-align: right;
-  color: #178a50;
-  margin: 0;
 `;
 
 const TargetPriceTag = styled.p`

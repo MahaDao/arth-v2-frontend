@@ -327,6 +327,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "fund",
+    "outputs": [
+      {
+        "internalType": "contract ISimpleERCFund",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "bytes32",
@@ -573,6 +586,19 @@
       }
     ],
     "name": "setARTHController",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "contract ISimpleERCFund",
+        "name": "newFund",
+        "type": "address"
+      }
+    ],
+    "name": "setFund",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

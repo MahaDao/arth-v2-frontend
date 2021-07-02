@@ -185,7 +185,7 @@ const CustomSlippageBox = styled.div`
   right: 0;
   min-width: max-content;
   z-index: 12;
-  box-shadow: 0px 12px 24px -4px rgba(0, 0, 0, 0.12), 0px 16px 20px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 12px 24px -4px rgba(0, 0, 0, 0.12), 0px 16px 20px rgba(0, 0, 0, 0.25);
 `;
 
 const CTitle = styled.div`

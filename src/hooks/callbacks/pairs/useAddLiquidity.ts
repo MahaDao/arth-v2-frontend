@@ -23,7 +23,7 @@ export default function (
 
   const action = useCallback(async (callback?: () => void): Promise<void> => {
     try {
-      const response = await core.contracts.Router.addLiquidity(
+      const response = await core.contracts.ArthPoolRouter.addLiquidity(
         tokenA,
         tokenB,
         amountADesired,
@@ -31,7 +31,7 @@ export default function (
         amountAMinAfterSlippage,
         amountBMinAfterSlippage,
         to,
-        Math.ceil(Date.now() / 1000) + 5 * 60 * 1000,
+        Math.ceil(Date.now() / 1000) + 5 * 60,
       );
 
       addTransaction(response, {

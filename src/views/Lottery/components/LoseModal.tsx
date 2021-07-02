@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Button from '../../../components/Button';
 import CustomModal from '../../../components/CustomModal';
 import CloseIcon from '../../../assets/img/CloseIcon.svg';
-import happyMask from '../../../assets/svg/happyMask.svg';
 import sadMask from '../../../assets/svg/sadMask.svg';
 import crosses from '../../../assets/svg/crosses.svg';
 import { useMediaQuery } from 'react-responsive';
@@ -28,19 +27,19 @@ export const LoseModal = (props: IProps) => {
             >
                 <>
                     <MainDiv>
-                        <img style={{ position: 'absolute', display: 'flex', top: 20, right: 25, zIndex: 2 }} src={CloseIcon} height={24} onClick={props.toggleOpen} />
+                        <img style={{ position: 'absolute', display: 'flex', top: 20, right: 25, zIndex: 2 }} src={CloseIcon} height={24} onClick={props.toggleOpen}  alt={''}/>
 
                         <MaskDiv>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: 30, width: '45%', position: 'absolute', top: 10 }}>
-                                <img src={crosses} height={24} />
-                                <img src={crosses} height={24} />
+                            <div  style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: 30, width: '45%', position: 'absolute', top: 10 }} >
+                                <img alt={''} src={crosses} height={24} />
+                                <img alt={''} src={crosses} height={24} />
                             </div>
 
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: 30, width: isMobile ? '30%' : '27%', position: 'absolute', top: 35 }}>
-                                <img src={crosses} height={24} />
-                                <img src={crosses} height={24} />
+                                <img alt={''} src={crosses} height={24} />
+                                <img alt={''} src={crosses} height={24} />
                             </div>
-                            <img src={sadMask} height={140} style={{ paddingTop: 40, zIndex: 2 }} />
+                            <img alt={''} src={sadMask} height={140} style={{ paddingTop: 40, zIndex: 2 }} />
                         </MaskDiv>
 
                         <WinnerText>

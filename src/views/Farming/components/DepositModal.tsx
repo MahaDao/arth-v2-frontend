@@ -86,9 +86,10 @@ export default (props: IProps) => {
           multiIcons={true}
           symbols={props.pool.depositTokenSymbols}
           errorCallback={(flag: boolean) => { setIsInputFieldError(flag) }}
+          tokenDecimals={18}
         />
         <OneLine>
-          <div style={{ flex: 1 }}></div>
+          <div style={{ flex: 1 }}/>
           <OneLine>
             <BeforeChip>Balance: {Number(getDisplayBalance(props.tokenBalance, tokenDecimals, 3)).toLocaleString()}</BeforeChip>
             <TagChips>{symbol}</TagChips>
