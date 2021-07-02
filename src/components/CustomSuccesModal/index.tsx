@@ -141,8 +141,7 @@ const ContentTitle = styled.p`
   line-height: 24px;
   text-align: center;
   color: rgba(255, 255, 255);
-  margin: 0;
-  margin-bottom: 10px;
+  margin: 0 0 10px;
 `
 
 const ContentSubtitle = styled.a`

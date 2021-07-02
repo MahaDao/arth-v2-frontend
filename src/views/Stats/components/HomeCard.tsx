@@ -83,7 +83,7 @@ const HomeCard: React.FC<HomeCardProps> = ({ title, symbol, address }) => {
           href={
             platformURL[config.platform] && platformURL[config.platform].swapUrl
               ? `${platformURL[config.platform]?.swapUrl}?inputCurrency=${address}`
-              : `https://app.uniswap.org/#/swap?inputCurrency=${address}`
+              : `https://app.uniswap.org/#/swap?outputCurrency=${address}`
           }
           id={`buy_${symbol}_from_${config.platform[0].toUpperCase() + config.platform.slice(1).toLowerCase()}`}
         >

@@ -67,13 +67,10 @@ const StyledProgress = styled.div<{ progress: number }>`
 
 const StyledDesc = styled.span`
   color: ${(props) => props.theme.color.grey[500]};
-  font-weight: 700;
   font-size: 12px;
   text-align: center;
   font-weight: 300;
   line-height: 130%;
-  text-align: center;
-  color: #ffffff;
   opacity: 0.64;
 `;
 const ParentContainer = styled.div`
@@ -83,12 +80,12 @@ const ParentContainer = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: row;
-  padding: 0px 20px;
+  padding: 0 20px;
   @media (max-width: 768px) {
     flex-direction: column;
     padding: 20px;
     width: auto;
-  } ;
+  };
 `;
 const StyledCardContentInner = styled.div`
   height: 100%;

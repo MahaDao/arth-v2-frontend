@@ -2,9 +2,9 @@ import { BigNumber } from 'ethers';
 import { useWallet } from 'use-wallet';
 import { useCallback, useEffect, useState } from 'react';
 
-import useCore from './useCore';
-import { useBlockNumber } from '../state/application/hooks';
-import config from '../config';
+import useCore from '../../useCore';
+import { useBlockNumber } from '../../../state/application/hooks';
+import config from '../../../config';
 
 type State = {
   isLoading: boolean;
@@ -35,8 +35,8 @@ export default () => {
       });
       return;
     }
-    const { PoolToken } = core.contracts;
 
+    const { PoolToken } = core.contracts;
     const tokenARTHXBalance = await core.ARTHX.balanceOf(PoolToken.address);
     const tokenMAHABalance = await core.MAHA.balanceOf(PoolToken.address);
     const tokenRTSupply = await core.PoolToken.totalSupply();
@@ -49,7 +49,7 @@ export default () => {
       isLoading: false,
       value: rates,
     });
-  }, [core.ARTHX, core.MAHA, account, core.PoolToken, core.contracts, pow]);
+  }, [account, pow, core]);
 
   useEffect(() => {
     if (core.isUnlocked) {

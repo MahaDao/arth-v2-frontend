@@ -1,53 +1,96 @@
-import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import Container from '../../components/Container';
+import { Link } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
-import uniswapLogo from '../../assets/svg/uniswapLogo.svg';
-import shushiswap from '../../assets/svg/sushiswapLogo.svg';
-import { withSnackbar, WithSnackbarProps } from 'notistack';
+import React, { useEffect, useState } from 'react';
 import CallMadeIcon from '@material-ui/icons/CallMade';
-import PageHeader from '../../components/PageHeader';
-import TradingCards from './components/TradingTable';
-import { WalletAutoConnect } from '../../components/WalletAutoConnect';
 
-const Boardrooms = (props: WithSnackbarProps) => {
+import dfyn from '../../assets/img/DFYN.png';
+
+import BuyContent from './components/BuyContent';
+import SellContent from './components/SellContent';
+import Container from '../../components/Container';
+import SlippageContainer from '../../components/SlippageContainer';
+
+const Boardrooms = () => {
   useEffect(() => window.scrollTo(0, 0), []);
-  // const basisCash = useBasisCash();
-  WalletAutoConnect();
 
-  // // const isLaunched = Date.now() >= config.boardroomLaunchesAt.getTime();
-  // if (!basisCash) return <div />;
+  const [type, setType] = useState<'Buy' | 'Sell'>('Buy');
+
+
+  const TabContent = () => {
+    return (
+      <Grid container style={{ marginTop: '24px' }}>
+        <Grid item lg={3} sm={'auto'}/>
+        <Grid item lg={6} md={12} sm={12} xs={12}>
+          <LeftTopCard className={'custom-mahadao-container'}>
+            <LeftTopCardHeader className={'custom-mahadao-container-header'}>
+              <div style={{ display: 'flex', flex: '1' }}>
+                <TabContainer onClick={() => setType('Buy')}>
+                  {type === 'Buy' && <ActiveTab />}
+                  <TabText>Buy</TabText>
+                </TabContainer>
+                <TabContainer onClick={() => setType('Sell')}>
+                  {type === 'Sell' && <ActiveTab />}
+                  <TabText>Sell</TabText>
+                </TabContainer>
+                <SlippageContainer />
+              </div>
+            </LeftTopCardHeader>
+            {type === 'Buy' && <BuyContent />}
+            {type === 'Sell' && <SellContent />}
+          </LeftTopCard>
+        </Grid>
+        <Grid item lg={3} sm={'auto'}/>
+      </Grid>
+    );
+  };
 
   return (
     <>
       <GradientDiv />
       <Container size="lg">
-        <PageHeader
-          title="Trade"
-          subtitle="Trade different pair of MAHA, ARTH, ARTHX and Collaterals"
-          // learnMoreLink="#"
-        />
-
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-            <TradingCards />
+        <div>
+          <PageHeading>TRADE</PageHeading>
+          <PageSubHeading>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </PageSubHeading>
+        </div>
+        {TabContent()}
+        <Grid container style={{ marginTop: '16px' }}>
+          <Grid item lg={3} sm={'auto'}/>
+          <Grid item lg={6} md={12} sm={12} xs={12}>
+            <CustomInfoCard className={'custom-mahadao-box'}>
+              <CustomInfoCardDetails>
+                <Grid container>
+                  <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                    <InfoBoxTitle>ARTH-ARTHX DFYN pool</InfoBoxTitle>
+                    <InfoBoxSubTitle>Provide liquidity to ARTH-ARTHX on DFYN</InfoBoxSubTitle>
+                  </Grid>
+                </Grid>
+              </CustomInfoCardDetails>
+              <CustomInfoCardButton to={'/pools'}>
+                <img alt='Logo' src={dfyn} style={{ marginRight: '10px' }} height={30} />
+                <span>Add liquidity on DFYN</span>
+                <CallMadeIcon style={{ fontSize: 15, marginLeft: '10px' }} />
+              </CustomInfoCardButton>
+            </CustomInfoCard>
           </Grid>
+          <Grid item lg={3} sm={'auto'}/>
         </Grid>
       </Container>
     </>
   );
-};
+}
 
 const GradientDiv = styled.div`
   background: linear-gradient(180deg, #2a2827 0%, rgba(42, 40, 39, 0) 100%);
   height: 270px;
   position: absolute;
-  // border: 1px solid;
   width: 100%;
   z-index: -5;
 `;
 
-const CustomInfoCardButton = styled.div`
+const CustomInfoCardButton = styled(Link)`
   width: 100%;
   border: 1px solid rgba(255, 255, 255, 0.32);
   box-sizing: border-box;
@@ -55,7 +98,7 @@ const CustomInfoCardButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 12px;
+  padding: 6px;
   font-family: Inter;
   font-style: normal;
   font-weight: 600;
@@ -63,14 +106,11 @@ const CustomInfoCardButton = styled.div`
   line-height: 20px;
   cursor: pointer;
   &:hover {
-    background: #423b38;
+    background: transparent;
+    color: #ffffff;
   }
-  /* identical to box height, or 143% */
-
   text-align: center;
-
   color: #ffffff;
-
   opacity: 0.88;
 `;
 
@@ -118,60 +158,13 @@ const PageSubHeading = styled.p`
   margin-bottom: 40px;
 `;
 
-const RadioSelectionConatiner = styled.div`
-  background: #2a2827;
-  border-radius: 8px;
-  padding: 6px;
-  display: flex;
-  flex-direction: row;
-`;
-const RadioSubConatiner = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 40px;
-  z-index: 1;
-  cursor: pointer;
-  flex: 0.5;
-  position: relative;
-`;
-
-const RadioText = styled.span`
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 20px;
-  text-align: center;
-  color: rgba(255, 255, 255, 0.88);
-  z-index: 1;
-`;
-
-const RadioLogo = styled.span`
-  margin-left: 5px;
-  margin-right: 5px;
-`;
-
-const ActiveRadio = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 40px;
-  background: #423b38;
-  border-radius: 4px;
-  z-index: 0;
-`;
-
-const LeftTopCard = styled.div`
-  margin-top: 24px;
-  @media (max-width: 600px) {
-    margin-top: 24px;
-  }
-`;
+const LeftTopCard = styled.div``;
 
 const LeftTopCardHeader = styled.div`
   display: flex;
   flex-direction: row;
 `;
+
 const TabContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -192,15 +185,6 @@ const TabText = styled.span`
   font-size: 14px;
   line-height: 20px;
   text-align: center;
-  color: rgba(255, 255, 255, 0.64);
-`;
-const TabTextActive = styled.span`
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 20px;
-  text-align: center;
   color: rgba(255, 255, 255, 0.88);
 `;
 
@@ -214,15 +198,10 @@ const ActiveTab = styled.div`
   border-bottom: 2px solid #fd5656;
 `;
 
-const CustomInfoCard = styled.div`
-  margin-top: 16px;
-  @media (max-width: 600px) {
-    margin-top: 24px;
-  }
-`;
+const CustomInfoCard = styled.div``;
 
 const CustomInfoCardDetails = styled.div`
   margin: 10px 0;
 `;
 
-export default withSnackbar(Boardrooms);
+export default Boardrooms;

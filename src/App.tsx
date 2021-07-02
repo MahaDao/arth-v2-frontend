@@ -2,7 +2,7 @@ import AOS from 'aos';
 import { Provider } from 'react-redux';
 import React, { useEffect } from 'react';
 import { SnackbarProvider } from 'notistack';
-import { useWallet, UseWalletProvider } from 'use-wallet';
+import { UseWalletProvider } from 'use-wallet';
 import { ThemeProvider } from 'styled-components';
 import { HashRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 
@@ -13,6 +13,7 @@ import theme from './theme';
 
 import Home from './views/Home';
 import Mint from './views/Mint';
+import Trade from './views/Trade';
 import Pools from './views/Pools';
 import Stats from './views/Stats';
 import Rebase from './views/Rebase';
@@ -23,19 +24,22 @@ import Farming from './views/Farming';
 import Lottery from './views/Lottery';
 import TopBar from './components/TopBar';
 import Popups from './components/Popups';
+import Disclaimer from './components/Disclaimer';
+import NoMetamaskNotice from './components/NoMetamaskNotice';
+import ConnectionNotice from './views/Genesis/ConnectionNotice';
 
 import store from './state';
+import config from './config';
 import useCore from './hooks/useCore';
 import Updaters from './state/Updaters';
 import ModalsProvider from './contexts/Modals';
-import BasisCashProvider from './contexts/BasisCashProvider';
-import config from './config';
-import Button from './components/Button';
-import ConnectionNotice from './views/Genesis/ConnectionNotice';
 import { Mixpanel } from './analytics/Mixpanel';
+import BasisCashProvider from './contexts/BasisCashProvider';
+import LockDeposit from './views/LockDeposit';
 
 const Providers: React.FC = ({ children }) => {
   const currentNetworkId = config.chainId;
+
   return (
     <ThemeProvider theme={theme}>
       <UseWalletProvider chainId={currentNetworkId} connectors={{ injected: {} }}>
@@ -54,12 +58,6 @@ const App: React.FC = () => {
   // Init animate on scroll
   useEffect(() => {
     AOS.init();
-
-    // @ts-ignore
-    window.ethereum.on('chainChanged', (chainId) => {
-      // handle the new network
-      console.log('change');
-    });
   }, []);
 
   const makeUnPassive = (ev: any) => {
@@ -75,17 +73,22 @@ const App: React.FC = () => {
     <Providers>
       <Router>
         <TopBar />
+        <Disclaimer />
         <Switch>
+          <Route path="/" exact>
+            <Home />
+          </Route>
+          {/* <Route path="/genesis" exact>
+            <Page availableNetworks={[137, 1337]}>
+              <Genesis />
+            </Page>
+          </Route> */}
           <Route path="/stats">
             <Page availableNetworks={[137, 1337]}>
               <Stats />
             </Page>
           </Route>
-          {/*<Route path="/" exact>
-            <Home />
-          </Route>*/}
-
-          {/* <Route path="/farming">
+          <Route path="/farming">
             <Page availableNetworks={[137, 1337]}>
               <Farming />
             </Page>
@@ -97,25 +100,25 @@ const App: React.FC = () => {
           </Route>
           <Route path="/trade">
             <Page availableNetworks={[137, 1337]}>
-              <TemporaryTrade />
+              <Trade />
             </Page>
           </Route>
           <Route path="/pools">
             <Page availableNetworks={[137, 1337]}>
               <Pools />
             </Page>
-          </Route> */}
-          <Route path="/genesis">
+          </Route>
+          {/* <Route path="/genesis">
             <Page>
               <Genesis />
             </Page>
-          </Route>
+          </Route> */}
           {/* <Route path="/faucet">
             <Page availableNetworks={[1337]}>
               <Faucet />
             </Page>
           </Route> */}
-          <Route path="/rebase">
+          {/* <Route path="/rebase">
             <Page>
               <Rebase />
             </Page>
@@ -125,7 +128,12 @@ const App: React.FC = () => {
               <Lottery />
             </Page>
           </Route>
-          <Redirect to="/genesis"></Redirect>
+          <Route path="/lock-deposit">
+            <Page availableNetworks={[137, 1337]}>
+              <LockDeposit />
+            </Page>
+          </Route> */}
+          <Redirect to="/"></Redirect>
         </Switch>
       </Router>
     </Providers>
@@ -134,7 +142,6 @@ const App: React.FC = () => {
 
 const AppContent: React.FC = ({ children }) => {
   const core = useCore();
-  const { account, connect } = useWallet();
 
   useEffect(() => {
     // @ts-ignore
@@ -145,9 +152,8 @@ const AppContent: React.FC = ({ children }) => {
       });
   }, []);
 
+  if (!window.ethereum) return <NoMetamaskNotice />;
   if (!core) return <div />;
-
-  console.log();
 
   if (window.location.hostname === 'arthcoin.com') {
     Mixpanel.track(`ScreenView:${window.location.pathname}`);

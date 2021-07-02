@@ -16,7 +16,7 @@ export default (amount: BigNumber) => {
 
     return (
       amount
-        .sub(BigNumber.from(1).sub(slippageRateBN))
+        .mul(BigNumber.from(1e6).sub(slippageRateBN))
         .div(1e6)
     );
   }, [amount, slippageState])

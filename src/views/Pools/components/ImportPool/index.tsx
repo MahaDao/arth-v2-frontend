@@ -5,7 +5,6 @@ import TokenSymbol from '../../../../components/TokenSymbol';
 import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
 import plus from '../../../../assets/svg/plus.svg';
 import CustomImportPoolDropDown from './components/CustomImportPoolDropDown';
-import InfoIcon from '@material-ui/icons/Info';
 
 type props = {
   onBack: () => void;
@@ -24,13 +23,13 @@ const ImportPool: React.FC<props> = (props) => {
   const [secondCoinDropDown, setSecondCoinDropDown] = useState<string[]>([]);
 
   useEffect(() => {
-    var arr: string[];
+    let arr: string[];
     arr = defaultDropdownValues.filter(e => {
       return (![firstCoin, secondCoin].includes(e))
     });
     setFirstCoinDropDown(arr);
 
-    var arr2: string[];
+    let arr2: string[];
     arr2 = defaultDropdownValues.filter(e => {
       return (![firstCoin, secondCoin].includes(e))
     });
@@ -67,7 +66,7 @@ const ImportPool: React.FC<props> = (props) => {
             />}
           </CoinSelection>
           <PlusMinusArrow>
-            <img src={plus} />
+            <img src={plus}  alt={''}/>
           </PlusMinusArrow>
           <CoinSelection onClick={() => {
             if (dropDownNo === 2){
@@ -182,7 +181,7 @@ const CardTitle = styled.p`
   line-height: 24px;
   text-align: center;
   color: rgba(255, 255, 255);
-  margin: 0px;
+  margin: 0;
 `
 
 const CoinSelection = styled.div`
@@ -237,7 +236,7 @@ const ActionMessage = styled.p`
   line-height: 20px;
   text-align: center;
   color: #F7653B;
-  margin: 0px;
+  margin: 0;
   cursor: pointer;
 `
 
@@ -267,7 +266,7 @@ const OneLine = styled.div`
 `
 
 const TextWithIcon = styled.div`
-  ont-family: Inter;
+  font-family: Inter;
   font-style: normal;
   font-weight: 600;
   font-size: 14px;

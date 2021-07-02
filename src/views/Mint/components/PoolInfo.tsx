@@ -24,7 +24,7 @@ interface IProps {
 export default ({ selectedCollateralCoin }: IProps) => {
   const { isLoading: isGlobalCollateraLoading, value: cr } = useGlobalCollateralRatio();
   const { isLoading: isARTHXOracleLoading, value: arthxPrice } = useARTHXOraclePrice();
-  const { isLoading: isCollateralPoolLoading, value: poolBalance } = useCollateralPoolBalance(selectedCollateralCoin);;
+  const { isLoading: isCollateralPoolLoading, value: poolBalance } = useCollateralPoolBalance(selectedCollateralCoin);
   const { isLoading: isPoolMintingLoading, value: mintingFee } = usePoolMintingFees(selectedCollateralCoin);
   const { isLoading: isPoolRedeemFeesLoading, value: redeemingFee } = usePoolRedeemFees(selectedCollateralCoin);
   const { isLoading: isStabilityFeeLoading, value: stabilityFee } = useStabilityFee();
@@ -189,7 +189,6 @@ const OneLineInput = styled.div`
   flex-direction: row;
   align-items: baseline;
   justify-content: flex-start;
-  margin: 5px 0 10px 0;
 `;
 
 const TextForInfoTitle = styled.div`

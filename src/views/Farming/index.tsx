@@ -5,7 +5,6 @@ import { Grid } from '@material-ui/core';
 import Container from '../../components/Container';
 import FarmingCards from './components/FarmingCards';
 import PageHeader from '../../components/PageHeader';
-import { WalletAutoConnect } from '../../components/WalletAutoConnect';
 
 import { stakingContracts } from '../../config';
 
@@ -17,10 +16,8 @@ export interface ModeProps {
 
 const Banks = () => {
   let initMode = { id: 'all', name: 'All', count: 3 };
-  
+
   const [mode, setMode] = useState<ModeProps>(initMode);
-  
-  WalletAutoConnect();
 
   let headerList: ModeProps[] = [
     {
@@ -61,9 +58,9 @@ const Banks = () => {
                   style={
                     mode.name === obj.name
                       ? {
-                          background: mode.name === obj.name ? '#423B38' : 'transparent',
-                          border: '1px solid rgba(255, 255, 255, 0.08)',
-                        }
+                        background: mode.name === obj.name ? '#423B38' : 'transparent',
+                        border: '1px solid rgba(255, 255, 255, 0.08)',
+                      }
                       : {}
                   }
                   key={obj?.id}
@@ -114,9 +111,10 @@ const TextDiv = styled.div`
   justify-content: center;
   flex-direction: row;
   border-radius: 4px;
-  margin: 0px 6px;
-  padding: 0px 12px;
+  margin: 0 6px;
+  padding: 0 12px;
   cursor: pointer;
+
   &:hover {
     background: #423b3860;
   }
@@ -124,7 +122,7 @@ const TextDiv = styled.div`
 
 const ScrollDiv = styled.div`
   ::-webkit-scrollbar {
-    height: 0px;
+    height: 0;
     background: transparent; /* make scrollbar transparent */
   }
 `;
@@ -149,7 +147,7 @@ const Text2 = styled.p`
   font-size: 12px;
   line-height: 130%;
   color: #ffffff;
-  margin: 0px 5px;
+  margin: 0 5px;
 `;
 
 export default Banks;

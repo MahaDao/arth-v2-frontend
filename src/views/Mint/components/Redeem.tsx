@@ -1,31 +1,26 @@
 import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
 import Grid from '@material-ui/core/Grid';
-import { Divider } from '@material-ui/core';
 import { parseUnits } from 'ethers/lib/utils';
 import { BigNumber } from '@ethersproject/bignumber';
 import React, { useEffect, useMemo, useState } from 'react';
-import { withSnackbar, WithSnackbarProps } from 'notistack';
 import Loader from 'react-spinners/BeatLoader';
 
 import plusSign from '../../../assets/svg/plus.svg';
 import arrowDown from '../../../assets/svg/arrowDown.svg';
 
 import PoolInfo from './PoolInfo';
-import TransparentInfoDiv from './InfoDiv';
 import Button from '../../../components/Button';
-import CustomModal from '../../../components/CustomModal';
-import { CustomSnack } from '../../../components/SnackBar';
 import CustomSuccessModal from '../../../components/CustomSuccesModal';
 import SlippageContainer from '../../../components/SlippageContainer';
 import CustomInputContainer from '../../../components/CustomInputContainer';
 import { ValidateNumber } from '../../../components/CustomInputContainer/RegexValidation';
+import RedeemModal from './RedeemModal';
 
 import useCore from '../../../hooks/useCore';
 import useTokenDecimals from '../../../hooks/useTokenDecimals';
 import { getDisplayBalance } from '../../../utils/formatBalance';
 import useTokenBalance from '../../../hooks/state/useTokenBalance';
-import useRedeemARTH from '../../../hooks/callbacks/pools/useRedeemARTH';
 import useARTHXPrice from '../../../hooks/state/controller/useARTHXPrice';
 import useStabilityFee from '../../../hooks/state/controller/useStabilityFee';
 import usePoolRedeemFees from '../../../hooks/state/pools/usePoolRedeemFees';
@@ -38,13 +33,12 @@ interface IProps {
   setType: (type: 'mint' | 'redeem') => void;
 }
 
-const RedeemTabContent = (props: WithSnackbarProps & IProps) => {
+const RedeemTabContent = (props: IProps) => {
   const [arthValue, setArthValue] = useState<string>('0');
   const [arthxValue, setArthxValue] = useState<string>('0');
   const [collateralValue, setCollateralValue] = useState<string>('0');
 
-  const [openModal, setOpenModal] = useState<0 | 1 | 2>(0);
-  const [successModal, setSuccessModal] = useState<boolean>(false);
+  const [openModal, setOpenModal] = useState<boolean>(false);
   const [isInputFieldError, setIsInputFieldError] = useState<boolean>(false);
   const [successCollectModal, setSuccessCollectModal] = useState<boolean>(false);
 
@@ -106,26 +100,12 @@ const RedeemTabContent = (props: WithSnackbarProps & IProps) => {
     ]
   }, [collateralValue, tokenDecimals, collateralOutMinAfterFee, isRedeemFeeLoading]);
 
-  const redeemARTH = useRedeemARTH(
-    selectedCollateral,
-    BigNumber.from(parseUnits(`${arthValue}`, 18)),
-    BigNumber.from(parseUnits(`${arthxValue}`, 18)),
-    collateralOutMinAfterFee
-  );
-
   const stabilityFeeAmount = useMemo(() => {
     return BigNumber
       .from(parseUnits(`${arthValue}`, 18))
       .mul(stabilityFee)
       .div(1e6);
   }, [arthValue, stabilityFee]);
-
-  const handleRedeem = () => {
-    redeemARTH(() => {
-      setOpenModal(2);
-      setSuccessModal(true);
-    });
-  };
 
   const isWalletConnected = !!account;
   const isMAHAApproving = mahaApproveStatus === ApprovalState.PENDING;
@@ -264,107 +244,25 @@ const RedeemTabContent = (props: WithSnackbarProps & IProps) => {
 
   return (
     <>
-      <CustomModal
-        closeButton
-        handleClose={() => setOpenModal(0)}
-        open={openModal === 1}
-        modalTitleStyle={{}}
-        modalContainerStyle={{}}
-        modalBodyStyle={{}}
-        title={`Confirm Redeem ARTH`}
-      >
-        <>
-          <TransparentInfoDiv
-            labelData={`Your ARTH redeem amount`}
-            rightLabelUnit={'ARTH'}
-            rightLabelValue={Number(arthValue).toLocaleString()}
-          />
+      <RedeemModal
+        openModal={openModal}
+        isInputFieldError={isInputFieldError}
+        selectedCollateralCoin={selectedCollateral}
+        collateralValue={collateralValue}
+        arthValue={arthValue}
+        arthxValue={arthxValue}
+        redeemCR={redeemCR}
+        tradingFee={tradingFee}
+        stabilityFee={stabilityFee}
+        onClose={() => setOpenModal(false)}
+        onSuccess={() => {
+          onCollateralValueChange('')
+          setOpenModal(false)
+        }}
+        isArthMahaArthxApproved={isArthMahaArthxApproved}
+        collateralOutMinAfterFee={collateralOutMinAfterFee}
+      />
 
-          <TransparentInfoDiv
-            labelData={`Your ARTHX redeem amount`}
-            rightLabelUnit={'ARTHX'}
-            rightLabelValue={Number(arthxValue).toLocaleString()}
-          />
-
-          <TransparentInfoDiv
-            labelData={`Trading Fee`}
-            rightLabelUnit={selectedCollateral}
-            rightLabelValue={
-              Number(getDisplayBalance(tradingFee, tokenDecimals))
-                .toLocaleString('en-US', { maximumFractionDigits: tokenDecimals })
-            }
-          />
-
-          <TransparentInfoDiv
-            labelData={`Stability Fee`}
-            rightLabelUnit={'MAHA'}
-            rightLabelValue={
-              Number(getDisplayBalance(stabilityFeeAmount, 18, 3))
-                .toLocaleString('en-US', { maximumFractionDigits: 2 })
-            }
-          />
-
-          <Divider
-            style={{
-              background: 'rgba(255, 255, 255, 0.08)',
-              margin: '15px 0px',
-            }}
-          />
-
-          <TransparentInfoDiv
-            labelData={`You will receive collateral`}
-            labelToolTipData={'testing'}
-            rightLabelUnit={selectedCollateral}
-            rightLabelValue={Number(collateralValue).toLocaleString()}
-          />
-
-          <div
-            style={{
-              flexDirection: 'column-reverse',
-              display: 'flex',
-              width: '100%',
-              marginTop: '10%',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginBottom: 8,
-            }}
-          >
-            <div style={{ flex: 1, width: '100%', marginTop: 10 }}>
-              <Button
-                variant={'transparent'}
-                text="Cancel"
-                size={'lg'}
-                onClick={() => {
-                  setOpenModal(0);
-                  let options = {
-                    content: () =>
-                      CustomSnack({
-                        onClose: props.closeSnackbar,
-                        type: 'red',
-                        data1: `Redeeming ${Number(arthValue).toLocaleString()} ARTH cancelled`,
-                      }),
-                  };
-                  props.enqueueSnackbar('timepass', options);
-                }}
-              />
-            </div>
-            <div style={{ width: '100%' }}>
-              <Button
-                disabled={
-                  redeemCR.lte(1e6) ||
-                  isInputFieldError ||
-                  !isArthMahaArthxApproved ||
-                  !Number(collateralValue) ||
-                  !Number(arthValue)
-                }
-                text={'Redeem ARTH'}
-                size={'lg'}
-                onClick={handleRedeem}
-              />
-            </div>
-          </div>
-        </>
-      </CustomModal>
       <Grid container style={{ marginTop: '24px' }} spacing={2}>
         <Grid item lg={1} />
         <Grid item lg={5} md={12} sm={12} xs={12}>
@@ -401,6 +299,7 @@ const RedeemTabContent = (props: WithSnackbarProps & IProps) => {
                     ? 'Currently Redeem Collateral ratio is not 100%'
                     : ''
                 }
+                tokenDecimals={18}
               />
               <PlusMinusArrow>
                 <img src={plusSign} alt="plus" />
@@ -424,6 +323,7 @@ const RedeemTabContent = (props: WithSnackbarProps & IProps) => {
                     ? 'Currently Redeem Collateral ratio is not 100%'
                     : ''
                 }
+                tokenDecimals={18}
               />
               <PlusMinusArrow>
                 <img src={arrowDown} alt="arrow" />
@@ -439,9 +339,9 @@ const RedeemTabContent = (props: WithSnackbarProps & IProps) => {
                 dropDownValues={collateralTypes}
                 ondropDownValueChange={(data) => {
                   setSelectedReceiveRedeemCoin(data);
-                  setTimeout(() => {
-                    onCollateralValueChange(collateralValue.toString());
-                  }, 1000);
+                  // setTimeout(() => {
+                  //   onCollateralValueChange(collateralValue.toString());
+                  // }, 1000);
                 }}
                 disabled={redeemCR.lte(1e6) || isCollateralBalanceLoading || isCollateralPriceLoading}
                 SymbolText={selectedCollateral}
@@ -450,6 +350,7 @@ const RedeemTabContent = (props: WithSnackbarProps & IProps) => {
                     ? 'Currently Redeem Collateral ratio is not 100%'
                     : ''
                 }
+                tokenDecimals={tokenDecimals}
               />
               <div>
                 <OneLineInputwomargin>
@@ -566,7 +467,7 @@ const RedeemTabContent = (props: WithSnackbarProps & IProps) => {
                           !Number(collateralValue) ||
                           !Number(arthValue)
                         }
-                        onClick={() => setOpenModal(1)}
+                        onClick={() => setOpenModal(true)}
                       />
                     </ApproveButtonContainer>
                     <br />
@@ -576,7 +477,10 @@ const RedeemTabContent = (props: WithSnackbarProps & IProps) => {
                       text={'Redeem'}
                       size={'lg'}
                       variant={'default'}
-                        onClick={() => collectRedeemption(() => setSuccessCollectModal(true))}
+                        onClick={() => collectRedeemption(() => {
+                          onARTHXValueChange('');
+                          setSuccessCollectModal(true)
+                        })}
                     />
                   </>
                 )}
@@ -590,13 +494,6 @@ const RedeemTabContent = (props: WithSnackbarProps & IProps) => {
         <Grid item lg={1} />
       </Grid>
       <CustomSuccessModal
-        modalOpen={successModal}
-        setModalOpen={() => setSuccessModal(false)}
-        title={'Redeeming ARTH successful!'}
-        subTitle={''}
-        subsubTitle={'Your ARTH has now been redeemed for its underlying collateral'}
-      />
-      <CustomSuccessModal
         modalOpen={successCollectModal}
         setModalOpen={() => setSuccessCollectModal(false)}
         title={'Collecting redeemed collateral successful!'}
@@ -605,7 +502,7 @@ const RedeemTabContent = (props: WithSnackbarProps & IProps) => {
       />
     </>
   );
-};
+}
 
 const OneLineInputwomargin = styled.div`
   display: flex;
@@ -694,7 +591,7 @@ const TextWithIcon = styled.div`
   color: rgba(255, 255, 255, 0.88);
 `;
 const BeforeChip = styled.span`
-  ont-family: Inter;
+  font-family: Inter;
   font-style: normal;
   font-weight: 300;
   font-size: 12px;
@@ -717,4 +614,4 @@ const ApproveButtonContainer = styled.div`
   display: flex;
 `;
 
-export default withSnackbar(RedeemTabContent);
+export default RedeemTabContent;

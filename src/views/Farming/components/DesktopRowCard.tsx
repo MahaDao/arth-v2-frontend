@@ -16,7 +16,7 @@ import useCore from '../../../hooks/useCore';
 import { platformURL } from '../../../config';
 import { StakingContract } from '../../../basis-cash';
 import useTokenDecimals from '../../../hooks/useTokenDecimals';
-import { getDisplayBalance } from '../../../utils/formatBalance';
+import { getDisplayBalance, getDisplayBalanceToken } from '../../../utils/formatBalance';
 import useTokenBalance from '../../../hooks/state/useTokenBalance';
 import config from '../../../config';
 
@@ -27,6 +27,10 @@ type IProps = {
   rates: {
     maha: BigNumber;
     arthx: BigNumber;
+  };
+  apyState: {
+    isLoading: boolean;
+    apy: string;
   };
   onDepositClick: () => void;
   onWithdrawClick: () => void;
@@ -50,21 +54,33 @@ export default (props: IProps) => {
 
   const pow = BigNumber.from(10).pow(18);
 
-  const currentEarnedARTHX = useMemo(() => {
-    return Number(getDisplayBalance(
-      props?.claimableBalance?.mul(props?.rates?.arthx).div(pow),
-      18,
-      6
-    ))
-  }, [props, pow]);
+  const initEarnedARTHX = useMemo(() => {
+    if (props.pool.rewardTokenKind === 'pool-token') {
+      return Number(getDisplayBalanceToken(
+        props?.claimableBalance?.mul(props?.rates?.arthx).div(pow),
+        core.tokens.ARTHX,
+        6
+      ))
+    }
 
-  const currentEarnedMAHA = useMemo(() => {
-    return Number(getDisplayBalance(
-      props?.claimableBalance?.mul(props?.rates?.maha).div(pow),
-      18,
-      6
-    ))
-  }, [props, pow]);
+    if (props.pool.rewardTokenKind === 'single') {
+      return Number(getDisplayBalanceToken(props?.claimableBalance, core.tokens.ARTHX, 6))
+    }
+  }, [props, pow, core.tokens.ARTHX]);
+
+  const initEarnedMAHA = useMemo(() => {
+    if (props.pool.rewardTokenKind === 'pool-token') {
+      return Number(getDisplayBalanceToken(
+        props?.claimableBalance?.mul(props?.rates?.maha).div(pow),
+        core.tokens.MAHA,
+        6
+      ))
+    }
+
+    if (props.pool.rewardTokenKind === 'single') {
+      return Number(getDisplayBalanceToken(props?.claimableBalance, core.tokens.MAHA, 6))
+    }
+  }, [props, pow, core.tokens.MAHA]);
 
   const getImage = (platform: string) => {
     if (platform === 'sushiswap') return sushiswap;
@@ -124,10 +140,17 @@ export default (props: IProps) => {
           </TableMainTextStyle>
         </Grid>
         <Grid item lg={2}>
-          <TableMainTextStyle>{/* {props?.apy} */}</TableMainTextStyle>
+          <TableMainTextStyle>{
+            props?.apyState?.isLoading
+              ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
+              : props?.apyState?.apy
+          }</TableMainTextStyle>
         </Grid>
         <Grid item lg={2}>
-          <TableMainTextStyle>MAHA + ARTHX</TableMainTextStyle>
+          <TableMainTextStyle>
+            {props.pool.rewardTokenKind === 'pool-token' && 'ARTHX +'}
+            MAHA
+          </TableMainTextStyle>
         </Grid>
         <Grid item lg={2}>
           {
@@ -156,7 +179,7 @@ export default (props: IProps) => {
         props.stakedBalance.gt(0) && (
           <DepositInfoContainer>
             <div style={{ display: 'flex' }}>
-              Your Locked state:
+              Your Locked stake:
               <TableMainTextStyle style={{ marginLeft: '10px' }}>
                 {Number(getDisplayBalance(props.stakedBalance, tokenDecimals, 3)).toLocaleString()}
               </TableMainTextStyle>
@@ -169,11 +192,27 @@ export default (props: IProps) => {
               <>
                 Earned:
                 <TableMainTextStyle style={{ marginLeft: '10px' }}>
-                  <span>{currentEarnedARTHX}</span>
-                  {' '}
-                  ARTHX
-                  {' + '}
-                  <span>{currentEarnedMAHA}</span>
+                  {
+                    props.pool.rewardTokenKind === 'pool-token' && (
+                      <span>
+                        {
+                          Number(initEarnedARTHX)
+                            .toLocaleString('en-US', { maximumFractionDigits: 6 })
+                        }
+                      </span>
+                    )
+                  }
+                  {
+                    props.pool.rewardTokenKind === 'pool-token' && (
+                      ' ARTHX + '
+                    )
+                  }
+                  <span>
+                    {
+                      Number(initEarnedMAHA)
+                        .toLocaleString('en-US', { maximumFractionDigits: 6 })
+                    }
+                  </span>
                   {' '}
                   MAHA
                 </TableMainTextStyle>
@@ -194,7 +233,7 @@ const CustomCardGrid = styled.div`
   border: 1px solid rgba(255, 255, 255, 0.16);
   box-sizing: border-box;
   border-radius: 12px;
-  margin: 8px 0px;
+  margin: 8px 0;
   position: relative;
 `;
 
@@ -218,17 +257,6 @@ const AddLiquidityButton = styled.p`
   color: #ff7f57;
   margin: 0;
   cursor: pointer;
-`;
-
-const DayText = styled.p`
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 300;
-  font-size: 14px;
-  line-height: 140%;
-  color: rgba(255, 255, 255, 0.64);
-  opacity: 0.88;
-  margin: 0;
 `;
 
 const DepositInfoContainer = styled.div`
@@ -263,6 +291,6 @@ const CardIcon = styled.img`
   transform: translate(-50%, -50%);
   position: absolute;
   top: 50%;
-  left: 0px;
+  left: 0;
   z-index: 10;
 `;

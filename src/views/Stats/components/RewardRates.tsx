@@ -1,8 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import InfoIcon from '@material-ui/icons/Info';
 
-import HtmlTooltip from '../../../components/HtmlTooltip';
 import CustomToolTip from '../../../components/CustomTooltip';
 
 const BondingDiscount: React.FC = () => {
@@ -87,20 +85,8 @@ const BeforeChip = styled.span`
   color: #ffffff;
 `;
 
-const TagChips = styled.div`
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 4px;
-  padding: 2px 8px;
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 300;
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.64);
-`;
 
-const ToolTipFont = styled.p`
-  padding: 0px;
-  margin: 0px;
-`;
+
+
 
 export default BondingDiscount;

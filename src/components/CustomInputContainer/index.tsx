@@ -38,6 +38,7 @@ type props = {
   DisableMsg?: string;
   errorCallback?: (flag: boolean) => void;
   isBalanceLoading?: boolean;
+  tokenDecimals?: number;
 };
 
 interface ICStatesInterface {
@@ -67,6 +68,7 @@ const CustomInputContainer: React.FC<props> = (props) => {
     IWarningstate = 'default',
     warningMsg = '',
     isBalanceLoading = false,
+    tokenDecimals = 6,
   } = props;
 
   const [ICStates, setICStates] = useState<ICStatesInterface>({ IState: Istate, IMsg: msg });
@@ -120,11 +122,11 @@ const CustomInputContainer: React.FC<props> = (props) => {
       }
     }
 
-    let DigitsStatus = true
-    if (!checkForAfterDecimalDigits(val)) {
+    let DigitsStatus = true;
+    if (!checkForAfterDecimalDigits(val, tokenDecimals)) {
       const temp: ICStatesInterface = {
         IWarningState: 'warning',
-        IMsg: 'Only 7 digits before decimal and 6 digits after decimal is allowed.',
+        IMsg: `Only 14 digits before decimal and ${tokenDecimals} digits after decimal is allowed.`,
       };
       setICWarningStates(temp);
       DigitsStatus = false
@@ -147,6 +149,18 @@ const CustomInputContainer: React.FC<props> = (props) => {
     return returnObj;
   }
 
+  const onValueChange = (value: string) => {
+    if (value === '') {
+    } else {
+      if (!ValidateNumber(value)) return
+    }
+
+    if (Number(value) && Number(value) <= 0) return;
+    checkForErrorAndWarning(value).then((data) => {
+      if (data) props?.setText(value.length > 1 ? correctString(value) : value);
+    })
+  }
+
   return (
     <div style={{ position: 'relative' }}>
       {DisableMsg !== '' && <TotalDisable><DMsg>{DisableMsg}</DMsg></TotalDisable>}
@@ -157,9 +171,9 @@ const CustomInputContainer: React.FC<props> = (props) => {
             {ILabelInfoValue !== '' && Redirection()}
           </ILabelLeft>
           <ILabelRight>
-            { isBalanceLoading
-                ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
-                : showBalance && <ILabelBalance>{`Balance  ${Number(IBalanceValue).toLocaleString()}`}</ILabelBalance>
+            {isBalanceLoading && showBalance
+              ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
+              : showBalance && <ILabelBalance>{`Balance  ${Number(IBalanceValue).toLocaleString()}`}</ILabelBalance>
             }
           </ILabelRight>
         </ILabelContainer>
@@ -177,18 +191,7 @@ const CustomInputContainer: React.FC<props> = (props) => {
             }}
             disabled={disabled}
             type={'string'}
-            onChange={(event) => {
-              const value = event.target.value;
-              if (value === '') {
-              } else {
-                if (!ValidateNumber(value)) return
-              }
-
-              if (Number(value) && Number(value) <= 0) return;
-              checkForErrorAndWarning(value).then((data) => {
-                if (data) props?.setText(value.length > 1 ? correctString(value) : value);
-              })
-            }}
+            onChange={(event) => onValueChange(event.target.value)}
           />
           {tagText !== '' && (
             <MaxTagConatiner
@@ -244,7 +247,10 @@ const CustomInputContainer: React.FC<props> = (props) => {
             {modalOpen && hasDropDown && ondropDownValueChange && (
               <CustomDropDown
                 dropDownValues={dropDownValues}
-                ondropDownValueChange={ondropDownValueChange}
+                ondropDownValueChange={(data) => {
+                  onValueChange('')
+                  ondropDownValueChange(data)
+                }}
               />
             )}
           </IFieldRightContainer>
@@ -366,7 +372,7 @@ const IFieldConatiner = styled.div`
 const IFieldRightContainer = styled.div`
   padding: 10px 12px;
   background: #1f1e1e;
-  border-radius: 0px 6px 6px 0px;
+  border-radius: 0 6px 6px 0;
   display: flex;
   align-items: center;
   position: relative;
@@ -380,7 +386,7 @@ const MaxTagConatiner = styled.div`
   color: #f7653b;
   padding: 10px 12px;
   background: transparent;
-  border-radius: 0px 6px 6px 0px;
+  border-radius: 0 6px 6px 0;
   display: flex;
   align-items: center;
   position: relative;

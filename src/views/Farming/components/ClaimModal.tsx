@@ -1,14 +1,16 @@
-import React, {useMemo} from 'react';
+import React, { useMemo } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { BigNumber } from '@ethersproject/bignumber';
 
 import Button from '../../../components/Button';
 import CustomModal from '../../../components/CustomModal';
-import TransparentInfoDiv from '../../Genesis/components/InfoDiv';
 
+import useCore from '../../../hooks/useCore';
 import { StakingContract } from '../../../basis-cash';
-import { getDisplayBalance } from '../../../utils/formatBalance';
+import { getDisplayBalanceToken } from '../../../utils/formatBalance';
 import useStakingClaim from '../../../hooks/callbacks/staking/useStakingClaim';
+import TransparentInfoDiv from '../../../components/CustomTransparentInfoDiv/InfoDiv';
+
 
 interface IProps {
   toggleSuccessModal?: () => void;
@@ -26,8 +28,11 @@ interface IProps {
 }
 
 export default (props: IProps) => {
-  const claim = useStakingClaim(props.pool.contract);
-  
+  const claim = useStakingClaim(
+    props.pool.contract,
+    props.pool.rewardTokenKind
+  );
+
   const handleClaim = () => {
     claim(() => {
       props.onCancel();
@@ -35,22 +40,36 @@ export default (props: IProps) => {
     });
   }
 
+  const core = useCore()
   const pow = BigNumber.from(10).pow(18);
+
   const initEarnedARTHX = useMemo(() => {
-    return Number(getDisplayBalance(
-      props?.claimableBalance?.mul(props?.rates?.arthx).div(pow),
-      18,
-      6
-    ))
-  }, [props, pow]);
+    if (props.pool.rewardTokenKind === 'pool-token') {
+      return Number(getDisplayBalanceToken(
+        props?.claimableBalance?.mul(props?.rates?.arthx).div(pow),
+        core.tokens.ARTHX,
+        6
+      ))
+    }
+
+    if (props.pool.rewardTokenKind === 'single') {
+      return Number(getDisplayBalanceToken(props?.claimableBalance, core.tokens.ARTHX, 6))
+    }
+  }, [props, pow, core.tokens.ARTHX]);
 
   const initEarnedMAHA = useMemo(() => {
-    return Number(getDisplayBalance(
-      props?.claimableBalance?.mul(props?.rates?.maha).div(pow),
-      18,
-      6
-    ))
-  }, [props, pow]);
+    if (props.pool.rewardTokenKind === 'pool-token') {
+      return Number(getDisplayBalanceToken(
+        props?.claimableBalance?.mul(props?.rates?.maha).div(pow),
+        core.tokens.MAHA,
+        6
+      ))
+    }
+
+    if (props.pool.rewardTokenKind === 'single') {
+      return Number(getDisplayBalanceToken(props?.claimableBalance, core.tokens.MAHA, 6))
+    }
+  }, [props, pow, core.tokens.MAHA]);
 
   return (
     <CustomModal
@@ -63,20 +82,24 @@ export default (props: IProps) => {
       title={`Claim Your Rewards`}
     >
       <>
-        <TransparentInfoDiv
-          labelData={`You will receive`}
-          rightLabelUnit={'ARTHX'}
-          rightLabelValue={
-            Number(initEarnedARTHX)
-              .toLocaleString('en-US', { maximumFractionDigits: 6 })
-          }
-        />
+        {
+          props.pool.rewardTokenKind === 'pool-token' &&
+          <TransparentInfoDiv
+            labelData={`You will receive`}
+            rightLabelUnit={'ARTHX'}
+            rightLabelValue={
+              Number(initEarnedARTHX)
+                .toLocaleString('en-US', { maximumFractionDigits: 6 })
+            }
+          />
+        }
+
         <TransparentInfoDiv
           labelData={`You will receive`}
           rightLabelUnit={'MAHA'}
           rightLabelValue={
             Number(initEarnedMAHA)
-              .toLocaleString('en-US', {maximumFractionDigits: 6})
+              .toLocaleString('en-US', { maximumFractionDigits: 6 })
           }
         />
         <Grid
@@ -99,8 +122,8 @@ export default (props: IProps) => {
           <Grid item lg={6} md={6} sm={12} xs={12}>
             <Button
               disabled={
-                !Number(initEarnedARTHX) || 
-                !Number(initEarnedMAHA)
+                !Number(initEarnedMAHA) ||
+                (props.pool.rewardTokenKind && !Number(initEarnedARTHX))
               }
               text={'Claim'}
               size={'lg'}

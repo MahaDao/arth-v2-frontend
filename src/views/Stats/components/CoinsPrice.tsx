@@ -3,12 +3,10 @@ import styled from 'styled-components';
 import Loader from 'react-spinners/BeatLoader';
 
 import { getDisplayBalance } from '../../../utils/formatBalance';
-import useARTHOraclePrice from '../../../hooks/state/controller/useARTHPrice';
 import useMAHAOraclePrice from '../../../hooks/state/controller/useMAHAPrice';
 import useARTHXOraclePrice from '../../../hooks/state/controller/useARTHXPrice';
 
 const CoinsPrice: React.FC = () => {
-  const { isLoading: isARTHPriceLoading, value: arthPrice } = useARTHOraclePrice();
   const { isLoading: isMAHAPriceLoading, value: mahaPrice } = useMAHAOraclePrice();
   const { isLoading: isARTHXPriceLoading, value: arthxPrice } = useARTHXOraclePrice();
 
@@ -18,17 +16,10 @@ const CoinsPrice: React.FC = () => {
         <OneLine style={{ marginTop: '0px' }}>
           <div>
             <TextWithIcon>ARTH Current Price</TextWithIcon>
+          </div>
+          <div>
             <TargetPriceTag>Target Price: $1.00</TargetPriceTag>
           </div>
-          {/* <div>
-            <BeforeChip>
-              {isARTHPriceLoading
-                ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
-                : Number(getDisplayBalance(arthPrice, 6, 6))
-                  .toLocaleString('en-US', { maximumFractionDigits: 6 })
-              }
-            </BeforeChip>
-          </div> */}
         </OneLine>
         <OneLine>
           <div>
@@ -106,32 +97,11 @@ const BeforeChip = styled.span`
   color: #ffffff;
 `;
 
-const TagChips = styled.div`
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 4px;
-  padding: 2px 8px;
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 300;
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.64);
-`;
 
-const ToolTipFont = styled.p`
-  padding: 0px;
-  margin: 0px;
-`;
 
-const PercentChange = styled.p`
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 300;
-  font-size: 12px;
-  line-height: 130%;
-  text-align: right;
-  color: #178a50;
-  margin: 0;
-`;
+
+
+
 
 const TargetPriceTag = styled.p`
   background: #423b38;

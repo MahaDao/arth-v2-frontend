@@ -3,6 +3,7 @@
   "version": "1.3.0",
   "private": true,
   "dependencies": {
+    "@dfyn/sdk": "^0.0.5",
     "@ethersproject/providers": "^5.0.9",
     "@fortawesome/fontawesome-svg-core": "^1.2.30",
     "@fortawesome/free-solid-svg-icons": "^5.14.0",
@@ -67,7 +68,7 @@
     "web3": "^1.2.11"
   },
   "scripts": {
-    "start": "REACT_APP_NETWORK=ethereum react-scripts start",
+    "start": "REACT_APP_NETWORK=stagingMaticMainnet react-scripts start",
     "push": "npm run build && echo 'arthcoin.com' > build/CNAME && gh-pages --dist build",
     "push-polygon": "REACT_APP_NETWORK=matic npm run build && echo 'polygon.arthcoin.com' > build/CNAME && gh-pages -r git@github.com:MahaDAO/polygon.arthcoin.com.git --dist build",
     "push-eth": "REACT_APP_NETWORK=ethereum npm run build && echo 'ethereum.arthcoin.com' > build/CNAME && gh-pages -r git@github.com:MahaDAO/ethereum.arthcoin.com.git --dist build",

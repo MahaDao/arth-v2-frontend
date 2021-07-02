@@ -28,7 +28,6 @@ import TicketGreen from '../../assets/svg/TicketGreen.svg';
 
 import Button from '../../components/Button';
 import Container from '../../components/Container';
-import TransparentInfoDiv from './components/InfoDiv';
 import CustomModal from '../../components/CustomModal';
 import { CustomSnack } from '../../components/SnackBar';
 import prettyNumber from '../../components/PrettyNumber';
@@ -56,6 +55,7 @@ import useRecollateralizationDiscount from '../../hooks/state/controller/useReco
 import config from '../../config';
 import DepositModal from './components/DepositModal';
 import { Mixpanel } from '../../analytics/Mixpanel';
+import TransparentInfoDiv from '../../components/CustomTransparentInfoDiv/InfoDiv';
 
 withStyles({
   root: {
@@ -370,9 +370,9 @@ const Genesis = (props: WithSnackbarProps) => {
         subsubTitle={
           'Your transaction is now being mined on the blockchain. You should consider adding collateral to earn NFT rewards.'
         }
-        // buttonText={'Stake your ARTHX'}
-        // buttonType={'default'}
-        // buttonTo={'/farming'}
+      // buttonText={'Stake your ARTHX'}
+      // buttonType={'default'}
+      // buttonTo={'/farming'}
       />
       <CustomModal
         closeButton
@@ -773,7 +773,7 @@ const Genesis = (props: WithSnackbarProps) => {
                       />
                     ) : (
                       <Button
-                        text={type === 'Commit' ? 'Commit Collateral' : 'Swap ARTH'}
+                        text={type === 'Commit' ? 'Commit Collateral' : 'Swap ARTH is disabled'}
                         size={'lg'}
                         variant={'default'}
                         disabled={
@@ -781,8 +781,8 @@ const Genesis = (props: WithSnackbarProps) => {
                           isInputFieldError ||
                           (type === 'Commit'
                             ? !Number(collateralValue) ||
-                              percentageCompleted.gt(BigNumber.from(10).pow(18))
-                            : !Number(arthValue)) ||
+                            percentageCompleted.gt(BigNumber.from(10).pow(18))
+                            : true) ||
                           !isApproved
                         }
                         onClick={() => setOpenModal(1)}
@@ -821,18 +821,18 @@ const Genesis = (props: WithSnackbarProps) => {
       </Container>
 
       {depositModal && (
-        <DepositModal onCancel={() => setdepositModal(false)} onDeposit={() => {}} />
+        <DepositModal onCancel={() => setdepositModal(false)} onDeposit={() => { }} />
       )}
 
       <CustomSuccessModal
         modalOpen={successModal}
         setModalOpen={() => setSuccessModal(false)}
         title={'Minting ARTHX successful!'}
-        // subsubTitle={'You should consider stake your ARTHX to earn higher APY'}
-        // subTitleLink={'/#/farming'}
-        // buttonText={'Stake your ARTHX'}
-        // buttonType={'default'}
-        // buttonHref={'/#/farming'}
+      // subsubTitle={'You should consider stake your ARTHX to earn higher APY'}
+      // subTitleLink={'/#/farming'}
+      // buttonText={'Stake your ARTHX'}
+      // buttonType={'default'}
+      // buttonHref={'/#/farming'}
       />
     </>
   );

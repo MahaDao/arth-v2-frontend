@@ -1,57 +1,100 @@
-import React, { useEffect, useState } from 'react';
+import { BigNumber } from 'ethers';
+import { useWallet } from 'use-wallet';
 import styled from 'styled-components';
-import useCore from '../../../hooks/useCore';
 import Grid from '@material-ui/core/Grid';
-import Button from '../../../components/Button';
-import arrowDown from '../../../assets/svg/arrowDown.svg';
 import { Divider } from '@material-ui/core';
-import TransparentInfoDiv from './InfoDiv';
-import CustomInputContainer from '../../../components/CustomInputContainer';
+import { parseUnits } from 'ethers/lib/utils';
+import Loader from 'react-spinners/BeatLoader';
+import React, { useEffect, useMemo, useState } from 'react';
+
+import arrowDown from '../../../assets/svg/arrowDown.svg';
+
+import TransparentInfoDiv from '../../../components/CustomTransparentInfoDiv/InfoDiv';
+import Button from '../../../components/Button';
+
 import CustomModal from '../../../components/CustomModal';
-import { CustomSnack } from '../../../components/SnackBar';
-import { withSnackbar, WithSnackbarProps } from 'notistack';
 import CustomToolTip from '../../../components/CustomTooltip';
+import CustomInputContainer from '../../../components/CustomInputContainer';
+import { ValidateNumber } from '../../../components/CustomInputContainer/RegexValidation';
 
-const SellContent = (props: WithSnackbarProps) => {
+import useCore from '../../../hooks/useCore';
+import useDFYNPrice from '../../../hooks/state/pairs/useDFYNPrice';
+import useARTHXTaxFee from '../../../hooks/state/useARTHXTaxFee';
+import useTokenBalance from '../../../hooks/state/useTokenBalance';
+import { getDisplayBalanceToken } from '../../../utils/formatBalance';
+import useARTHXBuyAmount from '../../../hooks/state/pairs/useARTHXBuyAmount';
+import useSellARTHX from '../../../hooks/callbacks/pairs/useSellARTHX';
+import useApprove, { ApprovalState } from '../../../hooks/callbacks/useApprove';
+
+const SellContent = () => {
   useEffect(() => window.scrollTo(0, 0), []);
-  const core = useCore();
 
-  const [sellAmount, setSellAmount] = useState<string>('0.00');
-  const [sellReceive, setSellReceive] = useState<string>('0.00');
-
+  const [sellAmount, setSellAmount] = useState<string>('0');
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [isInputFieldError, setIsInputFieldError] = useState<boolean>(false);
 
-  const [selectedAmountCoin, setSelectedAmountCoin] = useState<string>('ETH');
-  const [dropDownValues] = useState<string[]>(core.getCollateralTypes());
+  const core = useCore();
+  const { account, connect } = useWallet();
+  const sellToken = core.tokens['ARTHX'];
 
-  // const isLaunched = Date.now() >= config.boardroomLaunchesAt.getTime();
-  if (!core) return <div />;
+  const { isLoading: isSellAmountBalanceLoading, value: sellAmountBalance } = useTokenBalance(
+    core.tokens['ARTHX']
+  );
+  const price = useDFYNPrice(
+    core.tokens['ARTHX'],
+    core.tokens['ARTH']
+  );
+  const { isLoading: isTaxPercentLoading, value: taxPercent } = useARTHXTaxFee();
 
-  const ratio = 100;
+  const [isTradingFeeLoading, tradingFee] = useMemo(() => {
+    if (isTaxPercentLoading) return [true, BigNumber.from(0)];
+    if (taxPercent.lte(0)) return [false, BigNumber.from(0)];
+
+    return [
+      false,
+      BigNumber.from(parseUnits(`${sellAmount}`, 18))
+        .mul(taxPercent)
+        .div(1e6)
+    ];
+  }, [isTaxPercentLoading, taxPercent, sellAmount]);
+
+  const { isLoading: isOutAmountLoading, value: outputAmount } = useARTHXBuyAmount(
+    core.tokens['ARTHX'],
+    core.tokens['ARTH'],
+    BigNumber.from(parseUnits(`${sellAmount}`, 18)).sub(tradingFee)
+  );
 
   const onSellAmountChange = (val: string) => {
-    if (val === '') {
-      setSellReceive('0');
+    if (val === '' || price === '-') {
+      setSellAmount('0');
+      return;
     }
-    setSellAmount(val);
-    const valInNumber = Number(val);
-    if (valInNumber) {
-      const temp = String(valInNumber * ratio);
-      setSellReceive(temp);
-    }
+
+    const check: boolean = ValidateNumber(val);
+    setSellAmount(check ? val : String(Number(val)));
   }
 
-  const onReceiveAmountChange = (val: string) => {
-    if (val === '') {
-      setSellAmount('0');
-    }
-    setSellReceive(val);
-    const valInNumber = Number(val);
-    if (valInNumber) {
-      const temp = String(valInNumber * (1 / ratio));
-      setSellAmount(temp);
-    }
+  const [approveARTHXStatus, approveARTHX] = useApprove(
+    core.tokens['ARTHX'],
+    core.contracts.UniswapV2Router02.address
+  );
+
+  const sellARTHX = useSellARTHX(
+    core.tokens['ARTH'].address,
+    core.tokens['ARTHX'].address,
+    BigNumber.from(parseUnits(`${sellAmount}`, 18)),
+    BigNumber.from(parseUnits(`${outputAmount}`, 18)),
+    account
+  );
+
+  const handleSellARTHX = () => {
+    sellARTHX(() => {
+      setOpenModal(false);
+    })
   }
+
+  const isARTHXApproving = approveARTHXStatus === ApprovalState.PENDING;
+  const isARTHXApproved = approveARTHXStatus === ApprovalState.APPROVED;
 
   const sellConfirmModal = () => {
     return (
@@ -66,13 +109,13 @@ const SellContent = (props: WithSnackbarProps) => {
         <div>
           <TransparentInfoDiv
             labelData={`Your amount`}
-            rightLabelUnit={'ARTH'}
+            rightLabelUnit={'ARTHX'}
             rightLabelValue={sellAmount.toString()}
           />
           <TransparentInfoDiv
-            labelData={`Trading Fee`}
-            rightLabelUnit={'5.87'}
-            rightLabelValue={'ARTH'}
+            labelData={`Fee`}
+            rightLabelUnit={'ARTHX'}
+            rightLabelValue={Number(getDisplayBalanceToken(tradingFee, core.tokens['ARTHX'])).toLocaleString()}
           />
           <Divider
             style={{
@@ -82,11 +125,9 @@ const SellContent = (props: WithSnackbarProps) => {
           />
           <TransparentInfoDiv
             labelData={`You will receive`}
-            // labelToolTipData={'testing'}
-            rightLabelUnit={selectedAmountCoin}
-            rightLabelValue={sellReceive.toString()}
+            rightLabelUnit={'ARTH'}
+            rightLabelValue={Number(outputAmount).toLocaleString('en-US', { maximumFractionDigits: 4 })}
           />
-
           <Grid container spacing={2} style={{ marginTop: '32px' }}>
             <Grid item lg={6} md={6} sm={12} xs={12}>
               <Button
@@ -95,36 +136,14 @@ const SellContent = (props: WithSnackbarProps) => {
                 size={'lg'}
                 onClick={() => {
                   setOpenModal(false);
-                  let options = {
-                    content: () =>
-                      CustomSnack({
-                        onClose: props.closeSnackbar,
-                        type: 'red',
-                        data1: `Sell order for ${123} ARTH cancelled`,
-                      }),
-                  };
-                  props.enqueueSnackbar('timepass', options);
                 }}
-              // onClick={handleClose}
               />
             </Grid>
             <Grid item lg={6} md={6} sm={12} xs={12}>
               <Button
                 text={'Confirm Sell'}
-                // textStyles={{ color: '#F5F5F5' }}
                 size={'lg'}
-                onClick={() => {
-                  setOpenModal(false);
-                  let options = {
-                    content: () =>
-                      CustomSnack({
-                        onClose: props.closeSnackbar,
-                        type: 'green',
-                        data1: `Selling ${sellAmount} ARTH`,
-                      }),
-                  };
-                  props.enqueueSnackbar('timepass', options);
-                }}
+                onClick={handleSellARTHX}
               />
             </Grid>
           </Grid>
@@ -132,90 +151,135 @@ const SellContent = (props: WithSnackbarProps) => {
       </CustomModal>
     )
   }
+
   return (
     <div>
       <LeftTopCardContainer className={'custom-mahadao-container-content'}>
         <CustomInputContainer
-          ILabelValue={'Enter Amount'}
-          IBalanceValue={'Balance 500.00'}
+          ILabelValue={'Enter amount'}
+          IBalanceValue={getDisplayBalanceToken(sellAmountBalance, sellToken)}
+          isBalanceLoading={isSellAmountBalanceLoading}
           ILabelInfoValue={''}
           DefaultValue={sellAmount.toString()}
-          LogoSymbol={'ARTH'}
+          LogoSymbol={'ARTHX'}
           hasDropDown={false}
-          SymbolText={'ARTH'}
-          inputMode={'decimal'}
-          tagText={'MAX'}
+          SymbolText={'ARTHX'}
+          inputMode={'numeric'}
           setText={(val: string) => {
-            onSellAmountChange(val)
+            onSellAmountChange(val);
           }}
+          disabled={isSellAmountBalanceLoading}
+          errorCallback={(flag: boolean) => {
+            setIsInputFieldError(flag);
+          }}
+          tokenDecimals={18}
         />
         <PlusMinusArrow>
-          <img src={arrowDown} />
+          <img alt='Arrow' src={arrowDown} />
         </PlusMinusArrow>
-        <CustomInputContainer
-          ILabelValue={'You receive'}
-          IBalanceValue={'Balance 500.00'}
-          // ILabelInfoValue={'How can i get it?'}
-          DefaultValue={sellReceive.toString()}
-          LogoSymbol={selectedAmountCoin}
-          dropDownValues={dropDownValues}
-          ondropDownValueChange={(data) => {
-            setSelectedAmountCoin(data);
-          }}
-          hasDropDown={true}
-          SymbolText={selectedAmountCoin}
-          inputMode={'decimal'}
-          setText={(val: string) => {
-            onReceiveAmountChange(val)
-          }}
-        />
-        <div>
-          <TcContainer>
+        <TextWithIcon style={{ marginBottom: '12px' }}>You Receive</TextWithIcon>
+        <ReceiveContainer>
+          <OneLineInputwomargin>
+            <div style={{ flex: 1 }}>
+              <TextWithIcon>
+                ARTH
+                <CustomToolTip
+                  toolTipText={'Amount of ARTH bought'}
+                />
+              </TextWithIcon>
+            </div>
             <OneLineInputwomargin>
-              <div style={{ flex: 1 }}>
-                <TextWithIcon>Liquidity on Uniswap</TextWithIcon>
-              </div>
-              <OneLineInputwomargin>
-                <BeforeChip>$ 9,760,068</BeforeChip>
-              </OneLineInputwomargin>
+              <BeforeChip className={'custom-mahadao-chip'}>
+                {
+                  Number(sellAmount)
+                    ? Number(outputAmount).toLocaleString('en-US', { maximumFractionDigits: 4 })
+                    : '0'
+                }
+              </BeforeChip>
+              <TagChips>ARTH</TagChips>
             </OneLineInputwomargin>
-            <OneLineInputwomargin style={{ marginTop: '12px' }}>
-              <div style={{ flex: 1 }}>
-                <TextWithIcon>Price</TextWithIcon>
-              </div>
-              <OneLineInputwomargin>
-                <BeforeChip>0.05</BeforeChip>
-                <TagChips>ARTH</TagChips>
-                <BeforeChip>per</BeforeChip>
-                <TagChips>ETH</TagChips>
-              </OneLineInputwomargin>
+          </OneLineInputwomargin>
+          <OneLineInputwomargin style={{ marginTop: '10px' }}>
+            <div style={{ flex: 1 }}>
+              <TextWithIcon>
+                Fee
+              </TextWithIcon>
+            </div>
+            <OneLineInputwomargin>
+              <BeforeChip>
+                {
+                  isTradingFeeLoading
+                    ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
+                    : Number(getDisplayBalanceToken(tradingFee, core.tokens['ARTHX'])).toLocaleString()
+                }
+              </BeforeChip>
+              <TagChips>ARTHX</TagChips>
             </OneLineInputwomargin>
-            <OneLineInputwomargin style={{ marginTop: '10px' }}>
-              <div style={{ flex: 1 }}>
-                <TextWithIcon>
-                  Trading fee
-                  <CustomToolTip toolTipText={'loreum ipsum'} />
-                </TextWithIcon>
-              </div>
-              <OneLineInputwomargin>
-                <BeforeChip>0.05</BeforeChip>
-                <TagChips>ARTH</TagChips>
-              </OneLineInputwomargin>
+          </OneLineInputwomargin>
+          <OneLineInputwomargin style={{ marginTop: '10px' }}>
+            <div style={{ flex: 1 }}>
+              <TextWithIcon>Price</TextWithIcon>
+            </div>
+            <OneLineInputwomargin>
+              <BeforeChip>{price}</BeforeChip>
+              <TagChips style={{ marginRight: '4px' }}>ARTHX</TagChips>
+              <BeforeChip>per</BeforeChip>
+              <TagChips>ARTH</TagChips>
             </OneLineInputwomargin>
-          </TcContainer>
-          <div style={{marginTop: '32px'}}>
-            <Button text={'Sell'} size={'lg'} onClick={() => setOpenModal(true)} />
-          </div>
-        </div>
+          </OneLineInputwomargin>
+        </ReceiveContainer>
+        {
+          !!!account ? (
+            <Button
+              text={'Connect Wallet'}
+              size={'lg'}
+              onClick={() =>
+                connect('injected').then(() => {
+                  localStorage.removeItem('disconnectWallet');
+                })
+              }
+            />
+          ) : (
+            isARTHXApproved
+              ? (
+                <Button
+                  text={'Sell'}
+                  size={'lg'}
+                  disabled={
+                    isInputFieldError ||
+                    !Number(sellAmount) ||
+                    !Number(outputAmount)
+                  }
+                  onClick={() => setOpenModal(true)}
+                />
+              )
+              : (
+                <Button
+                  text={
+                    isARTHXApproving
+                      ? 'Approving ARTHX'
+                      : 'Approve ARTHX'
+                  }
+                  size={'lg'}
+                  disabled={
+                    isOutAmountLoading ||
+                    isInputFieldError ||
+                    !Number(sellAmount) ||
+                    !Number(outputAmount)
+                  }
+                  loading={isARTHXApproving}
+                  onClick={approveARTHX}
+                />
+              )
+          )
+        }
       </LeftTopCardContainer>
-      {sellConfirmModal()}
+      {
+        sellConfirmModal()
+      }
     </div>
   );
 };
-
-const TcContainer = styled.div`
-  margin-top: 24px;
-`;
 
 const OneLineInputwomargin = styled.div`
   display: flex;
@@ -223,10 +287,11 @@ const OneLineInputwomargin = styled.div`
   align-items: baseline;
   justify-content: flex-start;
 `;
+
 const LeftTopCardContainer = styled.div``;
+
 const PlusMinusArrow = styled.div`
   width: 100%;
-  height: 32px;
   border-radius: 1.33px;
   color: #ffffff;
   align-items: center;
@@ -234,6 +299,14 @@ const PlusMinusArrow = styled.div`
   display: flex;
   flex-direction: row;
   font-size: 20px;
+  margin: 12px 0;
+`;
+
+const ReceiveContainer = styled.div`
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 12px;
 `;
 
 const TextWithIcon = styled.div`
@@ -246,7 +319,7 @@ const TextWithIcon = styled.div`
 `;
 
 const BeforeChip = styled.span`
-  ont-family: Inter;
+  font-family: Inter;
   font-style: normal;
   font-weight: 300;
   font-size: 12px;
@@ -265,4 +338,4 @@ const TagChips = styled.div`
   color: rgba(255, 255, 255, 0.64);
 `;
 
-export default withSnackbar(SellContent);
+export default SellContent;

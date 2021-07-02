@@ -8,7 +8,7 @@ interface IProps {
   availableNetworks?: number[]
 }
 
-export default ({ children, availableNetworks }: IProps) => (
+export default ({ children }: IProps) => (
   <StyledPage>
     <div className="chakra-home">
       <img src={chakra} height={1400} alt="chakra" />s

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React  from 'react';
 import styled from 'styled-components';
 import InfoIcon from '@material-ui/icons/Info';
 import HtmlTooltip from '../HtmlTooltip';
@@ -9,9 +9,9 @@ type props = {
 };
 
 const CustomToolTip: React.FC<props> = (props) => {
-  const { toolTipText, iconStyle } = props;
+  const { toolTipText } = props;
 
-  if (toolTipText.toLowerCase() === 'loreum ipsum') return <></>;
+  if (toolTipText?.toLowerCase() === 'loreum ipsum') return <></>;
 
   if (!toolTipText) {
     return <InfoIcon fontSize="default" style={{ transform: 'scale(0.6)' }} />;

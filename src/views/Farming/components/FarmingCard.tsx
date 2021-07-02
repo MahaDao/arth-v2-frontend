@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
+import React, { useState, useEffect } from 'react';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
 
 import { ModeProps } from '../index';
@@ -13,7 +13,7 @@ import DesktopRowCard from './DesktopRowCard';
 import useCore from '../../../hooks/useCore';
 import useModal from '../../../hooks/useModal';
 import { StakingContract } from '../../../basis-cash';
-import usePoolTokenRates from '../../../hooks/usePoolTokenRates';
+import usePoolTokenRates from '../../../hooks/state/staking/usePoolTokenRates';
 import useTokenBalance from '../../../hooks/state/useTokenBalance';
 import CustomSuccessModal from '../../../components/CustomSuccesModal';
 import useStakingBalance from '../../../hooks/state/staking/useStakingBalance';
@@ -24,18 +24,48 @@ interface IProps {
   cardData: StakingContract;
 }
 
+interface APYState {
+  isLoading: boolean;
+  apy: string
+}
+
 const FarmingCard = (props: WithSnackbarProps & IProps) => {
-  const [successModal, setSuccessModal] = useState(false)
-  const pool = props.cardData;
+  const [successModal, setSuccessModal] = useState(false);
+  const [apyState, setAPYState] = useState<APYState>({ isLoading: true, apy: '0' });
 
   const core = useCore();
+  const pool = props.cardData;
   const isMobile = useMediaQuery({ maxWidth: '600px' });
   const depositTokenContract = core.tokens[pool.depositToken];
-  
-  const {isLoading: isTokenBalanceLoading, value: tokenBalance} = useTokenBalance(depositTokenContract);
-  const {isLoading: isStakedBalanceLoading, value: stakedBalance} = useStakingBalance(pool.contract);
-  const {isLoading: isClaimableBlanceLoading, value: claimableBalance} = useStakingRewards(pool.contract);
-  const {isLoading: isRatesLoading, value: rates} = usePoolTokenRates();
+
+  const fetchAPY = async () => {
+    const url = 'https://api.arthcoin.com/api/apy/ARTHX';
+    const headers = {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
+      'Access-Control-Allow-Headers':
+        'access-control-allow-headers,access-control-allow-methods,access-control-allow-origin,content-type',
+    };
+
+    fetch(url, { headers })
+      .then(res => res.json())
+      .then(res => setAPYState({ isLoading: false, apy: Number(res?.APY || 0).toLocaleString() + '%' }))
+      .catch(() => setAPYState({ isLoading: false, apy: '-' }))
+  }
+
+  useEffect(() => {
+    const interval = setInterval(
+      () => fetchAPY().catch(() => { }),
+      core.config.refreshInterval
+    );
+
+    return () => clearInterval(interval);
+  }, [core.config.refreshInterval]);
+
+  const { value: rates } = usePoolTokenRates();
+  const { value: stakedBalance } = useStakingBalance(pool.contract);
+  const { value: tokenBalance } = useTokenBalance(depositTokenContract);
+  const { value: claimableBalance } = useStakingRewards(pool.contract);
 
   const [onPresentExitModal, onDismissExitModal] = useModal(
     <ExitModal
@@ -102,6 +132,7 @@ const FarmingCard = (props: WithSnackbarProps & IProps) => {
       {!isMobile ? (
         <DesktopRowCard
           pool={pool}
+          apyState={apyState}
           claimableBalance={claimableBalance}
           stakedBalance={stakedBalance}
           rates={rates}
@@ -113,6 +144,7 @@ const FarmingCard = (props: WithSnackbarProps & IProps) => {
       ) : (
         <MobileRowCard
           pool={pool}
+          apyState={apyState}
           claimableBalance={claimableBalance}
           stakedBalance={stakedBalance}
           rates={rates}

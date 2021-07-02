@@ -9,38 +9,57 @@ interface props {
 const Nav = (props: props) => {
   return (
     <StyledNav>
-      <StyledLink exact activeClassName="active" to="/genesis">
-        Genesis
-      </StyledLink>
-      {/* <StyledLink exact activeClassName="active" to="/stats">
+      <StyledLink
+        exact
+        activeClassName="active"
+        to="/stats"
+      >
         Analytics
       </StyledLink>
-      <StyledLink exact activeClassName="active" to="/mint/mint">rr
-        Mint/Redeem
+      {/* <StyledLink
+        exact
+        activeClassName="active"
+        to="/genesis"
+      >
+        Genesis
       </StyledLink> */}
+      {/* <StyledLink exact activeClassName="active" to="/lock-deposit">
+        Debt pool
+      </StyledLink> */}
+      <StyledLink exact activeClassName="active" to="/mint/mint">
+        Mint/Redeem
+      </StyledLink>
       {/* <StyledLink exact activeClassName="active" to="/stabilize/recollateralize">
         Stabilize
       </StyledLink> */}
-      {/* <StyledLink exact activeClassName="active" to="/farming">
+      <StyledLink exact activeClassName="active" to="/farming">
         Farming
-      </StyledLink> */}
-      {/* <StyledLink exact activeClassName="active" to="/trade">
-        Trade
-      </StyledLink> */}
-      {/* {!props.isMainnet && (
-        <StyledLink exact activeClassName="active" to="/faucet">
-          Faucet
-        </StyledLink>
-      )} */}
-      <StyledLink exact activeClassName="active" to="/rebase">
+      </StyledLink>
+      {/* <StyledLink exact activeClassName="active" to="/rebase">
         Rebase
       </StyledLink>
       <StyledLink exact activeClassName="active" to="/lottery">
-        Prizes
-      </StyledLink>
-      {/* <StyledLink exact activeClassName="active" to="/pools">
-        Pools
+        Lottery
       </StyledLink> */}
+      <StyledLink exact activeClassName="active" to="/trade">
+        Trade
+      </StyledLink>
+      <StyledLink exact activeClassName="active" to="/pools">
+        Pools
+      </StyledLink>
+      {/* <StyledLink exact activeClassName="active" to="/trade">
+        Trade
+      </StyledLink> */}
+      {/* {
+        !props.isMainnet && (
+          <StyledLink exact activeClassName="active" to="/faucet">
+            Faucet
+          </StyledLink>
+        )
+      } */}
+      {/*<StyledLink exact activeClassName="active" to="/pools">
+        Pools
+      </StyledLink>*/}
     </StyledNav>
   );
 };

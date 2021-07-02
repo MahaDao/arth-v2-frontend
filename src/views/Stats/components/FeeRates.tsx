@@ -10,9 +10,9 @@ import useStabilityFee from '../../../hooks/state/controller/useStabilityFee';
 import usePoolMintingFees from '../../../hooks/state/pools/usePoolMintingFees';
 
 const BondingDiscount: React.FC = () => {
-  const {isLoading: isStabilityFeeLoading, value: stabilityFee} = useStabilityFee();
-  const {isLoading: isMintingFeeLoading, value: mintingFee} = usePoolMintingFees('');
-  const {isLoading: isRedeemingFeeLoading, value: redeemingFee} = usePoolRedeemFees('');
+  const { isLoading: isStabilityFeeLoading, value: stabilityFee } = useStabilityFee();
+  const { isLoading: isMintingFeeLoading, value: mintingFee } = usePoolMintingFees('');
+  const { isLoading: isRedeemingFeeLoading, value: redeemingFee } = usePoolRedeemFees('');
 
   return (
     <CustomInfoCard className={'custom-mahadao-box'}>
@@ -27,10 +27,10 @@ const BondingDiscount: React.FC = () => {
           </div>
           <OneLine>
             <BeforeChip>
-              { isMintingFeeLoading
+              {isMintingFeeLoading
                 ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
                 : Number(getDisplayBalance(mintingFee, 4, 4))
-                    .toLocaleString('en-US', {maximumFractionDigits: 4})
+                  .toLocaleString('en-US', { maximumFractionDigits: 4 })
               }%
             </BeforeChip>
           </OneLine>
@@ -44,7 +44,7 @@ const BondingDiscount: React.FC = () => {
           </div>
           <OneLine>
             <BeforeChip>
-              { isRedeemingFeeLoading
+              {isRedeemingFeeLoading
                 ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
                 : Number(getDisplayBalance(redeemingFee, 4, 4))
                   .toLocaleString('en-US', { maximumFractionDigits: 4 })
@@ -61,7 +61,7 @@ const BondingDiscount: React.FC = () => {
           </div>
           <OneLine>
             <BeforeChip>
-              { isStabilityFeeLoading
+              {isStabilityFeeLoading
                 ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
                 : Number(getDisplayBalance(stabilityFee, 4, 4))
                   .toLocaleString('en-US', { maximumFractionDigits: 4 })
@@ -75,7 +75,6 @@ const BondingDiscount: React.FC = () => {
 };
 
 const CustomInfoCard = styled.div`
-  // min-height: 220px;
   @media (max-width: 600px) {
     min-height: auto;
     margin-top: 8px;
@@ -123,22 +122,6 @@ const BeforeChip = styled.span`
   font-size: 16px;
   line-height: 24px;
   color: #ffffff;
-`;
-
-const TagChips = styled.div`
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 4px;
-  padding: 2px 8px;
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 300;
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.64);
-`;
-
-const ToolTipFont = styled.p`
-  padding: 0px;
-  margin: 0px;
 `;
 
 export default BondingDiscount;

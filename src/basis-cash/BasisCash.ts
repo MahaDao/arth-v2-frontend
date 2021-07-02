@@ -76,8 +76,8 @@ export class BasisCash {
 
     // this.multicall = new Multicall(cfg.defaultProvider, deployments.Multicall.address);
 
-    this.ArthMahaLP = new ERC20(deployments.ArthMahaLP?.address, provider, 'ARTH-MAHA LP');
-    this.ArthxArthLP = new ERC20(deployments.ArthArthxLP?.address, provider, 'ARTHX-ARTH LP');
+    this.ArthMahaLP = new ERC20(deployments.ArthMahaLP?.address, provider, 'ARTH-MAHA LP', 18);
+    this.ArthxArthLP = new ERC20(deployments.ArthArthxLP?.address, provider, 'ARTHX-ARTH LP', 18);
     this.PoolToken = new ERC20(deployments.PoolToken?.address, provider, 'ARTH-RT');
 
     this.tokens = {

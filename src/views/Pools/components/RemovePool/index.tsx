@@ -1,218 +1,136 @@
-import React, { useState } from 'react';
+import { BigNumber } from 'ethers';
+import { useWallet } from 'use-wallet';
 import styled from 'styled-components';
+import { parseUnits } from 'ethers/lib/utils';
+import React, { useMemo, useState } from 'react';
+import { Divider, Grid } from '@material-ui/core';
 import ArrowBackIos from '@material-ui/icons/ArrowBackIos';
 
-import { ICards, IPoolData } from '../OpenableCard';
-import {
-  createStyles,
-  Divider,
-  Grid,
-  makeStyles,
-  Slider,
-  Theme,
-  withStyles,
-} from '@material-ui/core';
-import arrowDown from '../../../../assets/svg/arrowDown.svg';
 import plus from '../../../../assets/svg/plus.svg';
+import arrowDown from '../../../../assets/svg/arrowDown.svg';
+
 import Button from '../../../../components/Button';
-import { useMediaQuery } from 'react-responsive';
-import CustomInputContainer from '../../../../components/CustomInputContainer';
 import CustomModal from '../../../../components/CustomModal';
-import TransparentInfoDiv from '../InfoDiv';
-import { withSnackbar, WithSnackbarProps } from 'notistack';
-import { CustomSnack } from '../../../../components/SnackBar';
+import CustomInputContainer from '../../../../components/CustomInputContainer';
+
 import useCore from '../../../../hooks/useCore';
+import useDFYNPrice from '../../../../hooks/state/pairs/useDFYNPrice';
+import useTotalSupply from '../../../../hooks/useTotalSupply';
+import useTokenBalance from '../../../../hooks/state/useTokenBalance';
+import { getDisplayBalanceToken } from '../../../../utils/formatBalance';
+import useTokenBalanceOf from '../../../../hooks/state/useTokenBalanceOf';
+import useApprove, { ApprovalState } from '../../../../hooks/callbacks/useApprove';
+import useRemoveLiquidity from '../../../../hooks/callbacks/pairs/useRemoveLiquidity';
 import { ValidateNumber } from '../../../../components/CustomInputContainer/RegexValidation';
+import SlippageContainer from '../../../../components/SlippageContainer';
+import TransparentInfoDiv from '../../../../components/CustomTransparentInfoDiv/InfoDiv';
+
+interface SelectedPair {
+  id: number;
+  symbol1: string;
+  symbol2: string;
+  pairName: string;
+  pairToken: string;
+}
 
 type props = {
-  selectedPair: {
-    liquidity: ICards;
-    pool: IPoolData;
-  };
+  selectedPair: SelectedPair;
   onBack: () => void;
 };
 
-const useSliderStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      width: '100%',
-      // color: 'white'
-    },
-    margin: {
-      height: theme.spacing(3),
-    },
-  }),
-);
-
-function valuetext(value: number) {
-  return `${value}`;
-}
-
-// function valueLabelFormat(value: number) {
-//   return marks.findIndex((mark: any) => mark.value === value) + 1;
-// }
-
-const PrettoRestrictSlider = withStyles({
-  root: {
-    // color: 'white',
-    height: 15,
-    width: '95%',
-  },
-  thumb: {
-    height: 10,
-    width: 10,
-    // backgroundColor: '#fff',
-    border: '2px solid currentColor',
-    color: '#FFA981',
-    marginTop: -3.5,
-    marginLeft: -3,
-    '&:focus, &:hover, &$active': {
-      boxShadow: 'inherit',
-    },
-  },
-  active: {},
-  valueLabel: {
-    left: 'calc(-100% - 5px)',
-    // color: '#FF7F57',
-  },
-  marked: {
-    color: 'red',
-  },
-  markLabel: {
-    // color: 'green'
-  },
-  track: {
-    height: 3,
-    borderRadius: 3,
-    color: '#FFA981',
-    // top: '2%'
-  },
-  rail: {
-    height: 3,
-    borderRadius: 3,
-    color: '#D74D26',
-    // background:'red'
-    // border: '1px solid'
-  },
-  markLabelActive: {
-    fontStyle: 'normal',
-    fontWeight: 300,
-    fontSize: '12px',
-    lineHeight: '130%',
-    textAlign: 'center',
-    color: 'rgba(255, 255, 255, 0.88)',
-  },
-  mark: {
-    color: 'transparent',
-  },
-})(Slider);
-
-const RemovePool = (props: props & WithSnackbarProps) => {
+const RemovePool = (props: props) => {
   const { selectedPair, onBack } = props;
 
-  const [simpleType, setType] = useState<boolean>(true);
-  const core = useCore();
-  const sliderClasses = useSliderStyles();
-  const [sliderValue, setSliderValue] = React.useState(30);
-  const isMobile = useMediaQuery({ query: '(max-device-width: 1284px)' });
-  const defaultDropdownValues = core.getCollateralTypes();
-  const [balance, setBalance] = useState<number>(500.0);
-  const [firstCoin, setFirstCoin] = useState<string>('ARTH');
-  const [secondCoin, setSecondCoin] = useState<string>('ETH');
-  const [firstCoinAmount, setFirstCoinAmount] = useState<string>('0.0');
-  const [secondCoinAmount, setSecondCoinAmount] = useState<string>('0.0');
-  const [secondCoinDropDown, setSecondCoinDropDown] = useState<string[]>(defaultDropdownValues);
+  const [pairValue, setPairValue] = useState<string>('0');
   const [confirmModal, setConfirmModal] = useState<boolean>(false);
-  const handleSliderChange = (event: any, value: any) => {
-    setSliderValue(value);
-  };
-  const simple = () => {
-    return (
-      <div>
-        <div>
-          <OneLineInput>
-            <div>
-              <InputLabel>How much liquidity you want to remove?</InputLabel>
-            </div>
-            <InputNoDisplay>
-              <InternalSpan>{sliderValue}%</InternalSpan>
-            </InputNoDisplay>
-          </OneLineInput>
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            color: 'white',
-            flexDirection: 'row',
-            width: '100%',
-            paddingLeft: '16px',
-            // marginTop: '10px'
-          }}
-        >
-          <div className={sliderClasses.root}>
-            <PrettoRestrictSlider
-              defaultValue={30}
-              getAriaValueText={valuetext}
-              valueLabelFormat={valuetext}
-              // ValueLabelComponent={'span'}
-              // value={sliderValue}
-              onChange={handleSliderChange}
-              aria-label="pretto slider"
-              step={1}
-              // marks
-              min={0}
-              max={100}
-              valueLabelDisplay="off"
-            />
-            <div
-              style={{
-                marginTop: -15,
-                marginLeft: -15,
-                marginBottom: 15,
-                display: 'flex',
-                justifyContent: 'space-between',
-              }}
-            >
-              <TimeSpan>0%</TimeSpan>
-              <TimeSpan>100%</TimeSpan>
-            </div>
-          </div>
-        </div>
-        <PlusMinusArrow>
-          <img src={arrowDown} alt="arrow-down" />
-        </PlusMinusArrow>
-        <PrimaryText>You receive</PrimaryText>
-        <ReYouReceiveContain>
-          <OneLineInputwomargin style={{ marginBottom: '10px' }}>
-            <PrimaryText>ARTH</PrimaryText>
-            <OneLineInputwomargin>
-              <BeforeHardChip>150.00</BeforeHardChip>
-              <HardChip>ARTH</HardChip>
-            </OneLineInputwomargin>
-          </OneLineInputwomargin>
-          <OneLineInputwomargin style={{ marginBottom: '5px' }}>
-            <PrimaryText>ETH</PrimaryText>
-            <OneLineInputwomargin>
-              <BeforeHardChip>200.00</BeforeHardChip>
-              <HardChip>MAHA</HardChip>
-            </OneLineInputwomargin>
-          </OneLineInputwomargin>
-        </ReYouReceiveContain>
-        <OneLine style={{ marginTop: '15px' }}>
-          <div style={{ flex: 1 }}>
-            <TextWithIcon>Price</TextWithIcon>
-          </div>
-          <OneLine>
-            <BeforeChip>0.05</BeforeChip>
-            <TagChips style={{ marginRight: '5px' }}>ARTH</TagChips>
-            <BeforeChip>per</BeforeChip>
-            <TagChips>ETH</TagChips>
-          </OneLine>
-        </OneLine>
-      </div>
-    );
-  };
+  const [isInputFieldError, setIsInputFieldError] = useState<boolean>(false);
+
+  const core = useCore();
+  const { account } = useWallet();
+
+  const lpToken = core.tokens[selectedPair.pairToken];
+  const firstToken = core.tokens[selectedPair.symbol1];
+  const secondToken = core.tokens[selectedPair.symbol2];
+
+  const uniswapPrice = useDFYNPrice(
+    core.tokens[selectedPair.symbol1],
+    core.tokens[selectedPair.symbol2]
+  );
+
+  const [lpTokenApproveStatus, approveLpToken] = useApprove(
+    core.tokens[selectedPair.pairToken],
+    core.contracts.Router.address
+  );
+
+  const { isLoading: isLPBalanceLoading, value: lpBalance } = useTokenBalance(lpToken);
+  const { isLoading: isFirstCoinLoading, value: firstCoinBalance } = useTokenBalance(firstToken);
+  const { isLoading: isSecondCoinLoading, value: secondCoinBalance } = useTokenBalance(secondToken);
+  const { isLoading: isTotalSupplyLoading, value: totalSupply } = useTotalSupply(selectedPair.pairToken);
+
+  const { isLoading: isPairFirstCoinBalanceLoading, value: firstCoinPairBalance } = useTokenBalanceOf(
+    firstToken,
+    lpToken.address
+  );
+  const { isLoading: isPairSecondCoinBalanceLoading, value: secondCoinPairBalance } = useTokenBalanceOf(
+    secondToken,
+    lpToken.address
+  );
+
+  const [isFirstCoinValueLoading, firstCoinValue] = useMemo(() => {
+    if (isTotalSupplyLoading || isPairFirstCoinBalanceLoading)
+      return [true, BigNumber.from(0)];
+
+    if (pairValue === '' || !Number(pairValue)) return [false, BigNumber.from(0)];
+
+    const bnPairValue = BigNumber.from(parseUnits(`${pairValue}`, 18));
+    return [
+      false,
+      bnPairValue.mul(firstCoinPairBalance).div(totalSupply)
+    ];
+  }, [
+    isTotalSupplyLoading,
+    pairValue,
+    firstCoinPairBalance,
+    isPairFirstCoinBalanceLoading,
+    totalSupply
+  ]);
+
+  const [isSecondCoinValueLoading, secondCoinValue] = useMemo(() => {
+    if (isTotalSupplyLoading || isPairSecondCoinBalanceLoading)
+      return [true, BigNumber.from(0)];
+
+    if (pairValue === '' || !Number(pairValue)) return [false, BigNumber.from(0)];
+
+    const bnPairValue = BigNumber.from(parseUnits(`${pairValue}`, 18));
+    return [
+      false,
+      bnPairValue.mul(secondCoinPairBalance).div(totalSupply)
+    ];
+  }, [
+    isTotalSupplyLoading,
+    pairValue,
+    secondCoinPairBalance,
+    isPairSecondCoinBalanceLoading,
+    totalSupply
+  ]);
+
+  const removeLiquidity = useRemoveLiquidity(
+    core.tokens[selectedPair.symbol1].address,
+    core.tokens[selectedPair.symbol2].address,
+    BigNumber.from(parseUnits(`${pairValue}`, 18)),
+    firstCoinValue,
+    secondCoinValue,
+    account
+  );
+
+  const handleRemoveLiquidity = () => {
+    removeLiquidity(() => {
+      setConfirmModal(false);
+    });
+  }
+
+  const isLpTokenApproving = lpTokenApproveStatus === ApprovalState.PENDING;
+  const isLpTokenApproved = lpTokenApproveStatus === ApprovalState.APPROVED;
 
   const detailed = () => {
     return (
@@ -226,82 +144,63 @@ const RemovePool = (props: props & WithSnackbarProps) => {
         </div>
         <CustomInputContainer
           ILabelValue={'Enter Token Amount'}
-          IBalanceValue={`Balance ${balance}`}
-          // ILabelInfoValue={'How can i get it?'}
-          DefaultValue={firstCoinAmount.toString()}
-          LogoSymbol={firstCoin}
+          IBalanceValue={getDisplayBalanceToken(lpBalance, lpToken)}
+          isBalanceLoading={isLPBalanceLoading}
+          DefaultValue={pairValue.toString()}
+          LogoSymbol={''}
           hasDropDown={false}
           multiIcons
-          // symbol1={selectedPair?.liquidity?.symbol1}
-          // symbol2={selectedPair?.liquidity?.symbol2}
-          // dropDownValues={firstCoinDropDown}
-          // ondropDownValueChange={(data) => {
-          //   if (data !== secondCoin) {
-          //     setFirstCoin(data);
-          //   }
-          // }}
-          SymbolText={selectedPair?.liquidity?.pairName}
-          inputMode={'decimal'}
-          setText={(val: string) =>
-            setFirstCoinAmount(ValidateNumber(val) ? val : String(Number(val)))
-          }
-          tagText={'MAX'}
+          symbols={[selectedPair.symbol1, selectedPair.symbol2]}
+          SymbolText={`${selectedPair.symbol1}+${selectedPair.symbol2}`}
+          inputMode={'numeric'}
+          setText={(val: string) => {
+            setPairValue(ValidateNumber(val) ? val : '0');
+          }}
+          disabled={isLPBalanceLoading}
+          errorCallback={(flag: boolean) => {
+            setIsInputFieldError(flag);
+          }}
+          tokenDecimals={18}
         />
         <PlusMinusArrow>
           <img src={arrowDown} alt="arrow-down" />
         </PlusMinusArrow>
         <CustomInputContainer
           ILabelValue={'You Receive'}
-          IBalanceValue={`Balance ${balance}`}
-          // ILabelInfoValue={'How can i get it?'}
-          DefaultValue={secondCoinAmount.toString()}
-          LogoSymbol={secondCoin}
-          hasDropDown={true}
-          dropDownValues={secondCoinDropDown}
-          ondropDownValueChange={(data) => {
-            if (firstCoin !== data) {
-              setSecondCoin(data);
-            }
-          }}
-          SymbolText={secondCoin}
-          inputMode={'decimal'}
-          setText={(val: string) =>
-            setSecondCoinAmount(ValidateNumber(val) ? val : String(Number(val)))
-          }
-          tagText={'MAX'}
+          IBalanceValue={getDisplayBalanceToken(firstCoinBalance, firstToken)}
+          isBalanceLoading={isFirstCoinLoading}
+          DefaultValue={getDisplayBalanceToken(firstCoinValue, firstToken)}
+          LogoSymbol={selectedPair.symbol1}
+          hasDropDown={false}
+          SymbolText={selectedPair.symbol1.toUpperCase()}
+          inputMode={'numeric'}
+          disabled={true}
+          tokenDecimals={18}
         />
         <PlusMinusArrow>
           <img src={plus} alt="plus" />
         </PlusMinusArrow>
         <CustomInputContainer
-          ILabelValue={'You Receive'}
-          IBalanceValue={`Balance ${balance}`}
-          // ILabelInfoValue={'How can i get it?'}
-          DefaultValue={secondCoinAmount.toString()}
-          LogoSymbol={secondCoin}
-          hasDropDown={true}
-          dropDownValues={secondCoinDropDown}
-          ondropDownValueChange={(data) => {
-            if (firstCoin !== data) {
-              setSecondCoin(data);
-            }
-          }}
-          SymbolText={secondCoin}
-          inputMode={'decimal'}
-          setText={(val: string) =>
-            setSecondCoinAmount(ValidateNumber(val) ? val : String(Number(val)))
-          }
-          tagText={'MAX'}
+          ILabelValue={'Enter Amount'}
+          IBalanceValue={getDisplayBalanceToken(secondCoinBalance, secondToken)}
+          isBalanceLoading={isSecondCoinLoading}
+          DefaultValue={getDisplayBalanceToken(secondCoinValue, secondToken)}
+          LogoSymbol={selectedPair.symbol2}
+          hasDropDown={false}
+          SymbolText={selectedPair.symbol2.toUpperCase()}
+          inputMode={'numeric'}
+          disabled={true}
+          tokenDecimals={18}
         />
         <OneLine style={{ marginTop: '15px' }}>
           <div style={{ flex: 1 }}>
             <TextWithIcon>Price</TextWithIcon>
           </div>
           <OneLine>
-            <BeforeChip>0.05</BeforeChip>
-            <TagChips style={{ marginRight: '5px' }}>{firstCoin}</TagChips>
+            <BeforeChip>{uniswapPrice}</BeforeChip>
+            <TagChips style={{ marginRight: '5px' }}>{selectedPair.symbol1}</TagChips>
             <BeforeChip>per</BeforeChip>
-            <TagChips>{secondCoin}</TagChips>
+            <TagChips>{selectedPair.symbol2}</TagChips>
           </OneLine>
         </OneLine>
       </div>
@@ -321,21 +220,22 @@ const RemovePool = (props: props & WithSnackbarProps) => {
       >
         <>
           <TransparentInfoDiv
-            labelData={`You will receive ARTH`}
-            rightLabelUnit={firstCoin}
-            rightLabelValue={firstCoinAmount.toString()}
+            labelData={`You will receive ${selectedPair.symbol1.toUpperCase()}`}
+            rightLabelUnit={selectedPair.symbol1.toUpperCase()}
+            rightLabelValue={getDisplayBalanceToken(firstCoinValue, firstToken)}
           />
           <TransparentInfoDiv
-            labelData={`You will receive ETH`}
-            rightLabelUnit={secondCoin}
-            rightLabelValue={secondCoinAmount.toString()}
+            labelData={`You will receive  ${selectedPair.symbol2.toUpperCase()}`}
+            rightLabelUnit={selectedPair.symbol2.toUpperCase()}
+            rightLabelValue={getDisplayBalanceToken(secondCoinValue, secondToken)}
           />
+
           <Divider style={{ background: 'rgba(255, 255, 255, 0.08)', margin: '15px 0px' }} />
 
           <TransparentInfoDiv
-            labelData={`UNI ARTH/ETH Burned`}
-            rightLabelUnit={`${firstCoin}/${secondCoin}`}
-            rightLabelValue={'1000.00'}
+            labelData={`${selectedPair.symbol1.toUpperCase()}/${selectedPair.symbol2.toUpperCase()} LP Token Burned`}
+            rightLabelUnit={`${selectedPair.symbol1.toUpperCase()}/${selectedPair.symbol2.toUpperCase()}`}
+            rightLabelValue={Number(pairValue).toLocaleString()}
           />
           <Grid container spacing={2} style={{ marginTop: '32px' }}>
             <Grid item lg={6} md={6} sm={12} xs={12}>
@@ -345,15 +245,6 @@ const RemovePool = (props: props & WithSnackbarProps) => {
                 size={'lg'}
                 onClick={() => {
                   setConfirmModal(false);
-                  let options = {
-                    content: () =>
-                      CustomSnack({
-                        onClose: props.closeSnackbar,
-                        type: 'red',
-                        data1: `Remove-Liquidity order for ${123} ARTH cancelled`,
-                      }),
-                  };
-                  props.enqueueSnackbar('timepass', options);
                 }}
               />
             </Grid>
@@ -361,18 +252,7 @@ const RemovePool = (props: props & WithSnackbarProps) => {
               <Button
                 text={'Remove Liquidity'}
                 size={'lg'}
-                onClick={() => {
-                  setConfirmModal(false);
-                  let options = {
-                    content: () =>
-                      CustomSnack({
-                        onClose: props.closeSnackbar,
-                        type: 'green',
-                        data1: `Removing Liquidity for ${123} ARTH`,
-                      }),
-                  };
-                  props.enqueueSnackbar('timepass', options);
-                }}
+                onClick={handleRemoveLiquidity}
               />
             </Grid>
           </Grid>
@@ -380,47 +260,48 @@ const RemovePool = (props: props & WithSnackbarProps) => {
       </CustomModal>
       <CustomCard className={'custom-mahadao-container'}>
         <CustomCardHeader className={'custom-mahadao-container-header'}>
-          <EachElement>
-            {' '}
-            <ArrowBackIos
-              onClick={() => onBack()}
-              fontSize="default"
-              color={'inherit'}
-              htmlColor={'#ffffff'}
-            />{' '}
-          </EachElement>
-          <EachElement>
-            {' '}
-            <CardTitle>Remove Liquidity</CardTitle>
-          </EachElement>
-          <EachElement>
-            {' '}
-            <Detailed onClick={() => setType(!simpleType)}>
-              {simpleType ? 'Detailed' : 'Simple'}
-            </Detailed>
-          </EachElement>
+          <EachElementBack> <ArrowBackIos onClick={() => onBack()} fontSize="default" color={'inherit'} htmlColor={'#ffffff'} /> </EachElementBack>
+          <EachElementTitle> <CardTitle>Remove Liquidity</CardTitle> </EachElementTitle>
+          <EachElementBack> <SlippageContainer /> </EachElementBack>
         </CustomCardHeader>
         <CustomCardContainer className={'custom-mahadao-container-content'}>
-          {/* <div> */}
-          {simpleType ? simple() : detailed()}
-          <ButtonContainer>
-            <div style={isMobile ? {} : { marginRight: 5, width: '100%' }}>
+          {detailed()}
+          <Grid container spacing={2} style={{ marginTop: '32px' }}>
+            <Grid item lg={6} md={6} sm={12} xs={12}>
               <Button
-                text={'Approve'}
+                text={
+                  isLpTokenApproved
+                    ? `Approved`
+                    : !isLpTokenApproving
+                      ? `Approve`
+                      : 'Approving...'
+                }
                 size={'lg'}
-                onClick={() => {
-                  setConfirmModal(true);
-                }}
+                disabled={
+                  isInputFieldError ||
+                  isLpTokenApproved ||
+                  !Number(pairValue)
+                }
+                onClick={approveLpToken}
+                loading={isLpTokenApproving}
               />
-            </div>
-            <div style={isMobile ? { marginTop: 5 } : { marginLeft: 5, width: '100%' }}>
-              <Button text={'Remove Liquidity'} size={'lg'} disabled />
-            </div>
-          </ButtonContainer>
-          {/* </div> */}
+            </Grid>
+            <Grid item lg={6} md={6} sm={12} xs={12}>
+              <Button
+                onClick={() => setConfirmModal(true)}
+                text={'Remove Liquidity'}
+                size={'lg'}
+                disabled={
+                  isInputFieldError ||
+                  !isLpTokenApproved ||
+                  !Number(pairValue)
+                }
+              />
+            </Grid>
+          </Grid>
         </CustomCardContainer>
       </CustomCard>
-      <CustomInfoCard className={'custom-mahadao-box'}>
+      {/* <CustomInfoCard className={'custom-mahadao-box'}>
         <CustomInfoCardHeader>Your Position</CustomInfoCardHeader>
         <CustomInfoCardDetails>
           <OneLine>
@@ -428,7 +309,7 @@ const RemovePool = (props: props & WithSnackbarProps) => {
               <TextWithIcon> Your total pool tokens </TextWithIcon>
             </div>
             <OneLine>
-              <BeforeChip>{selectedPair?.pool?.total}</BeforeChip>
+              <BeforeChip>{''}</BeforeChip>
               <TagChips>ARTH / ETH </TagChips>
             </OneLine>
           </OneLine>
@@ -437,7 +318,7 @@ const RemovePool = (props: props & WithSnackbarProps) => {
               <TextWithIcon> Pooled ARTH </TextWithIcon>
             </div>
             <OneLine>
-              <BeforeChip>{selectedPair?.pool?.arth}</BeforeChip>
+              <BeforeChip>{''}</BeforeChip>
               <TagChips>ARTH</TagChips>
             </OneLine>
           </OneLine>
@@ -446,7 +327,7 @@ const RemovePool = (props: props & WithSnackbarProps) => {
               <TextWithIcon>Pooled ETH</TextWithIcon>
             </div>
             <OneLine>
-              <BeforeChip>{selectedPair?.pool?.eth}</BeforeChip>
+              <BeforeChip>{''}</BeforeChip>
               <TagChips>ETH</TagChips>
             </OneLine>
           </OneLine>
@@ -455,17 +336,17 @@ const RemovePool = (props: props & WithSnackbarProps) => {
               <TextWithIcon>Your pool share</TextWithIcon>
             </div>
             <OneLine>
-              <BeforeChip>{selectedPair?.pool?.share}%</BeforeChip>
-              {/* <TagChips>0.06%</TagChips> */}
+              <BeforeChip>{''}%</BeforeChip>
+              <TagChips>0.06%</TagChips>
             </OneLine>
           </OneLine>
         </CustomInfoCardDetails>
-      </CustomInfoCard>
+      </CustomInfoCard> */}
     </div>
   );
 };
 
-export default withSnackbar(RemovePool);
+export default RemovePool;
 
 const CustomCard = styled.div`
   background: linear-gradient(180deg, #48423e 0%, #373030 100%);
@@ -476,27 +357,23 @@ const CustomCard = styled.div`
 const CustomCardHeader = styled.div`
   display: flex;
   flex-direction: row;
-  padding: 24px 32px;
+  padding-top: 28px;
+  padding-bottom: 28px;
   align-items: center;
   align-content: center;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   @media (max-width: 600px) {
-    padding: 12px 16px;
+    padding-top: 24px;
+    padding-bottom: 24px;
   }
 `;
 
-const EachElement = styled.div`
-  flex: 0.3333;
+const EachElementBack = styled.div`
   cursor: pointer;
 `;
 
-const TimeSpan = styled.div`
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 300;
-  font-size: 12px;
-  line-height: 130%;
-  color: rgba(255, 255, 255, 0.88);
+const EachElementTitle = styled.div`
+  flex: 1;
 `;
 
 const OneLineInput = styled.div`
@@ -504,47 +381,15 @@ const OneLineInput = styled.div`
   flex-direction: row;
   align-items: baseline;
   justify-content: flex-start;
-  margin: 0px 0px 10px 0px;
+  margin: 0 0 10px 0;
 `;
-const InternalSpan = styled.span`
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 12px;
-  line-height: 150%;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #ffffff;
-`;
-
-const InputNoDisplay = styled.span`
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 4px;
-  padding: 2px 10px;
-  height: 25px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0px 0px 0px 8px;
-`;
-
 const InputLabel = styled.p`
-  font-family: Inter;
+  font-family: Inter, serif;
   font-style: normal;
   font-weight: 600;
   font-size: 14px;
   color: rgba(255, 255, 255, 0.64);
-  margin: 0px;
-`;
-
-const Detailed = styled.div`
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 20px;
-  text-align: right;
-  color: #f7653b;
+  margin: 0;
 `;
 
 const CustomCardContainer = styled.div`
@@ -553,8 +398,9 @@ const CustomCardContainer = styled.div`
     padding: 16px 16px;
   }
 `;
+
 const ButtonContainer = styled.div`
-  margin: 15px 0px 0px 0px;
+  margin: 15px 0 0 0;
   display: flex;
   flex-direction: row;
   @media (max-width: 600px) {
@@ -562,6 +408,7 @@ const ButtonContainer = styled.div`
   }
   justify-content: space-between;
 `;
+
 const CardTitle = styled.p`
   font-family: Inter;
   font-style: normal;
@@ -570,53 +417,7 @@ const CardTitle = styled.p`
   line-height: 24px;
   text-align: center;
   color: rgba(255, 255, 255);
-  margin: 0px;
-`;
-
-const PrimaryText = styled.p`
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.64);
-  margin: 0px;
-  flex: 1;
-`;
-
-const BeforeHardChip = styled.span`
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 20px;
-  text-align: right;
-  color: rgba(255, 255, 255, 0.88);
-`;
-const HardChip = styled.div`
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 4px;
-  padding: 2px 8px;
-  font-family: Inter;
-  font-style: normal;
-  color: rgba(255, 255, 255, 0.64);
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 20px;
-  margin-left: 10px;
-  margin-right: 10px;
-`;
-const OneLineInputwomargin = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: baseline;
-  justify-content: flex-start;
-`;
-
-const ReYouReceiveContain = styled.div`
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 6px;
-  padding: 10px;
-  margin: 10px 0px;
+  margin: 0;
 `;
 
 const PlusMinusArrow = styled.div`
@@ -640,6 +441,7 @@ const CustomInfoCard = styled.div`
     padding: 16px;
   }
 `;
+
 const CustomInfoCardHeader = styled.p`
   font-family: Inter;
   font-style: normal;
@@ -669,13 +471,14 @@ const OneLine = styled.div`
 `;
 
 const TextWithIcon = styled.div`
-  ont-family: Inter;
+  font-family: Inter;
   font-style: normal;
   font-weight: 600;
   font-size: 14px;
   line-height: 20px;
   color: rgba(255, 255, 255, 0.64);
 `;
+
 const BeforeChip = styled.span`
   font-family: Inter;
   font-style: normal;

@@ -1,9 +1,13 @@
 import { BigNumber } from 'ethers';
+import { formatUnits } from 'ethers/lib/utils';
+
 import ERC20 from '../basis-cash/ERC20';
 
 export const getDisplayBalance = (balance: BigNumber, decimals = 18, fractionDigits = 3) => {
-  const number = getBalance(balance, decimals - fractionDigits);
-  return (number / 10 ** fractionDigits).toFixed(fractionDigits);
+  const formattedBalance: string = getBalance(balance, decimals);
+  const decimalsPointIndex = formattedBalance.indexOf('.');
+  if (decimalsPointIndex === -1) return formattedBalance;
+  return formattedBalance.slice(0, decimalsPointIndex) + '.' + formattedBalance.slice(decimalsPointIndex + 1, decimalsPointIndex + 1 + fractionDigits);
 };
 
 export const getFullDisplayBalance = (balance: BigNumber, decimals = 18) => {
@@ -18,8 +22,12 @@ export const getDisplayBalanceToken = (
   return getDisplayBalance(balance, token.decimal, fractionDigits);
 };
 
-export function getBalance(balance: BigNumber, decimals = 18): number {
-  return balance?.div(BigNumber.from(10).pow(decimals)).toNumber();
+export function getBalance(balance: BigNumber, decimals = 18): string {
+  try {
+    return formatUnits(balance, decimals)
+  } catch (err) {
+    return '0'
+  };
 }
 
 export const truncateMiddle = function (

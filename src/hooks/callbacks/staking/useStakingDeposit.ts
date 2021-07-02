@@ -9,8 +9,8 @@ import formatErrorMessage from '../../../utils/formatErrorMessage';
 import { useTransactionAdder } from '../../../state/transactions/hooks';
 
 export default function (
-  stakingContract: string, 
-  amount: number, 
+  stakingContract: string,
+  amount: number,
   depositToken: string,
   symbol: string
 ) {
@@ -32,7 +32,7 @@ export default function (
       });
 
       if (callback) callback();
-    } catch(e) {
+    } catch (e) {
       addPopup({
         error: {
           message: formatErrorMessage(e?.data?.message || e?.message),
@@ -41,12 +41,12 @@ export default function (
       });
     }
   }, [
-    core.contracts, 
-    stakingContract, 
-    tokenDecimals, 
+    core.contracts,
+    stakingContract,
+    tokenDecimals,
     amount,
     addPopup,
-    addTransaction, 
+    addTransaction,
     symbol
   ]);
 

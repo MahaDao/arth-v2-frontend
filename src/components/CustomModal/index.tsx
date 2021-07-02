@@ -52,7 +52,7 @@ const DialogTitle = withStyles(styles)((props: DialogTitleProps) => {
   );
 });
 
-const DialogContent = withStyles((theme: Theme) => ({
+const DialogContent = withStyles(() => ({
   root: {
     minWidth: 500,
   },
@@ -117,16 +117,13 @@ const CustomModal: React.FC<props> = ({
   const modalStyles = useStyles();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const [openModal, setOpen] = React.useState(open);
-  const [isCloseClicked, toggleCloseClicked] = React.useState(false);
 
   const handleCloseModal = () => {
-    // setOpen(false);
-    // toggleCloseClicked(true);
     if (handleClose) {
       handleClose();
     }
   };
-  if (!isCloseClicked && open !== openModal) {
+  if (open !== openModal) {
     setOpen(open);
   }
   let modalJsx = <div />;
@@ -152,7 +149,6 @@ const CustomModal: React.FC<props> = ({
             color: 'rgba(255, 255, 255, 0.88)',
             alignItems: 'center',
             justifyContent: 'center',
-            // width: '100%'
             ...modalTitleStyle
           }}
           id='customized-dialog-title'

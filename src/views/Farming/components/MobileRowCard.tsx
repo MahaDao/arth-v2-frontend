@@ -1,10 +1,11 @@
-import React, {useMemo} from 'react';
+import React, { useMemo } from 'react';
 import { useWallet } from 'use-wallet';
 import styled from 'styled-components';
 import Loader from 'react-spinners/BeatLoader';
 import { Grid, Divider } from '@material-ui/core';
 import { BigNumber } from '@ethersproject/bignumber';
 
+import dfyn from '../../../assets/img/DFYN.png';
 import uniswap from '../../../assets/svg/UniswapWhite.svg';
 import sushiswap from '../../../assets/svg/SushiswapWhite.svg';
 
@@ -17,8 +18,8 @@ import config, { platformURL } from '../../../config';
 import useCore from '../../../hooks/useCore';
 import { StakingContract } from '../../../basis-cash';
 import useTokenDecimals from '../../../hooks/useTokenDecimals';
-import { getDisplayBalance } from '../../../utils/formatBalance';
 import useTokenBalance from '../../../hooks/state/useTokenBalance';
+import { getDisplayBalance, getDisplayBalanceToken } from '../../../utils/formatBalance';
 
 interface IProps {
   pool: StakingContract;
@@ -27,6 +28,10 @@ interface IProps {
   rates: {
     maha: BigNumber;
     arthx: BigNumber;
+  };
+  apyState: {
+    isLoading: boolean;
+    apy: string;
   };
   onExitClick: () => void;
   onDepositClick: () => void;
@@ -40,7 +45,7 @@ export const MobileFarm = (props: IProps) => {
   const { account, connect } = useWallet();
 
   const depositTokenContract = core.tokens[props.pool.depositToken];
-  const {isLoading: isTokenBalanceLoading, value: tokenBalance} = useTokenBalance(depositTokenContract);
+  const { isLoading: isTokenBalanceLoading, value: tokenBalance } = useTokenBalance(depositTokenContract);
   const tokenDecimals = useTokenDecimals(props.pool.depositToken);
 
   const tokens = props.pool.depositTokenSymbols.map((p) => core.tokens[p]);
@@ -49,36 +54,53 @@ export const MobileFarm = (props: IProps) => {
   const etherscan = `${config.etherscanUrl}/address/${tokenAddresses[0]}`
   const pow = BigNumber.from(10).pow(18);
 
-  const currentEarnedARTHX = useMemo(() => {
-    return Number(getDisplayBalance(
-      props?.claimableBalance?.mul(props?.rates?.arthx).div(pow),
-      18,
-      6
-    ))
-  }, [props, pow]);
+  const initEarnedARTHX = useMemo(() => {
+    if (props.pool.rewardTokenKind === 'pool-token') {
+      return Number(getDisplayBalanceToken(
+        props?.claimableBalance?.mul(props?.rates?.arthx).div(pow),
+        core.tokens.ARTHX,
+        6
+      ))
+    }
 
-  const currentEarnedMAHA = useMemo(() => {
-    return Number(getDisplayBalance(
-      props?.claimableBalance?.mul(props?.rates?.maha).div(pow),
-      18,
-      6
-    ))
-  }, [props, pow]);
+    if (props.pool.rewardTokenKind === 'single') {
+      return Number(getDisplayBalanceToken(props?.claimableBalance, core.tokens.ARTHX, 6))
+    }
+  }, [props, pow, core.tokens.ARTHX]);
+
+  const initEarnedMAHA = useMemo(() => {
+    if (props.pool.rewardTokenKind === 'pool-token') {
+      return Number(getDisplayBalanceToken(
+        props?.claimableBalance?.mul(props?.rates?.maha).div(pow),
+        core.tokens.MAHA,
+        6
+      ))
+    }
+
+    if (props.pool.rewardTokenKind === 'single') {
+      return Number(getDisplayBalanceToken(props?.claimableBalance, core.tokens.MAHA, 6))
+    }
+  }, [props, pow, core.tokens.MAHA]);
 
   const isWalletConnected = !!account;
 
   const getImage = (platform: string) => {
     if (platform === 'sushiswap') return sushiswap;
+    if (platform === 'dfyn') return dfyn;
     return uniswap;
   }
 
   return (
     <StyledCardWrapper>
-      <CardIcon>
-        <div style={{ zIndex: 15, background: '#2A2827', borderRadius: 36 }}>
-          <img src={getImage(props.pool.platform)} alt="Uniswap logo" height={32} />
-        </div>
-      </CardIcon>
+      {
+        props.pool.platform && (
+          <CardIcon>
+            <div style={{ zIndex: 15, background: '#2A2827', borderRadius: 36 }}>
+              <img src={getImage(props.pool.platform)} alt="Uniswap logo" height={32} />
+            </div>
+          </CardIcon>
+        )
+      }
       <Card>
         <CardContent>
           <StyledContent>
@@ -118,15 +140,15 @@ export const MobileFarm = (props: IProps) => {
               <div style={{ display: 'flex', flexDirection: 'column', marginLeft: 40 }}>
                 <StyledTitle>{props.pool.depositTokenSymbols.join('-')}</StyledTitle>
                 {
-                  props.pool.platform 
+                  props.pool.platform
                     ? (
                       <StyledSubTitle onClick={() => window.open(uniswapLink, '_blank')}>
                         Add Liquidity
                       </StyledSubTitle>
                     ) : (
-                        <StyledSubTitle onClick={() => window.open(etherscan, '_blank')}>
+                      <StyledSubTitle onClick={() => window.open(etherscan, '_blank')}>
                         View on Explorer
-                        </StyledSubTitle>
+                      </StyledSubTitle>
                     )
                 }
               </div>
@@ -155,18 +177,38 @@ export const MobileFarm = (props: IProps) => {
                   </MainSpan>
                 </div>
               </Grid>
+              <Grid
+                item
+                xs={12}
+                direction={'row'}
+                justify={'space-between'}
+                style={{ display: 'flex', marginTop: 5 }}
+              >
+                <DescriptionDiv>
+                  APY
+                </DescriptionDiv>
+                <div style={{ flexDirection: 'column', display: 'flex' }}>
+                  <MainSpan>
+                    {
+                      props?.apyState?.isLoading
+                        ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
+                        : props?.apyState?.apy
+                    }
+                  </MainSpan>
+                </div>
+              </Grid>
             </Grid>
             <ButtonContainer>
               <div style={{ marginTop: 15 }}>
                 {!isWalletConnected ? (
-                  <Button 
-                    text={'Connect Wallet'} 
-                    size={'lg'} 
+                  <Button
+                    text={'Connect Wallet'}
+                    size={'lg'}
                     onClick={() =>
                       connect('injected').then(() => {
                         localStorage.removeItem('disconnectWallet')
-                      })} 
-                    />
+                      })}
+                  />
                 ) : (
                   <Button
                     disabled={tokenBalance.lte(0)}
@@ -180,7 +222,7 @@ export const MobileFarm = (props: IProps) => {
           </StyledContent>
         </CardContent>
         {
-          props.stakedBalance.gt(0) 
+          props.stakedBalance.gt(0)
             ? (
               <OpenableDiv>
                 <InfoDiv>
@@ -198,27 +240,33 @@ export const MobileFarm = (props: IProps) => {
                     background: 'rgba(255, 255, 255, 0.08)',
                     margin: '15px 0px',
                   }}
-                variant={'middle'}
+                  variant={'middle'}
                 />
                 <InfoDiv>
                   <div>
-                      <InfoDivLeftSpan>Unclaimed Rewards:</InfoDivLeftSpan>
-                      <InfoDivRightSpan>
-                        <span>{currentEarnedARTHX}</span>
-                        {' '}
-                        ARTHX
-                      </InfoDivRightSpan>
-                      <InfoDivLeftSpan>+ </InfoDivLeftSpan>
-                      <InfoDivRightSpan>
-                        <span>{currentEarnedMAHA}</span>
-                        {' '}
-                        MAHA
-                      </InfoDivRightSpan>
-                      <Withdraw
-                        onClick={props.onClaimClick}
-                      >
-                        Claim
-                      </Withdraw>
+                    <InfoDivLeftSpan>Unclaimed Rewards:</InfoDivLeftSpan>
+                    {
+                      props.pool.rewardTokenKind === 'pool-token' && (
+                        <InfoDivRightSpan>
+                          <span>{Number(initEarnedARTHX).toLocaleString('en-US', { maximumFractionDigits: 6 })}</span> ARTHX
+                        </InfoDivRightSpan>
+                      )
+                    }
+                    {
+                      props.pool.rewardTokenKind === 'pool-token' && (
+                        <InfoDivLeftSpan>+ </InfoDivLeftSpan>
+                      )
+                    }
+                    <InfoDivRightSpan>
+                      <span>{Number(initEarnedMAHA).toLocaleString('en-US', { maximumFractionDigits: 6 })}</span>
+                      {' '}
+                      MAHA
+                    </InfoDivRightSpan>
+                    <Withdraw
+                      onClick={props.onClaimClick}
+                    >
+                      Claim
+                    </Withdraw>
                   </div>
                 </InfoDiv>
                 <Divider
@@ -238,10 +286,10 @@ export const MobileFarm = (props: IProps) => {
                   </div>
                 </InfoDiv>
               </OpenableDiv>
-            ) 
+            )
             : (
-            <></>
-          )
+              <></>
+            )
         }
       </Card>
     </StyledCardWrapper>
@@ -281,19 +329,19 @@ const OpenableDiv = styled.div`
   background: #423b38;
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-sizing: border-box;
-  border-radius: 0px 0px 12px 12px;
+  border-radius: 0 0 12px 12px;
   display: flex;
   width: 100%;
   flex-direction: column;
   text-align: center;
   justify-content: center;
-  padding: 20px 0px;
+  padding: 20px 0;
 `;
 
 const InfoDiv = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 10px 0px 0px 0px;
+  margin: 10px 0 0 0;
   text-align: center;
   align-items: center;
 `;
@@ -305,7 +353,7 @@ const Withdraw = styled.div`
   font-size: 14px;
   line-height: 20px;
   color: #ff7f57;
-  margin: 8px 0px 0px 0px;
+  margin: 8px 0 0 0;
 `;
 
 const InfoDivLeftSpan = styled.div`
@@ -344,54 +392,6 @@ const StyledContent = styled.div`
   justify-content: space-between;
 `;
 
-const StyledInfoSlots = styled.div`
-  display: flex;
-  text-align: center;
-  padding-top: 5px;
-  padding-bottom: 5px;
-`;
-
-const LockinDiv = styled.div`
-  display: flex;
-  text-align: center;
-  padding-bottom: 3px;
-  padding-top: 35px;
-`;
-
-const StyledInfoSlot = styled.div`
-  padding-left: 5px;
-  padding-right: 5px;
-`;
-
-const SlotTitle = styled.div`
-  color: #fff;
-  font-weight: 300;
-  font-size: 16px;
-`;
-
-const PercentageTilte = styled.span`
-  text-align: center;
-  font-weight: 300;
-  font-size: 16px;
-  color: #ffffff;
-`;
-
-const BoldText = styled.span`
-  font-weight: 600;
-  font-size: 18px;
-  margin-right: 5px;
-`;
-
-const PercentageContainer = styled.div`
-  background: rgba(255, 255, 255, 0.16);
-  border-radius: 60px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 13px 15px;
-`;
-
 const StyledTitle = styled.span`
   font-family: Inter;
   font-style: normal;
@@ -410,46 +410,8 @@ const CardHeaderDiv = styled.div`
 
 const CardIcon = styled.div`
   position: absolute;
-  margin: -16px 0px 0px 0px;
+  margin: -16px 0 0 0;
   left: 45%;
-`;
-
-const DiscountDivContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  border-radius: 8px;
-  width: 100%;
-  padding: 0px 5px 10px 5px;
-`;
-
-const DiscountDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.16);
-  border-radius: 8px;
-  text-align: center;
-  font-size: 12px;
-  flex: 0.9;
-  font-weight: 300;
-  color: #ffffff;
-  padding: 10px 15px 10px 15px;
-  margin: 0px 3px 0px 3px;
-  min-width: 30%;
-  height: 45px;
-  justify-content: center;
-`;
-
-const TitleText = styled.div`
-  font-size: 12px;
-  font-weight: bold;
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 600;
-  text-align: center;
-  align-items: center;
-  color: #ffffff;
 `;
 
 const StyledSubTitle = styled.div`
