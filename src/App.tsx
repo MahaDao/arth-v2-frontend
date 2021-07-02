@@ -127,12 +127,12 @@ const App: React.FC = () => {
             <Page>
               <Lottery />
             </Page>
-          </Route>
+          </Route> */}
           <Route path="/lock-deposit">
             <Page availableNetworks={[137, 1337]}>
               <LockDeposit />
             </Page>
-          </Route> */}
+          </Route>
           <Redirect to="/"></Redirect>
         </Switch>
       </Router>

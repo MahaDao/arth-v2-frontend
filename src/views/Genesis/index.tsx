@@ -397,7 +397,7 @@ const Text = styled.p`
   font-style: normal;
   font-weight: 300;
   font-size: 12px;
-  line-height: 130%;
+  line-height: 130%;PageSubHeading
   color: #20c974;
   flex: 1;
   padding-left: 10px;
