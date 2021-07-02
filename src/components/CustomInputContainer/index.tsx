@@ -38,7 +38,7 @@ type props = {
   DisableMsg?: string;
   errorCallback?: (flag: boolean) => void;
   isBalanceLoading?: boolean;
-  tokenDecimals?:number;
+  tokenDecimals?: number;
 };
 
 interface ICStatesInterface {
@@ -122,11 +122,11 @@ const CustomInputContainer: React.FC<props> = (props) => {
       }
     }
 
-    let DigitsStatus = true
+    let DigitsStatus = true;
     if (!checkForAfterDecimalDigits(val, tokenDecimals)) {
       const temp: ICStatesInterface = {
         IWarningState: 'warning',
-        IMsg: `Only 18 digits before decimal and ${tokenDecimals} digits after decimal is allowed.`,
+        IMsg: `Only 14 digits before decimal and ${tokenDecimals} digits after decimal is allowed.`,
       };
       setICWarningStates(temp);
       DigitsStatus = false
