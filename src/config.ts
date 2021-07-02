@@ -158,24 +158,24 @@ export const platformURL: { [platform: string]: Platform } = {
 };
 
 export const stakingContracts: StakingContract[] = [
-  // {
-  //   name: 'ARTH/USDC LP',
-  //   platform: 'dfyn',
-  //   contract: 'StakeARTHUSDC',
-  //   kind: 'unlocked',
-  //   depositToken: 'ArthUsdcLP',
-  //   depositTokenSymbols: ['ARTH', 'USDC'],
-  //   depositTokenKind: 'single',
-  //   earnTokenName: 'ARTHX_MAHA_POOL',
-  //   finished: false,
-  //   endDate: new Date('2021-09-30T18:56:39.000Z'),
-  //   rewardTokenKind: 'pool-token',
-  //   rewardTokenSymbols: ['ARTHX', 'MAHA'],
-  //   networks: [ChainId.MAINNET, ChainId.RINKEBY, 1337, 137],
-  //   sort: 0,
-  //   categories: ['all', 'arth'],
-  //   apyId: 'arthusdc'
-  // },
+  {
+    name: 'ARTH/USDC LP',
+    platform: 'dfyn',
+    contract: 'StakeARTHUSDC',
+    kind: 'unlocked',
+    depositToken: 'ArthUsdcLP',
+    depositTokenSymbols: ['ARTH', 'USDC'],
+    depositTokenKind: 'single',
+    earnTokenName: 'ARTHX_MAHA_POOL',
+    finished: false,
+    endDate: new Date('2021-09-30T18:56:39.000Z'),
+    rewardTokenKind: 'pool-token',
+    rewardTokenSymbols: ['ARTHX', 'MAHA'],
+    networks: [ChainId.MAINNET, ChainId.RINKEBY, 1337, 137],
+    sort: 0,
+    categories: ['all', 'arth'],
+    apyId: 'arthusdc'
+  },
   {
     name: 'ARTH/MAHA LP',
     platform: 'dfyn',
