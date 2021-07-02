@@ -151,7 +151,8 @@ export default (props: IProps) => {
               date={props.pool.endDate}
               renderer={({ days, hours, minutes, seconds, completed }) => {
                 return (
-                  `${days}d : ${hours}h : ${minutes}m : ${seconds}s`
+                  // `${days}d : ${hours}h : ${minutes}m : ${seconds}s`
+                  `${days} Days`
                 );
               }}
             />
