@@ -79,7 +79,7 @@ export class BasisCash {
 
     this.ArthMahaLP = new ERC20(deployments.ArthMahaLP?.address, provider, 'ARTH-MAHA LP', 18);
     this.ArthxArthLP = new ERC20(deployments.ArthArthxLP?.address, provider, 'ARTH-ARTHX LP', 18);
-    this.ArthUsdcLP = new ERC20(deployments.ArthUsdcLP?.address, provider, 'ARTH-USDC LP', 18);
+    this.ArthUsdcLP = new ERC20(deployments.ArthUsdcLP?.address, provider, 'ARTH-USDC LP', 8);
     this.PoolToken = new ERC20(deployments.PoolToken?.address, provider, 'ARTH-RT');
 
     this.tokens = {
