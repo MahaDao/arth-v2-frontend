@@ -123,11 +123,11 @@ const App: React.FC = () => {
               <Rebase />
             </Page>
           </Route> */}
-          <Route path="/lottery">
+          {/* <Route path="/lottery">
             <Page>
               <Lottery />
             </Page>
-          </Route> */}
+          </Route>  */}
           <Route path="/lock-deposit">
             <Page availableNetworks={[137, 1337]}>
               <LockDeposit />
