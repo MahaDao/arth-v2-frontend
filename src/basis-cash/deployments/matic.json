@@ -8,7 +8,7 @@
     "abi": "ArthPoolRouter"
   },
   "PoolToken": {
-    "address": "0xA11f20Bf7CbAD8A93Ca6853f95Fc7cb8A7d6870c",
+    "address": "0x963911186972433fFF9FE2aA5959dA3918456B59",
     "abi": "PoolToken"
   },
   "StakeARTH": {
