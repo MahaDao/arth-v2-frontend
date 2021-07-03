@@ -133,12 +133,12 @@ const MobileNav = (props: props) => {
             >
               Rebase
             </StyledLink> */}
-            {/* <StyledLink exact activeClassName="active" to="/trade">
+            <StyledLink exact activeClassName="active" to="/trade">
               Trade
             </StyledLink>
             <StyledLink exact activeClassName="active" to="/pools">
-              Pools
-            </StyledLink> */}
+              Liquidity
+            </StyledLink>
             {/*{
               !props.isMainnet && (
                 <StyledLink exact activeClassName="active" to="/faucet" onClick={() => props.onClick()}>
