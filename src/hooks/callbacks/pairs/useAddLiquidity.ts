@@ -12,7 +12,7 @@ export default function (
   tokenB: string,
   amountADesired: BigNumber,
   amountBDesired: BigNumber,
-  to: string
+  to: string,
 ) {
   const core = useCore();
   const addPopup = useAddPopup();
@@ -21,44 +21,48 @@ export default function (
   const amountAMinAfterSlippage = useApplySlippage(amountADesired);
   const amountBMinAfterSlippage = useApplySlippage(amountBDesired);
 
-  const action = useCallback(async (callback?: () => void): Promise<void> => {
-    try {
-      const response = await core.contracts.ArthPoolRouter.addLiquidity(
-        tokenA,
-        tokenB,
-        amountADesired,
-        amountBDesired,
-        amountAMinAfterSlippage,
-        amountBMinAfterSlippage,
-        to,
-        Math.ceil(Date.now() / 1000) + 5 * 60,
-      );
+  const action = useCallback(
+    async (callback?: () => void): Promise<void> => {
+      try {
+        const response = await core.contracts.Router.addLiquidity(
+          tokenA,
+          tokenB,
+          amountADesired,
+          amountBDesired,
+          amountAMinAfterSlippage,
+          amountBMinAfterSlippage,
+          to,
+          Math.ceil(Date.now() / 1000) + 5 * 60,
+        );
 
-      addTransaction(response, {
-        summary: `Add Liquidity`
-      });
+        addTransaction(response, {
+          summary: `Add Liquidity`,
+        });
 
-      if (callback) callback();
-    } catch (e) {
-      addPopup({
-        error: {
-          message: formatErrorMessage(e?.data?.message || e?.message),
-          stack: e?.stack
-        }
-      });
-    }
-  }, [
-    core,
-    addPopup,
-    addTransaction,
-    tokenA,
-    tokenB,
-    amountADesired,
-    amountBDesired,
-    amountAMinAfterSlippage,
-    amountBMinAfterSlippage,
-    to
-  ]);
+        if (callback) callback();
+      } catch (e) {
+        console.log(e);
+        addPopup({
+          error: {
+            message: formatErrorMessage(e?.data?.message || e?.message),
+            stack: e?.stack,
+          },
+        });
+      }
+    },
+    [
+      core,
+      addPopup,
+      addTransaction,
+      tokenA,
+      tokenB,
+      amountADesired,
+      amountBDesired,
+      amountAMinAfterSlippage,
+      amountBMinAfterSlippage,
+      to,
+    ],
+  );
 
   return action;
 }

@@ -47,10 +47,12 @@ const FarmingCard = (props: WithSnackbarProps & IProps) => {
         'access-control-allow-headers,access-control-allow-methods,access-control-allow-origin,content-type',
     };
 
-    fetch(url, { headers })
-      .then(res => res.json())
-      .then(res => setAPYState({ isLoading: false, apy: Number(res?.APY || 0).toLocaleString() + '%' }))
-      .catch((err) => setAPYState({ isLoading: false, apy: '-' }));
+    if (pool.apyId !== '') {
+      fetch(url, { headers })
+        .then(res => res.json())
+        .then(res => setAPYState({ isLoading: false, apy: Number(res?.APY || 0).toLocaleString() + '%' }))
+        .catch((err) => setAPYState({ isLoading: false, apy: '-' }));
+    }
   }
 
   useEffect(() => {
@@ -60,7 +62,7 @@ const FarmingCard = (props: WithSnackbarProps & IProps) => {
     );
 
     return () => clearInterval(interval);
-  }, [core.config.refreshInterval]);
+  }, [core.config.refreshInterval, fetchAPY]);
 
   const { value: rates } = usePoolTokenRates();
   const { value: stakedBalance } = useStakingBalance(pool.contract);

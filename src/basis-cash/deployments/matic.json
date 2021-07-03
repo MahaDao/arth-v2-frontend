@@ -4,8 +4,12 @@
     "abi": "ArthController"
   },
   "ArthPoolRouter": {
-    "address": "0x58A4E5e9045cE11066CBaa056F6A139E92aA2BaA",
+    "address": "0x6A784Fb2C489808a096185f070CA41a2e5Ad4aB6",
     "abi": "ArthPoolRouter"
+  },
+  "Router": {
+    "address": "0x6A784Fb2C489808a096185f070CA41a2e5Ad4aB6",
+    "abi": "Router"
   },
   "PoolToken": {
     "address": "0x963911186972433fFF9FE2aA5959dA3918456B59",

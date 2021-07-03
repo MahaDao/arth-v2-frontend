@@ -29,16 +29,7 @@ const Boardrooms = () => {
         pairName: 'ARTH-ARTHX',
         pairToken: 'ArthArthxLP',
       },
-    },
-    {
-      liquidity: {
-        id: 2,
-        symbol1: 'ARTH',
-        symbol2: 'MAHA',
-        pairName: 'ARTH-MAHA',
-        pairToken: 'ArthMahaLP',
-      },
-    },
+    }
   ];
 
   const [selectedPair, setSelectedPair] = useState({
@@ -70,17 +61,17 @@ const Boardrooms = () => {
         {liquidityPairs.length === 0 // noLiquidity
           ? NoLiquidityFound()
           : liquidityPairs.map((pair) => (
-              <OpenableCard
-                key={pair.liquidity.id}
-                liquidityPair={pair.liquidity}
-                setSelected={(val: any) => {
-                  setSelectedPair(val);
-                }}
-                setChangeAction={(val) => {
-                  setAction(val);
-                }}
-              />
-            ))}
+            <OpenableCard
+              key={pair.liquidity.id}
+              liquidityPair={pair.liquidity}
+              setSelected={(val: any) => {
+                setSelectedPair(val);
+              }}
+              setChangeAction={(val) => {
+                setAction(val);
+              }}
+            />
+          ))}
       </>
     );
   };
@@ -90,7 +81,7 @@ const Boardrooms = () => {
       <GradientDiv />
       <Container size="lg">
         <div>
-          <PageHeading>Pool</PageHeading>
+          <PageHeading>Liquidity</PageHeading>
           <PageSubHeading>Manage your liquidity positions on various AMMs</PageSubHeading>
         </div>
         {/* NOTE: do not remove this, required for later. */}
