@@ -5,12 +5,10 @@ import { BigNumber } from '@ethersproject/bignumber';
 
 import prettyNumber from '../../../components/PrettyNumber';
 import CustomToolTip from '../../../components/CustomTooltip';
-
 import arrowRightWhite from '../../../assets/svg/arrowRightWhite.svg';
-
 import { getDisplayBalance } from '../../../utils/formatBalance';
-import useAllPoolAvailableToMint from '../../../hooks/state/pools/useAllPoolAvailableToMint';
 import Loader from 'react-spinners/BeatLoader';
+import useTotalSupply from '../../../hooks/useTotalSupply';
 
 type props = {
   globalCollateralValue: BigNumber;
@@ -18,7 +16,7 @@ type props = {
 };
 
 const BasicInfo: React.FC<props> = (props) => {
-  const { isLoading: isAvailabelToMintLoading, value: totalAvailableToMint } = useAllPoolAvailableToMint();
+  const { isLoading: isAvailabelToMintLoading, value: totalSupply } = useTotalSupply('ARTH');
 
   return (
     <CustomInfoCard className={'custom-mahadao-box'}>
@@ -27,14 +25,14 @@ const BasicInfo: React.FC<props> = (props) => {
           <OneLine>
             <div>
               <TextWithIcon>
-                Available To Mint
-                <CustomToolTip toolTipText={'Amount of ARTH available to mint across all pools.'} />
+                ARTH Supply
+                <CustomToolTip toolTipText={'The total ARTH available in circulation.'} />
               </TextWithIcon>
               <BeforeChip>
                 {
                   isAvailabelToMintLoading
                     ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
-                    : prettyNumber(getDisplayBalance(totalAvailableToMint, 18, 6))
+                    : prettyNumber(getDisplayBalance(totalSupply, 18, 6))
                 } ARTH
               </BeforeChip>
             </div>
@@ -48,14 +46,14 @@ const BasicInfo: React.FC<props> = (props) => {
             <div>
               <TextWithIcon>
                 Total Collateral Value
-                <CustomToolTip toolTipText={'$GMU worth of collateral currently in the protocol.'} />
+                <CustomToolTip toolTipText={'USD worth of collateral currently in the protocol.'} />
               </TextWithIcon>
               <BeforeChip>
                 {'$ '}
                 {
                   props.isGlobalCollateralValueLoading
                     ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
-                    : prettyNumber(getDisplayBalance(props.globalCollateralValue))
+                    : prettyNumber(getDisplayBalance(props.globalCollateralValue.mul(2)))
                 }
               </BeforeChip>
             </div>

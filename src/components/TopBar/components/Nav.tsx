@@ -12,9 +12,9 @@ const Nav = (props: props) => {
       <StyledLink exact activeClassName="active" to="/lock-deposit">
         Debt pool
       </StyledLink>
-      <StyledLink exact activeClassName="active" to="/mint/mint">
+      {/* <StyledLink exact activeClassName="active" to="/mint/mint">
         Mint/Redeem
-      </StyledLink>
+      </StyledLink> */}
       {/* <StyledLink exact activeClassName="active" to="/stabilize/recollateralize">
         Stabilize
       </StyledLink> */}

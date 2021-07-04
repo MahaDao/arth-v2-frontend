@@ -80,7 +80,7 @@ const App: React.FC = () => {
               <Genesis />
             </Page>
           </Route>  */}
-          <Route path="/">
+          <Route exact path="/">
             <Page availableNetworks={[137, 1337]}>
               <Stats />
             </Page>

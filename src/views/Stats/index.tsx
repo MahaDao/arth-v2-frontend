@@ -6,7 +6,6 @@ import { useMediaQuery } from 'react-responsive';
 import FadeLoader from 'react-spinners/FadeLoader';
 
 import Page from '../../components/Page';
-import HomeCard from './components/HomeCard';
 import PieChart from './components/PieChart';
 import FeeRates from './components/FeeRates';
 import StakeBox from './components/StakeBox';
@@ -15,12 +14,10 @@ import CoinsPrice from './components/CoinsPrice';
 import Container from '../../components/Container';
 import PageHeader from '../../components/PageHeader';
 import prettyNumber from '../../components/PrettyNumber';
-import BondingDiscount from './components/BondingDiscount';
 import CustomToolTip from '../../components/CustomTooltip';
 import { WalletAutoConnect } from '../../components/WalletAutoConnect';
 
 import { colors } from './types';
-import useCore from '../../hooks/useCore';
 import { getDisplayBalance } from '../../utils/formatBalance';
 import useGlobalCollateralValue from '../../hooks/state/useGlobalCollateralValue';
 import useAllPoolCollateralValue from '../../hooks/state/pools/useAllPoolCollateralValue';
@@ -28,7 +25,6 @@ import useAllPoolCollateralValue from '../../hooks/state/pools/useAllPoolCollate
 const Home: React.FC = () => {
   const isMobile = useMediaQuery({ maxWidth: '600px' });
 
-  const core = useCore();
   const { isLoading: isPoolsValueLoading, value: allPoolsValue } = useAllPoolCollateralValue();
   const {
     isLoading: isGlobalCollateralValueLoading,
@@ -36,10 +32,6 @@ const Home: React.FC = () => {
   } = useGlobalCollateralValue();
 
   WalletAutoConnect();
-
-  const arthAddress = useMemo(() => core.ARTH.address, [core]);
-  const mahaAddress = useMemo(() => core.MAHA.address, [core]);
-  const arthxAddress = useMemo(() => core.ARTHX.address, [core]);
 
   const [isFormattedPoolValuesLoading, formattedPoolValues] = useMemo(() => {
     if (isPoolsValueLoading || isGlobalCollateralValueLoading) return [true, []];
@@ -49,7 +41,7 @@ const Home: React.FC = () => {
       false,
       allPoolsValue.map((p) => ({
         name: p.poolToken,
-        amount: Number(getDisplayBalance(p.value)),
+        amount: Number(getDisplayBalance(p.value.mul(2))),
         percentage: Number(getDisplayBalance(p.value.mul(1e8).div(globalCollateralValue), 6)),
       })),
     ];
@@ -61,7 +53,7 @@ const Home: React.FC = () => {
   ]);
 
   return (
-    <Page>
+    <>
       <PageHeader
         subtitle="View information about the current ARTH protocol"
         title="Analytics"
@@ -188,7 +180,7 @@ const Home: React.FC = () => {
           </Grid>
         </Grid> */}
       </Container>
-    </Page>
+    </>
   );
 };
 
