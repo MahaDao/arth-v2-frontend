@@ -69,7 +69,6 @@
   },
   "scripts": {
     "start": "REACT_APP_NETWORK=matic react-scripts start",
-    "push": "npm run build && echo 'arthcoin.com' > build/CNAME && gh-pages --dist build",
     "push-polygon": "REACT_APP_NETWORK=matic npm run build && echo 'polygon.arthcoin.com' > build/CNAME && gh-pages -r git@github.com:MahaDAO/polygon.arthcoin.com.git --dist build",
     "push-eth": "REACT_APP_NETWORK=ethereum npm run build && echo 'ethereum.arthcoin.com' > build/CNAME && gh-pages -r git@github.com:MahaDAO/ethereum.arthcoin.com.git --dist build",
     "build": "CI= GENERATE_SOURCEMAP=false react-scripts build",
