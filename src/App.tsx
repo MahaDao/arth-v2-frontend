@@ -11,7 +11,6 @@ import './index.css';
 import 'aos/dist/aos.css';
 import theme from './theme';
 
-import Home from './views/Home';
 import Mint from './views/Mint';
 import Trade from './views/Trade';
 import Pools from './views/Pools';

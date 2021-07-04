@@ -139,19 +139,19 @@ const Home: React.FC = () => {
               globalCollateralValue={globalCollateralValue}
               isGlobalCollateralValueLoading={isGlobalCollateralValueLoading}
             />
+            <StakeBox />
           </Grid>
           <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
             <CoinsPrice />
-            <StakeBox />
+
+            <br />
+            <FeeRates />
           </Grid>
         </Grid>
         <Grid container spacing={2} style={{ marginTop: '8px' }}>
           {/* <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
             <BondingDiscount stats />
           </Grid> */}
-          <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-            <FeeRates />
-          </Grid>
         </Grid>
         {/* <Grid container spacing={2} style={{ marginTop: '8px' }}>
           <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
