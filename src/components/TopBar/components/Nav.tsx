@@ -9,20 +9,12 @@ interface props {
 const Nav = (props: props) => {
   return (
     <StyledNav>
-      {/* <StyledLink
-        exact
-        activeClassName="active"
-        to="/stats"
-      >
-        Analytics
-      </StyledLink> */}
-
       <StyledLink exact activeClassName="active" to="/lock-deposit">
         Debt pool
       </StyledLink>
-      {/* <StyledLink exact activeClassName="active" to="/mint/mint">
+      <StyledLink exact activeClassName="active" to="/mint/mint">
         Mint/Redeem
-      </StyledLink> */}
+      </StyledLink>
       {/* <StyledLink exact activeClassName="active" to="/stabilize/recollateralize">
         Stabilize
       </StyledLink> */}

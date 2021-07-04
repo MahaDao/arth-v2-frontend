@@ -16,12 +16,20 @@ export default () => {
   const core = useCore();
 
   const fetchCashPrice = useCallback(async () => {
-    const controller = core.contracts.ArthController;
+    const controller = core.contracts.UniswapPairOracle_ARTH_USDC;
+    const decimals = BigNumber.from(10).pow(18);
+
+    console.log(
+      core.ARTH.address,
+      1000000000000000000,
+      // await controller.consult(core.ARTH.address, 1000000000000000000),
+    );
+
     setCustomState({
       isLoading: false,
-      value: await controller.getARTHPrice(),
+      value: await controller.consult(core.ARTH.address, decimals),
     });
-  }, [core.contracts.ArthController]);
+  }, [core.ARTH.address, core.contracts.UniswapPairOracle_ARTH_USDC]);
 
   useEffect(() => {
     fetchCashPrice().catch((err) =>

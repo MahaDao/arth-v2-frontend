@@ -5,26 +5,38 @@ import Loader from 'react-spinners/BeatLoader';
 import { getDisplayBalance } from '../../../utils/formatBalance';
 import useMAHAOraclePrice from '../../../hooks/state/controller/useMAHAPrice';
 import useARTHXOraclePrice from '../../../hooks/state/controller/useARTHXPrice';
+import useARTHPrice from '../../../hooks/state/controller/useARTHPrice';
+
 
 const CoinsPrice: React.FC = () => {
   const { isLoading: isMAHAPriceLoading, value: mahaPrice } = useMAHAOraclePrice();
   const { isLoading: isARTHXPriceLoading, value: arthxPrice } = useARTHXOraclePrice();
+  const { isLoading: isARTHPriceLoading, value: arthPrice } = useARTHPrice();
 
   return (
     <CustomInfoCard className={'custom-mahadao-box'}>
       <CustomInfoCardDetails>
         <OneLine style={{ marginTop: '0px' }}>
           <div>
-            <TextWithIcon>ARTH Price</TextWithIcon>
-            {/* <TargetPriceTag>Target Price: $2.00</TargetPriceTag> */}
+            <TextWithIcon>ARTH 1hr TWAP Price</TextWithIcon>
+            <TargetPriceTag>Target Price: $2.00</TargetPriceTag>
           </div>
           <div>
-            <TargetPriceTag>Target Price: $2.00</TargetPriceTag>
+            <BeforeChip>
+              {isARTHPriceLoading ? (
+                <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
+              ) : (
+                Number(getDisplayBalance(arthPrice, 6, 6)).toLocaleString('en-US', {
+                  maximumFractionDigits: 6,
+                })
+              )}{' '}
+              USDC
+            </BeforeChip>
           </div>
         </OneLine>
         <OneLine>
           <div>
-            <TextWithIcon>ARTHX Price</TextWithIcon>
+            <TextWithIcon>ARTHX 1hr TWAP Price</TextWithIcon>
           </div>
           <div>
             <BeforeChip>
@@ -41,7 +53,7 @@ const CoinsPrice: React.FC = () => {
         </OneLine>
         <OneLine>
           <div>
-            <TextWithIcon>MAHA Price</TextWithIcon>
+            <TextWithIcon>MAHA 1hr TWAP Price</TextWithIcon>
           </div>
           <div>
             <BeforeChip>

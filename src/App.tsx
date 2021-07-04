@@ -75,29 +75,26 @@ const App: React.FC = () => {
         <TopBar />
         <Disclaimer />
         <Switch>
-          <Route path="/" exact>
-            <Home />
-          </Route>
           {/* <Route path="/genesis" exact>
             <Page availableNetworks={[137, 1337]}>
               <Genesis />
             </Page>
-          </Route>
-          <Route path="/stats">
+          </Route>  */}
+          <Route path="/">
             <Page availableNetworks={[137, 1337]}>
               <Stats />
             </Page>
-          </Route>  */}
+          </Route>
           <Route path="/farming">
             <Page availableNetworks={[137, 1337]}>
               <Farming />
             </Page>
           </Route>
-          {/* <Route path="/mint/:paramType">
+          <Route path="/mint/:paramType">
             <Page availableNetworks={[137, 1337]}>
               <Mint />
             </Page>
-          </Route> */}
+          </Route>
           <Route path="/trade">
             <Page availableNetworks={[137, 1337]}>
               <Trade />
