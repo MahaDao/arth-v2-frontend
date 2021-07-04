@@ -199,31 +199,6 @@ code {
   width: 100%;
 }
 
-.gradient-red-1-home {
-  position: absolute;
-  opacity: 0.1;
-  top: 400px;
-  background-image: url('views/Home/images//gradient-circle.png');
-  background-position: center;
-  background-size: cover;
-  height: 100%;
-  background-repeat: no-repeat;
-  width: 100%;
-  z-index: -2;
-}
-
-.gradient-red-2-home {
-  position: absolute;
-  opacity: 0.5;
-  top: 400px;
-  background-image: url('views/Home/images//gradient-circle.png');
-  background-size: contain;
-  height: 100%;
-  max-width: 1024px;
-  width: 100%;
-  z-index: -2;
-}
-
 a:hover {
   text-decoration: none !important;
   color: inherit;

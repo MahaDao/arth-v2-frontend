@@ -62,37 +62,10 @@ const BoardroomSection = (props: IProps) => {
               <TextWithIcon>
                 Over {prettyNumber(getDisplayBalanceToken(supply.value, currentToken))} {props.symbol} have been deposited in this pool
               </TextWithIcon>
-            </Grid>
-            <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
-              <ButtonConatiner>
-                {!!!account ? (
-                  <Button
-                    text={'Connect Wallet'}
-                    size={'lg'}
-                    onClick={() =>
-                      connect('injected').then(() => {
-                        localStorage.removeItem('disconnectWallet');
-                      })
-                    }
-                  />
-                ) : (
-                  !isApproved ? (
-                    <Button
-                      text={!isApproving ? `Approve ${props.symbol}` : 'Approving...'}
-                      size={'sm'}
-                      disabled={isApproving || props.symbol === 'ARTH'}
-                      onClick={approve}
-                      loading={isApproving}
-                    />
-                  ) : (
-                    <Button
-                      disabled={props.symbol === 'ARTH'}
-                      text={`Deposit ${props.symbol}`} size={'sm'} onClick={() => {
-                        setOpenModal(true);
-                      }} />
-                  )
-                )}
-              </ButtonConatiner>
+              <br />
+              <TextWithIcon>
+                Debt pools are now closed! You will find a new pool where you can collect all the USDC fees that the protocol generates
+              </TextWithIcon>
             </Grid>
           </Grid>
         </CustomInfoCardDetails>
