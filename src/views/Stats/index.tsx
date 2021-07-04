@@ -154,9 +154,9 @@ const Home: React.FC = () => {
           </Grid>
         </Grid>
         <Grid container spacing={2} style={{ marginTop: '8px' }}>
-          <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+          {/* <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
             <BondingDiscount stats />
-          </Grid>
+          </Grid> */}
           <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
             <FeeRates />
           </Grid>
