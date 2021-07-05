@@ -55,6 +55,7 @@ const MintModal = (props: IProps) => {
   useEffect(() => window.scrollTo(0, 0), []);
 
   const handleMint = () => {
+    // confirm("Please note that minting ARTH will require you to put 10% of your colla")
     mintARTH(() => {
       onSuccess();
       setSuccessModal(true);
