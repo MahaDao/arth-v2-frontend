@@ -101,14 +101,14 @@ const MobileNav = (props: props) => {
             >
               Debt pools
             </StyledLink>
-            {/* <StyledLink
+            <StyledLink
               exact
               activeClassName="active"
               to="/mint/mint"
               onClick={() => props.onClick()}
             >
               Mint/Redeem
-            </StyledLink> */}
+            </StyledLink>
             {/* <StyledLink
               exact
               activeClassName="active"

@@ -45,7 +45,7 @@ const MintModal = (props: IProps) => {
   const core = useCore();
   const tokenDecimals = useTokenDecimals(selectedCollateralCoin);
   const collateralPool = core.getCollatearalPool(selectedCollateralCoin);
-  const [collatApproveStatus, ] = useApprove(
+  const [collatApproveStatus,] = useApprove(
     core.tokens[selectedCollateralCoin],
     collateralPool.address,
   );
@@ -91,14 +91,14 @@ const MintModal = (props: IProps) => {
             rightLabelUnit={selectedCollateralCoin}
             rightLabelValue={Number(collateralValue).toLocaleString()}
           />
-          <TransparentInfoDiv
+          {/* <TransparentInfoDiv
             labelData={`Trading Fee`}
             rightLabelUnit={'ARTH'}
             rightLabelValue={
               Number(getDisplayBalance(tradingFee, 18, 6))
                 .toLocaleString('en-US', { maximumFractionDigits: 6 })
             }
-          />
+          /> */}
           <Divider
             style={{
               background: 'rgba(255, 255, 255, 0.08)',

@@ -89,14 +89,14 @@ const RedeemModal = (props: IProps) => {
             rightLabelValue={Number(arthxValue).toLocaleString()}
           />
 
-          <TransparentInfoDiv
+          {/* <TransparentInfoDiv
             labelData={`Trading Fee`}
             rightLabelUnit={selectedCollateralCoin}
             rightLabelValue={
               Number(getDisplayBalance(tradingFee, tokenDecimals))
                 .toLocaleString('en-US', { maximumFractionDigits: tokenDecimals })
             }
-          />
+          /> */}
 
           <TransparentInfoDiv
             labelData={`Stability Fee`}

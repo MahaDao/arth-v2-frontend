@@ -308,7 +308,7 @@ const MintTabContent = (props: IProps) => {
               />
               <div>
                 <TcContainer>
-                  <OneLineInputwomargin>
+                  {/* <OneLineInputwomargin>
                     <div style={{ flex: 1 }}>
                       <TextWithIcon>
                         Trading Fee
@@ -325,7 +325,7 @@ const MintTabContent = (props: IProps) => {
                       </BeforeChip>
                       <TagChips>ARTH</TagChips>
                     </OneLineInputwomargin>
-                  </OneLineInputwomargin>
+                  </OneLineInputwomargin> */}
                 </TcContainer>
                 <div style={{ marginTop: '32px' }}>
                   {
@@ -343,7 +343,7 @@ const MintTabContent = (props: IProps) => {
                         <Grid container spacing={2}>
                           {showDepositWETH &&
                             (
-                              <div style={{marginBottom: '12px', width: '100%'}}>
+                              <div style={{ marginBottom: '12px', width: '100%' }}>
                                 <Button
                                   text={`Convert your ${config.blockchainToken} into ${selectedCollateralCoin}`}
                                   size={'lg'}
@@ -374,15 +374,15 @@ const MintTabContent = (props: IProps) => {
                       ) : (
                         <Grid container spacing={2}>
                           {showDepositWETH &&
-                          (
-                            <div style={{marginBottom: '12px', width: '100%'}}>
-                              <Button
-                                text={`Convert your ${config.blockchainToken} into ${selectedCollateralCoin}`}
-                                size={'lg'}
-                                onClick={() => setdepositModal(true)}
-                                tracking_id={'deposit_weth'}
-                              />
-                            </div>)
+                            (
+                              <div style={{ marginBottom: '12px', width: '100%' }}>
+                                <Button
+                                  text={`Convert your ${config.blockchainToken} into ${selectedCollateralCoin}`}
+                                  size={'lg'}
+                                  onClick={() => setdepositModal(true)}
+                                  tracking_id={'deposit_weth'}
+                                />
+                              </div>)
                           }
                           <Button
                             text={'Mint'}

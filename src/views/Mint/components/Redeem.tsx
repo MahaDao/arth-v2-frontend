@@ -60,17 +60,17 @@ const RedeemTabContent = (props: IProps) => {
     return BigNumber.from(1e6).sub(arthxRatio)
   }, [arthxRatio]);
 
- 
-  const {isLoading: isARTHBalanceLoading, value: arthBalance} = useTokenBalance(core.ARTH);
-  const {isLoading: isARTHXBalanceLoading, value: arthxBalance} = useTokenBalance(core.ARTHX);
- 
+
+  const { isLoading: isARTHBalanceLoading, value: arthBalance } = useTokenBalance(core.ARTH);
+  const { isLoading: isARTHXBalanceLoading, value: arthxBalance } = useTokenBalance(core.ARTHX);
+
   const tokenDecimals = useTokenDecimals(selectedCollateral);
-  const {isLoading: isRedeemableBalancesLoading, value: redeemableBalances} = useRedeemableBalances(selectedCollateral);
-  const {isLoading: isCollateralBalanceLoading, value: collateralBalance} = useTokenBalance(core.tokens[selectedCollateral]);
-  const {isLoading: isRedeemFeeLoading, value: redeemFee} = usePoolRedeemFees(selectedCollateral);
-  const {isLoading: isStabilityFeeLoading, value: stabilityFee} = useStabilityFee();
-  const {isLoading: isCollateralPriceLoading, value: collateralToGMUPrice} = useCollateralPoolPrice(selectedCollateral);
-  const {isLoading: isARTHXLoading, value: arthxPrice} = useARTHXPrice();
+  const { isLoading: isRedeemableBalancesLoading, value: redeemableBalances } = useRedeemableBalances(selectedCollateral);
+  const { isLoading: isCollateralBalanceLoading, value: collateralBalance } = useTokenBalance(core.tokens[selectedCollateral]);
+  const { isLoading: isRedeemFeeLoading, value: redeemFee } = usePoolRedeemFees(selectedCollateral);
+  const { isLoading: isStabilityFeeLoading, value: stabilityFee } = useStabilityFee();
+  const { isLoading: isCollateralPriceLoading, value: collateralToGMUPrice } = useCollateralPoolPrice(selectedCollateral);
+  const { isLoading: isARTHXLoading, value: arthxPrice } = useARTHXPrice();
 
   const [mahaApproveStatus, approveMAHA] = useApprove(core.MAHA, collateralPool.address);
   const [arthxApproveStatus, approveARTHX] = useApprove(core.ARTHX, collateralPool.address);
@@ -118,9 +118,9 @@ const RedeemTabContent = (props: IProps) => {
   const isArthxApproving = arthxApproveStatus === ApprovalState.PENDING;
 
   const isArthMahaArthxApproved = useMemo(() => {
-    if (stabilityFeeAmount.lte(0) && Number(arthValue) && Number(arthxValue)) 
+    if (stabilityFeeAmount.lte(0) && Number(arthValue) && Number(arthxValue))
       return !!account && isArthApproved && isArthxApproved;
-    if (stabilityFeeAmount.gt(0) && !Number(arthValue) && Number(arthxValue)) 
+    if (stabilityFeeAmount.gt(0) && !Number(arthValue) && Number(arthxValue))
       return !!account && isArthApproved && isArthxApproved;
     if (stabilityFeeAmount.gt(0) && Number(arthValue) && !Number(arthxValue))
       return !!account && isArthApproved && isArthApproved;
@@ -353,7 +353,7 @@ const RedeemTabContent = (props: IProps) => {
                 tokenDecimals={tokenDecimals}
               />
               <div>
-                <OneLineInputwomargin>
+                {/* <OneLineInputwomargin>
                   <div style={{ flex: 1, marginTop: 10 }}>
                     <TextWithIcon>Trading Fee</TextWithIcon>
                   </div>
@@ -368,7 +368,7 @@ const RedeemTabContent = (props: IProps) => {
                     </BeforeChip>
                     <TagChips>{selectedCollateral}</TagChips>
                   </OneLineInputwomargin>
-                </OneLineInputwomargin>
+                </OneLineInputwomargin> */}
 
                 <OneLineInput>
                   <div style={{ flex: 1 }}>
@@ -478,10 +478,10 @@ const RedeemTabContent = (props: IProps) => {
                       text={'Redeem'}
                       size={'lg'}
                       variant={'default'}
-                        onClick={() => collectRedeemption(() => {
-                          onARTHXValueChange('');
-                          setSuccessCollectModal(true)
-                        })}
+                      onClick={() => collectRedeemption(() => {
+                        onARTHXValueChange('');
+                        setSuccessCollectModal(true)
+                      })}
                       tracking_id={'redeem'}
                     />
                   </>

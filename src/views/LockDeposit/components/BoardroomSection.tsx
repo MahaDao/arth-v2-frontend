@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import styled from 'styled-components';
-import { useWallet } from 'use-wallet';
 
-import Button from '../../../components/Button';
 import DepositModal from './DepositModal';
 import useCore from '../../../hooks/useCore';
-import useApprove, { ApprovalState } from '../../../hooks/callbacks/useApprove';
 import useBoardroomBalance from '../../../hooks/state/debtBoardroom/useBoardroomBalance';
 import { getDisplayBalanceToken } from '../../../utils/formatBalance';
 import useBoardroomSupply from '../../../hooks/state/debtBoardroom/useBoardroomSupply';
@@ -21,20 +18,12 @@ interface IProps {
 }
 
 const BoardroomSection = (props: IProps) => {
-  const { account, connect } = useWallet();
-
   const core = useCore()
   const [openModal, setOpenModal] = useState(false);
   const currentToken = core.tokens[props.symbol]
-  const pool = props.symbol === 'ARTH' ? core.contracts.ARTHDebtBoardroom : core.contracts.ARTHXDebtBoardroom
-  const [approveStatus, approve] = useApprove(currentToken, pool.address);
 
   const balance = useBoardroomBalance(props.symbol)
   const supply = useBoardroomSupply(props.symbol)
-
-  const isApproved = approveStatus === ApprovalState.APPROVED;
-  const isApproving = approveStatus === ApprovalState.PENDING;
-
 
   return (
     <>
@@ -86,12 +75,6 @@ const BoardroomSection = (props: IProps) => {
 
 export default BoardroomSection;
 
-const ButtonConatiner = styled.div`
-  margin-top: 20px;
-  @media (max-width: 600px) {
-    margin-top: 24px;
-  }
-`;
 
 const CustomInfoCard = styled.div`
   margin-top: 16px;

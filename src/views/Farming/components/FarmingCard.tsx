@@ -1,5 +1,5 @@
 import { useMediaQuery } from 'react-responsive';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
 
 import { ModeProps } from '../index';
@@ -38,7 +38,7 @@ const FarmingCard = (props: WithSnackbarProps & IProps) => {
   const isMobile = useMediaQuery({ maxWidth: '600px' });
   const depositTokenContract = core.tokens[pool.depositToken];
 
-  const fetchAPY = async () => {
+  const fetchAPY = useCallback(async () => {
     const url = `https://api.arthcoin.com/api/apy/request?key=${pool.apyId}`;
     const headers = {
       'Access-Control-Allow-Origin': '*',
@@ -53,13 +53,11 @@ const FarmingCard = (props: WithSnackbarProps & IProps) => {
         .then(res => setAPYState({ isLoading: false, apy: Number(res?.APY || 0).toLocaleString() + '%' }))
         .catch((err) => setAPYState({ isLoading: false, apy: '-' }));
     }
-  }
+  }, [pool.apyId])
 
   useEffect(() => {
-    const interval = setInterval(
-      () => fetchAPY().catch(() => { }),
-      core.config.refreshInterval
-    );
+    fetchAPY()
+    const interval = setInterval(fetchAPY, 60 * 1000);
 
     return () => clearInterval(interval);
   }, [core.config.refreshInterval, fetchAPY]);
