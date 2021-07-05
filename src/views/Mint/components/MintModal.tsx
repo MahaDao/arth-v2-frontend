@@ -12,6 +12,8 @@ import useMintARTH from '../../../hooks/callbacks/pools/useMintARTH';
 import CustomSuccessModal from '../../../components/CustomSuccesModal';
 import useApprove, { ApprovalState } from '../../../hooks/callbacks/useApprove';
 import TransparentInfoDiv from '../../../components/CustomTransparentInfoDiv/InfoDiv';
+import warningLogo from '../../../assets/svg/warningIcon.svg';
+import styled from 'styled-components';
 
 interface IProps {
   isInputFieldError: boolean;
@@ -153,7 +155,13 @@ const MintModal = (props: IProps) => {
                 tracking_id={'confirm_mint'}
               />
             </div>
+
           </div>
+
+          <CustomBadgeAlert>
+            <Logo src={warningLogo} alt='waring' />
+            <Text>{'Loreum ipsum Loreum ipsum Loreum ipsum Loreum ipsum Loreum ipsum '}</Text>
+          </CustomBadgeAlert>
         </>
       </CustomModal>
 
@@ -174,3 +182,30 @@ const MintModal = (props: IProps) => {
 };
 
 export default MintModal;
+
+const CustomBadgeAlert = styled.div`
+  border: 1px solid #FCB400;
+  box-sizing: border-box;
+  border-radius: 4px;
+  padding: 8px;
+  display: flex;
+  align-items: flex-start;
+`
+
+const Logo = styled.img`
+  width: 13.33px;
+  height: 13.33px;
+  margin-top: 2px;
+`
+
+const Text = styled.p`
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 130%;
+  color: #FCB400;
+  flex: 1;
+  padding-left: 10px;
+  margin-bottom: 0;
+`
