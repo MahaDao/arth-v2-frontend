@@ -208,7 +208,7 @@ const MintTabContent = (props: IProps) => {
         selectedCollateralCoin={selectedCollateralCoin}
         arthValue={arthValue}
         arthxValue={arthxValue}
-        openModal={true}
+        openModal={openModal}
         tradingFee={tradingFee}
         onClose={() => setOpenModal(false)}
         onSuccess={() => {
