@@ -118,12 +118,17 @@ const MintModal = (props: IProps) => {
             rightLabelUnit={'ARTHX'}
             rightLabelValue={Number(arthxValue).toLocaleString()}
           />
+
+          <CustomBadgeAlert>
+            <Logo src={warningLogo} alt='waring' />
+            <Text>{'Loreum ipsum Loreum ipsum Loreum ipsum Loreum ipsum Loreum ipsum '}</Text>
+          </CustomBadgeAlert>
           <div
             style={{
               flexDirection: 'column-reverse',
               display: 'flex',
               width: '100%',
-              marginTop: '10%',
+              marginTop: '32px',
               justifyContent: 'space-between',
               alignItems: 'center',
               marginBottom: 8,
@@ -158,10 +163,7 @@ const MintModal = (props: IProps) => {
 
           </div>
 
-          <CustomBadgeAlert>
-            <Logo src={warningLogo} alt='waring' />
-            <Text>{'Loreum ipsum Loreum ipsum Loreum ipsum Loreum ipsum Loreum ipsum '}</Text>
-          </CustomBadgeAlert>
+
         </>
       </CustomModal>
 
@@ -190,6 +192,7 @@ const CustomBadgeAlert = styled.div`
   padding: 8px;
   display: flex;
   align-items: flex-start;
+  margin-top: 24px;
 `
 
 const Logo = styled.img`
