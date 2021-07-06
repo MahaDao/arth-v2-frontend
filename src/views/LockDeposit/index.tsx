@@ -23,7 +23,7 @@ const LockDeposit = () => {
         padding: '80px 0px 0',
       }}>
         <PageHeading>{'DEBT POOL'}</PageHeading>
-        <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+        {/*<div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
           <PageSubHeading>
             <StartsIn>Closes in</StartsIn>
             <Countdown
@@ -37,7 +37,7 @@ const LockDeposit = () => {
               }}
             />
           </PageSubHeading>
-        </div>
+        </div>*/}
       </div>
 
       <Grid container spacing={2}>

@@ -20,7 +20,7 @@ const HomeCard: React.FC<DeptCardProps> = ({ symbol }) => {
             className="margin-left-5"
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'baseline', textAlign: 'left' }}
           >
-            <span className="margin-bottom-5">{`${symbol} into Debt`}</span>
+            <span>{`${symbol} into Debt`}</span>
             <CustomToolTip toolTipText={'loreum ipsum'}/>
           </div>
         </CardHeader>
