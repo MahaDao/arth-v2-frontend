@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import Loader from 'react-spinners/BeatLoader';
 
 import TokenSymbol from '../../../components/TokenSymbol';
 import CustomToolTip from '../../../components/CustomTooltip';
@@ -9,6 +10,7 @@ import useCore from '../../../hooks/useCore';
 import prettyNumber from '../../../components/PrettyNumber';
 import { getDisplayBalanceToken } from '../../../utils/formatBalance';
 import useTokenBalanceOf from '../../../hooks/state/useTokenBalanceOf';
+import useTotalFeeAllocated from '../../../hooks/state/debtBoardroom/useTotalFeeAllocated';
 
 interface DeptCardProps {
   symbol: string;
@@ -17,8 +19,8 @@ interface DeptCardProps {
 const HomeCard: React.FC<DeptCardProps> = ({ symbol }) => {
   const core = useCore();
   const token = core.tokens[symbol];
-  
-  const tokenBalance = useTokenBalanceOf(token, core.myAccount);
+
+  const feeAllocated = useTotalFeeAllocated();
 
   return (
     <Wrapper>
@@ -37,13 +39,11 @@ const HomeCard: React.FC<DeptCardProps> = ({ symbol }) => {
           <CardSection>
             <TextWithIcon>Total Fees</TextWithIcon>
             <StyledValue>
-              {Number(prettyNumber(getDisplayBalanceToken(tokenBalance.value, token))).toLocaleString()} {symbol}
-            </StyledValue>
-          </CardSection>
-          <CardSection>
-            <TextWithIcon>Available to Claim</TextWithIcon>
-            <StyledValue>
-              {Number(prettyNumber(getDisplayBalanceToken(tokenBalance.value, token))).toLocaleString()} {symbol}
+              {
+                feeAllocated.isLoading
+                  ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
+                  : prettyNumber(getDisplayBalanceToken(feeAllocated.value, token))
+              } USDC
             </StyledValue>
           </CardSection>
           <CustomBadgeAlert>
@@ -138,7 +138,7 @@ const Card = styled.div`
   background: rgba(255, 255, 255, 0.02);
   backdrop-filter: blur(70px);
   border-radius: 12px;
-  min-height: 462px;
+  min-height: 500px;
   @media (max-width: 768px) {
     min-height: auto;
   }

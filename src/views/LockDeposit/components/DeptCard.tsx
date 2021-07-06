@@ -173,7 +173,7 @@ const Card = styled.div`
   @media (max-width: 768px) {
     min-height: auto;
   }
-  min-height: 462px;
+  min-height: 500px;
 `;
 
 
