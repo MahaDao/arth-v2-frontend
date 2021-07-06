@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import Loader from 'react-spinners/BeatLoader';
 
 import TokenSymbol from '../../../components/TokenSymbol';
 import CustomToolTip from '../../../components/CustomTooltip';
@@ -7,6 +8,7 @@ import warningLogo from '../../../assets/svg/warningIcon.svg';
 
 import useCore from '../../../hooks/useCore';
 import prettyNumber from '../../../components/PrettyNumber';
+import useEarned from '../../../hooks/state/debtBoardroom/useEarned';
 import { getDisplayBalanceToken } from '../../../utils/formatBalance';
 import useBoardroomSupply from '../../../hooks/state/debtBoardroom/useBoardroomSupply';
 import useBoardroomBalance from '../../../hooks/state/debtBoardroom/useBoardroomBalance';
@@ -17,11 +19,14 @@ interface DeptCardProps {
 }
 
 const HomeCard: React.FC<DeptCardProps> = ({ price, symbol }) => {
-  const core = useCore()
+  const core = useCore();
+  const currentToken = core.tokens[symbol];
 
-  const currentToken = core.tokens[symbol]
-  const balance = useBoardroomBalance(symbol)
-  const supply = useBoardroomSupply(symbol)
+  const supply = useBoardroomSupply(symbol);
+  const balance = useBoardroomBalance(symbol);
+  const earned = useEarned(symbol);
+
+  console.log('Supply', supply.value.toString());
 
   return (
     <Wrapper>
@@ -40,13 +45,31 @@ const HomeCard: React.FC<DeptCardProps> = ({ price, symbol }) => {
           <CardSection>
             <TextWithIcon>Total Deposited</TextWithIcon>
             <StyledValue>
-              {Number(prettyNumber(getDisplayBalanceToken(supply.value, currentToken))).toLocaleString()} {symbol}
+              {
+                supply.isLoading
+                  ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
+                  : prettyNumber(getDisplayBalanceToken(supply.value, currentToken))
+              } {symbol}
             </StyledValue>
           </CardSection>
           <CardSection>
             <TextWithIcon>You Deposited</TextWithIcon>
             <StyledValue>
-              {Number(prettyNumber(getDisplayBalanceToken(balance.value, currentToken))).toLocaleString()} {symbol}
+              {
+                balance.isLoading
+                  ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
+                  : prettyNumber(getDisplayBalanceToken(balance.value, currentToken))
+              } {symbol}
+            </StyledValue>
+          </CardSection>
+          <CardSection>
+            <TextWithIcon>Available to claim</TextWithIcon>
+            <StyledValue>
+              {
+                earned.isLoading
+                  ? <Loader color={'#ffffff'} loading={true} size={8} margin={2} />
+                  : prettyNumber(getDisplayBalanceToken(earned.value, core.tokens.USDC))
+              } USDC
             </StyledValue>
           </CardSection>
           <InfoMsg>
