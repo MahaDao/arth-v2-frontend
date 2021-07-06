@@ -293,6 +293,7 @@ const MintTabContent = (props: IProps) => {
                 DefaultValue={arthxValue.toString()}
                 LogoSymbol={'ARTHX'}
                 ILabelInfoValue={"How can I get it ?"}
+                href={`https://exchange.dfyn.network/#/swap?inputCurrency=MATIC&outputCurrency=${core.tokens['ARTHX'].address}`}
                 disabled={mintCR.lte(1e6) || isarthxBalanceLoading || isarthxPriceLoading}
                 hasDropDown={false}
                 SymbolText={'ARTHX'}

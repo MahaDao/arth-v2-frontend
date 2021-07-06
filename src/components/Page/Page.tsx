@@ -11,7 +11,7 @@ interface IProps {
 export default ({ children }: IProps) => (
   <StyledPage>
     <div className="chakra-home">
-      <img src={chakra} height={1400} alt="chakra" />s
+      <img src={chakra} height={1400} alt="chakra" />
     </div>
     <StyledMain>{children}</StyledMain>
   </StyledPage>

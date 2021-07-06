@@ -158,7 +158,7 @@ const RedeemModal = (props: IProps) => {
         title={'Redeeming ARTH successful!'}
         subTitle={''}
         subsubTitle={'Your ARTH has now been redeemed for its underlying collateral'}
-      />s
+      />
     </>
   );
 };
