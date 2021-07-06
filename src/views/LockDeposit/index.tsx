@@ -5,13 +5,16 @@ import Countdown from 'react-countdown';
 import DepositModal from './components/DepositModal';
 import BoardroomSection from './components/BoardroomSection';
 import styled from 'styled-components';
+import DeptCard from './components/DeptCard';
+import Container from '../../components/Container';
+import CollectedDetailsCard from './components/CollectedDetailsCard';
 
 const LockDeposit = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [symbolSelected, setSymbolSelected] = useState<'ARTH' | 'ARTHX' | ''>('')
 
   return (
-    <div>
+    <Container size="lg">
       <div style={{
         display: 'flex',
         flexDirection: 'column',
@@ -36,7 +39,20 @@ const LockDeposit = () => {
           </PageSubHeading>
         </div>
       </div>
+
       <Grid container spacing={2}>
+        <Grid item lg={4} md={4} sm={12} xs={12}>
+          <DeptCard symbol={'ARTH'}/>
+        </Grid>
+        <Grid item lg={4} md={4} sm={12} xs={12}>
+          <DeptCard symbol={'ARTHX'}/>
+        </Grid>
+        <Grid item lg={4} md={4} sm={12} xs={12}>
+          <CollectedDetailsCard symbol={'USDC'}/>
+        </Grid>
+      </Grid>
+
+      {/*<Grid container spacing={2}>
         <Grid item lg={3} md={3} sm={12} xs={12}>
         </Grid>
         <Grid item lg={6} md={6} sm={12} xs={12}>
@@ -67,8 +83,8 @@ const LockDeposit = () => {
           onDeposit={() => { }}
           symbol={symbolSelected}
         />)
-      }
-    </div>
+      }*/}
+    </Container>
   )
 }
 
