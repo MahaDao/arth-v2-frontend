@@ -5,11 +5,23 @@ import TokenSymbol from '../../../components/TokenSymbol';
 import CustomToolTip from '../../../components/CustomTooltip';
 import warningLogo from '../../../assets/svg/warningIcon.svg';
 
+import useCore from '../../../hooks/useCore';
+import prettyNumber from '../../../components/PrettyNumber';
+import { getDisplayBalanceToken } from '../../../utils/formatBalance';
+import useBoardroomSupply from '../../../hooks/state/debtBoardroom/useBoardroomSupply';
+import useBoardroomBalance from '../../../hooks/state/debtBoardroom/useBoardroomBalance';
+
 interface DeptCardProps {
   symbol: string;
+  price: number;
 }
 
-const HomeCard: React.FC<DeptCardProps> = ({ symbol }) => {
+const HomeCard: React.FC<DeptCardProps> = ({ price, symbol }) => {
+  const core = useCore()
+
+  const currentToken = core.tokens[symbol]
+  const balance = useBoardroomBalance(symbol)
+  const supply = useBoardroomSupply(symbol)
 
   return (
     <Wrapper>
@@ -26,21 +38,21 @@ const HomeCard: React.FC<DeptCardProps> = ({ symbol }) => {
         </CardHeader>
         <CardContent>
           <CardSection>
-            <TextWithIcon>Your Deposit</TextWithIcon>
+            <TextWithIcon>Total Deposited</TextWithIcon>
             <StyledValue>
-              500M {symbol}
+              {Number(prettyNumber(getDisplayBalanceToken(supply.value, currentToken))).toLocaleString()} {symbol}
             </StyledValue>
           </CardSection>
           <CardSection>
-            <TextWithIcon>Your Deposit</TextWithIcon>
+            <TextWithIcon>You Deposited</TextWithIcon>
             <StyledValue>
-              500M {symbol}
+              {Number(prettyNumber(getDisplayBalanceToken(balance.value, currentToken))).toLocaleString()} {symbol}
             </StyledValue>
           </CardSection>
           <InfoMsg>
             {`This debt pool allows users to convert their ${symbol} token into debt to the protocol.
             The protocol promises to pay all holders of this pool their ${symbol} (polygon)
-            tokens at a price of 0.012$.`}
+            tokens at a price of ${price}$.`}
           </InfoMsg>
           <CustomBadgeAlert>
             <Logo src={warningLogo} alt='waring' />
@@ -135,11 +147,10 @@ const Card = styled.div`
   background: rgba(255, 255, 255, 0.02);
   backdrop-filter: blur(70px);
   border-radius: 12px;
-  min-height: 428px;
   @media (max-width: 768px) {
     min-height: auto;
   }
-    
+  min-height: 462px;
 `;
 
 

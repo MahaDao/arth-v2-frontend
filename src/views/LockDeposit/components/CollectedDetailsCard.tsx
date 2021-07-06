@@ -5,11 +5,20 @@ import TokenSymbol from '../../../components/TokenSymbol';
 import CustomToolTip from '../../../components/CustomTooltip';
 import warningLogo from '../../../assets/svg/Icon-16.svg';
 
+import useCore from '../../../hooks/useCore';
+import prettyNumber from '../../../components/PrettyNumber';
+import { getDisplayBalanceToken } from '../../../utils/formatBalance';
+import useTokenBalanceOf from '../../../hooks/state/useTokenBalanceOf';
+
 interface DeptCardProps {
   symbol: string;
 }
 
 const HomeCard: React.FC<DeptCardProps> = ({ symbol }) => {
+  const core = useCore();
+  const token = core.tokens[symbol];
+  
+  const tokenBalance = useTokenBalanceOf(token, core.myAccount);
 
   return (
     <Wrapper>
@@ -18,9 +27,9 @@ const HomeCard: React.FC<DeptCardProps> = ({ symbol }) => {
           <TokenSymbol size={40} symbol={symbol} />
           <div
             className="margin-left-5"
-            style={{ display: 'flex', flexDirection: 'column', alignItems: 'baseline', textAlign: 'left' }}
+            style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'left' }}
           >
-            <span className="margin-bottom-5">{`Collected Fees from Protocol`}</span>
+            <span className="margin-bottom-5">{`Collected Fees`}</span>
             <CustomToolTip toolTipText={'loreum ipsum'}/>
           </div>
         </CardHeader>
@@ -28,13 +37,13 @@ const HomeCard: React.FC<DeptCardProps> = ({ symbol }) => {
           <CardSection>
             <TextWithIcon>Total Fees</TextWithIcon>
             <StyledValue>
-              500M {symbol}
+              {Number(prettyNumber(getDisplayBalanceToken(tokenBalance.value, token))).toLocaleString()} {symbol}
             </StyledValue>
           </CardSection>
           <CardSection>
             <TextWithIcon>Available to Claim</TextWithIcon>
             <StyledValue>
-              500M {symbol}
+              {Number(prettyNumber(getDisplayBalanceToken(tokenBalance.value, token))).toLocaleString()} {symbol}
             </StyledValue>
           </CardSection>
           <CustomBadgeAlert>
