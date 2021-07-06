@@ -3,18 +3,17 @@ import styled from 'styled-components';
 import Loader from 'react-spinners/BeatLoader';
 
 import TokenSymbol from '../../../components/TokenSymbol';
-import CustomToolTip from '../../../components/CustomTooltip';
 import warningLogo from '../../../assets/svg/Icon-16.svg';
+import CustomToolTip from '../../../components/CustomTooltip';
 
 import useCore from '../../../hooks/useCore';
 import prettyNumber from '../../../components/PrettyNumber';
 import { getDisplayBalanceToken } from '../../../utils/formatBalance';
-import useTokenBalanceOf from '../../../hooks/state/useTokenBalanceOf';
 import useTotalFeeAllocated from '../../../hooks/state/debtBoardroom/useTotalFeeAllocated';
 
 interface DeptCardProps {
   symbol: string;
-}
+};
 
 const HomeCard: React.FC<DeptCardProps> = ({ symbol }) => {
   const core = useCore();
@@ -164,7 +163,8 @@ const InfoMsg = styled.p`
   color: #FFFFFF;
   opacity: 0.64;
   margin-top: 20px;
-`
+`;
+
 const CustomBadgeAlert = styled.div`
   border: 1px solid rgba(255, 255, 255, 0.88);
   box-sizing: border-box;
@@ -182,13 +182,13 @@ const CustomBadgeAlert = styled.div`
     width: 100%;
     margin-bottom: 0;
   }
-`
+`;
 
 const Logo = styled.img`
   width: 13.33px;
   height: 13.33px;
   margin-top: 2px;
-`
+`;
 
 const Text = styled.p`
   font-family: Inter;
@@ -200,7 +200,6 @@ const Text = styled.p`
   flex: 1;
   padding-left: 10px;
   margin-bottom: 0;
-`
-
+`;
 
 export default HomeCard;

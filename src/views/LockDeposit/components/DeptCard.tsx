@@ -1,7 +1,9 @@
 import React from 'react';
+import { useWallet } from 'use-wallet';
 import styled from 'styled-components';
 import Loader from 'react-spinners/BeatLoader';
 
+import Button from '../../../components/Button';
 import TokenSymbol from '../../../components/TokenSymbol';
 import CustomToolTip from '../../../components/CustomTooltip';
 import warningLogo from '../../../assets/svg/warningIcon.svg';
@@ -10,6 +12,7 @@ import useCore from '../../../hooks/useCore';
 import prettyNumber from '../../../components/PrettyNumber';
 import useEarned from '../../../hooks/state/debtBoardroom/useEarned';
 import { getDisplayBalanceToken } from '../../../utils/formatBalance';
+import useClaim from '../../../hooks/callbacks/debtBoardroom/useClaim';
 import useBoardroomSupply from '../../../hooks/state/debtBoardroom/useBoardroomSupply';
 import useBoardroomBalance from '../../../hooks/state/debtBoardroom/useBoardroomBalance';
 
@@ -20,13 +23,22 @@ interface DeptCardProps {
 
 const HomeCard: React.FC<DeptCardProps> = ({ price, symbol }) => {
   const core = useCore();
+  const { account, connect } = useWallet();
+
   const currentToken = core.tokens[symbol];
 
   const supply = useBoardroomSupply(symbol);
   const balance = useBoardroomBalance(symbol);
   const earned = useEarned(symbol);
+  const handleClaim = useClaim(symbol);
 
-  console.log('Supply', supply.value.toString());
+  const isWalletConnected = !!account;
+
+  const claim = () => {
+    handleClaim(() => {
+      console.log('Here');
+    });
+  }
 
   return (
     <Wrapper>
@@ -77,14 +89,36 @@ const HomeCard: React.FC<DeptCardProps> = ({ price, symbol }) => {
             The protocol promises to pay all holders of this pool their ${symbol} (polygon)
             tokens at a price of ${price}$.`}
           </InfoMsg>
-          <CustomBadgeAlert>
+          {/* <CustomBadgeAlert>
             <Logo src={warningLogo} alt='waring' />
             <Text>
               {'Debt pools are now closed! ' +
-              'You will find a new pool where you can collect all the' +
-              ' USDC fees that the protocol generates.'}
+                'You will find a new pool where you can collect all the' +
+                ' USDC fees that the protocol generates.'}
             </Text>
-          </CustomBadgeAlert>
+          </CustomBadgeAlert> */}
+          <ButtonToBottom>
+            {
+              !isWalletConnected ? (
+                <Button
+                  text={'Connect Wallet'}
+                  size={'lg'}
+                  onClick={() =>
+                    connect('injected').then(() => {
+                      localStorage.removeItem('disconnectWallet');
+                    })
+                  }
+                />
+              ) : (
+                <Button
+                  disabled={earned.value.lte(0)}
+                  text="Claim"
+                  size={'sm'}
+                  onClick={claim}
+                />
+              )
+            }
+          </ButtonToBottom>
         </CardContent>
       </Card>
     </Wrapper>
@@ -176,7 +210,6 @@ const Card = styled.div`
   min-height: 500px;
 `;
 
-
 const TextWithIcon = styled.div`
   font-family: Inter;
   font-style: normal;
@@ -196,7 +229,8 @@ const InfoMsg = styled.p`
   color: #FFFFFF;
   opacity: 0.64;
   margin-top: 20px;
-`
+`;
+
 const CustomBadgeAlert = styled.div`
   border: 1px solid #FCB400;
   box-sizing: border-box;
@@ -205,13 +239,13 @@ const CustomBadgeAlert = styled.div`
   display: flex;
   align-items: flex-start;
   margin-top: 24px;
-`
+`;
 
 const Logo = styled.img`
   width: 13.33px;
   height: 13.33px;
   margin-top: 2px;
-`
+`;
 
 const Text = styled.p`
   font-family: Inter;
@@ -223,7 +257,15 @@ const Text = styled.p`
   flex: 1;
   padding-left: 10px;
   margin-bottom: 0;
-`
+`;
 
+const ButtonToBottom = styled.div`
+  box-sizing: border-box;
+  padding: 8px;
+  display: flex;
+  align-items: flex-end;
+  margin-top: 24px;
+  width: 100%
+`;
 
 export default HomeCard;
