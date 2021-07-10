@@ -9,8 +9,8 @@ interface props {
 const Nav = (props: props) => {
   return (
     <StyledNav>
-      <StyledLink exact activeClassName="active" to="/lock-deposit">
-        Debt pool
+      <StyledLink exact activeClassName="active" to="/fees">
+        Fees
       </StyledLink>
       <StyledLink exact activeClassName="active" to="/mint/mint">
         Mint/Redeem

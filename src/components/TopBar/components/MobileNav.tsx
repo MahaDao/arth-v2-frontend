@@ -96,10 +96,10 @@ const MobileNav = (props: props) => {
             <StyledLink
               exact
               activeClassName="active"
-              to="/lock-deposit"
+              to="/fees"
               onClick={() => props.onClick()}
             >
-              Debt pools
+              Fees
             </StyledLink>
             <StyledLink
               exact
